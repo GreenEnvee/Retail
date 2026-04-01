@@ -536,6 +536,7 @@
                               img_object: image,
                               width: image_width,
                               srcset: srcset,
+                              placeholder: false,
                               alt: alt
                             -%}
                           {%- endif -%}
@@ -586,918 +587,1431 @@
 
 {% schema %}
 {
-  "name": "Image with text",
-  "max_blocks": 2,
-  "settings": [
-  {
-    "type": "select",
-    "id": "height",
-    "label": "Section height",
-    "default": "use_screen_one_half",
-    "options": [
-      { "value": "use_screen_full", "label": "Full screen height"},
-      { "value": "use_screen_three_quarters", "label": "Three quarters of screen height"},
-      { "value": "use_screen_two_thirds", "label": "Two thirds of screen height"},
-      { "value": "use_screen_one_half", "label": "One half of screen height"},
-      { "value": "use_screen_one_third", "label": "One third of screen height"},
-      { "value": "use_screen_one_fifth", "label": "One fifth of screen height"},
-      { "value": "use_pixels_800", "label": "800px" },
-      { "value": "use_pixels_650", "label": "650px" },
-      { "value": "use_pixels_500", "label": "500px" },
-      { "value": "use_image", "label": "Image height" }
-    ]
-  },
-  {
-    "type": "range",
-    "id": "brick_gutter",
-    "min": 0,
-    "max": 50,
-    "step": 2,
-    "unit": "px",
-    "label": "Block spacing",
-    "default": 0
-  },
-  {
-    "type": "checkbox",
-    "id": "borders",
-    "label": "Add borders",
-    "default": false
-  },
-  {
-    "type": "color",
-    "id": "bg_color",
-    "label": "Background"
-  },
-  {
-    "type": "checkbox",
-    "id": "preload_image",
-    "label": "Prioritize image load",
-    "default": false,
-    "info": "Prioritize loading this image before other images. Helpful when this section is first on a page, harmful when this section is below other image sections."
-  },
-  {
-    "type": "header",
-    "content": "Section spacing"
-  },
-  {
-    "type": "select",
-    "id": "width",
-    "label": "Width",
-    "default": "wrapper",
-    "options": [
-      { "value": "wrapper--none", "label": "Full width" },
-      { "value": "wrapper--full", "label": "Full width padded" },
-      { "value": "wrapper", "label": "Page width" },
-      { "value": "wrapper--narrow", "label": "Page width narrow" },
-      { "value": "wrapper--tiny", "label": "Page width extra narrow" }
-    ]
-  },
-  {
-    "type": "range",
-    "id": "padding_top",
-    "min": 0,
-    "max": 180,
-    "step": 2,
-    "unit": "px",
-    "label": "Padding top",
-    "default": 36
-  },
-  {
-    "type": "range",
-    "id": "padding_bottom",
-    "min": 0,
-    "max": 180,
-    "step": 2,
-    "unit": "px",
-    "label": "Padding bottom",
-    "default": 36
-  }
-],
-"blocks": [
-    {
-      "type": "image",
-      "name": "Image",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "header",
-          "content": "Overlay"
-        },
-        {
-          "type": "range",
-          "id": "overlay_opacity",
-          "label": "Opacity",
-          "info": "Increase contrast for legible text.",
-          "min": 0,
-          "max": 100,
-          "step": 5,
-          "unit": "%",
-          "default":15
-        },
-        {
-          "type": "color",
-          "id": "overlay_color",
-          "label": "Overlay color",
-          "default": "#000"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_overlay_text",
-          "label": "Overlay behind text only",
-          "default": false
-        },
-        {
-          "type": "header",
-          "content": "Text"
-        },
-        {
-          "type": "text",
-          "id": "kicker",
-          "label": "Kicker"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title"
-        },
-        {
-          "type": "richtext",
-          "id": "richtext",
-          "label": "Text"
-        },
-        {
-          "type": "select",
-          "id": "text_align",
-          "label": "Alignment",
-          "default": "align--middle-center",
-          "options": [
-            { "value": "align--top-left", "label": "Top left"},
-            { "value": "align--top-center", "label": "Top center"},
-            { "value": "align--top-right", "label": "Top right"},
-            { "value": "align--middle-left", "label": "Middle left"},
-            { "value": "align--middle-center", "label": "Absolute center"},
-            { "value": "align--middle-right", "label": "Middle right"},
-            { "value": "align--bottom-left", "label": "Bottom left"},
-            { "value": "align--bottom-center", "label": "Bottom center"},
-            { "value": "align--bottom-right", "label": "Bottom right"}
-          ]
-        },
-        {
-          "type": "select",
-          "id": "text_color",
-          "label": "Text color",
-          "default": "text--white",
-          "options": [
-            { "value": "text--neutral", "label": "Normal text"},
-            { "value": "text--white", "label": "White"},
-            { "value": "text--primary", "label": "Primary accent"},
-            { "value": "text--secondary", "label": "Secondary accent"},
-            { "value": "text--black", "label": "Black"},
-            { "value": "text--invert--primary", "label": "Primary dark accent"},
-            { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-            { "value": "text--invert", "label": "Inverted text color"},
-            { "value": "text--bright--primary", "label": "Primary bright accent"},
-            { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-          ]
-        },
-        {
-          "type": "header",
-          "content": "Button"
-        },
-        {
-          "type": "text",
-          "id": "link_text",
-          "label": "Text",
-          "default": "Shop Now",
-          "info": "Leave blank to link entire image"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link"
-        },
-        {
-          "type": "select",
-          "id": "button_color",
-          "label": "Color",
-          "default": "btn--white",
-          "options": [
-            { "value": "btn--primary", "label": "Bright accent" },
-            { "value": "btn--secondary", "label": "Secondary accent" },
-            { "value": "btn--neutral", "label": "Text color" },
-            { "value": "btn--black", "label": "Black" },
-            { "value": "btn--white", "label": "White" }
-          ]
-        },
-        {
-          "type": "select",
-          "id": "button_style",
-          "label": "Button style",
-          "default": "btn",
-          "options": [
-            { "value": "btn-text-thick-line", "label": "Capitalized text" },
-            { "value": "btn", "label": "Solid button" },
-            { "value": "btn--soft", "label": "Soft button" },
-            { "value": "btn--outline", "label": "Outlined button" }
-          ]
-        }
-      ]
-    },
-    {
-    "type": "text",
-    "name": "Text",
-    "settings": [
-      {
-        "type": "text",
-        "id": "kicker",
-        "label": "Kicker",
-        "default": "Image with text"
-      },
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Title"
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
-      },
-      {
-        "type":  "range",
-        "id":    "font_size",
-        "label": "Text size",
-        "min":    1,
-        "max":    10,
-        "step":   1,
-        "default":5
-      },
-      {
-        "type":  "range",
-        "id":    "text_columns",
-        "label": "Columns",
-        "min":    1,
-        "max":    3,
-        "step":   1,
-        "default":1,
-        "info": "Desktop only"
-      },
-      {
-        "type": "select",
-        "id": "align_text",
-        "label": "Text alignment",
-        "default": "text-left",
-        "options": [
-          { "value": "text-left","label": "Left" },
-          { "value": "text-center","label": "Centered" },
-          { "value": "text-right","label": "Right" }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Button"
-      },
-      {
-        "type":"text",
-        "id":"button_text",
-        "label":"Text"
-      },
-      {
-        "type":"url",
-        "id":"button_url",
-        "label":"Link"
-      },
-      {
-        "type": "select",
-        "id": "button_color",
-        "label": "Color",
-        "default": "btn--neutral",
-        "options": [
-          { "value": "btn--primary", "label": "Bright accent" },
-          { "value": "btn--secondary", "label": "Secondary accent" },
-          { "value": "btn--neutral", "label": "Text color" },
-          { "value": "btn--black", "label": "Black" },
-          { "value": "btn--white", "label": "White" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "default": "btn-text-thick-line",
-        "options": [
-          { "value": "btn-text-thick-line", "label": "Capitalized text" },
-          { "value": "btn btn--long", "label": "Solid button" },
-          { "value": "btn--soft btn--long", "label": "Soft button" },
-          { "value": "btn--outline btn--long", "label": "Outlined button" }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Style"
-      },
-      {
-        "type": "select",
-        "id": "text_color",
-        "label": "Text color",
-        "default": "text--neutral",
-        "options": [
-          { "value": "text--neutral", "label": "Normal text"},
-          { "value": "text--white", "label": "White"},
-          { "value": "text--primary", "label": "Primary accent"},
-          { "value": "text--secondary", "label": "Secondary accent"},
-          { "value": "text--black", "label": "Black"},
-          { "value": "text--invert--primary", "label": "Primary dark accent"},
-          { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-          { "value": "text--invert", "label": "Inverted text color"},
-          { "value": "text--bright--primary", "label": "Primary bright accent"},
-          { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-        ]
-      },
-      {
-        "type": "color",
-        "id": "bg_color",
-        "label": "Background"
-      }
-    ]
-  },
-  {
-    "type": "newsletter",
-    "name": "Newsletter",
-    "limit": 1,
-    "settings": [
-      {
-        "type": "text",
-        "id": "kicker",
-        "label": "Kicker",
-        "default": "Newsletter"
-      },
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading"
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Join to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
-      },
-      {
-        "type":  "range",
-        "id":    "font_size",
-        "label": "Text size",
-        "min":    1,
-        "max":    10,
-        "step":   1,
-        "default":5
-      },
-      {
-        "type": "select",
-        "id": "align_text",
-        "label": "Text alignment",
-        "default": "text-left",
-        "options": [
-          { "value": "text-left","label": "Left" },
-          { "value": "text-center","label": "Centered" },
-          { "value": "text-right","label": "Right" }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Button"
-      },
-      {
-        "type":"text",
-        "id":"button_text",
-        "label":"Text"
-      },
-      {
-        "type": "select",
-        "id": "button_color",
-        "label": "Color",
-        "default": "btn--neutral",
-        "options": [
-          { "value": "btn--primary", "label": "Bright accent" },
-          { "value": "btn--secondary", "label": "Secondary accent" },
-          { "value": "btn--neutral", "label": "Text color" },
-          { "value": "btn--black", "label": "Black" },
-          { "value": "btn--white", "label": "White" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "default": "btn--soft",
-        "options": [
-          { "value": "btn", "label": "Solid button" },
-          { "value": "btn--soft", "label": "Soft button" },
-          { "value": "btn--outline", "label": "Outlined button" }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Style"
-      },
-      {
-        "type": "select",
-        "id": "text_color",
-        "label": "Text color",
-        "default": "text--neutral",
-        "options": [
-          { "value": "text--neutral", "label": "Normal text"},
-          { "value": "text--white", "label": "White"},
-          { "value": "text--primary", "label": "Primary accent"},
-          { "value": "text--secondary", "label": "Secondary accent"},
-          { "value": "text--black", "label": "Black"},
-          { "value": "text--invert--primary", "label": "Primary dark accent"},
-          { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-          { "value": "text--invert", "label": "Inverted text color"},
-          { "value": "text--bright--primary", "label": "Primary bright accent"},
-          { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-        ]
-      },
-      {
-        "type": "color",
-        "id": "bg_color",
-        "label": "Background",
-        "default": "#f7f7f7"
-      },
-      {
-        "type": "paragraph",
-        "content": "Subscribers are under 'Accepts Marketing' in your [customer admin](/admin/customers)."
-      }
-    ]
-  },
-  {
-    "type": "video",
-    "name": "Video",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Background video"
-      },
-      {
-        "type": "video",
-        "id": "video_bg",
-        "label": "Video background"
-      },
-      {
-        "type": "select",
-        "id": "object_position",
-        "label": "Background video position",
-        "default": "center-center",
-        "options": [
-          { "label": "Top", "value": "center-top" },
-          { "label": "Right", "value": "right-center" },
-          { "label": "Center", "value": "center-center" },
-          { "label": "Left", "value": "left-center" },
-          { "label": "Bottom", "value": "center-bottom" }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Background Image"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "header",
-        "content": "Video popup"
-      },
-      {
-        "type": "video_url",
-        "id": "video_link",
-        "label": "Video popup link",
-        "accept": ["youtube", "vimeo"],
-        "info": "Streaming video source from YouTube or Vimeo.",
-        "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
-      },
-      {
-        "type": "text",
-        "id": "popup_text",
-        "label": "Popup button text"
-      },
-      {
-        "type": "header",
-        "content": "Text"
-      },
-      {
-        "type": "text",
-        "id": "kicker",
-        "label": "Kicker",
-        "default": "Introducing"
-      },
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Title",
-        "default": "Featured video"
-      },
-      {
-        "type": "richtext",
-        "id": "richtext",
-        "label": "Text",
-        "default": "<p>This area is used to describe your video’s details.</p>"
-      },
-      {
-        "type": "select",
-        "id": "text_align",
-        "label": "Alignment",
-        "default": "align--middle-center",
-        "options": [
-          { "value": "align--top-left", "label": "Top left"},
-          { "value": "align--top-center", "label": "Top center"},
-          { "value": "align--top-right", "label": "Top right"},
-          { "value": "align--middle-left", "label": "Middle left"},
-          { "value": "align--middle-center", "label": "Absolute center"},
-          { "value": "align--middle-right", "label": "Middle right"},
-          { "value": "align--bottom-left", "label": "Bottom left"},
-          { "value": "align--bottom-center", "label": "Bottom center"},
-          { "value": "align--bottom-right", "label": "Bottom right"}
-        ]
-      },
-      {
-        "type": "select",
-        "id": "text_color",
-        "label": "Text color",
-        "default": "text--white",
-        "options": [
-          { "value": "text--neutral", "label": "Normal text"},
-          { "value": "text--white", "label": "White"},
-          { "value": "text--primary", "label": "Primary accent"},
-          { "value": "text--secondary", "label": "Secondary accent"},
-          { "value": "text--black", "label": "Black"},
-          { "value": "text--invert--primary", "label": "Primary dark accent"},
-          { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-          { "value": "text--invert", "label": "Inverted text color"},
-          { "value": "text--bright--primary", "label": "Primary bright accent"},
-          { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-        ]
-      },
-      {
-        "type":    "range",
-        "id":      "overlay_opacity",
-        "min":     0,
-        "max":     100,
-        "step":    5,
-        "label":   "Image overlay opacity",
-        "info":    "Increase contrast for legible text.",
-        "default": 15
-      },
-      {
-        "type": "color",
-        "id": "overlay_color",
-        "label": "Overlay color",
-        "default": "#000"
-      },
-      {
-        "type": "header",
-        "content": "Button"
-      },
-      {
-        "type": "text",
-        "id": "link_text",
-        "label": "Text"
-      },
-      {
-        "type": "url",
-        "id": "link",
-        "label": "Link"
-      },
-      {
-        "type": "select",
-        "id": "button_color",
-        "label": "Color",
-        "default": "btn--white",
-        "options": [
-          { "value": "btn--primary", "label": "Bright accent" },
-          { "value": "btn--secondary", "label": "Secondary accent" },
-          { "value": "btn--neutral", "label": "Text color" },
-          { "value": "btn--black", "label": "Black" },
-          { "value": "btn--white", "label": "White" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "default": "btn",
-        "options": [
-          { "value": "btn", "label": "Solid button"},
-          { "value": "btn--soft", "label": "Soft button"},
-          { "value": "btn--outline", "label": "Outlined button"}
-        ]
-      }
-    ]
-  },
-  {
-    "type": "product",
-    "name": "Product",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Product"
-      },
-      {
-        "type": "product",
-        "id": "product",
-        "label": "Product"
-      },
-      {
-        "type": "text",
-        "id": "kicker",
-        "label": "Kicker",
-        "default": "Shop the look"
-      },
-      {
-        "type": "text",
-        "id": "badge_string",
-        "label": "Custom badge"
-      },
-      {
-        "type": "header",
-        "content": "Style"
-      },
-      {
-        "type": "select",
-        "id": "align_text",
-        "label": "Text alignment",
-        "default": "text-center",
-        "options": [
-          { "value": "text-left","label": "Left" },
-          { "value": "text-center","label": "Centered" },
-          { "value": "text-right","label": "Right" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "text_color",
-        "label": "Text color",
-        "default": "text--neutral",
-        "options": [
-          { "value": "text--neutral", "label": "Normal text"},
-          { "value": "text--white", "label": "White"},
-          { "value": "text--primary", "label": "Primary accent"},
-          { "value": "text--secondary", "label": "Secondary accent"},
-          { "value": "text--black", "label": "Black"},
-          { "value": "text--invert--primary", "label": "Primary dark accent"},
-          { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-          { "value": "text--invert", "label": "Inverted text color"},
-          { "value": "text--bright--primary", "label": "Primary bright accent"},
-          { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-        ]
-      },
-      {
-        "type": "color",
-        "id": "bg_color",
-        "label": "Background",
-        "default": "#f7f7f7"
-      },
-      {
-        "type": "color",
-        "id": "bg_accent",
-        "label": "Background accent",
-        "default": "#ffffff"
-      }
-    ]
-  },
-  {
-    "type": "collection",
-    "name": "Collection",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Collection"
-      },
-      {
-        "type": "collection",
-        "id": "collection",
-        "label": "Collection"
-      },
-      {
-        "type": "text",
-        "id": "kicker",
-        "label": "Kicker",
-        "default": "Shop the look"
-      },
-      {
-        "type": "header",
-        "content": "Style"
-      },
-      {
-        "type": "select",
-        "id": "align_text",
-        "label": "Text alignment",
-        "default": "text-center",
-        "options": [
-          { "value": "text-left","label": "Left" },
-          { "value": "text-center","label": "Centered" },
-          { "value": "text-right","label": "Right" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "text_color",
-        "label": "Text color",
-        "default": "text--neutral",
-        "options": [
-          { "value": "text--neutral", "label": "Normal text"},
-          { "value": "text--white", "label": "White"},
-          { "value": "text--primary", "label": "Primary accent"},
-          { "value": "text--secondary", "label": "Secondary accent"},
-          { "value": "text--black", "label": "Black"},
-          { "value": "text--invert--primary", "label": "Primary dark accent"},
-          { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-          { "value": "text--invert", "label": "Inverted text color"},
-          { "value": "text--bright--primary", "label": "Primary bright accent"},
-          { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-        ]
-      },
-      {
-        "type": "color",
-        "id": "bg_color",
-        "label": "Background",
-        "default": "#f7f7f7"
-      },
-      {
-        "type": "color",
-        "id": "bg_accent",
-        "label": "Background accent",
-        "default": "#ffffff"
-      }
-    ]
-  },
-  {
-    "type": "article",
-    "name": "Article",
-    "settings": [
-      {
-        "type": "article",
-        "id": "article",
-        "label": "Article"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_tag",
-        "label": "Show tag",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "show_date",
-        "label": "Show date",
-        "default": true
-      },
-      {
-        "type":  "range",
-        "id":    "font_size",
-        "label": "Text size",
-        "min":    1,
-        "max":    10,
-        "step":   1,
-        "default": 5
-      },
-      {
-        "type": "checkbox",
-        "id": "show_excerpt",
-        "label": "Show excerpt",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "align_text",
-        "label": "Text alignment",
-        "default": "text-left",
-        "options": [
-          { "value": "text-left","label": "Left" },
-          { "value": "text-center","label": "Centered" },
-          { "value": "text-right","label": "Right" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "placement_text",
-        "label": "Text placement",
-        "default": "middle",
-        "options": [
-          { "value": "top","label": "Top" },
-          { "value": "middle","label": "Middle" },
-          { "value": "bottom","label": "Bottom" }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Author"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_author_name",
-        "label": "Show author name",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "show_author_image",
-        "label": "Show author image",
-        "default": true
-      },
-      {
-        "type": "image_picker",
-        "id": "author_image",
-        "label": "Author image"
-      },
-      {
-        "type": "header",
-        "content": "Button"
-      },
-      {
-        "type":"text",
-        "id":"button_text",
-        "label":"Text",
-        "default": "Read more"
-      },
-      {
-        "type": "select",
-        "id": "button_color",
-        "label": "Color",
-        "default": "btn--neutral",
-        "options": [
-          { "value": "btn--primary", "label": "Bright accent" },
-          { "value": "btn--secondary", "label": "Secondary accent" },
-          { "value": "btn--neutral", "label": "Text color" },
-          { "value": "btn--black", "label": "Black" },
-          { "value": "btn--white", "label": "White" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "default": "btn-text-thick-line",
-        "options": [
-          { "value": "btn-text-thick-line", "label": "Capitalized text" },
-          { "value": "btn btn--long", "label": "Solid button" },
-          { "value": "btn--soft btn--long", "label": "Soft button" },
-          { "value": "btn--outline btn--long", "label": "Outlined button" }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Style"
-      },
-      {
-        "type": "select",
-        "id": "text_color",
-        "label": "Text color",
-        "default": "text--neutral",
-        "options": [
-          { "value": "text--neutral", "label": "Normal text"},
-          { "value": "text--white", "label": "White"},
-          { "value": "text--primary", "label": "Primary accent"},
-          { "value": "text--secondary", "label": "Secondary accent"},
-          { "value": "text--black", "label": "Black"},
-          { "value": "text--invert--primary", "label": "Primary dark accent"},
-          { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-          { "value": "text--invert", "label": "Inverted text color"},
-          { "value": "text--bright--primary", "label": "Primary bright accent"},
-          { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-        ]
-      },
-      {
-        "type": "color",
-        "id": "bg_color",
-        "label": "Background",
-        "default": "#f7f7f7"
-      }
-    ]
-  }
-],
-  "presets": [
-    {
-      "name": "Image with text",
-      "category": "Image",
-      "blocks": [
-        {
-          "type": "text"
-        },
-        {
-          "type": "image"
-        }
-      ]
-    }
-  ],
-  "disabled_on": {
-    "groups": ["header","footer","aside"]
-  }
+	"name": "Image with text",
+	"max_blocks": 2,
+	"blocks": [
+		{
+			"type": "image",
+			"name": "Image",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "header",
+					"content": "Overlay"
+				},
+				{
+					"type": "range",
+					"id": "overlay_opacity",
+					"label": "Opacity",
+					"info": "Increase contrast for legible text.",
+					"min": 0,
+					"max": 100,
+					"step": 5,
+					"unit": "%",
+					"default": 15
+				},
+				{
+					"type": "color",
+					"id": "overlay_color",
+					"label": "Overlay color",
+					"default": "#000"
+				},
+				{
+					"type": "checkbox",
+					"id": "enable_overlay_text",
+					"label": "Overlay behind text only",
+					"default": false
+				},
+				{
+					"type": "header",
+					"content": "Text"
+				},
+				{
+					"type": "text",
+					"id": "kicker",
+					"label": "Kicker"
+				},
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Title"
+				},
+				{
+					"type": "richtext",
+					"id": "richtext",
+					"label": "Text"
+				},
+				{
+					"type": "select",
+					"id": "text_align",
+					"label": "Alignment",
+					"default": "align--middle-center",
+					"options": [
+						{
+							"value": "align--top-left",
+							"label": "Top left"
+						},
+						{
+							"value": "align--top-center",
+							"label": "Top center"
+						},
+						{
+							"value": "align--top-right",
+							"label": "Top right"
+						},
+						{
+							"value": "align--middle-left",
+							"label": "Middle left"
+						},
+						{
+							"value": "align--middle-center",
+							"label": "Absolute center"
+						},
+						{
+							"value": "align--middle-right",
+							"label": "Middle right"
+						},
+						{
+							"value": "align--bottom-left",
+							"label": "Bottom left"
+						},
+						{
+							"value": "align--bottom-center",
+							"label": "Bottom center"
+						},
+						{
+							"value": "align--bottom-right",
+							"label": "Bottom right"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "text_color",
+					"label": "Text color",
+					"default": "text--white",
+					"options": [
+						{
+							"value": "text--neutral",
+							"label": "Normal text"
+						},
+						{
+							"value": "text--white",
+							"label": "White"
+						},
+						{
+							"value": "text--primary",
+							"label": "Primary accent"
+						},
+						{
+							"value": "text--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "text--black",
+							"label": "Black"
+						},
+						{
+							"value": "text--invert--primary",
+							"label": "Primary dark accent"
+						},
+						{
+							"value": "text--invert--secondary",
+							"label": "Secondary dark accent"
+						},
+						{
+							"value": "text--invert",
+							"label": "Inverted text color"
+						},
+						{
+							"value": "text--bright--primary",
+							"label": "Primary bright accent"
+						},
+						{
+							"value": "text--bright--secondary",
+							"label": "Secondary bright accent"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Button"
+				},
+				{
+					"type": "text",
+					"id": "link_text",
+					"label": "Text",
+					"default": "Shop Now",
+					"info": "Leave blank to link entire image"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Link"
+				},
+				{
+					"type": "select",
+					"id": "button_color",
+					"label": "Color",
+					"default": "btn--white",
+					"options": [
+						{
+							"value": "btn--primary",
+							"label": "Bright accent"
+						},
+						{
+							"value": "btn--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "btn--neutral",
+							"label": "Text color"
+						},
+						{
+							"value": "btn--black",
+							"label": "Black"
+						},
+						{
+							"value": "btn--white",
+							"label": "White"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Button style",
+					"default": "btn",
+					"options": [
+						{
+							"value": "btn-text-thick-line",
+							"label": "Capitalized text"
+						},
+						{
+							"value": "btn",
+							"label": "Solid button"
+						},
+						{
+							"value": "btn--soft",
+							"label": "Soft button"
+						},
+						{
+							"value": "btn--outline",
+							"label": "Outlined button"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "text",
+			"name": "Text",
+			"settings": [
+				{
+					"type": "text",
+					"id": "kicker",
+					"label": "Kicker",
+					"default": "Image with text"
+				},
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Title"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "<p>Use this text to share information about your brand with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+				},
+				{
+					"type": "range",
+					"id": "font_size",
+					"label": "Text size",
+					"min": 1,
+					"max": 10,
+					"step": 1,
+					"default": 5
+				},
+				{
+					"type": "range",
+					"id": "text_columns",
+					"label": "Columns",
+					"min": 1,
+					"max": 3,
+					"step": 1,
+					"default": 1,
+					"info": "Desktop only"
+				},
+				{
+					"type": "select",
+					"id": "align_text",
+					"label": "Text alignment",
+					"default": "text-left",
+					"options": [
+						{
+							"value": "text-left",
+							"label": "Left"
+						},
+						{
+							"value": "text-center",
+							"label": "Centered"
+						},
+						{
+							"value": "text-right",
+							"label": "Right"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Button"
+				},
+				{
+					"type": "text",
+					"id": "button_text",
+					"label": "Text"
+				},
+				{
+					"type": "url",
+					"id": "button_url",
+					"label": "Link"
+				},
+				{
+					"type": "select",
+					"id": "button_color",
+					"label": "Color",
+					"default": "btn--neutral",
+					"options": [
+						{
+							"value": "btn--primary",
+							"label": "Bright accent"
+						},
+						{
+							"value": "btn--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "btn--neutral",
+							"label": "Text color"
+						},
+						{
+							"value": "btn--black",
+							"label": "Black"
+						},
+						{
+							"value": "btn--white",
+							"label": "White"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Button style",
+					"default": "btn-text-thick-line",
+					"options": [
+						{
+							"value": "btn-text-thick-line",
+							"label": "Capitalized text"
+						},
+						{
+							"value": "btn btn--long",
+							"label": "Solid button"
+						},
+						{
+							"value": "btn--soft btn--long",
+							"label": "Soft button"
+						},
+						{
+							"value": "btn--outline btn--long",
+							"label": "Outlined button"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Style"
+				},
+				{
+					"type": "select",
+					"id": "text_color",
+					"label": "Text color",
+					"default": "text--neutral",
+					"options": [
+						{
+							"value": "text--neutral",
+							"label": "Normal text"
+						},
+						{
+							"value": "text--white",
+							"label": "White"
+						},
+						{
+							"value": "text--primary",
+							"label": "Primary accent"
+						},
+						{
+							"value": "text--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "text--black",
+							"label": "Black"
+						},
+						{
+							"value": "text--invert--primary",
+							"label": "Primary dark accent"
+						},
+						{
+							"value": "text--invert--secondary",
+							"label": "Secondary dark accent"
+						},
+						{
+							"value": "text--invert",
+							"label": "Inverted text color"
+						},
+						{
+							"value": "text--bright--primary",
+							"label": "Primary bright accent"
+						},
+						{
+							"value": "text--bright--secondary",
+							"label": "Secondary bright accent"
+						}
+					]
+				},
+				{
+					"type": "color",
+					"id": "bg_color",
+					"label": "Background"
+				}
+			]
+		},
+		{
+			"type": "newsletter",
+			"name": "Newsletter",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "kicker",
+					"label": "Kicker",
+					"default": "Newsletter"
+				},
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Heading"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "<p>Join to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+				},
+				{
+					"type": "range",
+					"id": "font_size",
+					"label": "Text size",
+					"min": 1,
+					"max": 10,
+					"step": 1,
+					"default": 5
+				},
+				{
+					"type": "select",
+					"id": "align_text",
+					"label": "Text alignment",
+					"default": "text-left",
+					"options": [
+						{
+							"value": "text-left",
+							"label": "Left"
+						},
+						{
+							"value": "text-center",
+							"label": "Centered"
+						},
+						{
+							"value": "text-right",
+							"label": "Right"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Button"
+				},
+				{
+					"type": "text",
+					"id": "button_text",
+					"label": "Text"
+				},
+				{
+					"type": "select",
+					"id": "button_color",
+					"label": "Color",
+					"default": "btn--neutral",
+					"options": [
+						{
+							"value": "btn--primary",
+							"label": "Bright accent"
+						},
+						{
+							"value": "btn--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "btn--neutral",
+							"label": "Text color"
+						},
+						{
+							"value": "btn--black",
+							"label": "Black"
+						},
+						{
+							"value": "btn--white",
+							"label": "White"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Button style",
+					"default": "btn--soft",
+					"options": [
+						{
+							"value": "btn",
+							"label": "Solid button"
+						},
+						{
+							"value": "btn--soft",
+							"label": "Soft button"
+						},
+						{
+							"value": "btn--outline",
+							"label": "Outlined button"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Style"
+				},
+				{
+					"type": "select",
+					"id": "text_color",
+					"label": "Text color",
+					"default": "text--neutral",
+					"options": [
+						{
+							"value": "text--neutral",
+							"label": "Normal text"
+						},
+						{
+							"value": "text--white",
+							"label": "White"
+						},
+						{
+							"value": "text--primary",
+							"label": "Primary accent"
+						},
+						{
+							"value": "text--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "text--black",
+							"label": "Black"
+						},
+						{
+							"value": "text--invert--primary",
+							"label": "Primary dark accent"
+						},
+						{
+							"value": "text--invert--secondary",
+							"label": "Secondary dark accent"
+						},
+						{
+							"value": "text--invert",
+							"label": "Inverted text color"
+						},
+						{
+							"value": "text--bright--primary",
+							"label": "Primary bright accent"
+						},
+						{
+							"value": "text--bright--secondary",
+							"label": "Secondary bright accent"
+						}
+					]
+				},
+				{
+					"type": "color",
+					"id": "bg_color",
+					"label": "Background",
+					"default": "#f7f7f7"
+				},
+				{
+					"type": "paragraph",
+					"content": "Subscribers are under 'Accepts Marketing' in your [customer admin](/admin/customers)."
+				}
+			]
+		},
+		{
+			"type": "video",
+			"name": "Video",
+			"settings": [
+				{
+					"type": "header",
+					"content": "Background video"
+				},
+				{
+					"type": "video",
+					"id": "video_bg",
+					"label": "Video background"
+				},
+				{
+					"type": "select",
+					"id": "object_position",
+					"label": "Background video position",
+					"default": "center-center",
+					"options": [
+						{
+							"label": "Top",
+							"value": "center-top"
+						},
+						{
+							"label": "Right",
+							"value": "right-center"
+						},
+						{
+							"label": "Center",
+							"value": "center-center"
+						},
+						{
+							"label": "Left",
+							"value": "left-center"
+						},
+						{
+							"label": "Bottom",
+							"value": "center-bottom"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Background Image"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "header",
+					"content": "Video popup"
+				},
+				{
+					"type": "video_url",
+					"id": "video_link",
+					"label": "Video popup link",
+					"accept": [
+						"youtube",
+						"vimeo"
+					],
+					"info": "Streaming video source from YouTube or Vimeo.",
+					"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+				},
+				{
+					"type": "text",
+					"id": "popup_text",
+					"label": "Popup button text"
+				},
+				{
+					"type": "header",
+					"content": "Text"
+				},
+				{
+					"type": "text",
+					"id": "kicker",
+					"label": "Kicker",
+					"default": "Introducing"
+				},
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Title",
+					"default": "Featured video"
+				},
+				{
+					"type": "richtext",
+					"id": "richtext",
+					"label": "Text",
+					"default": "<p>This area is used to describe your video’s details.</p>"
+				},
+				{
+					"type": "select",
+					"id": "text_align",
+					"label": "Alignment",
+					"default": "align--middle-center",
+					"options": [
+						{
+							"value": "align--top-left",
+							"label": "Top left"
+						},
+						{
+							"value": "align--top-center",
+							"label": "Top center"
+						},
+						{
+							"value": "align--top-right",
+							"label": "Top right"
+						},
+						{
+							"value": "align--middle-left",
+							"label": "Middle left"
+						},
+						{
+							"value": "align--middle-center",
+							"label": "Absolute center"
+						},
+						{
+							"value": "align--middle-right",
+							"label": "Middle right"
+						},
+						{
+							"value": "align--bottom-left",
+							"label": "Bottom left"
+						},
+						{
+							"value": "align--bottom-center",
+							"label": "Bottom center"
+						},
+						{
+							"value": "align--bottom-right",
+							"label": "Bottom right"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "text_color",
+					"label": "Text color",
+					"default": "text--white",
+					"options": [
+						{
+							"value": "text--neutral",
+							"label": "Normal text"
+						},
+						{
+							"value": "text--white",
+							"label": "White"
+						},
+						{
+							"value": "text--primary",
+							"label": "Primary accent"
+						},
+						{
+							"value": "text--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "text--black",
+							"label": "Black"
+						},
+						{
+							"value": "text--invert--primary",
+							"label": "Primary dark accent"
+						},
+						{
+							"value": "text--invert--secondary",
+							"label": "Secondary dark accent"
+						},
+						{
+							"value": "text--invert",
+							"label": "Inverted text color"
+						},
+						{
+							"value": "text--bright--primary",
+							"label": "Primary bright accent"
+						},
+						{
+							"value": "text--bright--secondary",
+							"label": "Secondary bright accent"
+						}
+					]
+				},
+				{
+					"type": "range",
+					"id": "overlay_opacity",
+					"min": 0,
+					"max": 100,
+					"step": 5,
+					"label": "Image overlay opacity",
+					"info": "Increase contrast for legible text.",
+					"default": 15
+				},
+				{
+					"type": "color",
+					"id": "overlay_color",
+					"label": "Overlay color",
+					"default": "#000"
+				},
+				{
+					"type": "header",
+					"content": "Button"
+				},
+				{
+					"type": "text",
+					"id": "link_text",
+					"label": "Text"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Link"
+				},
+				{
+					"type": "select",
+					"id": "button_color",
+					"label": "Color",
+					"default": "btn--white",
+					"options": [
+						{
+							"value": "btn--primary",
+							"label": "Bright accent"
+						},
+						{
+							"value": "btn--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "btn--neutral",
+							"label": "Text color"
+						},
+						{
+							"value": "btn--black",
+							"label": "Black"
+						},
+						{
+							"value": "btn--white",
+							"label": "White"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Button style",
+					"default": "btn",
+					"options": [
+						{
+							"value": "btn",
+							"label": "Solid button"
+						},
+						{
+							"value": "btn--soft",
+							"label": "Soft button"
+						},
+						{
+							"value": "btn--outline",
+							"label": "Outlined button"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "product",
+			"name": "Product",
+			"settings": [
+				{
+					"type": "header",
+					"content": "Product"
+				},
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product"
+				},
+				{
+					"type": "text",
+					"id": "kicker",
+					"label": "Kicker",
+					"default": "Shop the look"
+				},
+				{
+					"type": "text",
+					"id": "badge_string",
+					"label": "Custom badge"
+				},
+				{
+					"type": "header",
+					"content": "Style"
+				},
+				{
+					"type": "select",
+					"id": "align_text",
+					"label": "Text alignment",
+					"default": "text-center",
+					"options": [
+						{
+							"value": "text-left",
+							"label": "Left"
+						},
+						{
+							"value": "text-center",
+							"label": "Centered"
+						},
+						{
+							"value": "text-right",
+							"label": "Right"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "text_color",
+					"label": "Text color",
+					"default": "text--neutral",
+					"options": [
+						{
+							"value": "text--neutral",
+							"label": "Normal text"
+						},
+						{
+							"value": "text--white",
+							"label": "White"
+						},
+						{
+							"value": "text--primary",
+							"label": "Primary accent"
+						},
+						{
+							"value": "text--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "text--black",
+							"label": "Black"
+						},
+						{
+							"value": "text--invert--primary",
+							"label": "Primary dark accent"
+						},
+						{
+							"value": "text--invert--secondary",
+							"label": "Secondary dark accent"
+						},
+						{
+							"value": "text--invert",
+							"label": "Inverted text color"
+						},
+						{
+							"value": "text--bright--primary",
+							"label": "Primary bright accent"
+						},
+						{
+							"value": "text--bright--secondary",
+							"label": "Secondary bright accent"
+						}
+					]
+				},
+				{
+					"type": "color",
+					"id": "bg_color",
+					"label": "Background",
+					"default": "#f7f7f7"
+				},
+				{
+					"type": "color",
+					"id": "bg_accent",
+					"label": "Background accent",
+					"default": "#ffffff"
+				}
+			]
+		},
+		{
+			"type": "collection",
+			"name": "Collection",
+			"settings": [
+				{
+					"type": "header",
+					"content": "Collection"
+				},
+				{
+					"type": "collection",
+					"id": "collection",
+					"label": "Collection"
+				},
+				{
+					"type": "text",
+					"id": "kicker",
+					"label": "Kicker",
+					"default": "Shop the look"
+				},
+				{
+					"type": "header",
+					"content": "Style"
+				},
+				{
+					"type": "select",
+					"id": "align_text",
+					"label": "Text alignment",
+					"default": "text-center",
+					"options": [
+						{
+							"value": "text-left",
+							"label": "Left"
+						},
+						{
+							"value": "text-center",
+							"label": "Centered"
+						},
+						{
+							"value": "text-right",
+							"label": "Right"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "text_color",
+					"label": "Text color",
+					"default": "text--neutral",
+					"options": [
+						{
+							"value": "text--neutral",
+							"label": "Normal text"
+						},
+						{
+							"value": "text--white",
+							"label": "White"
+						},
+						{
+							"value": "text--primary",
+							"label": "Primary accent"
+						},
+						{
+							"value": "text--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "text--black",
+							"label": "Black"
+						},
+						{
+							"value": "text--invert--primary",
+							"label": "Primary dark accent"
+						},
+						{
+							"value": "text--invert--secondary",
+							"label": "Secondary dark accent"
+						},
+						{
+							"value": "text--invert",
+							"label": "Inverted text color"
+						},
+						{
+							"value": "text--bright--primary",
+							"label": "Primary bright accent"
+						},
+						{
+							"value": "text--bright--secondary",
+							"label": "Secondary bright accent"
+						}
+					]
+				},
+				{
+					"type": "color",
+					"id": "bg_color",
+					"label": "Background",
+					"default": "#f7f7f7"
+				},
+				{
+					"type": "color",
+					"id": "bg_accent",
+					"label": "Background accent",
+					"default": "#ffffff"
+				}
+			]
+		},
+		{
+			"type": "article",
+			"name": "Article",
+			"settings": [
+				{
+					"type": "article",
+					"id": "article",
+					"label": "Article"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_tag",
+					"label": "Show tag",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_date",
+					"label": "Show date",
+					"default": true
+				},
+				{
+					"type": "range",
+					"id": "font_size",
+					"label": "Text size",
+					"min": 1,
+					"max": 10,
+					"step": 1,
+					"default": 5
+				},
+				{
+					"type": "checkbox",
+					"id": "show_excerpt",
+					"label": "Show excerpt",
+					"default": true
+				},
+				{
+					"type": "select",
+					"id": "align_text",
+					"label": "Text alignment",
+					"default": "text-left",
+					"options": [
+						{
+							"value": "text-left",
+							"label": "Left"
+						},
+						{
+							"value": "text-center",
+							"label": "Centered"
+						},
+						{
+							"value": "text-right",
+							"label": "Right"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "placement_text",
+					"label": "Text placement",
+					"default": "middle",
+					"options": [
+						{
+							"value": "top",
+							"label": "Top"
+						},
+						{
+							"value": "middle",
+							"label": "Middle"
+						},
+						{
+							"value": "bottom",
+							"label": "Bottom"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Author"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_author_name",
+					"label": "Show author name",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_author_image",
+					"label": "Show author image",
+					"default": true
+				},
+				{
+					"type": "image_picker",
+					"id": "author_image",
+					"label": "Author image"
+				},
+				{
+					"type": "header",
+					"content": "Button"
+				},
+				{
+					"type": "text",
+					"id": "button_text",
+					"label": "Text",
+					"default": "Read more"
+				},
+				{
+					"type": "select",
+					"id": "button_color",
+					"label": "Color",
+					"default": "btn--neutral",
+					"options": [
+						{
+							"value": "btn--primary",
+							"label": "Bright accent"
+						},
+						{
+							"value": "btn--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "btn--neutral",
+							"label": "Text color"
+						},
+						{
+							"value": "btn--black",
+							"label": "Black"
+						},
+						{
+							"value": "btn--white",
+							"label": "White"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Button style",
+					"default": "btn-text-thick-line",
+					"options": [
+						{
+							"value": "btn-text-thick-line",
+							"label": "Capitalized text"
+						},
+						{
+							"value": "btn btn--long",
+							"label": "Solid button"
+						},
+						{
+							"value": "btn--soft btn--long",
+							"label": "Soft button"
+						},
+						{
+							"value": "btn--outline btn--long",
+							"label": "Outlined button"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Style"
+				},
+				{
+					"type": "select",
+					"id": "text_color",
+					"label": "Text color",
+					"default": "text--neutral",
+					"options": [
+						{
+							"value": "text--neutral",
+							"label": "Normal text"
+						},
+						{
+							"value": "text--white",
+							"label": "White"
+						},
+						{
+							"value": "text--primary",
+							"label": "Primary accent"
+						},
+						{
+							"value": "text--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "text--black",
+							"label": "Black"
+						},
+						{
+							"value": "text--invert--primary",
+							"label": "Primary dark accent"
+						},
+						{
+							"value": "text--invert--secondary",
+							"label": "Secondary dark accent"
+						},
+						{
+							"value": "text--invert",
+							"label": "Inverted text color"
+						},
+						{
+							"value": "text--bright--primary",
+							"label": "Primary bright accent"
+						},
+						{
+							"value": "text--bright--secondary",
+							"label": "Secondary bright accent"
+						}
+					]
+				},
+				{
+					"type": "color",
+					"id": "bg_color",
+					"label": "Background",
+					"default": "#f7f7f7"
+				}
+			]
+		},
+	],
+	"settings": [
+		{
+			"type": "select",
+			"id": "height",
+			"label": "Section height",
+			"default": "use_screen_one_half",
+			"options": [
+				{
+					"value": "use_screen_full",
+					"label": "Full screen height"
+				},
+				{
+					"value": "use_screen_three_quarters",
+					"label": "Three quarters of screen height"
+				},
+				{
+					"value": "use_screen_two_thirds",
+					"label": "Two thirds of screen height"
+				},
+				{
+					"value": "use_screen_one_half",
+					"label": "One half of screen height"
+				},
+				{
+					"value": "use_screen_one_third",
+					"label": "One third of screen height"
+				},
+				{
+					"value": "use_screen_one_fifth",
+					"label": "One fifth of screen height"
+				},
+				{
+					"value": "use_pixels_800",
+					"label": "800px"
+				},
+				{
+					"value": "use_pixels_650",
+					"label": "650px"
+				},
+				{
+					"value": "use_pixels_500",
+					"label": "500px"
+				},
+				{
+					"value": "use_image",
+					"label": "Image height"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "brick_gutter",
+			"min": 0,
+			"max": 50,
+			"step": 2,
+			"unit": "px",
+			"label": "Block spacing",
+			"default": 0
+		},
+		{
+			"type": "checkbox",
+			"id": "borders",
+			"label": "Add borders",
+			"default": false
+		},
+		{
+			"type": "color",
+			"id": "bg_color",
+			"label": "Background"
+		},
+		{
+			"type": "checkbox",
+			"id": "preload_image",
+			"label": "Prioritize image load",
+			"default": false,
+			"info": "Prioritize loading this image before other images. Helpful when this section is first on a page, harmful when this section is below other image sections."
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper",
+			"options": [
+				{
+					"value": "wrapper--none",
+					"label": "Full width"
+				},
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				},
+				{
+					"value": "wrapper--narrow",
+					"label": "Page width narrow"
+				},
+				{
+					"value": "wrapper--tiny",
+					"label": "Page width extra narrow"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 36
+		},
+	],
+	"presets": [
+		{
+			"name": "Image with text",
+			"blocks": [
+				{
+					"type": "text"
+				},
+				{
+					"type": "image"
+				}
+			]
+		}
+	],
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"aside"
+		]
+	}
 }
 {% endschema %}

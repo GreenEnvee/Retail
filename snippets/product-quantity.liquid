@@ -2,17 +2,25 @@
 
 <div class="product__block__quantity" style="--PB: {{ block.settings.padding_bottom }}px;" {{ block.shopify_attributes }}>
   {%- if block.settings.show_quantity -%}
-    <div class="quantity__wrapper" data-quantity-selector>
-      <button class="quantity__button quantity__button--minus" data-decrease-quantity type="button" aria-label="{{ 'general.accessibility.decrease_quantity' | t }}">&minus;</button>
-      <input data-quantity-input
+    <div x-stepper x-effect="quantity = $stepper.value" class="quantity__wrapper">
+      <button class="quantity__button quantity__button--minus" x-stepper:minus type="button" aria-label="{{ 'general.accessibility.decrease_quantity' | t }}">&minus;</button>
+      <input
         aria-label="{{ 'cart.label.quantity' | t }}"
         class="quantity__input"
         type="number"
         min="1"
         name="quantity"
         form="{{ uniq_id }}"
-        value="1"/>
-      <button class="quantity__button quantity__button--plus" data-increase-quantity type="button" aria-label="{{ 'general.accessibility.increase_quantity' | t }}">+</button>
+        value="1"
+        x-stepper:input
+        {% comment %} This is for backwards compatibility with the old quantity selector that triggers 'change' when incrementing or decrementing {% endcomment %}
+        x-init='
+          $watch("quantity", () => {
+            $dispatch("change")
+          })
+        '
+      />
+      <button class="quantity__button quantity__button--plus" x-stepper:plus type="button" aria-label="{{ 'general.accessibility.increase_quantity' | t }}">+</button>
     </div>
   {%- endif -%}
 </div>

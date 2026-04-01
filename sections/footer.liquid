@@ -33,7 +33,7 @@
 {%- endcapture -%}
 
 {%- capture socials_html -%}
-  {%- assign social_accounts = 'Facebook, Twitter, Tiktok, Pinterest, Instagram, Snapchat, Tumblr, Linkedin, YouTube, Vimeo, Medium, ' | split: ', ' -%}
+  {%- assign social_accounts = 'Facebook, X, Tiktok, Pinterest, Instagram, Snapchat, Tumblr, Linkedin, YouTube, Vimeo, Medium, ' | split: ', ' -%}
   {%- for social in social_accounts -%}
     {%- assign social_handle = social | handleize -%}
     {% capture social_link %}social_{{ social_handle }}_link{% endcapture %}
@@ -66,7 +66,7 @@
             echo image | image_url: width: image_width
           endcapture
 
-          render 'image-tag', img_object: image, wh_ratio: image.aspect_ratio, width: image_width, srcset: srcset, alt: custom_social_icon_title
+          render 'image-tag', img_object: image, wh_ratio: image.aspect_ratio, width: image_width, srcset: srcset, placeholder: false, alt: custom_social_icon_title
         -%}
       </a>
     {%- endif -%}
@@ -341,7 +341,7 @@
 
       {%- if shop.features.follow_on_shop? and block.settings.enable_follow_on_shop -%}
         {%- capture follow_on_shop_html -%}
-          <span class="inline-block align-middle my-[5px]"
+          <span class="inline-block align-middle my-[5px] ms-[20px] first:ms-0"
             data-shop-pay-wrapper
             data-bg="var(--COLOR-FOOTER-BG)"
             data-text="var(--COLOR-FOOTER-A90)"
@@ -436,328 +436,365 @@
 
 {% schema %}
 {
-  "name": "Footer",
-  "max_blocks": 6,
-  "settings": [
-    {
-      "type": "select",
-      "id": "menu_position",
-      "label": "Menu position",
-      "default": "left",
-      "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "right", "label": "Right" }
-      ]
-    },
-    {
-      "label": "Footer logo",
-      "type": "image_picker",
-      "id": "footer_image",
-      "info": "400 x 200px .png"
-    },
-    {
-      "type":    "range",
-      "id":      "logo_max_limit",
-      "min":     5,
-      "max":     495,
-      "step":    5,
-      "unit":    "px",
-      "label":   "Logo width",
-      "default": 120
-    },
-    {
-      "type": "header",
-      "content": "Section spacing"
-    },
-    {
-      "type": "select",
-      "id": "width",
-      "label": "Width",
-      "default": "wrapper--full",
-      "options": [
-        { "value": "wrapper--full", "label": "Full width padded" },
-        { "value": "wrapper", "label": "Page width" }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 50
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 50
-    }
-  ],
-  "blocks" : [
-    {
-      "type": "linklist",
-      "name": "Link list",
-      "settings": [
-        {
-           "type": "link_list",
-           "id": "linklist",
-           "label": "Link list",
-           "default": "main-menu",
-           "info": "This menu won't show dropdown items"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title"
-        },
-        {
-          "type": "select",
-          "id": "accordion_default",
-          "label": "Mobile accordion",
-          "default": "",
-          "options": [
-            { "value": "accordion-is-open", "label": "Open by default"},
-            { "value": "", "label": "Closed by default"}
-          ]
-        }
-      ]
-    },
-    {
-      "type": "newsletter",
-      "name": "Newsletter",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "checkbox",
-          "id": "show_image",
-          "label": "Show image",
-          "default": true
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "range",
-          "id": "wh_ratio",
-          "min": 0.5,
-          "max": 5,
-          "step": 0.1,
-          "unit": ":1",
-          "label": "Image scaling ratio",
-          "info": "Tall to wide",
-          "default": 2
-        },
-        {
-          "type": "header",
-          "content": "Newsletter"
-        },
-        {
-          "type": "checkbox",
-          "id": "newsletter_enable",
-          "label": "Show newsletter",
-          "info":  "Subscribers are under 'Accepts Marketing' in your [customer admin](/admin/customers).",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "id": "recaptcha_enabled",
-          "label": "Recaptcha enabled",
-          "info": "[Show Google terms](/admin/online_store/preferences)",
-          "default": false
-        },
-        {
-          "type": "header",
-          "content": "Text"
-        },
-        {
-          "id": "kicker",
-          "type": "text",
-          "label": "Kicker"
-        },
-        {
-          "id": "heading",
-          "type": "text",
-          "label": "Title",
-          "default": "Exclusive offers straight to your inbox"
-        },
-        {
-          "id": "richtext",
-          "type": "richtext",
-          "label": "Text",
-          "default": "<p>Join to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
-        },
-        {
-          "type":  "range",
-          "id":    "text_size",
-          "label": "Text size",
-          "min":    1,
-          "max":    15,
-          "step":   1,
-          "default": 4
-        },
-        {
-          "type": "header",
-          "content": "Colors"
-        },
-        {
-          "type": "color",
-          "id": "background_color",
-          "label": "Background color",
-          "default": "#f7f7f7"
-        },
-        {
-          "type": "color",
-          "id": "text_color_value",
-          "label": "Text color",
-          "default": "#656565"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "name": "Text",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Text column"
-        },
-        {
-          "type": "richtext",
-          "id": "text",
-          "label": "Text",
-          "default": "<p>Share store details, promotions, or brand content with your customers.</p>"
-        },
-        {
-          "type":  "range",
-          "id":    "text_size",
-          "label": "Text size",
-          "min":    1,
-          "max":    15,
-          "step":   1,
-          "default": 4
-        },
-        {
-          "type": "select",
-          "id": "accordion_default",
-          "label": "Mobile accordion",
-          "default": "",
-          "options": [
-            { "value": "accordion-is-open", "label": "Open by default"},
-            { "value": "", "label": "Closed by default"}
-          ]
-        }
-      ]
-    },
-    {
-      "type": "image",
-      "name": "Image",
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Image column"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type":    "range",
-          "id":      "image_max_limit",
-          "min":     10,
-          "max":     900,
-          "step":    10,
-          "unit":    "px",
-          "label":   "Max width",
-          "default": 300
-        },
-        {
-          "type":"url",
-          "id":"image_link",
-          "label":"Link"
-        },
-        {
-          "type": "select",
-          "id": "accordion_default",
-          "label": "Mobile accordion",
-          "default": "",
-          "options": [
-            { "value": "accordion-is-open", "label": "Open by default"},
-            { "value": "", "label": "Closed by default"}
-          ]
-        }
-      ]
-    },
-    {
-      "type": "page",
-      "name": "Page",
-      "settings": [
-        {
-          "id": "page",
-          "type": "page",
-          "label": "Page"
-        },
-        {
-          "type": "select",
-          "id": "accordion_default",
-          "label": "Mobile accordion",
-          "default": "",
-          "options": [
-            { "value": "accordion-is-open", "label": "Open by default"},
-            { "value": "", "label": "Closed by default"}
-          ]
-        }
-      ]
-    },
-    {
-      "type": "social",
-      "name": "Social",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Stay in touch."
-        },
-        {
-          "type":  "range",
-          "id":    "text_size",
-          "label": "Text size",
-          "min":    1,
-          "max":    15,
-          "step":   1,
-          "default": 8
-        },
-        {
-          "type": "header",
-          "content": "Follow on Shop",
-          "info": "Display follow button for your storefront on the Shop app. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/follow-on-shop)"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_follow_on_shop",
-          "default": true,
-          "label": "Enable Follow on Shop"
-        }
-      ]
-    }
-  ],
-  "enabled_on": {
-    "groups": ["footer"]
-  }
+	"name": "Footer",
+	"max_blocks": 6,
+	"settings": [
+		{
+			"type": "select",
+			"id": "menu_position",
+			"label": "Menu position",
+			"default": "left",
+			"options": [
+				{
+					"value": "left",
+					"label": "Left"
+				},
+				{
+					"value": "right",
+					"label": "Right"
+				}
+			]
+		},
+		{
+			"label": "Footer logo",
+			"type": "image_picker",
+			"id": "footer_image",
+			"info": "400 x 200px .png"
+		},
+		{
+			"type": "range",
+			"id": "logo_max_limit",
+			"min": 5,
+			"max": 495,
+			"step": 5,
+			"unit": "px",
+			"label": "Logo width",
+			"default": 120
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper--full",
+			"options": [
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 50
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 50
+		}
+	],
+	"blocks": [
+		{
+			"type": "linklist",
+			"name": "Link list",
+			"settings": [
+				{
+					"type": "link_list",
+					"id": "linklist",
+					"label": "Link list",
+					"default": "main-menu",
+					"info": "This menu won't show dropdown items"
+				},
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Title"
+				},
+				{
+					"type": "select",
+					"id": "accordion_default",
+					"label": "Mobile accordion",
+					"default": "",
+					"options": [
+						{
+							"value": "accordion-is-open",
+							"label": "Open by default"
+						},
+						{
+							"value": "",
+							"label": "Closed by default"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "newsletter",
+			"name": "Newsletter",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "show_image",
+					"label": "Show image",
+					"default": true
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "range",
+					"id": "wh_ratio",
+					"min": 0.5,
+					"max": 5,
+					"step": 0.1,
+					"unit": ":1",
+					"label": "Image scaling ratio",
+					"default": 2
+				},
+				{
+					"type": "header",
+					"content": "Newsletter"
+				},
+				{
+					"type": "checkbox",
+					"id": "newsletter_enable",
+					"label": "Show newsletter",
+					"info": "Subscribers are under 'Accepts Marketing' in your [customer admin](/admin/customers).",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "recaptcha_enabled",
+					"label": "Recaptcha enabled",
+					"info": "[Show Google terms](/admin/online_store/preferences)",
+					"default": false
+				},
+				{
+					"type": "header",
+					"content": "Text"
+				},
+				{
+					"id": "kicker",
+					"type": "text",
+					"label": "Kicker"
+				},
+				{
+					"id": "heading",
+					"type": "text",
+					"label": "Title",
+					"default": "Exclusive offers straight to your inbox"
+				},
+				{
+					"id": "richtext",
+					"type": "richtext",
+					"label": "Text",
+					"default": "<p>Join to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+				},
+				{
+					"type": "range",
+					"id": "text_size",
+					"label": "Text size",
+					"min": 1,
+					"max": 15,
+					"step": 1,
+					"default": 4
+				},
+				{
+					"type": "header",
+					"content": "Colors"
+				},
+				{
+					"type": "color",
+					"id": "background_color",
+					"label": "Background color",
+					"default": "#f7f7f7"
+				},
+				{
+					"type": "color",
+					"id": "text_color_value",
+					"label": "Text color",
+					"default": "#656565"
+				}
+			]
+		},
+		{
+			"type": "text",
+			"name": "Text",
+			"settings": [
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Title",
+					"default": "Text column"
+				},
+				{
+					"type": "richtext",
+					"id": "text",
+					"label": "Text",
+					"default": "<p>Share store details, promotions, or brand content with your customers.</p>"
+				},
+				{
+					"type": "range",
+					"id": "text_size",
+					"label": "Text size",
+					"min": 1,
+					"max": 15,
+					"step": 1,
+					"default": 4
+				},
+				{
+					"type": "select",
+					"id": "accordion_default",
+					"label": "Mobile accordion",
+					"default": "",
+					"options": [
+						{
+							"value": "accordion-is-open",
+							"label": "Open by default"
+						},
+						{
+							"value": "",
+							"label": "Closed by default"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "image",
+			"name": "Image",
+			"settings": [
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Title",
+					"default": "Image column"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "range",
+					"id": "image_max_limit",
+					"min": 10,
+					"max": 900,
+					"step": 10,
+					"unit": "px",
+					"label": "Max width",
+					"default": 300
+				},
+				{
+					"type": "url",
+					"id": "image_link",
+					"label": "Link"
+				},
+				{
+					"type": "select",
+					"id": "accordion_default",
+					"label": "Mobile accordion",
+					"default": "",
+					"options": [
+						{
+							"value": "accordion-is-open",
+							"label": "Open by default"
+						},
+						{
+							"value": "",
+							"label": "Closed by default"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "page",
+			"name": "Page",
+			"settings": [
+				{
+					"id": "page",
+					"type": "page",
+					"label": "Page"
+				},
+				{
+					"type": "select",
+					"id": "accordion_default",
+					"label": "Mobile accordion",
+					"default": "",
+					"options": [
+						{
+							"value": "accordion-is-open",
+							"label": "Open by default"
+						},
+						{
+							"value": "",
+							"label": "Closed by default"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "social",
+			"name": "Social",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Title",
+					"default": "Stay in touch."
+				},
+				{
+					"type": "range",
+					"id": "text_size",
+					"label": "Text size",
+					"min": 1,
+					"max": 15,
+					"step": 1,
+					"default": 8
+				},
+				{
+					"type": "header",
+					"content": "Follow on Shop",
+					"info": "Display follow button for your storefront on the Shop app. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/follow-on-shop)"
+				},
+				{
+					"type": "checkbox",
+					"id": "enable_follow_on_shop",
+					"default": true,
+					"label": "Enable Follow on Shop"
+				}
+			]
+		}
+	],
+	"enabled_on": {
+		"groups": [
+			"footer"
+		]
+	}
 }
 {% endschema %}

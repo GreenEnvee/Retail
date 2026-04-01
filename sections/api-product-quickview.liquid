@@ -1,6 +1,7 @@
-<div data-api-content>
-  <div class="drawer__top quickview__modal__top" data-quickview-head>
+<!-- sections/api-product-quickview.liquid -->
 
+<div data-enable-history-state="false" class="contents" x-data="productForm()" data-morph-children-only>
+  <div class="drawer__top quickview__modal__top" data-quickview-head>
     <div class="drawer__top__left">
       {%- render 'product-title', product: product, block: block, section: section -%}
       {%- render 'product-price', product: product, block: block, section: section -%}
@@ -14,9 +15,9 @@
     </button>
   </div>
 
-  <div class="drawer__body" data-drawer-scrolls>
+  <div class="drawer__body" data-drawer-scrolls data-morph-skip>
     {%- if product.media.size > 0 -%}
-      <div class="quickview__modal__images" data-product-slideshow data-slideshow-desktop-style="none" data-slideshow-mobile-style="none">
+      <div class="quickview__modal__images" data-vertical-images data-product-slideshow data-slideshow-desktop-style="none" data-slideshow-mobile-style="none">
         {% for media in product.media %}
           {% render 'media', media: media, section: section %}
         {% endfor %}
@@ -30,19 +31,22 @@
     {% capture form_attr %}form="uniq_id"{% endcapture %}
     {%- render 'sibling-color-as-line-prop' product: product, attributes: form_attr -%}
 
-    <div class="product__form__outer product__align-left">
-      <button type="button" class="quickview__form__toggle btn standard__cta is-active hide" data-toggle-button>
-        <span>{{ 'products.general.hide_options' | t }}</span>
-        <span>{{ 'products.general.show_options' | t }}</span>
+    <div class="product__form__outer product__align-left" data-morph-children-only>
+      <button
+        type="button"
+        @click="showForm = !showForm"
+        class="quickview__form__toggle btn standard__cta"
+        data-toggle-button
+      >
+        <span x-show="showForm">{{ 'products.general.hide_options' | t }}</span>
+        <span x-show="!showForm">{{ 'products.general.show_options' | t }}</span>
       </button>
 
-      <div class="quickview__form__wrapper is-expanded" data-quickview-form-area data-product-form-wrapper>
+      <div class="quickview__form__wrapper is-expanded" :class="{ 'is-expanded': showForm }"  data-morph-children-only data-quickview-form-area data-product-form-wrapper>
         {%- render 'product-variant-options' product: product, uniq_id: uniq_id -%}
         {%- render 'product-subscription' product: product, uniq_id: uniq_id, enable: true -%}
         {%- render 'product-buttons' product: product, uniq_id: uniq_id -%}
       </div>
-
     </div>
-
   </div>
 </div>

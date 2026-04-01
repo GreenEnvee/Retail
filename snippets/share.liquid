@@ -9,12 +9,15 @@
 
   if product
     assign current_variant = product.selected_or_first_available_variant
-    assign share_url = current_variant.url | prepend: request.origin
+    capture variant_url
+      render 'product-form-variant-url', product: product, variant: current_variant
+    endcapture
+    assign share_url = variant_url | prepend: request.origin
   endif
 -%}
 
 {%- if share_url != '' -%}
-<share-button class="share-holder"  {% if block %}{{ block.shopify_attributes }}{% endif %}>
+<share-button key="{{ current_variant.id }}" class="share-holder" {% if block %}{{ block.shopify_attributes }}{% endif %}>
   <button class="share__button is-hidden" data-share-button>
     {%- render 'icon-core-share-ios' -%}
 

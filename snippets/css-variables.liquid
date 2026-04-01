@@ -488,8 +488,10 @@
   --FONT-KICKER-LETTER-SPACING: normal;
 {% endif %}
 
-
+{% comment %} Theme check cant find this because the file is actually called ico-select.svg.liquid {% endcomment %}
+{% # theme-check-disable MissingAsset %}
 --ICO-SELECT: url('{{ "ico-select.svg" | asset_url }}');
+{% # theme-check-enable MissingAsset %}
 
 /* ================ Photo correction ================ */
 {%- assign photo_correction = 100 -%}

@@ -45,46 +45,48 @@
       {%- endif -%}
 
       {%- if block.settings.show_remaining -%}
-        {%- assign max_inventory = block.settings.countdown -%}
-        {%- assign show_remaining_class = 'count-is-unavailable' -%}
-        {%- assign current_inventory = 0 -%}
+        {% liquid
+          assign current_variant = product.selected_or_first_available_variant
 
-        {%- if current_variant.inventory_policy == 'deny' and current_variant.inventory_management -%}
-          {%- if current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= max_inventory -%}
-            {%- assign show_remaining_class = 'count-is-low' -%}
-            {%- assign current_inventory = current_variant.inventory_quantity -%}
-          {%- elsif current_variant.inventory_quantity > 0 and current_variant.inventory_quantity > max_inventory -%}
-            {%- assign show_remaining_class = 'count-is-in' -%}
-          {%- else -%}
-            {%- assign show_remaining_class = 'count-is-out' -%}
-          {%- endif -%}
-        {%- else -%}
-          {%- assign show_remaining_class = 'count-is-unavailable' -%}
-        {%- endif -%}
+          assign show_always = false
 
-        {%- capture inventory -%}
-          <span data-remaining-max="{{ max_inventory }}" data-remaining-count>{{ current_inventory | default: 0 }} </span>
-        {%- endcapture -%}
+          if block.settings.show_remaining_style == 'always'
+            assign show_always = true
+          endif
 
-        <p class="variant__countdown {{ show_remaining_class }}{% if block.settings.show_remaining_style == 'low' or is_preorder %} show-only-low{% endif %}" data-remaining-wrapper>
-          <span class="variant__countdown--in">{{ 'products.product.in_stock' | t }}</span>
-          <span class="variant__countdown--low">{{ 'products.product.remaining_html' | t: inventory: inventory }}</span>
-          <span class="variant__countdown--out">{{ 'products.product.out_of_stock' | t }}</span>
-          <span class="variant__countdown--unavailable">{{ 'products.product.item_unavailable' | t }}</span>
-        </p>
+          # The inventory at which the "countdown" begins, e.g. "Only 9 products left"
+          assign low_threshold = block.settings.countdown
 
-        <script data-product-remaining-json type="application/json">
-          {
-            {%- for variant in product.variants -%}
-              {%- assign maximum = block.settings.countdown | plus: 1 -%}
-              {%- assign quant = null -%}
-              {%- if variant.inventory_policy == 'deny' and variant.inventory_management -%}
-                {%- assign quant = variant.inventory_quantity | at_most: maximum -%}
-              {%- endif -%}
-              "{{ variant.id | json }}": "{{ quant | json }}"{%- unless forloop.last -%},{%- endunless -%}
-            {%- endfor -%}
-          }
-        </script>
+          assign is_in_stock = false
+          assign is_low_stock = false
+          assign is_out_of_stock = false
+
+          assign current_inventory = current_variant.inventory_quantity
+
+          if current_variant.inventory_quantity > low_threshold
+            assign is_in_stock = true
+          endif
+
+          if current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= low_threshold
+            assign is_low_stock = true
+          endif
+
+          if current_variant.inventory_quantity < 1
+            assign is_out_of_stock = true
+          endif
+        %}
+
+        {% if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' %}
+          <p class="variant__countdown">
+            {% if is_in_stock and show_always %}
+              <span class="variant__countdown--in">{{ 'products.product.in_stock' | t }}</span>
+            {% elsif is_low_stock %}
+              <span class="variant__countdown--low">{{ 'products.product.remaining_html' | t: inventory: current_inventory }}</span>
+            {% elsif is_out_of_stock %}
+              <span class="variant__countdown--out">{{ 'products.product.out_of_stock' | t }}</span>
+            {% endif %}
+          </p>
+        {% endif %}
       {%- endif -%}
     </div>
   {%- endif -%}

@@ -101,7 +101,7 @@
               {% render 'cart-shipping-estimate' %}
             {%- endif -%}
 
-            <p class="drawer__bottom__meta body-size-3"><em>{{ 'cart.general.shipping_at_checkout' | t }}</em></p>
+            <p class="drawer__bottom__meta body-size-3"><em>{% render 'taxes-included-cart' %}</em></p>
 
             <div class="drawer__footer__subtotal" data-cart-subtotal>
               {% render 'cart-subtotal' %}
@@ -109,7 +109,8 @@
 
             <form id='cart-form' action="{{ routes.cart_url }}" method="post" novalidate class="cart">
               <button type="submit" name="checkout" class="btn btn--primary btn--large btn--full checkout__button">
-                {{ 'cart.general.checkout' | t }} •
+                {{ 'cart.general.checkout' | t }}
+                <span class="cta__dot">•</span>
                 <span data-cart-final>
                   {{ cart.total_price | money_with_currency }}
                 </span>
@@ -135,109 +136,109 @@
 
 {% schema %}
 {
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "cart_shipping_enable",
-      "label": "Enable shipping estimates",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "cart_show_quantity",
-      "label": "Show quantity selectors",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "cart_notes_enable",
-      "label": "Show cart notes",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Free shipping message"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_free_shipping_message",
-      "label": "Show free shipping message",
-      "default": false
-    },
-    {
-      "type": "textarea",
-      "id": "message",
-      "label": "Message",
-      "info": "Use ||amount|| to display progress towards free shipping, set the amount in your global theme settings for cart.",
-      "default": "Spend ||amount|| more for free shipping"
-    },
-    {
-      "type": "header",
-      "content": "Custom cart message"
-    },
-    {
-      "type": "checkbox",
-      "id": "cart_custom_message_enable",
-      "label": "Show custom message",
-      "default": false
-    },
-    {
-      "type": "richtext",
-      "id": "cart_custom_message_text",
-      "label": "Message text",
-      "default": "<p>Use code <strong>TENOFF</strong> at checkout for 10% off</p>"
-    },
-    {
-      "type": "header",
-      "content": "Colors"
-    },
-    {
-      "type": "select",
-      "id": "cart_color_bg",
-      "label": "Background color",
-      "default": "palette--light bg--neutral",
-      "options": [
-        {
-          "value": "palette--light bg--neutral",
-          "label": "Default"
-        },
-        {
-          "value": "palette--light bg--accent",
-          "label": "Light"
-        },
-        {
-          "value": "palette--dark bg--invert",
-          "label": "Dark"
-        },
-        {
-          "value": "palette--dark bg--invert--accent",
-          "label": "Dark accent"
-        },
-        {
-          "value": "palette--bright bg--bright",
-          "label": "Bright"
-        },
-        {
-          "value": "palette--bright bg--bright--accent",
-          "label": "Bright accent"
-        }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Additional checkout buttons"
-    },
-    {
-      "type": "paragraph",
-      "content": "Not recommended for drawer style and popup style cart"
-    },
-    {
-      "type": "checkbox",
-      "id": "cart_show_additional_buttons",
-      "label": "Show additional checkout options on cart",
-      "info": "Move buttons for Apple Pay, Amazon Pay and PayPal express from the first step of the checkout to the cart.",
-      "default": false
-    }
-  ]
+	"settings": [
+		{
+			"type": "checkbox",
+			"id": "cart_shipping_enable",
+			"label": "Enable shipping estimates",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "cart_show_quantity",
+			"label": "Show quantity selectors",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "cart_notes_enable",
+			"label": "Show cart notes",
+			"default": false
+		},
+		{
+			"type": "header",
+			"content": "Free shipping message"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_free_shipping_message",
+			"label": "Show free shipping message",
+			"default": false
+		},
+		{
+			"type": "textarea",
+			"id": "message",
+			"label": "Message",
+			"info": "Use ||amount|| to display progress towards free shipping, set the amount in your global theme settings for cart.",
+			"default": "Spend ||amount|| more for free shipping"
+		},
+		{
+			"type": "header",
+			"content": "Custom cart message"
+		},
+		{
+			"type": "checkbox",
+			"id": "cart_custom_message_enable",
+			"label": "Show custom message",
+			"default": false
+		},
+		{
+			"type": "richtext",
+			"id": "cart_custom_message_text",
+			"label": "Message text",
+			"default": "<p>Use code <strong>TENOFF</strong> at checkout for 10% off</p>"
+		},
+		{
+			"type": "header",
+			"content": "Colors"
+		},
+		{
+			"type": "select",
+			"id": "cart_color_bg",
+			"label": "Background color",
+			"default": "palette--light bg--neutral",
+			"options": [
+				{
+					"value": "palette--light bg--neutral",
+					"label": "Default"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Additional checkout buttons"
+		},
+		{
+			"type": "paragraph",
+			"content": "Not recommended for drawer style and popup style cart"
+		},
+		{
+			"type": "checkbox",
+			"id": "cart_show_additional_buttons",
+			"label": "Show additional checkout options on cart",
+			"info": "Move buttons for Apple Pay, Amazon Pay and PayPal express from the first step of the checkout to the cart.",
+			"default": false
+		}
+	]
 }
 {% endschema %}

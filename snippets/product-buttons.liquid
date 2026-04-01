@@ -4,6 +4,7 @@
   assign buybutton_setting = false
   assign gift_card_recipient_feature_active = false
   assign current_variant = product.selected_or_first_available_variant
+  assign price = current_variant.price
 
   if block.settings.enable_gift_card_recipient and product.gift_card?
     assign gift_card_recipient_feature_active = true
@@ -18,9 +19,31 @@
   if product.selling_plan_groups.size > 0
     assign buybutton_setting = false
   endif
+
+  # Select current selling plan if it's specified in the URL
+  assign selected_selling_plan = product.selected_selling_plan
+  if product.requires_selling_plan and selected_selling_plan == blank
+    # Fallback to the first available selling plan
+    assign selected_selling_plan = product.selected_or_first_available_selling_plan_allocation.selling_plan | default: product.selling_plan_groups[0].selling_plans[0]
+  endif
+
+  # Subscription price
+  if selected_selling_plan
+    assign price_adjustment = selected_selling_plan.price_adjustments[0]
+    case price_adjustment.value_type
+      when 'percentage'
+        assign plan_discount_amount = price | times: price_adjustment.value | divided_by: 100
+      when 'fixed_amount'
+        assign plan_discount_amount = price_adjustment.value
+      when 'price'
+        assign plan_discount_amount = 0
+        assign price = price_adjustment.value
+    endcase
+    assign price = price | minus: plan_discount_amount
+  endif
 -%}
 
-<product-form x-data="productAddButtonForm()" class="product__block__buttons" style="--PB: {{ block.settings.padding_bottom }}px;" {{ block.shopify_attributes }} >
+<div class="product__block__buttons" style="--PB: {{ block.settings.padding_bottom }}px;" {{ block.shopify_attributes }} >
   <div data-product-form-outer>
     {% comment %} The [data-product-form] tag distinguishes the product form from upsell instant-add-buttons. {% endcomment %}
     {%- form 'product', product, id: uniq_id, data-product-form: '', data-product-handle: product.handle -%}
@@ -50,9 +73,13 @@
 
             {%- render 'sibling-color-as-line-prop' product: product -%}
 
-            {%- unless current_variant.available -%}
+            {%- if current_variant == null -%}
+              {%- assign button_text =  'products.product.unavailable' | t -%}
+            {%- endif -%}
+
+            {%- if current_variant.available == false -%}
               {%- assign button_text =  'products.product.sold_out' | t -%}
-            {%- endunless -%}
+            {%- endif -%}
 
             <div class="product__submit__buttons{% if product.has_only_default_variant %} product__submit__buttons--clear{% endif %}">
               <span class="sr-only" aria-live="polite" x-show="isLoading">
@@ -75,18 +102,23 @@
                 }"
                 {% unless current_variant.available %} disabled="disabled" {% endunless %}
               >
-                <span class="btn-state-ready">
+                <span class="btn-state-ready flex justify-center">
                   <span data-add-to-cart-text>
                     {{ button_text }}
                   </span>
-                  <span class="cta__dot">•</span>
-                  <span data-button-price>
-                    {%- if settings.currency_code_enable -%}
-                      {{ current_variant.price | money_with_currency }}
-                    {%- else -%}
-                      {{ current_variant.price | money }}
-                    {%- endif -%}
-                  </span>
+                  {% if current_variant %}
+                    <span class="cta__dot opacity-50">•</span>
+                    <span
+                      data-button-price
+                      x-text="$formatCurrency({{- price -}} * Math.max(quantity, 1), { form: 'short', currency: '{{ cart.currency.iso_code }}' })"
+                    >
+                      {%- if settings.currency_code_enable -%}
+                        {{ price | money_with_currency }}
+                      {%- else -%}
+                        {{ price | money }}
+                      {%- endif -%}
+                    </span>
+                  {% endif %}
                 </span>
 
                 <span class="btn-state-loading">
@@ -112,21 +144,8 @@
         <div class="shop-pay-terms">{{- form | payment_terms -}}</div>
       {%- endunless -%}
 
-      {% comment %} The input with name="id" submits to cart {% endcomment %}
-      <input type="hidden" name="id" value="{{ current_variant.id }}">
-
-      <script data-product-json type="application/json">
-        {{ product | json }}
-      </script>
+      {% comment %} The input with name="id" indicates the variant to add to cart {% endcomment %}
+      <input type="hidden" name="id" x-model.fill="variantId" value="{{ current_variant.id }}">
     {%- endform -%}
   </div>
-</product-form>
-
-
-
-
-
-
-
-
-
+</div>

@@ -62,20 +62,18 @@
         </div>
 
         {% if blog.next_article or blog.previous_article %}
-          <p class="clearfix">
+          <p class="flex justify-between flex-wrap gap-r4">
             {% if blog.previous_article %}
-              <span class="left">
-                <a href="{{ blog.previous_article }}" class="btn--soft">
-                  &larr; {{ 'blogs.article.older_post' | t }}
-                </a>
-              </span>
+              <a href="{{ blog.previous_article }}" class="btn--soft">
+                <span class="inline-block rtl:-scale-x-100">&larr;</span>
+                {{ 'blogs.article.older_post' | t }}
+              </a>
             {% endif %}
             {% if blog.next_article %}
-              <span class="right">
-                <a href="{{ blog.next_article }}" class="btn--soft">
-                  {{ 'blogs.article.newer_post' | t }} &rarr;
-                </a>
-              </span>
+              <a href="{{ blog.next_article }}" class="btn--soft">
+                {{ 'blogs.article.newer_post' | t }}
+                <span class="inline-block rtl:-scale-x-100">&rarr;</span>
+              </a>
             {% endif %}
           </p>
         {% endif %}
@@ -269,184 +267,255 @@
 
 {% schema %}
 {
-  "name": "Article",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Article"
-    },
-    {
-      "type": "checkbox",
-      "id": "blog_show_meta",
-      "label": "Show date and author",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "tags",
-      "label": "Show article tags"
-    },
-    {
-      "type": "select",
-      "id": "color_bg",
-      "label": "Background color",
-      "default": "palette--light bg--neutral",
-      "options": [
-        { "value": "palette--light bg--neutral", "label": "Default"},
-        { "value": "palette--light bg--accent", "label": "Light"},
-        { "value": "palette--dark bg--invert", "label": "Dark"},
-        { "value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-        { "value": "palette--bright bg--bright", "label": "Bright"},
-        { "value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Share"
-    },
-    {
-      "type": "checkbox",
-      "id": "social",
-      "label": "Show social sharing"
-    },
-    {
-      "type": "text",
-      "id": "share_label",
-      "label": "Text",
-      "default": "Share"
-    },
-    {
-      "type": "header",
-      "content": "Featured Image"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_featured_image",
-      "label": "Show featured image",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "image_height",
-      "label": "Image height",
-      "default": "use_screen_one_third",
-      "options": [
-        { "value": "use_screen_full", "label": "Full screen height"},
-        { "value": "use_screen_three_quarters", "label": "Three quarters of screen height"},
-        { "value": "use_screen_two_thirds", "label": "Two thirds of screen height"},
-        { "value": "use_screen_one_half", "label": "One half of screen height"},
-        { "value": "use_screen_one_third", "label": "One third of screen height"},
-        { "value": "use_screen_one_fifth", "label": "One fifth of screen height"},
-        { "value": "use_pixels_800", "label": "800px" },
-        { "value": "use_pixels_650", "label": "650px" },
-        { "value": "use_pixels_500", "label": "500px" },
-        { "value": "use_image", "label": "Image height"}
-      ]
-    },
-    {
-      "type": "select",
-      "id": "bg_position",
-      "label": "Position",
-      "default": "center-center",
-      "options": [
-        { "label": "Top", "value": "center-top" },
-        { "label": "Right", "value": "right-center" },
-        { "label": "Center", "value": "center-center" },
-        { "label": "Left", "value": "left-center" },
-        { "label": "Bottom", "value": "center-bottom" }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Sidebar"
-    },
-    {
-      "type": "checkbox",
-      "id": "sidebar_tags",
-      "label": "Show all tags"
-    },
-    {
-      "type": "checkbox",
-      "id": "recent",
-      "default": true,
-      "label": "Show recent articles"
-    },
-    {
-      "type": "range",
-      "id": "wh_ratio",
-      "min": 0.5,
-      "max": 5,
-      "step": 0.1,
-      "unit": ":1",
-      "label": "Image scaling ratio",
-      "info": "Tall to wide",
-      "default": 1.7
-    },
-    {
-      "type": "checkbox",
-      "id": "show_author",
-      "label": "Show author",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_tags",
-      "label": "Show tags",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_date",
-      "label": "Show date",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_preview",
-      "label": "Show article excerpt",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_link",
-      "label": "Show read more link",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Section spacing"
-    },
-    {
-      "type": "select",
-      "id": "width",
-      "label": "Width",
-      "default": "wrapper",
-      "options": [
-        { "value": "wrapper--full", "label": "Full width padded" },
-        { "value": "wrapper", "label": "Page width" },
-        { "value": "wrapper--narrow", "label": "Page width narrow" }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 36
-    }
-  ]
+	"name": "Article",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Article"
+		},
+		{
+			"type": "checkbox",
+			"id": "blog_show_meta",
+			"label": "Show date and author",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "tags",
+			"label": "Show article tags"
+		},
+		{
+			"type": "select",
+			"id": "color_bg",
+			"label": "Background color",
+			"default": "palette--light bg--neutral",
+			"options": [
+				{
+					"value": "palette--light bg--neutral",
+					"label": "Default"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Share"
+		},
+		{
+			"type": "checkbox",
+			"id": "social",
+			"label": "Show social sharing"
+		},
+		{
+			"type": "text",
+			"id": "share_label",
+			"label": "Text",
+			"default": "Share"
+		},
+		{
+			"type": "header",
+			"content": "Featured Image"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_featured_image",
+			"label": "Show featured image",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "image_height",
+			"label": "Image height",
+			"default": "use_screen_one_third",
+			"options": [
+				{
+					"value": "use_screen_full",
+					"label": "Full screen height"
+				},
+				{
+					"value": "use_screen_three_quarters",
+					"label": "Three quarters of screen height"
+				},
+				{
+					"value": "use_screen_two_thirds",
+					"label": "Two thirds of screen height"
+				},
+				{
+					"value": "use_screen_one_half",
+					"label": "One half of screen height"
+				},
+				{
+					"value": "use_screen_one_third",
+					"label": "One third of screen height"
+				},
+				{
+					"value": "use_screen_one_fifth",
+					"label": "One fifth of screen height"
+				},
+				{
+					"value": "use_pixels_800",
+					"label": "800px"
+				},
+				{
+					"value": "use_pixels_650",
+					"label": "650px"
+				},
+				{
+					"value": "use_pixels_500",
+					"label": "500px"
+				},
+				{
+					"value": "use_image",
+					"label": "Image height"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "bg_position",
+			"label": "Position",
+			"default": "center-center",
+			"options": [
+				{
+					"label": "Top",
+					"value": "center-top"
+				},
+				{
+					"label": "Right",
+					"value": "right-center"
+				},
+				{
+					"label": "Center",
+					"value": "center-center"
+				},
+				{
+					"label": "Left",
+					"value": "left-center"
+				},
+				{
+					"label": "Bottom",
+					"value": "center-bottom"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Sidebar"
+		},
+		{
+			"type": "checkbox",
+			"id": "sidebar_tags",
+			"label": "Show all tags"
+		},
+		{
+			"type": "checkbox",
+			"id": "recent",
+			"default": true,
+			"label": "Show recent articles"
+		},
+		{
+			"type": "range",
+			"id": "wh_ratio",
+			"min": 0.5,
+			"max": 5,
+			"step": 0.1,
+			"unit": ":1",
+			"label": "Image scaling ratio",
+			"default": 1.7
+		},
+		{
+			"type": "checkbox",
+			"id": "show_author",
+			"label": "Show author",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_tags",
+			"label": "Show tags",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_date",
+			"label": "Show date",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_preview",
+			"label": "Show article excerpt",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_link",
+			"label": "Show read more link",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper",
+			"options": [
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				},
+				{
+					"value": "wrapper--narrow",
+					"label": "Page width narrow"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 36
+		}
+	]
 }
 {% endschema %}

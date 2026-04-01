@@ -166,226 +166,278 @@
 
 {% schema %}
 {
-  "name": "Shop the look",
-  "settings": [
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "Image"
-    },
-    {
-      "type": "range",
-      "id": "wh_ratio",
-      "min": 0.5,
-      "max": 4,
-      "step": 0.1,
-      "unit": ":1",
-      "label": "Image scaling ratio",
-      "info": "Tall to wide",
-      "default": 1.7
-    },
-    {
-      "type": "checkbox",
-      "id": "default_open",
-      "label": "Default to open",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "dot_color",
-      "label": "Dot color",
-      "default": "palette--dark bg--invert",
-      "options": [
-        {"value": "palette--light bg--neutral", "label": "Default"},
-        {"value": "palette--light bg--accent", "label": "Light"},
-        {"value": "palette--dark bg--invert", "label": "Dark"},
-        {"value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-        {"value": "palette--bright bg--bright", "label": "Bright"},
-        {"value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-      ]
-    },
-    {
-      "type": "select",
-      "id": "card_color",
-      "label": "Product card color",
-      "default": "palette--light bg--neutral",
-      "options": [
-        {"value": "palette--light bg--neutral", "label": "Default"},
-        {"value": "palette--light bg--accent", "label": "Light"},
-        {"value": "palette--dark bg--invert", "label": "Dark"},
-        {"value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-        {"value": "palette--bright bg--bright", "label": "Bright"},
-        {"value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-      ]
-    },
-    {
-      "type": "select",
-      "id": "position",
-      "label": "Product position",
-      "default": "look__products__holder--right",
-      "options": [
-        {"value": "look__products__holder--left", "label": "Left"},
-        {"value": "look__products__holder--right", "label": "Right"}
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Mobile"
-    },
-    {
-      "type": "range",
-      "id": "grid_small",
-      "min": 1,
-      "max": 2,
-      "step": 0.1,
-      "label": "Products per row",
-      "default": 1.2
-    },
-    {
-      "type": "checkbox",
-      "id": "image_mobile_enable",
-      "label": "Enable mobile image (optional)",
-      "default": false
-    },
-    {
-      "type": "image_picker",
-      "id": "image_mobile",
-      "label": "Image"
-    },
-    {
-      "type": "range",
-      "id": "wh_ratio_mobile",
-      "min": 0.5,
-      "max": 4,
-      "step": 0.1,
-      "unit": ":1",
-      "label": "Image scaling ratio",
-      "info": "Tall to wide",
-      "default": 1
-    },
-    {
-      "type": "header",
-      "content": "Section spacing"
-    },
-    {
-      "type": "select",
-      "id": "width",
-      "label": "Width",
-      "default": "wrapper--none",
-      "options": [
-        {"value": "wrapper--none", "label": "Full width"},
-        {"value": "wrapper--full", "label": "Full width padded"},
-        {"value": "wrapper", "label": "Page width"}
-      ]
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 0
-    }
-  ],
-  "blocks": [
-    {
-      "type": "product",
-      "name": "Product",
-      "limit": 10,
-      "settings": [
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product",
-          "info": "Product displayed in the modal"
-        },
-        {
-          "type": "header",
-          "content": "Dot position"
-        },
-        {
-          "type": "range",
-          "id": "position_x",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "label": "Horizontal",
-          "unit": "%",
-          "default": 50
-        },
-        {
-          "type": "range",
-          "id": "position_y",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "label": "Vertical",
-          "unit": "%",
-          "default": 50
-        },
-        {
-          "type": "paragraph",
-          "content": "Mobile image dot position (optional)"
-        },
-        {
-          "type": "range",
-          "id": "position_x_mobile",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "label": "Horizontal",
-          "unit": "%",
-          "default": 50
-        },
-        {
-          "type": "range",
-          "id": "position_y_mobile",
-          "min": 0,
-          "max": 100,
-          "step": 1,
-          "label": "Vertical",
-          "unit": "%",
-          "default": 50
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Shop the look",
-      "category": "Collection",
-      "blocks": [
-        {
-          "type": "product",
-          "settings": {
-            "position_x": 40,
-            "position_y": 20
-          }
-        },
-        {
-          "type": "product",
-          "settings": {
-            "position_x": 60,
-            "position_y": 60
-          }
-        }
-      ]
-    }
-  ],
-  "disabled_on": {
-    "groups": ["header", "footer", "aside"]
-  }
+	"name": "Shop the look",
+	"settings": [
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image"
+		},
+		{
+			"type": "range",
+			"id": "wh_ratio",
+			"min": 0.5,
+			"max": 4,
+			"step": 0.1,
+			"unit": ":1",
+			"label": "Image scaling ratio",
+			"default": 1.7
+		},
+		{
+			"type": "checkbox",
+			"id": "default_open",
+			"label": "Default to open",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "dot_color",
+			"label": "Dot color",
+			"default": "palette--dark bg--invert",
+			"options": [
+				{
+					"value": "palette--light bg--neutral",
+					"label": "Default"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "card_color",
+			"label": "Product card color",
+			"default": "palette--light bg--neutral",
+			"options": [
+				{
+					"value": "palette--light bg--neutral",
+					"label": "Default"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "position",
+			"label": "Product position",
+			"default": "look__products__holder--right",
+			"options": [
+				{
+					"value": "look__products__holder--left",
+					"label": "Left"
+				},
+				{
+					"value": "look__products__holder--right",
+					"label": "Right"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Mobile"
+		},
+		{
+			"type": "range",
+			"id": "grid_small",
+			"min": 1,
+			"max": 2,
+			"step": 0.1,
+			"label": "Products per row",
+			"default": 1.2
+		},
+		{
+			"type": "checkbox",
+			"id": "image_mobile_enable",
+			"label": "Enable mobile image (optional)",
+			"default": false
+		},
+		{
+			"type": "image_picker",
+			"id": "image_mobile",
+			"label": "Image"
+		},
+		{
+			"type": "range",
+			"id": "wh_ratio_mobile",
+			"min": 0.5,
+			"max": 4,
+			"step": 0.1,
+			"unit": ":1",
+			"label": "Image scaling ratio",
+			"default": 1
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper--none",
+			"options": [
+				{
+					"value": "wrapper--none",
+					"label": "Full width"
+				},
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 0
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 0
+		}
+	],
+	"blocks": [
+		{
+			"type": "product",
+			"name": "Product",
+			"limit": 10,
+			"settings": [
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product",
+					"info": "Product displayed in the modal"
+				},
+				{
+					"type": "header",
+					"content": "Dot position"
+				},
+				{
+					"type": "range",
+					"id": "position_x",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"label": "Horizontal",
+					"unit": "%",
+					"default": 50
+				},
+				{
+					"type": "range",
+					"id": "position_y",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"label": "Vertical",
+					"unit": "%",
+					"default": 50
+				},
+				{
+					"type": "paragraph",
+					"content": "Mobile image dot position (optional)"
+				},
+				{
+					"type": "range",
+					"id": "position_x_mobile",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"label": "Horizontal",
+					"unit": "%",
+					"default": 50
+				},
+				{
+					"type": "range",
+					"id": "position_y_mobile",
+					"min": 0,
+					"max": 100,
+					"step": 1,
+					"label": "Vertical",
+					"unit": "%",
+					"default": 50
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Shop the look",
+			"blocks": [
+				{
+					"type": "product",
+					"settings": {
+						"position_x": 40,
+						"position_y": 20
+					}
+				},
+				{
+					"type": "product",
+					"settings": {
+						"position_x": 60,
+						"position_y": 60
+					}
+				}
+			]
+		}
+	],
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"aside"
+		]
+	}
 }
 {% endschema %}

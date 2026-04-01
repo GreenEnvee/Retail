@@ -47,68 +47,88 @@
 </section>
 
 {% schema %}
-  {
-    "name": "Video",
-    "settings": [
-      {
-        "type": "video",
-        "id": "video",
-        "label": "Video"
-      },
-      {
-        "type": "video_url",
-        "id": "video_link",
-        "label": "Video link",
-        "accept": ["youtube", "vimeo"],
-        "info": "Streaming video source from YouTube or Vimeo.",
-        "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
-      },
-      {
-        "type": "header",
-        "content": "Section spacing"
-      },
-      {
-        "type": "select",
-        "id": "width",
-        "label": "Width",
-        "default": "wrapper",
-        "options": [
-          { "value": "wrapper--none", "label": "Full width" },
-          { "value": "wrapper--full", "label": "Full width padded" },
-          { "value": "wrapper", "label": "Page width" },
-          { "value": "wrapper--narrow", "label": "Page width narrow" },
-          { "value": "wrapper--tiny", "label": "Page width extra narrow" }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "padding_top",
-        "min": 0,
-        "max": 180,
-        "step": 2,
-        "unit": "px",
-        "label": "Padding top",
-        "default": 36
-      },
-      {
-        "type": "range",
-        "id": "padding_bottom",
-        "min": 0,
-        "max": 180,
-        "step": 2,
-        "unit": "px",
-        "label": "Padding bottom",
-        "default": 36
-      }
-    ],
-    "presets": [
-      {
-        "name": "Video",
-        "category": "Image"
-      }
-    ],
-    "disabled_on": {
-      "groups": ["header", "aside"]
-    }
-  }
+{
+	"name": "Video",
+	"settings": [
+		{
+			"type": "video",
+			"id": "video",
+			"label": "Video"
+		},
+		{
+			"type": "video_url",
+			"id": "video_link",
+			"label": "Video link",
+			"accept": [
+				"youtube",
+				"vimeo"
+			],
+			"info": "Streaming video source from YouTube or Vimeo.",
+			"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper",
+			"options": [
+				{
+					"value": "wrapper--none",
+					"label": "Full width"
+				},
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				},
+				{
+					"value": "wrapper--narrow",
+					"label": "Page width narrow"
+				},
+				{
+					"value": "wrapper--tiny",
+					"label": "Page width extra narrow"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 36
+		}
+	],
+	"presets": [
+		{
+			"name": "Video"
+		}
+	],
+	"disabled_on": {
+		"groups": [
+			"header",
+			"aside"
+		]
+	}
+}
 {% endschema %}

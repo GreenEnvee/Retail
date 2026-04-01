@@ -1,10 +1,52 @@
 <!-- /snippets/product-price.liquid -->
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
+  assign price = current_variant.price
+  assign compare_at_price = current_variant.compare_at_price
+
+  assign difference = product.compare_at_price | minus: product.price
+  assign percent_off = difference | times: 1.0 | divided_by: product.compare_at_price | times: 100.0
+  assign sale_type = settings.badge_sale_type
 
   if block.settings.price_size
     assign price_size_class = block.settings.price_size | prepend: 'accent-size-'
     assign price_small_class = block.settings.price_size | minus: 1 | prepend: 'accent-size-'
+  endif
+
+  # Select current selling plan if it's specified in the URL
+  assign selected_selling_plan = product.selected_selling_plan
+  if product.requires_selling_plan
+    # Fallback to the first available selling plan
+    assign selected_selling_plan = product.selected_or_first_available_selling_plan_allocation.selling_plan | default: product.selling_plan_groups[0].selling_plans[0]
+  endif
+
+  assign sale_text = 'products.product.sale' | t
+
+  # Subscription price
+  if selected_selling_plan
+    assign sale_text = 'products.product.subscription' | t
+
+    # Make sure the variant exists(it isn't 'unavailable') and showing a price makes sense
+    if current_variant
+      assign price_adjustment = selected_selling_plan.price_adjustments[0]
+
+      case price_adjustment.value_type
+        when 'percentage'
+          assign sale_type = 'percentage'
+          assign plan_discount_amount = price | times: price_adjustment.value | divided_by: 100
+          assign compare_at_price = price
+          assign price = compare_at_price | minus: plan_discount_amount
+          assign percent_off = price_adjustment.value
+        when 'fixed_amount'
+          assign sale_type = 'dollar'
+          assign compare_at_price = price
+          assign price = compare_at_price | minus: price_adjustment.value
+        when 'price'
+          assign sale_type = 'dollar'
+          assign compare_at_price = price
+          assign price = price_adjustment.value
+      endcase
+    endif
   endif
 -%}
 
@@ -12,31 +54,47 @@
   <div class="product__price__wrap">
     <div class="product__price__main" data-price-wrapper>
       <span class="product__price {{ price_size_class }}">
-        <span data-product-price {% if current_variant.compare_at_price > current_variant.price %} class="product__price--sale"{% endif %}>
+        <span data-product-price {% if compare_at_price > price %} class="product__price--sale"{% endif %}>
           {%- if settings.currency_code_enable -%}
-            {{ current_variant.price | money_with_currency }}
+            {{ price | money_with_currency }}
           {%- else -%}
-            {{ current_variant.price | money }}
+            {{ price | money }}
           {%- endif -%}
         </span>
       </span>
 
-      <span data-price-off class="product__price--off hide">
-        <span data-price-off-type>{{ 'products.product.sale' | t }}</span>
-        <em>•</em>
-        {{ 'products.product.save' | t }}
-        <span data-price-off-amount></span>
-      </span>
+      {% if compare_at_price > price or product.selected_selling_plan %}
+        {% case sale_type %}
+          {% when 'strike' %}
+            <span data-compare-price class="product__price--compare {{ price_size_class }}">
+              {%- if settings.currency_code_enable -%}
+                {{ compare_at_price | money_with_currency }}
+              {%- else -%}
+                {{ compare_at_price | money }}
+              {%- endif -%}
+            </span>
+          {% when 'percentage' %}
+            {% assign difference = compare_at_price | minus: price %}
+            <span class="product__price--off">
+              <span>{{ sale_text }}</span>
+              {% if percent_off > 0 %}
+                <em>•</em>
+                {{ 'products.product.save' | t }}
+                <span>{{ percent_off | floor | append: '%' }}</span>
+              {% endif %}
+            </span>
+          {% when 'dollar' %}
+            {% assign amount_off = compare_at_price | minus: price %}
+            <span class="product__price--off">
+              <span>{{ sale_text }}</span>
+              <em>•</em>
+              {{ 'products.product.save' | t }}
+              <span>{{ amount_off | money }}</span>
+            </span>
+        {% endcase %}
+      {% endif %}
 
-      {% liquid
-        assign units = product.variants | map: 'unit_price' | compact
-        if units[0]
-          assign has_units = true
-        else
-          assign has_units = false
-        endif
-      %}
-      {% if has_units %}
+      {% if current_variant.unit_price != blank %}
         {% capture show_units %}
           {%- unless current_variant.unit_price -%}style="display: none;"{%- endunless -%}
         {% endcapture %}
@@ -66,9 +124,9 @@
             {{ unit_price_separator }}
             <span data-product-base id="unit-price-base-{{ block.id }}">{{ unit_price_base_unit }}</span>
           </span>
-          <span data-price-each class="hide">
+          <span class="hide">
             {{ 'products.product.each' | t }}
-            <span data-price-each-amount></span>
+            <span></span>
           </span>
         </div>
       {% endif %}

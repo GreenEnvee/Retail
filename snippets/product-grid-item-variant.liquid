@@ -33,7 +33,7 @@
         endif
       else
         assign difference = product.compare_at_price | minus: product.price
-        assign percent_off = difference | times: 1.0 | divided_by: product.compare_at_price | times: 100
+        assign percent_off = difference | times: 1.0 | divided_by: product.compare_at_price | times: 100.0
         assign sale_badge_content = percent_off | floor | append: '%'
       endif
       assign save_word = 'products.product.save' | t | append: ' '
@@ -213,6 +213,7 @@
               assign visible = false
               assign active_class = 'is-active'
               assign is_variant_featured_media = false
+              assign is_selected_variant = false
               assign preload_image = false
               assign loading_image = 'lazy'
 
@@ -224,7 +225,6 @@
               if product.selected_variant and product.selected_variant.featured_image
                 if product.selected_variant.featured_media.id == media.id
                   assign is_selected_variant = true
-                  assign is_variant_featured_media = true
                 endif
 
                 # Show variant image is there is a collection filter applied
@@ -273,7 +273,7 @@
               data-variant-id="{{ }}"
               loading="{{ loading }}"
               {% if visible %}data-grid-current-image{% endif %}
-              {% if is_variant_featured_media and visible %}
+              {% if is_selected_variant and visible %}
                 data-slide-for-filter-selected-variant
               {% endif %}
               {% if is_variant_featured_media %}
@@ -526,7 +526,7 @@
 
           <script data-quickview-modal-template type="text/x-template">
             <div class="drawer drawer--right quickview__modal" data-quickview-modal data-form-holder id="{{ product.id }}" aria-hidden="true">
-              <div class="drawer__content" data-product-quickview-ajax></div>
+              <div class="drawer__content" data-product-quickview-ajax x-section-api='api-product-quickview'></div>
 
               <span class="drawer__underlay" data-micromodal-close tabindex="-1">
                 <span class="drawer__underlay__fill"></span>

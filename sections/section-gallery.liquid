@@ -136,182 +136,216 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Gallery",
-    "max_blocks": 12,
-    "settings": [
-      {
-        "type": "header",
-        "content": "Images"
-      },
-      {
-        "type": "checkbox",
-        "id": "scale_image",
-        "label": "Scale images",
-        "default": true
-      },
-      {
-        "type": "range",
-        "id": "wh_ratio",
-        "min": 0.5,
-        "max": 5,
-        "step": 0.1,
-        "unit": ":1",
-        "label": "Image scaling ratio",
-        "info": "Tall to wide",
-        "default": 1
-      },
-      {
-        "type": "select",
-        "id": "bg",
-        "label": "Background color",
-        "default": "palette--light bg--neutral",
-        "options": [
-          { "value": "palette--light bg--neutral", "label": "Default"},
-          { "value": "palette--light bg--accent", "label": "Light"},
-          { "value": "palette--dark bg--invert", "label": "Dark"},
-          { "value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-          { "value": "palette--bright bg--bright", "label": "Bright"},
-          { "value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-        ]
-      },
-      {
-        "type": "checkbox",
-        "id": "add_gutters",
-        "label": "Add gutters",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "progress_bar",
-        "label": "Progress bar style",
-        "default": "mobile",
-        "options": [
-          {
-            "value": "hidden",
-            "label": "Hidden"
-          },
-          {
-            "value": "mobile",
-            "label": "Mobile only"
-          },
-          {
-            "value": "desktop",
-            "label": "Desktop only"
-          },
-          {
-            "value": "both",
-            "label": "Mobile and desktop"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Items per row"
-      },
-      {
-        "type":    "range",
-        "id":      "grid_large",
-        "min":     1,
-        "max":     6,
-        "step":    1,
-        "label":   "Desktop",
-        "default": 3
-      },
-      {
-        "type":    "range",
-        "id":      "grid_medium",
-        "min":     1,
-        "max":     4,
-        "step":    1,
-        "label":   "Tablet",
-        "default": 2
-      },
-      {
-        "type":    "range",
-        "id":      "grid_mobile",
-        "min":     1,
-        "max":     3,
-        "step":    0.1,
-        "label":   "Mobile",
-        "default": 1.2
-      },
-      {
-        "type": "header",
-        "content": "Section spacing"
-      },
-      {
-        "type": "select",
-        "id": "width",
-        "label": "Width",
-        "default": "wrapper",
-        "options": [
-          { "value": "wrapper--none", "label": "Full width" },
-          { "value": "wrapper--full", "label": "Full width padded" },
-          { "value": "wrapper", "label": "Page width" },
-          { "value": "wrapper--narrow", "label": "Page width narrow" },
-          { "value": "wrapper--tiny", "label": "Page width extra narrow" }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "padding_top",
-        "min": 0,
-        "max": 180,
-        "step": 2,
-        "unit": "px",
-        "label": "Padding top",
-        "default": 36
-      },
-      {
-        "type": "range",
-        "id": "padding_bottom",
-        "min": 0,
-        "max": 180,
-        "step": 2,
-        "unit": "px",
-        "label": "Padding bottom",
-        "default": 36
-      }
-    ],
-    "blocks": [
-      {
-        "type": "image",
-        "name": "Image",
-        "settings": [
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Image"
-          },
-          {
-            "type": "text",
-            "id": "link",
-            "label": "Link",
-            "info": "YouTube and Vimeo links will use a popup.  Blank links will zoom image."
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Gallery",
-        "category": "Image",
-        "blocks": [
-          {
-            "type": "image"
-          },
-          {
-            "type": "image"
-          },
-          {
-            "type": "image"
-          }
-        ]
-      }
-    ],
-    "disabled_on": {
-      "groups": ["header","aside"]
-    }
-  }
+{
+	"name": "Gallery",
+	"max_blocks": 12,
+	"settings": [
+		{
+			"type": "header",
+			"content": "Images"
+		},
+		{
+			"type": "checkbox",
+			"id": "scale_image",
+			"label": "Scale images",
+			"default": true
+		},
+		{
+			"type": "range",
+			"id": "wh_ratio",
+			"min": 0.5,
+			"max": 5,
+			"step": 0.1,
+			"unit": ":1",
+			"label": "Image scaling ratio",
+			"default": 1
+		},
+		{
+			"type": "select",
+			"id": "bg",
+			"label": "Background color",
+			"default": "palette--light bg--neutral",
+			"options": [
+				{
+					"value": "palette--light bg--neutral",
+					"label": "Default"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "checkbox",
+			"id": "add_gutters",
+			"label": "Add gutters",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "progress_bar",
+			"label": "Progress bar style",
+			"default": "mobile",
+			"options": [
+				{
+					"value": "hidden",
+					"label": "Hidden"
+				},
+				{
+					"value": "mobile",
+					"label": "Mobile only"
+				},
+				{
+					"value": "desktop",
+					"label": "Desktop only"
+				},
+				{
+					"value": "both",
+					"label": "Mobile and desktop"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Items per row"
+		},
+		{
+			"type": "range",
+			"id": "grid_large",
+			"min": 1,
+			"max": 6,
+			"step": 1,
+			"label": "Desktop",
+			"default": 3
+		},
+		{
+			"type": "range",
+			"id": "grid_medium",
+			"min": 1,
+			"max": 4,
+			"step": 1,
+			"label": "Tablet",
+			"default": 2
+		},
+		{
+			"type": "range",
+			"id": "grid_mobile",
+			"min": 1,
+			"max": 3,
+			"step": 0.1,
+			"label": "Mobile",
+			"default": 1.2
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper",
+			"options": [
+				{
+					"value": "wrapper--none",
+					"label": "Full width"
+				},
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				},
+				{
+					"value": "wrapper--narrow",
+					"label": "Page width narrow"
+				},
+				{
+					"value": "wrapper--tiny",
+					"label": "Page width extra narrow"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 36
+		}
+	],
+	"blocks": [
+		{
+			"type": "image",
+			"name": "Image",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "text",
+					"id": "link",
+					"label": "Link",
+					"info": "YouTube and Vimeo links will use a popup.  Blank links will zoom image."
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Gallery",
+			"blocks": [
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				},
+				{
+					"type": "image"
+				}
+			]
+		}
+	],
+	"disabled_on": {
+		"groups": [
+			"header",
+			"aside"
+		]
+	}
+}
 {% endschema %}

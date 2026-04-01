@@ -3,7 +3,7 @@
 {%- assign socials_html = '' -%}
 
 {%- capture socials_html -%}
-  {%- assign social_accounts = 'Facebook, Twitter, Tiktok, Pinterest, Instagram, Snapchat, Tumblr, Linkedin, YouTube, Vimeo, Medium, ' | split: ', ' -%}
+  {%- assign social_accounts = 'Facebook, X, Tiktok, Pinterest, Instagram, Snapchat, Tumblr, Linkedin, YouTube, Vimeo, Medium, ' | split: ', ' -%}
   {%- for social in social_accounts -%}
     {%- assign social_handle = social | handleize -%}
     {% capture social_link %}social_{{ social_handle }}_link{% endcapture %}
@@ -36,7 +36,7 @@
             echo image | image_url: width: image_width
           endcapture
 
-          render 'image-tag', img_object: image, wh_ratio: image.aspect_ratio, width: image_width, srcset: srcset, alt: custom_social_icon_title
+          render 'image-tag', img_object: image, wh_ratio: image.aspect_ratio, width: image_width, srcset: srcset, placeholder: false, alt: custom_social_icon_title
         -%}
 
         <span class="visually-hidden">{{ custom_social_icon_title }}</span>
@@ -173,75 +173,83 @@
 
 {% schema %}
 {
-  "name": "Subfooter",
-  "settings": [
-    {
-      "type": "link_list",
-      "id": "footer_secondary_linklist",
-      "label": "Link List",
-      "info": "This menu won't show dropdown items"
-    },
-    {
-      "type": "checkbox",
-      "id": "footer_payment_enable",
-      "label": "Show payment types"
-    },
-    {
-      "type": "checkbox",
-      "id": "footer_social_enable",
-      "label": "Show social icons"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_locale_selector",
-      "label": "Show language selector",
-      "info": "To add a language, go to your [language settings.](/admin/settings/languages)",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_currency_selector",
-      "label": "Show currency selector",
-      "info": "To add a currency, go to your [markets](/admin/settings/markets) or [payment settings.](/admin/settings/payments)",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Section spacing"
-    },
-    {
-      "type": "select",
-      "id": "width",
-      "label": "Width",
-      "default": "wrapper--full",
-      "options": [
-        { "value": "wrapper--full", "label": "Full width padded" },
-        { "value": "wrapper", "label": "Page width" }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 36
-    }
-  ],
-  "enabled_on": {
-    "groups": ["footer"]
-  }
+	"name": "Subfooter",
+	"settings": [
+		{
+			"type": "link_list",
+			"id": "footer_secondary_linklist",
+			"label": "Link List",
+			"info": "This menu won't show dropdown items"
+		},
+		{
+			"type": "checkbox",
+			"id": "footer_payment_enable",
+			"label": "Show payment types"
+		},
+		{
+			"type": "checkbox",
+			"id": "footer_social_enable",
+			"label": "Show social icons"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_locale_selector",
+			"label": "Show language selector",
+			"info": "To add a language, go to your [language settings.](/admin/settings/languages)",
+			"default": true
+		},
+		{
+			"type": "checkbox",
+			"id": "show_currency_selector",
+			"label": "Show currency selector",
+			"info": "To add a currency, go to your [markets](/admin/settings/markets) or [payment settings.](/admin/settings/payments)",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper--full",
+			"options": [
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 36
+		}
+	],
+	"enabled_on": {
+		"groups": [
+			"footer"
+		]
+	}
 }
 {% endschema %}

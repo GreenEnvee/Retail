@@ -49,20 +49,20 @@
 
           <p class="product-clip__price {% if card_variant.compare_at_price > card_variant.price %} sale{% endif %}">
             <span class="new-price">
-              {% if settings.currency_code_enable %}
-                {{ card_variant.price | money_with_currency }}
-              {% else %}
-                {{ card_variant.price | money }}
-              {% endif %}
+              {%- if settings.currency_code_enable -%}
+                {{- card_variant.price | money_with_currency -}}
+              {%- else -%}
+                {{- card_variant.price | money -}}
+              {%- endif -%}
             </span>
 
             {%- if card_variant.compare_at_price > card_variant.price -%}
               <span class="old-price">
-                {% if settings.currency_code_enable %}
-                  {{ card_variant.compare_at_price | money_with_currency }}
-                {% else %}
-                  {{ card_variant.compare_at_price | money }}
-                {% endif %}
+                {%- if settings.currency_code_enable -%}
+                  {{- card_variant.compare_at_price | money_with_currency -}}
+                {%- else -%}
+                  {{- card_variant.compare_at_price | money -}}
+                {%- endif -%}
               </span>
             {%- endif -%}
 
@@ -122,7 +122,7 @@
         {%- if can_one_click -%}
           {%- if card_variant.available -%}
             {% liquid
-              if product.metafields.theme.preorder.value == true
+              if card_product.metafields.theme.preorder.value == true
                 assign button_text = 'products.general.clip_pre_order' | t
               else
                 assign button_text = 'products.general.clip_add_to_cart' | t
@@ -191,7 +191,7 @@
     {%- unless can_one_click -%}
       <script data-quickview-modal-template type="text/x-template">
         <div class="drawer drawer--right quickview__modal" data-quickview-modal data-form-holder id="{{ card_product.id }}" aria-hidden="true">
-          <div class="drawer__content" data-product-quickview-ajax></div>
+          <div class="drawer__content" data-product-quickview-ajax x-section-api='api-product-quickview'></div>
 
           <span class="drawer__underlay" data-micromodal-close tabindex="-1">
             <span class="drawer__underlay__fill"></span>

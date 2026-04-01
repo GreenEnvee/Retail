@@ -9,6 +9,7 @@
   *  srcset {string} - Source set for <img> tag. Default: image-default-srcset.liquid
   *  sizes {string} - Sizes for <img> tag
   *  loading {string, false} - Image loading attribute. Default: 'lazy'
+  *  placeholder {string, false} - Which placeholder to use if img is blank (see https://shopify.dev/api/liquid/filters/placeholder_svg_tag for options). Default: 'image'
 
   {% render 'image-tag', img_object: section.settings.image %}
 {% endcomment %}
@@ -37,7 +38,7 @@
 
   assign class = class | default: ''
   assign style = style | default: ''
-  capture styles
+  capture style
     echo 'object-position: ' | append: focal_or_setting | append: '; '
     unless style == ''
       echo style
@@ -54,14 +55,15 @@
     sizes: sizes,
     loading: loading,
     fetchpriority: fetchpriority,
-    style: styles
+    style: style
   }}
-{% else %}
-  {%- liquid
-    capture svg_classes
-      echo 'block bg-theme-color-hairline fill-[#B4B6B9] placeholder-svg'
-    endcapture
-  -%}
-  <svg preserveAspectRatio="xMidYMid slice" class="{{ svg_classes }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 525.5 525.5">
-  </svg>
+{% elsif placeholder != false %}
+  {% assign placeholder = placeholder | default: 'image' %}
+
+  {% render 'image-placeholder',
+    placeholder: placeholder,
+    alt: alt,
+    class: class,
+    style: style
+  %}
 {% endif %}

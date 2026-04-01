@@ -463,7 +463,7 @@
 
           {% if drawer_links %}
             {% assign secondary_index = menu_index | plus: 1 %}
-            {% for link in linklists[toolbar_links].links %}
+            {% for link in linklists[drawer_links].links %}
               {% render 'nav-item-mobile', link: link, section: section, index: secondary_index, secondary_menu: true %}
               {% assign secondary_index = secondary_index | plus: forloop.index %}
             {% endfor %}
@@ -597,7 +597,7 @@
     "logo": {{ section.settings.logo | img_url: image_size | prepend: "https:" | json }},
   {% endif %}
   "sameAs": [
-    {{ settings.social_twitter_link | json }},
+    {{ settings.social_x_link | json }},
     {{ settings.social_facebook_link | json }},
     {{ settings.social_instagram_link | json }},
     {{ settings.social_pinterest_link | json }},
@@ -630,536 +630,743 @@
 
 {% schema %}
 {
-  "name": "Header",
-  "settings": [
-    {
-      "type": "select",
-      "id": "header_style",
-      "label": "Header style",
-      "default": "split",
-      "options": [
-        { "value": "logo_center", "label": "Menu | Logo | Cart"},
-        { "value": "menu_center", "label": "Logo | Menu | Cart"},
-        { "value": "split", "label": "Logo | Spacer | Menu + Cart"},
-        { "value": "drawer", "label": "Mobile drawer menu"}
-      ],
-      "info": "Learn more about [header styles](https://groupthought.com/link/pipeline/docs/header-styles)"
-    },
-    {
-      "type": "image_picker",
-      "id": "logo",
-      "label": "Logo image"
-    },
-    {
-      "type":    "range",
-      "id":      "logo_max_limit",
-      "min":     5,
-      "max":     495,
-      "step":    5,
-      "unit":    "px",
-      "label":   "Logo width",
-      "default": 120
-    },
-    {
-      "type":    "range",
-      "id":      "logo_padding",
-      "min":     0,
-      "max":     50,
-      "step":    1,
-      "unit":    "px",
-      "label":   "Logo padding",
-      "default": 15
-    },
-    {
-      "type":  "range",
-      "id":    "logo_text_size",
-      "label": "Logo text size",
-      "min":    1,
-      "max":    15,
-      "step":   1,
-      "default":5,
-      "info": "Available only for text logo"
-    },
-    {
-      "type": "header",
-      "content": "Links"
-    },
-    {
-      "type": "link_list",
-      "label": "Menu",
-      "id": "main_menu_linklist"
-    },
-    {
-      "type": "link_list",
-      "label": "Mobile menu (optional)",
-      "id": "mobile_menu_linklist"
-    },
-    {
-      "type": "checkbox",
-      "id": "full_width",
-      "default": false,
-      "label": "Full width"
-    },
-    {
-      "type": "checkbox",
-      "id": "underline_current",
-      "default": false,
-      "label": "Underline current page"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_search",
-      "default": true,
-      "label": "Show search in header"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_account",
-      "default": true,
-      "label": "Show account link in header",
-      "info": "The setting for 'show login link' must be enabled in your [customer accounts settings](/admin/settings/customer_accounts)."
-    },
-    {
-      "type": "checkbox",
-      "id": "use_icons",
-      "label": "Use icons",
-      "default": false,
-      "info": "For cart, account and header"
-    },
-    {
-      "type": "select",
-      "id": "icons_type",
-      "label": "Icons type",
-      "default": "classic",
-      "options": [
-        { "value": "classic", "label": "Classic" },
-        { "value": "modern", "label": "Modern" }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "cart_icon",
-      "label": "Cart icon",
-      "default": "bag",
-      "options": [
-        { "value": "basket", "label": "Basket" },
-        { "value": "bag", "label": "Bag" },
-        { "value": "cart", "label": "Cart" }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Sticky header"
-    },
-    {
-      "type": "select",
-      "id": "header_sticky",
-      "label": "Header scroll behavior",
-      "default": "static",
-      "options": [
-        { "value": "static", "label": "Default" },
-        { "value": "sticky", "label": "Sticky header" },
-        { "value": "directional", "label": "Sticky header only when scrolling up" }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Transparent header"
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_home",
-      "label": "Enable on the home page",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_collection",
-      "label": "Enable on collections",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_blog",
-      "label": "Enable on the blog",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_article",
-      "label": "Enable on articles",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "transparent_page",
-      "label": "Enable on pages",
-      "default": false
-    },
-    {
-      "type": "color",
-      "id": "transparent_text_color",
-      "label": "Text and icons color",
-      "default": "#ffffff"
-    },
-    {
-      "type": "image_picker",
-      "id": "transparent_logo",
-      "label": "Transparent header logo"
-    },
-    {
-      "type": "header",
-      "content": "Collection images"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_collection_images",
-      "label": "Show collection images",
-      "default": true,
-      "info": "Shown above collection name in meganav"
-    },
-    {
-      "type": "range",
-      "id": "collection_wh_ratio",
-      "min": 0.5,
-      "max": 5,
-      "step": 0.1,
-      "unit": ":1",
-      "label": "Collection image height",
-      "info": "Tall to wide",
-      "default": 2.5
-    }
-  ],
-  "blocks": [
-    {
-      "name": "Toolbar",
-      "type": "toolbar",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "header",
-          "content": "Announcement text"
-        },
-        {
-          "type": "richtext",
-          "id": "announcement_text",
-          "label": "Text",
-          "default": "<p>This is announcement <em><strong>richtext</strong></em> from an announcement block</p>"
-        },
-        {
-          "type": "header",
-          "content": "Menu"
-        },
-        {
-          "type": "link_list",
-          "id": "secondary_linklist",
-          "label": "Secondary menu",
-          "info": "This menu does not support dropdowns"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_menu_desktop",
-          "label": "Show on desktop",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "id": "show_menu_mobile",
-          "label": "Show in mobile drawer",
-          "default": true
-        },
-        {
-          "type": "header",
-          "content": "Language selector",
-          "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_locale_desktop",
-          "label": "Show on desktop",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "id": "show_locale_mobile",
-          "label": "Show in mobile drawer",
-          "default": true
-        },
-        {
-          "type": "header",
-          "content": "Country/Region selector",
-          "info": "To add a currency, go to your [markets settings.](/admin/settings/markets)"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_currency_desktop",
-          "label": "Show on desktop",
-          "default": true
-        },
-        {
-          "type": "checkbox",
-          "id": "show_currency_mobile",
-          "label": "Show in mobile drawer",
-          "default": true
-        }
-      ]
-    },
-    {
-      "name": "Image",
-      "type": "image",
-      "settings": [
-        {
-          "type": "select",
-          "id": "position",
-          "label": "Link position in main menu",
-          "default": "1",
-          "options": [
-            { "value": "1", "label": "Item 1"},
-            { "value": "2", "label": "Item 2"},
-            { "value": "3", "label": "Item 3"},
-            { "value": "4", "label": "Item 4"},
-            { "value": "5", "label": "Item 5"},
-            { "value": "6", "label": "Item 6"},
-            { "value": "7", "label": "Item 7"},
-            { "value": "8", "label": "Item 8"},
-            { "value": "9", "label": "Item 9"},
-            { "value": "10", "label": "Item 10"}
-          ]
-        },
-        {
-          "type": "range",
-          "id": "wh_ratio",
-          "min": 0,
-          "max": 3,
-          "step": 0.1,
-          "unit": ":1",
-          "label": "Image scaling ratio",
-          "info": "Tall to wide",
-          "default": 1.2
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "checkbox",
-          "id": "wide_element",
-          "label": "Wide element",
-          "default": false
-        },
-        {
-          "type":    "range",
-          "id":      "overlay_opacity",
-          "min":     0,
-          "max":     100,
-          "step":    5,
-          "label":   "Image overlay opacity",
-          "info":    "Increase contrast for legible text.",
-          "default": 0
-        },
-        {
-          "type": "color",
-          "id": "overlay_color",
-          "label": "Overlay color",
-          "default": "#000"
-        },
-        {
-          "type": "header",
-          "content": "Title"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Text"
-        },
-        {
-          "type": "select",
-          "id": "title_color",
-          "label": "Color",
-          "default": "text--white",
-          "options": [
-            { "value": "text--neutral", "label": "Normal text"},
-            { "value": "text--white", "label": "White"},
-            { "value": "text--primary", "label": "Primary accent"},
-            { "value": "text--secondary", "label": "Secondary accent"},
-            { "value": "text--black", "label": "Black"},
-            { "value": "text--invert--primary", "label": "Primary dark accent"},
-            { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-            { "value": "text--invert", "label": "Inverted text color"},
-            { "value": "text--bright--primary", "label": "Primary bright accent"},
-            { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-          ]
-        },
-        {
-          "type": "header",
-          "content": "Button"
-        },
-        {
-          "type": "select",
-          "id": "button_style",
-          "label": "Layout",
-          "default": "is-below-image",
-          "options": [
-            { "value": "text-button", "label": "Small button" },
-            { "value": "is-on-image", "label": "Text link overlay on hover" },
-            { "value": "is-below-image", "label": "Text link below image" }
-          ]
-        },
-        {
-          "type": "text",
-          "id": "link_text",
-          "label": "Text",
-          "default": "Shop All"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link",
-          "default": "/collections/all"
-        },
-        {
-          "type": "select",
-          "id": "button_color",
-          "label": "Color",
-          "default": "btn--neutral",
-          "options": [
-            { "value": "btn--primary", "label": "Bright accent" },
-            { "value": "btn--secondary", "label": "Secondary accent" },
-            { "value": "btn--neutral", "label": "Text color" },
-            { "value": "btn--black", "label": "Black" },
-            { "value": "btn--white", "label": "White" }
-          ]
-        },
-        {
-          "type": "header",
-          "content": "Visibility"
-        },
-        {
-          "type": "select",
-          "id": "display",
-          "label": "Show on",
-          "default": "all",
-          "options": [
-            { "value": "all", "label": "Both desktop and mobile drawer"},
-            { "value": "mobile", "label": "Mobile drawer only"},
-            { "value": "desktop", "label": "Desktop dropdown only"}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Product",
-      "type": "product",
-      "settings": [
-        {
-          "type": "select",
-          "id": "position",
-          "label": "Link position in main menu",
-          "default": "1",
-          "options": [
-            { "value": "1", "label": "Item 1"},
-            { "value": "2", "label": "Item 2"},
-            { "value": "3", "label": "Item 3"},
-            { "value": "4", "label": "Item 4"},
-            { "value": "5", "label": "Item 5"},
-            { "value": "6", "label": "Item 6"},
-            { "value": "7", "label": "Item 7"},
-            { "value": "8", "label": "Item 8"},
-            { "value": "9", "label": "Item 9"},
-            { "value": "10", "label": "Item 10"}
-          ]
-        },
-        {
-          "type": "checkbox",
-          "id": "wide_element",
-          "label": "Wide element",
-          "default": false
-        },
-        {
-          "type": "product",
-          "id": "product",
-          "label": "Product"
-        },
-        {
-          "type": "header",
-          "content": "Visibility"
-        },
-        {
-          "type": "select",
-          "id": "display",
-          "label": "Show on",
-          "default": "all",
-          "options": [
-            { "value": "all", "label": "Both desktop and mobile drawer"},
-            { "value": "mobile", "label": "Mobile drawer only"},
-            { "value": "desktop", "label": "Desktop dropdown only"}
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Collection",
-      "type": "collection",
-      "settings": [
-        {
-          "type": "select",
-          "id": "position",
-          "label": "Link position in main menu",
-          "default": "1",
-          "options": [
-            { "value": "1", "label": "Item 1"},
-            { "value": "2", "label": "Item 2"},
-            { "value": "3", "label": "Item 3"},
-            { "value": "4", "label": "Item 4"},
-            { "value": "5", "label": "Item 5"},
-            { "value": "6", "label": "Item 6"},
-            { "value": "7", "label": "Item 7"},
-            { "value": "8", "label": "Item 8"},
-            { "value": "9", "label": "Item 9"},
-            { "value": "10", "label": "Item 10"}
-          ]
-        },
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Collection"
-        },
-        {
-          "type":    "range",
-          "id":      "limit",
-          "min":     1,
-          "max":     10,
-          "step":    1,
-          "label":   "Product limit",
-          "default": 4
-        },
-        {
-          "type": "checkbox",
-          "id": "wide_element",
-          "label": "Wide element",
-          "default": false
-        },
-        {
-          "type": "header",
-          "content": "Visibility"
-        },
-        {
-          "type": "select",
-          "id": "display",
-          "label": "Show on",
-          "default": "all",
-          "options": [
-            { "value": "all", "label": "Both desktop and mobile drawer"},
-            { "value": "mobile", "label": "Mobile drawer only"},
-            { "value": "desktop", "label": "Desktop dropdown only"}
-          ]
-        }
-      ]
-    }
-  ],
-  "enabled_on": {
-    "groups": ["header"]
-  }
+	"name": "Header",
+	"settings": [
+		{
+			"type": "select",
+			"id": "header_style",
+			"label": "Header style",
+			"default": "split",
+			"options": [
+				{
+					"value": "logo_center",
+					"label": "Menu | Logo | Cart"
+				},
+				{
+					"value": "menu_center",
+					"label": "Logo | Menu | Cart"
+				},
+				{
+					"value": "split",
+					"label": "Logo | Spacer | Menu + Cart"
+				},
+				{
+					"value": "drawer",
+					"label": "Mobile drawer menu"
+				}
+			],
+			"info": "Learn more about [header styles](https://groupthought.com/link/pipeline/docs/header-styles)"
+		},
+		{
+			"type": "image_picker",
+			"id": "logo",
+			"label": "Logo image"
+		},
+		{
+			"type": "range",
+			"id": "logo_max_limit",
+			"min": 5,
+			"max": 495,
+			"step": 5,
+			"unit": "px",
+			"label": "Logo width",
+			"default": 120
+		},
+		{
+			"type": "range",
+			"id": "logo_padding",
+			"min": 0,
+			"max": 50,
+			"step": 1,
+			"unit": "px",
+			"label": "Logo padding",
+			"default": 15
+		},
+		{
+			"type": "range",
+			"id": "logo_text_size",
+			"label": "Logo text size",
+			"min": 1,
+			"max": 15,
+			"step": 1,
+			"default": 5,
+			"info": "Available only for text logo"
+		},
+		{
+			"type": "header",
+			"content": "Links"
+		},
+		{
+			"type": "link_list",
+			"label": "Menu",
+			"id": "main_menu_linklist"
+		},
+		{
+			"type": "link_list",
+			"label": "Mobile menu (optional)",
+			"id": "mobile_menu_linklist"
+		},
+		{
+			"type": "checkbox",
+			"id": "full_width",
+			"default": false,
+			"label": "Full width"
+		},
+		{
+			"type": "checkbox",
+			"id": "underline_current",
+			"default": false,
+			"label": "Underline current page"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_search",
+			"default": true,
+			"label": "Show search in header"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_account",
+			"default": true,
+			"label": "Show account link in header",
+			"info": "The setting for 'show login link' must be enabled in your [customer accounts settings](/admin/settings/customer_accounts)."
+		},
+		{
+			"type": "checkbox",
+			"id": "use_icons",
+			"label": "Use icons",
+			"default": false,
+			"info": "For cart, account and header"
+		},
+		{
+			"type": "select",
+			"id": "icons_type",
+			"label": "Icons type",
+			"default": "classic",
+			"options": [
+				{
+					"value": "classic",
+					"label": "Classic"
+				},
+				{
+					"value": "modern",
+					"label": "Modern"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "cart_icon",
+			"label": "Cart icon",
+			"default": "bag",
+			"options": [
+				{
+					"value": "basket",
+					"label": "Basket"
+				},
+				{
+					"value": "bag",
+					"label": "Bag"
+				},
+				{
+					"value": "cart",
+					"label": "Cart"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Sticky header"
+		},
+		{
+			"type": "select",
+			"id": "header_sticky",
+			"label": "Header scroll behavior",
+			"default": "static",
+			"options": [
+				{
+					"value": "static",
+					"label": "Default"
+				},
+				{
+					"value": "sticky",
+					"label": "Sticky header"
+				},
+				{
+					"value": "directional",
+					"label": "Sticky header only when scrolling up"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Transparent header"
+		},
+		{
+			"type": "checkbox",
+			"id": "transparent_home",
+			"label": "Enable on the home page",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "transparent_collection",
+			"label": "Enable on collections",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "transparent_blog",
+			"label": "Enable on the blog",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "transparent_article",
+			"label": "Enable on articles",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "transparent_page",
+			"label": "Enable on pages",
+			"default": false
+		},
+		{
+			"type": "color",
+			"id": "transparent_text_color",
+			"label": "Text and icons color",
+			"default": "#ffffff"
+		},
+		{
+			"type": "image_picker",
+			"id": "transparent_logo",
+			"label": "Transparent header logo"
+		},
+		{
+			"type": "header",
+			"content": "Collection images"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_collection_images",
+			"label": "Show collection images",
+			"default": true,
+			"info": "Shown above collection name in meganav"
+		},
+		{
+			"type": "range",
+			"id": "collection_wh_ratio",
+			"min": 0.5,
+			"max": 5,
+			"step": 0.1,
+			"unit": ":1",
+			"label": "Collection image height",
+			"default": 2.5
+		}
+	],
+	"blocks": [
+		{
+			"name": "Toolbar",
+			"type": "toolbar",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "header",
+					"content": "Announcement text"
+				},
+				{
+					"type": "richtext",
+					"id": "announcement_text",
+					"label": "Text",
+					"default": "<p>This is announcement <em><strong>richtext</strong></em> from an announcement block</p>"
+				},
+				{
+					"type": "header",
+					"content": "Menu"
+				},
+				{
+					"type": "link_list",
+					"id": "secondary_linklist",
+					"label": "Secondary menu",
+					"info": "This menu does not support dropdowns"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_menu_desktop",
+					"label": "Show on desktop",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_menu_mobile",
+					"label": "Show in mobile drawer",
+					"default": true
+				},
+				{
+					"type": "header",
+					"content": "Language selector",
+					"info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_locale_desktop",
+					"label": "Show on desktop",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_locale_mobile",
+					"label": "Show in mobile drawer",
+					"default": true
+				},
+				{
+					"type": "header",
+					"content": "Country/Region selector",
+					"info": "To add a currency, go to your [markets settings.](/admin/settings/markets)"
+				},
+				{
+					"type": "checkbox",
+					"id": "show_currency_desktop",
+					"label": "Show on desktop",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_currency_mobile",
+					"label": "Show in mobile drawer",
+					"default": true
+				}
+			]
+		},
+		{
+			"name": "Image",
+			"type": "image",
+			"settings": [
+				{
+					"type": "select",
+					"id": "position",
+					"label": "Link position in main menu",
+					"default": "1",
+					"options": [
+						{
+							"value": "1",
+							"label": "Item 1"
+						},
+						{
+							"value": "2",
+							"label": "Item 2"
+						},
+						{
+							"value": "3",
+							"label": "Item 3"
+						},
+						{
+							"value": "4",
+							"label": "Item 4"
+						},
+						{
+							"value": "5",
+							"label": "Item 5"
+						},
+						{
+							"value": "6",
+							"label": "Item 6"
+						},
+						{
+							"value": "7",
+							"label": "Item 7"
+						},
+						{
+							"value": "8",
+							"label": "Item 8"
+						},
+						{
+							"value": "9",
+							"label": "Item 9"
+						},
+						{
+							"value": "10",
+							"label": "Item 10"
+						}
+					]
+				},
+				{
+					"type": "range",
+					"id": "wh_ratio",
+					"min": 0,
+					"max": 3,
+					"step": 0.1,
+					"unit": ":1",
+					"label": "Image scaling ratio",
+					"default": 1.2
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image"
+				},
+				{
+					"type": "checkbox",
+					"id": "wide_element",
+					"label": "Wide element",
+					"default": false
+				},
+				{
+					"type": "range",
+					"id": "overlay_opacity",
+					"min": 0,
+					"max": 100,
+					"step": 5,
+					"label": "Image overlay opacity",
+					"info": "Increase contrast for legible text.",
+					"default": 0
+				},
+				{
+					"type": "color",
+					"id": "overlay_color",
+					"label": "Overlay color",
+					"default": "#000"
+				},
+				{
+					"type": "header",
+					"content": "Title"
+				},
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Text"
+				},
+				{
+					"type": "select",
+					"id": "title_color",
+					"label": "Color",
+					"default": "text--white",
+					"options": [
+						{
+							"value": "text--neutral",
+							"label": "Normal text"
+						},
+						{
+							"value": "text--white",
+							"label": "White"
+						},
+						{
+							"value": "text--primary",
+							"label": "Primary accent"
+						},
+						{
+							"value": "text--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "text--black",
+							"label": "Black"
+						},
+						{
+							"value": "text--invert--primary",
+							"label": "Primary dark accent"
+						},
+						{
+							"value": "text--invert--secondary",
+							"label": "Secondary dark accent"
+						},
+						{
+							"value": "text--invert",
+							"label": "Inverted text color"
+						},
+						{
+							"value": "text--bright--primary",
+							"label": "Primary bright accent"
+						},
+						{
+							"value": "text--bright--secondary",
+							"label": "Secondary bright accent"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Button"
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Layout",
+					"default": "is-below-image",
+					"options": [
+						{
+							"value": "text-button",
+							"label": "Small button"
+						},
+						{
+							"value": "is-on-image",
+							"label": "Text link overlay on hover"
+						},
+						{
+							"value": "is-below-image",
+							"label": "Text link below image"
+						}
+					]
+				},
+				{
+					"type": "text",
+					"id": "link_text",
+					"label": "Text",
+					"default": "Shop All"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Link",
+					"default": "/collections/all"
+				},
+				{
+					"type": "select",
+					"id": "button_color",
+					"label": "Color",
+					"default": "btn--neutral",
+					"options": [
+						{
+							"value": "btn--primary",
+							"label": "Bright accent"
+						},
+						{
+							"value": "btn--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "btn--neutral",
+							"label": "Text color"
+						},
+						{
+							"value": "btn--black",
+							"label": "Black"
+						},
+						{
+							"value": "btn--white",
+							"label": "White"
+						}
+					]
+				},
+				{
+					"type": "header",
+					"content": "Visibility"
+				},
+				{
+					"type": "select",
+					"id": "display",
+					"label": "Show on",
+					"default": "all",
+					"options": [
+						{
+							"value": "all",
+							"label": "Both desktop and mobile drawer"
+						},
+						{
+							"value": "mobile",
+							"label": "Mobile drawer only"
+						},
+						{
+							"value": "desktop",
+							"label": "Desktop dropdown only"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"type": "product",
+			"settings": [
+				{
+					"type": "select",
+					"id": "position",
+					"label": "Link position in main menu",
+					"default": "1",
+					"options": [
+						{
+							"value": "1",
+							"label": "Item 1"
+						},
+						{
+							"value": "2",
+							"label": "Item 2"
+						},
+						{
+							"value": "3",
+							"label": "Item 3"
+						},
+						{
+							"value": "4",
+							"label": "Item 4"
+						},
+						{
+							"value": "5",
+							"label": "Item 5"
+						},
+						{
+							"value": "6",
+							"label": "Item 6"
+						},
+						{
+							"value": "7",
+							"label": "Item 7"
+						},
+						{
+							"value": "8",
+							"label": "Item 8"
+						},
+						{
+							"value": "9",
+							"label": "Item 9"
+						},
+						{
+							"value": "10",
+							"label": "Item 10"
+						}
+					]
+				},
+				{
+					"type": "checkbox",
+					"id": "wide_element",
+					"label": "Wide element",
+					"default": false
+				},
+				{
+					"type": "product",
+					"id": "product",
+					"label": "Product"
+				},
+				{
+					"type": "header",
+					"content": "Visibility"
+				},
+				{
+					"type": "select",
+					"id": "display",
+					"label": "Show on",
+					"default": "all",
+					"options": [
+						{
+							"value": "all",
+							"label": "Both desktop and mobile drawer"
+						},
+						{
+							"value": "mobile",
+							"label": "Mobile drawer only"
+						},
+						{
+							"value": "desktop",
+							"label": "Desktop dropdown only"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Collection",
+			"type": "collection",
+			"settings": [
+				{
+					"type": "select",
+					"id": "position",
+					"label": "Link position in main menu",
+					"default": "1",
+					"options": [
+						{
+							"value": "1",
+							"label": "Item 1"
+						},
+						{
+							"value": "2",
+							"label": "Item 2"
+						},
+						{
+							"value": "3",
+							"label": "Item 3"
+						},
+						{
+							"value": "4",
+							"label": "Item 4"
+						},
+						{
+							"value": "5",
+							"label": "Item 5"
+						},
+						{
+							"value": "6",
+							"label": "Item 6"
+						},
+						{
+							"value": "7",
+							"label": "Item 7"
+						},
+						{
+							"value": "8",
+							"label": "Item 8"
+						},
+						{
+							"value": "9",
+							"label": "Item 9"
+						},
+						{
+							"value": "10",
+							"label": "Item 10"
+						}
+					]
+				},
+				{
+					"type": "collection",
+					"id": "collection",
+					"label": "Collection"
+				},
+				{
+					"type": "range",
+					"id": "limit",
+					"min": 1,
+					"max": 10,
+					"step": 1,
+					"label": "Product limit",
+					"default": 4
+				},
+				{
+					"type": "checkbox",
+					"id": "wide_element",
+					"label": "Wide element",
+					"default": false
+				},
+				{
+					"type": "header",
+					"content": "Visibility"
+				},
+				{
+					"type": "select",
+					"id": "display",
+					"label": "Show on",
+					"default": "all",
+					"options": [
+						{
+							"value": "all",
+							"label": "Both desktop and mobile drawer"
+						},
+						{
+							"value": "mobile",
+							"label": "Mobile drawer only"
+						},
+						{
+							"value": "desktop",
+							"label": "Desktop dropdown only"
+						}
+					]
+				}
+			]
+		}
+	],
+	"enabled_on": {
+		"groups": [
+			"header"
+		]
+	}
 }
 {% endschema %}

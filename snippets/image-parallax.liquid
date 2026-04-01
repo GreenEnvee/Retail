@@ -1,21 +1,19 @@
 <!-- /snippets/hero.liquid -->
 
 {% comment %}
-  A wrapper to enable parralax images
+  A wrapper for rendering banner images optonally with parallax
 
   * frame_height_class - css class to control frame height
   * frame_class - Additional CSS classes for the fram
-  * parallax_boolean - Boolean value to turn on parallax
+  * parallax_enabled - Boolean value to turn off parallax (enabled by default)
   * img_object - Image object to use used
   * img_object_mobile {object} - Image has a mobile override, use the picture tag (optional)
-
 
   Example:
   {% render 'image-parallax', img_object: section.settings.image, frame_height_class: section.settings.image_height %}
 {% endcomment %}
 
 {%- liquid
-  assign default_image = 'blank.svg' | asset_url
   assign height_class = frame_height_class | default: 'use_image'
 
   assign wh_ratio = img_object.aspect_ratio | default: 1
@@ -26,12 +24,14 @@
 
   assign placeholder = placeholder | default: 'lifestyle-1'
   assign sizes = sizes | default: '100vw'
+
+  assign parallax_enabled = parallax_enabled | default: settings.parallax_enable, allow_false: true
 -%}
 
 <div
   class="image__hero__frame fade-in-child aspect-[--wh-ratio-mobile] md:aspect-[--wh-ratio] {{ height_class }} {{ frame_class }}"
   data-overflow-background
-  {% if settings.parallax_enable %}data-parallax-wrapper{% endif %}
+  {% if parallax_enabled %}data-parallax-wrapper{% endif %}
   {% if height_class == 'use_image' %}
     style="
       --wh-ratio:  {{ wh_ratio }};
@@ -41,7 +41,7 @@
 >
   <div class="image__hero__pane">
     <div
-      {% if settings.parallax_enable %}
+      {% if parallax_enabled %}
         class="image__hero__scale h-[--height-mobile] md:h-[--height]"
         style="
           --height: {{ height }}vw;
@@ -67,7 +67,8 @@
         fetchpriority: fetchpriority,
         style: style,
         bg_position: bg_position,
-        loading_animation: loading_animation
+        loading_animation: loading_animation,
+        image_id: image_id
       %}
     </div>
   </div>

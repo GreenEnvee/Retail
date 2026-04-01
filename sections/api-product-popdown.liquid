@@ -1,10 +1,20 @@
+<!-- sections/api-product-popdown.liquid -->
+
 <div data-api-content>
-  <div class="product__popdown__outer">
+  <div
+    class="product__popdown__outer"
+    role="alertdialog"
+    aria-labelledby="dialogTitle"
+    aria-describedby="dialogDescription"
+  >
     <div class="product__popdown__textbar">
       <span class="visually-hidden" aria-live="polite">
-        {{ 'cart.general.add_message' | t }}
-        {{ product_variant.product.title | strip_html | escape }} &nbsp;
-        {{ product_variant.title }} {{ 'cart.general.total_message' | t: count: cart.item_count }}
+        <span id="dialogTitle">{{ 'cart.general.add_message' | t }}</span>
+        <span id="dialogDescription">
+          {{ product_variant.product.title | strip_html | escape }}
+          {% unless product_variant.product.has_only_default_variant %}{{ product_variant.title }}{% endunless %}
+          {{ 'cart.general.total_message' | t: count: cart.item_count }}
+        </span>
       </span>
 
         <span class="product__popdown__title product__popdown__title--bold">
@@ -19,7 +29,7 @@
           {{ 'products.cart_drawer.item_added' | t }}
         </span>
     </div>
-    <div class="wrapper">
+    <div class="wrapper !my-auto">
       <div class="product__popdown__inner">
         <div class="product__popdown__close">
           <button class="popdown__close__inner" aria-label="{{ 'general.accessibility.close' | t }}" data-close-popdown>

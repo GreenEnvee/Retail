@@ -1,0 +1,53 @@
+{%- comment -%}
+  Build variant URL with subscription parameter
+
+  Accepts:
+  - product
+  - variant
+  - selling_plan
+  - option_position (Optional) - used in "product-form-variant-buttons.liquid" and "product-form-variant-select.liquid"
+  - value_id (Optional)        - used in "product-form-variant-buttons.liquid" and "product-form-variant-select.liquid"
+{%- endcomment -%}
+
+{%- liquid
+  assign selling_plan = selling_plan | default: null, allow_false: true
+
+  if selling_plan == null
+    # Select current selling plan if it's specified in the URL
+    assign selling_plan = product.selected_selling_plan
+
+    if selling_plan == null and product.requires_selling_plan
+      # Fallback to the first available selling plan
+      assign selling_plan = product.selected_or_first_available_selling_plan_allocation.selling_plan | default: product.selling_plan_groups[0].selling_plans[0]
+    endif
+  endif
+
+  if variant
+    # Available variant
+    assign variant_url = variant.url
+  else
+    # Unavailable variant
+    assign selected_values_ids = product.options_with_values | map: 'selected_value' | map: 'id'
+    capture unavailable_variant_option_values_ids
+      for id in selected_values_ids
+        if forloop.index == option_position and value_id
+          # Handle product-form variant selector
+          echo value_id
+        else
+          # Handle everything else
+          echo id
+        endif
+        unless forloop.last
+          echo ','
+        endunless
+      endfor
+    endcapture
+    assign variant_url = product.url | append: '?option_values=' | append: unavailable_variant_option_values_ids
+  endif
+
+  if selling_plan
+    assign variant_url = variant_url | append: '&selling_plan=' | append: selling_plan.id
+  endif
+
+  echo variant_url
+-%}

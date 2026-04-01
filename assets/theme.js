@@ -9,7 +9,7 @@
 *
 */
 
-(function (AOS, FlickityFade, scrollLock, Flickity, Sqrl, MicroModal, Rellax, themeCurrency, axios, FlickitySync, themeAddresses) {
+(function (AOS, FlickityFade, scrollLock, Flickity, MicroModal, Rellax, themeCurrency, axios, themeAddresses, Sqrl) {
     'use strict';
 
     function _interopNamespaceDefault(e) {
@@ -98,32 +98,17 @@
         });
     }
 
-    // Remove loading class from all already loaded images
-    function removeLoadingClassFromLoadedImages(container) {
-        container.querySelectorAll('img').forEach((el)=>{
-            if (el.complete) {
-                el.parentNode.classList.remove('loading-shimmer');
-            }
-        });
-    }
-    // Remove loading class from image on `load` event
-    function handleImageLoaded(el) {
-        if (el.tagName == 'IMG' && el.parentNode.classList.contains('loading-shimmer')) {
-            el.parentNode.classList.remove('loading-shimmer');
-        }
-    }
-
     function readHeights() {
         const h = {};
         h.windowHeight = window.innerHeight;
-        h.announcementHeight = getHeight('[data-announcement-bar]');
-        h.toolbarHeight = getHeight('[data-toolbar-height]');
-        h.footerHeight = getHeight('[data-section-type*="footer"]');
-        h.menuHeight = getHeight('[data-header-height]');
+        h.announcementHeight = getHeight$1('[data-announcement-bar]');
+        h.toolbarHeight = getHeight$1('[data-toolbar-height]');
+        h.footerHeight = getHeight$1('[data-section-type*="footer"]');
+        h.menuHeight = getHeight$1('[data-header-height]');
         h.headerHeight = h.menuHeight + h.announcementHeight;
         h.logoHeight = getFooterLogoWithPadding();
         h.stickyHeader = document.querySelector('[data-header-sticky="sticky"]') ? h.menuHeight : 0;
-        h.backfillHeight = getHeight('[data-header-backfill]');
+        h.backfillHeight = getHeight$1('[data-header-backfill]');
         return h;
     }
     function setVarsOnResize() {
@@ -167,7 +152,7 @@
         let newBackfill = Math.abs(backfillHeight - menuHeight) > 1 ? `${menuHeight}px` : 'auto';
         document.documentElement.style.setProperty('--menu-backfill-height', newBackfill);
     }
-    function getHeight(selector) {
+    function getHeight$1(selector) {
         const el = document.querySelector(selector);
         if (el) {
             return el.clientHeight;
@@ -176,7 +161,7 @@
         }
     }
     function getFooterLogoWithPadding() {
-        const height = getHeight('[data-footer-logo]');
+        const height = getHeight$1('[data-footer-logo]');
         if (height > 0) {
             return height + 20;
         } else {
@@ -471,7 +456,7 @@
         window.addEventListener('theme:scroll:unlock', unlock);
     }
 
-    const selectors$17 = {
+    const selectors$14 = {
         time: 'time',
         days: '[data-days]',
         hours: '[data-hours]',
@@ -482,7 +467,7 @@
     const attributes$2 = {
         expirationBehavior: 'data-expiration-behavior'
     };
-    const classes$I = {
+    const classes$E = {
         showMessage: 'show-message',
         hideCountdown: 'hidden'
     };
@@ -543,10 +528,10 @@
                 seconds: 0
             });
             if (this.shouldHideOnComplete) {
-                this.shopifySection.classList.add(classes$I.hideCountdown);
+                this.shopifySection.classList.add(classes$E.hideCountdown);
             }
             if (this.shouldShowMessage) {
-                this.classList.add(classes$I.showMessage);
+                this.classList.add(classes$E.showMessage);
             }
         }
         // Function to update the countdown
@@ -562,13 +547,13 @@
         }
         constructor(){
             super();
-            this.shopifySection = this.closest(selectors$17.shopifySection);
+            this.shopifySection = this.closest(selectors$14.shopifySection);
             this.expirationBehavior = this.getAttribute(attributes$2.expirationBehavior);
-            this.time = this.querySelector(selectors$17.time);
-            this.days = this.querySelector(selectors$17.days);
-            this.hours = this.querySelector(selectors$17.hours);
-            this.minutes = this.querySelector(selectors$17.minutes);
-            this.seconds = this.querySelector(selectors$17.seconds);
+            this.time = this.querySelector(selectors$14.time);
+            this.days = this.querySelector(selectors$14.days);
+            this.hours = this.querySelector(selectors$14.hours);
+            this.minutes = this.querySelector(selectors$14.minutes);
+            this.seconds = this.querySelector(selectors$14.seconds);
             // Get the current and expiration dates in Unix timestamp format (milliseconds)
             this.endDate = Date.parse(this.time.dateTime);
             this.daysInMs = 1000 * 60 * 60 * 24;
@@ -583,14 +568,6 @@
 
     resizeListener();
     scrollListener();
-    // Remove "loading-shimmer" class from cached and very fast images
-    removeLoadingClassFromLoadedImages(document);
-    // Watch for any load events that bubble up from child elements
-    document.addEventListener('load', (e)=>{
-        const el = e.target;
-        // Capture load events from img tags and then remove their `loading-shimmer` class
-        handleImageLoaded(el);
-    }, true);
     // Tasks to run when the DOM elements are available
     window.addEventListener('DOMContentLoaded', ()=>{
         setVarsOnResize();
@@ -605,8 +582,6 @@
     window.addEventListener('load', ()=>{
         // Fix any text overflow in position:absolute elements
         preventOverflow(document);
-        // Catch any images that loaded before our load event listener above and remove "loading-shimmer" class
-        removeLoadingClassFromLoadedImages(document);
     });
     document.addEventListener('shopify:section:load', (e)=>{
         const container = e.target;
@@ -645,12 +620,12 @@
     }
     FetchError.prototype = Error.prototype;
 
-    const selectors$16 = {
+    const selectors$13 = {
         scrollbar: 'data-scrollbar-slider',
         scrollbarArrowPrev: '[data-scrollbar-arrow-prev]',
         scrollbarArrowNext: '[data-scrollbar-arrow-next]'
     };
-    const classes$H = {
+    const classes$D = {
         hidden: 'is-hidden'
     };
     const times$1 = {
@@ -693,30 +668,30 @@
         goToNext() {
             const position = this.scrollbar.getBoundingClientRect().width / 2 + this.scrollbar.scrollLeft;
             this.move(position);
-            this.arrowPrev.classList.remove(classes$H.hidden);
+            this.arrowPrev.classList.remove(classes$D.hidden);
             this.toggleNextArrow();
         }
         goToPrev() {
             const position = this.scrollbar.scrollLeft - this.scrollbar.getBoundingClientRect().width / 2;
             this.move(position);
-            this.arrowNext.classList.remove(classes$H.hidden);
+            this.arrowNext.classList.remove(classes$D.hidden);
             this.togglePrevArrow();
         }
         toggleNextArrow() {
             setTimeout(()=>{
                 if (window.isRTL) {
-                    this.arrowNext.classList.toggle(classes$H.hidden, this.scrollbar.scrollLeft === 0);
+                    this.arrowNext.classList.toggle(classes$D.hidden, this.scrollbar.scrollLeft === 0);
                 } else {
-                    this.arrowNext.classList.toggle(classes$H.hidden, Math.round(this.scrollbar.scrollLeft + this.scrollbar.getBoundingClientRect().width + 1) >= this.scrollbar.scrollWidth);
+                    this.arrowNext.classList.toggle(classes$D.hidden, Math.round(this.scrollbar.scrollLeft + this.scrollbar.getBoundingClientRect().width + 1) >= this.scrollbar.scrollWidth);
                 }
             }, times$1.delay);
         }
         togglePrevArrow() {
             setTimeout(()=>{
                 if (window.isRTL) {
-                    this.arrowPrev.classList.toggle(classes$H.hidden, Math.abs(this.scrollbar.scrollLeft) + this.scrollbar.getBoundingClientRect().width + 1 >= this.scrollbar.scrollWidth);
+                    this.arrowPrev.classList.toggle(classes$D.hidden, Math.abs(this.scrollbar.scrollLeft) + this.scrollbar.getBoundingClientRect().width + 1 >= this.scrollbar.scrollWidth);
                 } else {
-                    this.arrowPrev.classList.toggle(classes$H.hidden, this.scrollbar.scrollLeft <= 0);
+                    this.arrowPrev.classList.toggle(classes$D.hidden, this.scrollbar.scrollLeft <= 0);
                 }
             }, times$1.delay);
         }
@@ -739,17 +714,17 @@
         }
         constructor(scrollbar){
             this.scrollbar = scrollbar;
-            this.arrowNext = this.scrollbar.parentNode.querySelector(selectors$16.scrollbarArrowNext);
-            this.arrowPrev = this.scrollbar.parentNode.querySelector(selectors$16.scrollbarArrowPrev);
+            this.arrowNext = this.scrollbar.parentNode.querySelector(selectors$13.scrollbarArrowNext);
+            this.arrowPrev = this.scrollbar.parentNode.querySelector(selectors$13.scrollbarArrowPrev);
             this.init();
             this.resize();
-            if (this.scrollbar.hasAttribute(selectors$16.scrollbar)) {
+            if (this.scrollbar.hasAttribute(selectors$13.scrollbar)) {
                 this.scrollToVisibleElement();
             }
         }
     };
 
-    const selectors$15 = {
+    const selectors$12 = {
         siblingsInnerHolder: '[data-sibling-inner]'
     };
     let Siblings = class Siblings {
@@ -759,7 +734,7 @@
             });
         }
         constructor(holder){
-            this.siblings = holder.querySelectorAll(selectors$15.siblingsInnerHolder);
+            this.siblings = holder.querySelectorAll(selectors$12.siblingsInnerHolder);
             this.init();
         }
     };
@@ -829,7 +804,7 @@
         dataMinimum: 'data-minimum',
         dataItemId: 'data-item-id'
     };
-    const classes$G = {
+    const classes$C = {
         hide: 'hide',
         containerWithoutTabsNav: 'section-without-title--skip'
     };
@@ -837,7 +812,7 @@
         expires: 90,
         name: 'shopify_recently_viewed'
     };
-    const sections$p = [];
+    const sections$o = [];
     const excludedHandles = [];
     let RecentProducts = class RecentProducts {
         renderProducts() {
@@ -858,10 +833,10 @@
                     }
                 }
                 if (arrayURLs.length > 0 && arrayURLs.length >= this.minimum) {
-                    this.container.classList.remove(classes$G.hide);
+                    this.container.classList.remove(classes$C.hide);
                     if (this.recentViewedLink && this.recentViewedLink.previousElementSibling) {
-                        this.tabsHolderScroll.classList.remove(classes$G.hide);
-                        this.container.classList.add(classes$G.containerWithoutTabsNav);
+                        this.tabsHolderScroll.classList.remove(classes$C.hide);
+                        this.container.classList.add(classes$C.containerWithoutTabsNav);
                     }
                     const fecthRequests = arrayURLs.map((url)=>fetch(url, {
                             mode: 'no-cors'
@@ -902,14 +877,14 @@
                         return child !== this.recentViewedTab;
                     }).length > 1;
                     if (this.recentViewedLink && this.recentViewedLink.previousElementSibling) {
-                        this.tabsHolderScroll.classList.add(classes$G.hide);
-                        this.container.classList.remove(classes$G.containerWithoutTabsNav);
+                        this.tabsHolderScroll.classList.add(classes$C.hide);
+                        this.container.classList.remove(classes$C.containerWithoutTabsNav);
                     }
                     if (!hasSiblingTabs) {
-                        this.container.classList.add(classes$G.hide);
+                        this.container.classList.add(classes$C.hide);
                     }
                 } else {
-                    this.container.classList.add(classes$G.hide);
+                    this.container.classList.add(classes$C.hide);
                 }
             }
         }
@@ -973,7 +948,7 @@
     };
     const recentProducts = {
         onLoad () {
-            sections$p[this.id] = new RecentProducts(this);
+            sections$o[this.id] = new RecentProducts(this);
         }
     };
 
@@ -995,711 +970,55 @@
      *  if (resolution.isMobile() || resolution.isTouch()) {}
      * });
      *
-     */ function resolution$1() {
+     */ function resolution() {
         const touchQuery = `(any-pointer: coarse)`;
         const mobileQuery = `(max-width: ${window.theme.sizes.medium}px)`;
         const tabletQuery = `(min-width: ${window.theme.sizes.medium + 1}px) and (max-width: ${window.theme.sizes.large}px)`;
         const desktopQuery = `(min-width: ${window.theme.sizes.large + 1}px)`;
-        resolution$1.isTouch = ()=>{
+        resolution.isTouch = ()=>{
             const touchMatches = window.matchMedia(touchQuery).matches;
             document.documentElement.classList.toggle('supports-touch', touchMatches);
             return touchMatches;
         };
-        resolution$1.isMobile = ()=>window.matchMedia(mobileQuery).matches
+        resolution.isMobile = ()=>window.matchMedia(mobileQuery).matches
         ;
-        resolution$1.isTablet = ()=>window.matchMedia(tabletQuery).matches
+        resolution.isTablet = ()=>window.matchMedia(tabletQuery).matches
         ;
-        resolution$1.isDesktop = ()=>window.matchMedia(desktopQuery).matches
+        resolution.isDesktop = ()=>window.matchMedia(desktopQuery).matches
         ;
         const queries = [
             [
                 touchQuery,
-                resolution$1.isTouch
+                resolution.isTouch
             ],
             [
                 mobileQuery,
-                resolution$1.isMobile
+                resolution.isMobile
             ],
             [
                 tabletQuery,
-                resolution$1.isTablet
+                resolution.isTablet
             ],
             [
                 desktopQuery,
-                resolution$1.isDesktop
+                resolution.isDesktop
             ], 
         ];
-        resolution$1.onChange = (callback)=>{
+        resolution.onChange = (callback)=>{
             queries.forEach((query)=>{
                 window.matchMedia(query[0]).addEventListener('change', ()=>{
                     if (query[1]() && callback) callback();
                 });
             });
         };
-    }resolution$1();
-
-    function Listeners() {
-        this.entries = [];
-    }Listeners.prototype.add = function(element, event, fn) {
-        this.entries.push({
-            element: element,
-            event: event,
-            fn: fn
-        });
-        element.addEventListener(event, fn);
-    };
-    Listeners.prototype.removeAll = function() {
-        this.entries = this.entries.filter(function(listener) {
-            listener.element.removeEventListener(listener.event, listener.fn);
-            return false;
-        });
-    };
-
-    /**
-     * Convert the Object (with 'name' and 'value' keys) into an Array of values, then find a match & return the variant (as an Object)
-     * @param {Object} product Product JSON object
-     * @param {Object} collection Object with 'name' and 'value' keys (e.g. [{ name: "Size", value: "36" }, { name: "Color", value: "Black" }])
-     * @returns {Object || null} The variant object once a match has been successful. Otherwise null will be returned
-     */ function getVariantFromSerializedArray(product, collection) {
-        _validateProductStructure(product);
-        // If value is an array of options
-        var optionArray = _createOptionArrayFromOptionCollection(product, collection);
-        return getVariantFromOptionArray(product, optionArray);
-    }
-    /**
-     * Find a match in the project JSON (using Array with option values) and return the variant (as an Object)
-     * @param {Object} product Product JSON object
-     * @param {Array} options List of submitted values (e.g. ['36', 'Black'])
-     * @returns {Object || null} The variant object once a match has been successful. Otherwise null will be returned
-     */ function getVariantFromOptionArray(product, options) {
-        _validateProductStructure(product);
-        _validateOptionsArray(options);
-        var result = product.variants.filter(function(variant) {
-            return options.every(function(option, index) {
-                return variant.options[index] === option;
-            });
-        });
-        return result[0] || null;
-    }
-    /**
-     * Creates an array of selected options from the object
-     * Loops through the project.options and check if the "option name" exist (product.options.name) and matches the target
-     * @param {Object} product Product JSON object
-     * @param {Array} collection Array of object (e.g. [{ name: "Size", value: "36" }, { name: "Color", value: "Black" }])
-     * @returns {Array} The result of the matched values. (e.g. ['36', 'Black'])
-     */ function _createOptionArrayFromOptionCollection(product, collection) {
-        _validateProductStructure(product);
-        _validateSerializedArray(collection);
-        var optionArray = [];
-        collection.forEach(function(option) {
-            for(var i = 0; i < product.options.length; i++){
-                var name = product.options[i].name || product.options[i];
-                if (name.toLowerCase() === option.name.toLowerCase()) {
-                    optionArray[i] = option.value;
-                    break;
-                }
-            }
-        });
-        return optionArray;
-    }
-    /**
-     * Check if the product data is a valid JS object
-     * Error will be thrown if type is invalid
-     * @param {object} product Product JSON object
-     */ function _validateProductStructure(product) {
-        if (typeof product !== 'object') {
-            throw new TypeError(product + ' is not an object.');
-        }
-        if (Object.keys(product).length === 0 && product.constructor === Object) {
-            throw new Error(product + ' is empty.');
-        }
-    }
-    /**
-     * Validate the structure of the array
-     * It must be formatted like jQuery's serializeArray()
-     * @param {Array} collection Array of object [{ name: "Size", value: "36" }, { name: "Color", value: "Black" }]
-     */ function _validateSerializedArray(collection) {
-        if (!Array.isArray(collection)) {
-            throw new TypeError(collection + ' is not an array.');
-        }
-        if (collection.length === 0) {
-            throw new Error(collection + ' is empty.');
-        }
-        if (collection[0].hasOwnProperty('name')) {
-            if (typeof collection[0].name !== 'string') {
-                throw new TypeError('Invalid value type passed for name of option ' + collection[0].name + '. Value should be string.');
-            }
-        } else {
-            throw new Error(collection[0] + 'does not contain name key.');
-        }
-    }
-    /**
-     * Validate the structure of the array
-     * It must be formatted as list of values
-     * @param {Array} collection Array of object (e.g. ['36', 'Black'])
-     */ function _validateOptionsArray(options) {
-        if (Array.isArray(options) && typeof options[0] === 'object') {
-            throw new Error(options + 'is not a valid array of options.');
-        }
-    }
-
-    var selectors$14 = {
-        idInput: '[name="id"]',
-        planInput: '[name="selling_plan"]',
-        optionInput: '[name^="options"]',
-        quantityInput: '[name="quantity"]',
-        propertyInput: '[name^="properties"]'
-    };
-    /**
-     * Constructor class that creates a new instance of a product form controller.
-     *
-     * @param {Element} element - the outer wrapper containing the product form and all related input elements
-     * @param {Object} form - DOM element which is equal to the <form> node to submit the product form inputs
-     * @param {Object} product - A product object
-     * @param {Object} options - Optional options object
-     * @param {Function} options.onOptionChange - Callback for whenever an option input changes
-     * @param {Function} options.onPlanChange - Callback for changes to name=selling_plan
-     * @param {Function} options.onQuantityChange - Callback for whenever an quantity input changes
-     * @param {Function} options.onPropertyChange - Callback for whenever a property input changes
-     * @param {Function} options.onFormSubmit - Callback for whenever the product form is submitted
-     */ let ProductFormReader = class ProductFormReader {
-        /**
-       * Cleans up all event handlers that were assigned when the Product Form was constructed.
-       * Useful for use when a section needs to be reloaded in the theme editor.
-       */ destroy() {
-            this._listeners.removeAll();
-        }
-        /**
-       * Getter method which returns the array of currently selected option values
-       *
-       * @returns {Array} An array of option values
-       */ options() {
-            return this._serializeInputValues(this.optionInputs, function(item) {
-                var regex = /(?:^(options\[))(.*?)(?:\])/;
-                item.name = regex.exec(item.name)[2]; // Use just the value between 'options[' and ']'
-                return item;
-            });
-        }
-        /**
-       * Getter method which returns the currently selected variant, or `null` if variant
-       * doesn't exist.
-       *
-       * @returns {Object|null} Variant object
-       */ variant() {
-            const opts = this.options();
-            if (opts.length) {
-                return getVariantFromSerializedArray(this.product, opts);
-            } else {
-                return this.product.variants[0];
-            }
-        }
-        /**
-       * Getter method which returns the current selling plan, or `null` if plan
-       * doesn't exist.
-       *
-       * @returns {Object|null} Variant object
-       */ plan(variant) {
-            let plan = {
-                allocation: null,
-                group: null,
-                detail: null
-            };
-            const formData = new FormData(this.form);
-            const id = formData.get('selling_plan');
-            if (variant && variant.selling_plan_allocations && variant.selling_plan_allocations.length > 0) {
-                const uniqueVariantSellingPlanGroupIDs = [
-                    ...new Set(variant.selling_plan_allocations.map((sellingPlan)=>sellingPlan.selling_plan_group_id
-                    ))
-                ];
-                const productSubsGroup = this.element.querySelectorAll('[data-subscription-group]');
-                if (!productSubsGroup.length) {
-                    return;
-                }
-                productSubsGroup.forEach((group)=>group.style.display = "none"
-                );
-                uniqueVariantSellingPlanGroupIDs.forEach((groupId)=>{
-                    this.element.querySelector(`[data-selling-plan-group="${groupId}"]`).style.display = "block";
-                });
-            }
-            if (id && variant) {
-                plan.allocation = variant.selling_plan_allocations.find(function(item) {
-                    return item.selling_plan_id.toString() === id.toString();
-                });
-            }
-            if (plan.allocation) {
-                plan.group = this.product.selling_plan_groups.find(function(item) {
-                    return item.id.toString() === plan.allocation.selling_plan_group_id.toString();
-                });
-            }
-            if (plan.group) {
-                plan.detail = plan.group.selling_plans.find(function(item) {
-                    return item.id.toString() === id.toString();
-                });
-            }
-            if (plan && plan.allocation && plan.detail && plan.allocation) {
-                return plan;
-            } else return null;
-        }
-        /**
-       * Getter method which returns a collection of objects containing name and values
-       * of property inputs
-       *
-       * @returns {Array} Collection of objects with name and value keys
-       */ properties() {
-            return this._serializeInputValues(this.propertyInputs, function(item) {
-                var regex = /(?:^(properties\[))(.*?)(?:\])/;
-                item.name = regex.exec(item.name)[2]; // Use just the value between 'properties[' and ']'
-                return item;
-            });
-        }
-        /**
-       * Getter method which returns the current quantity or 1 if no quantity input is
-       * included in the form
-       *
-       * @returns {Array} Collection of objects with name and value keys
-       */ quantity() {
-            return this.quantityInputs[0] ? Number.parseInt(this.quantityInputs[0].value, 10) : 1;
-        }
-        getFormState() {
-            const variant = this.variant();
-            return {
-                options: this.options(),
-                variant: variant,
-                properties: this.properties(),
-                quantity: this.quantity(),
-                plan: this.plan(variant)
-            };
-        }
-        // Private Methods
-        // -----------------------------------------------------------------------------
-        _setIdInputValue(variant) {
-            if (variant && variant.id) {
-                this.variantElement.value = variant.id.toString();
-            } else {
-                this.variantElement.value = '';
-            }
-            this.variantElement.dispatchEvent(new Event('change'));
-        }
-        _onSubmit(options, event) {
-            event.dataset = this.getFormState();
-            if (options.onFormSubmit) {
-                options.onFormSubmit(event);
-            }
-        }
-        _onOptionChange(event) {
-            this._setIdInputValue(event.dataset.variant);
-        }
-        _onFormEvent(cb) {
-            if (typeof cb === 'undefined') {
-                return Function.prototype;
-            }
-            return (function(event) {
-                event.dataset = this.getFormState();
-                this._setIdInputValue(event.dataset.variant);
-                cb(event);
-            }).bind(this);
-        }
-        _initInputs(selector, cb) {
-            var elements = Array.prototype.slice.call(this.element.querySelectorAll(selector));
-            return elements.map((function(element) {
-                this._listeners.add(element, 'change', this._onFormEvent(cb));
-                return element;
-            }).bind(this));
-        }
-        _serializeInputValues(inputs, transform) {
-            return inputs.reduce(function(options, input) {
-                if (input.checked || input.type !== 'radio' && input.type !== 'checkbox' // Or if its any other type of input
-                ) {
-                    options.push(transform({
-                        name: input.name,
-                        value: input.value
-                    }));
-                }
-                return options;
-            }, []);
-        }
-        _validateProductObject(product) {
-            if (typeof product !== 'object') {
-                throw new TypeError(product + ' is not an object.');
-            }
-            if (typeof product.variants[0].options === 'undefined') {
-                throw new TypeError('Product object is invalid. Make sure you use the product object that is output from {{ product | json }} or from the http://[your-product-url].js route');
-            }
-            return product;
-        }
-        constructor(element, form, product, options){
-            this.element = element;
-            this.form = form.tagName == 'FORM' ? form : form.querySelector('form');
-            this.product = this._validateProductObject(product);
-            this.variantElement = this.form.querySelector(selectors$14.idInput);
-            options = options || {};
-            this.clickedElement = null;
-            this._listeners = new Listeners();
-            this._listeners.add(this.element, 'submit', this._onSubmit.bind(this, options));
-            this.optionInputs = this._initInputs(selectors$14.optionInput, options.onOptionChange);
-            this.planInputs = this._initInputs(selectors$14.planInput, options.onPlanChange);
-            this.quantityInputs = this._initInputs(selectors$14.quantityInput, options.onQuantityChange);
-            this.propertyInputs = this._initInputs(selectors$14.propertyInput, options.onPropertyChange);
-        }
-    };
-
-    function getProductJson(handle) {
-        const requestRoute = `${window.theme.routes.root_url}products/${handle}.js`;
-        return window.fetch(requestRoute).then((response)=>{
-            return response.json();
-        }).catch((e)=>{
-            console.error(e);
-        });
-    }
-
-    function getScript(url, callback, callbackError) {
-        let head = document.getElementsByTagName('head')[0];
-        let done = false;
-        let script = document.createElement('script');
-        script.src = url;
-        // Attach handlers for all browsers
-        script.onload = script.onreadystatechange = function() {
-            if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
-                done = true;
-                callback();
-            } else {
-                callbackError();
-            }
-        };
-        head.appendChild(script);
-    }
-
-    const loaders = {};
-    function loadScript(options = {}) {
-        if (!options.type) {
-            options.type = 'json';
-        }
-        if (options.url) {
-            if (loaders[options.url]) {
-                return loaders[options.url];
-            } else {
-                return getScriptWithPromise(options.url, options.type);
-            }
-        } else if (options.json) {
-            if (loaders[options.json]) {
-                return Promise.resolve(loaders[options.json]);
-            } else {
-                const request = window.fetch(options.json).then((response)=>{
-                    return response.json();
-                }).then((response)=>{
-                    loaders[options.json] = response;
-                    return response;
-                }).catch((error)=>{
-                    loaders[options.json] = null;
-                });
-                loaders[options.json] = request;
-                return request;
-            }
-        } else if (options.name) {
-            const key = ''.concat(options.name, options.version);
-            if (loaders[key]) {
-                return loaders[key];
-            } else {
-                return loadShopifyWithPromise(options);
-            }
-        } else {
-            return Promise.reject();
-        }
-    }function getScriptWithPromise(url, type) {
-        const loader = new Promise((resolve, reject)=>{
-            if (type === 'text') {
-                fetch(url).then((response)=>response.text()
-                ).then((data)=>{
-                    resolve(data);
-                }).catch((error)=>{
-                    reject(error);
-                });
-            } else {
-                getScript(url, function() {
-                    resolve();
-                }, function() {
-                    reject();
-                });
-            }
-        });
-        loaders[url] = loader;
-        return loader;
-    }
-    function loadShopifyWithPromise(options) {
-        const key = ''.concat(options.name, options.version);
-        const loader = new Promise((resolve, reject)=>{
-            try {
-                window.Shopify.loadFeatures([
-                    {
-                        name: options.name,
-                        version: options.version,
-                        onLoad: (err)=>{
-                            onLoadFromShopify(resolve, reject, err);
-                        }
-                    }, 
-                ]);
-            } catch (err) {
-                reject(err);
-            }
-        });
-        loaders[key] = loader;
-        return loader;
-    }
-    function onLoadFromShopify(resolve, reject, err) {
-        if (err) {
-            return reject(err);
-        } else {
-            return resolve();
-        }
-    }
-
-    const selectors$13 = {
-        wrapper: '[data-swapper-wrapper]',
-        target: '[data-swapper-target]',
-        hover: 'data-swapper-hover'
-    };
-    let sections$o = {};
-    let Swapper = class Swapper {
-        init() {
-            this.hovers.forEach((hover)=>{
-                hover.addEventListener('mouseenter', (function() {
-                    const newContent = hover.getAttribute(selectors$13.hover);
-                    this.target.innerHTML = `${newContent}`;
-                }).bind(this));
-            });
-            this.hovers.forEach((hover)=>{
-                hover.addEventListener('mouseleave', (function() {
-                    this.target.innerHTML = this.deafaultContent;
-                }).bind(this));
-            });
-            this.hovers.forEach((hover)=>{
-                hover.addEventListener('click', (function() {
-                    const clickedContent = hover.getAttribute(selectors$13.hover);
-                    this.deafaultContent = `${clickedContent}`;
-                }).bind(this));
-            });
-        }
-        constructor(el){
-            this.container = el;
-            this.target = this.container.querySelector(selectors$13.target);
-            this.hovers = this.container.querySelectorAll(`[${selectors$13.hover}]`);
-            if (this.target && this.hovers.length) {
-                this.deafaultContent = this.target.innerHTML;
-                this.init();
-            }
-        }
-    };
-    function makeSwappers(container) {
-        sections$o[container.id] = [];
-        const els = container.querySelectorAll(selectors$13.wrapper);
-        els.forEach((el)=>{
-            sections$o[container.id].push(new Swapper(el));
-        });
-    }
-    const swapperSection = {
-        onLoad () {
-            makeSwappers(this.container);
-        }
-    };
-
-    const defaults$2 = {
-        color: 'ash'
-    };
-    const selectors$12 = {
-        swatch: 'data-swatch',
-        outerGrid: '[data-grid-item]',
-        imageSlide: '[data-grid-image]',
-        dataGridImageDefault: 'data-grid-image-default',
-        dataGridImageTarget: 'data-grid-image-target',
-        image: 'data-swatch-image',
-        imageId: 'data-swatch-image-id',
-        variant: 'data-swatch-variant',
-        link: '[data-grid-link]',
-        wrapper: '[data-grid-swatches]',
-        template: '[data-swatch-template]',
-        handle: 'data-swatch-handle',
-        label: 'data-swatch-label',
-        index: 'data-swatch-index',
-        dataMediaId: 'data-media-id',
-        dataMediaSrcPlaceholder: 'data-media-src-placeholder',
-        dataFetchedImage: 'data-fetched-image',
-        dataFetchedImageIndex: 'data-fetched-image-index'
-    };
-    const classes$F = {
-        fade: 'is-fade'
-    };
-    let ColorMatch = class ColorMatch {
-        getColor() {
-            return this.match;
-        }
-        init() {
-            const getColors = loadScript({
-                json: window.theme.assets.swatches
-            });
-            return getColors.then((colors)=>{
-                return this.matchColors(colors, this.settings.color);
-            }).catch((e)=>{
-                console.log('failed to load swatch colors script');
-                console.log(e);
-            });
-        }
-        matchColors(colors, name) {
-            let bg = '#E5E5E5';
-            let img = null;
-            const path = window.theme.assets.base || '/';
-            const comparisonName = name.toLowerCase().replace(/\s/g, '');
-            const array = colors.colors;
-            if (array) {
-                const variantNameMatch = (nameObject)=>{
-                    const indexName = Object.keys(nameObject).toString();
-                    const neatName = indexName.toLowerCase().replace(/\s/g, '');
-                    return neatName === comparisonName;
-                };
-                const position = array.findIndex(variantNameMatch);
-                if (position > -1) {
-                    const value = Object.values(array[position])[0];
-                    const valueLowerCase = value.toLowerCase();
-                    if (valueLowerCase.includes('.jpg') || valueLowerCase.includes('.jpeg') || valueLowerCase.includes('.png') || valueLowerCase.includes('.svg')) {
-                        img = `${path}${encodeURIComponent(value)}`;
-                        bg = '#888888';
-                    } else {
-                        bg = value;
-                    }
-                }
-            }
-            return {
-                color: this.settings.color,
-                path: img,
-                hex: bg
-            };
-        }
-        constructor(options = {}){
-            this.settings = {
-                ...defaults$2,
-                ...options
-            };
-            this.match = this.init();
-        }
-    };
-    let RadioSwatch = class RadioSwatch extends HTMLElement {
-        init() {
-            this.setStyles();
-            // Change PGI slider image
-            if (this.variant && this.outer) {
-                // Get images on quickview load
-                this.outer.addEventListener('theme:quickview:media', (e)=>{
-                    if (e && e.detail && e.detail.media) {
-                        this.media = e.detail.media;
-                    }
-                });
-            }
-        }
-        setStyles() {
-            if (this.colorMatch.hex) {
-                this.element.style.setProperty('--swatch', `${this.colorMatch.hex}`);
-            }
-            if (this.colorMatch.path) {
-                this.element.style.setProperty('background-image', `url(${this.colorMatch.path})`);
-                this.element.style.setProperty('background-size', 'cover');
-            }
-        }
-        replaceImage() {
-            // Add new loaded image in PGI slider
-            if (this.imageReplace && this.imageSlide && this.imageId) {
-                if (this.imageSlide.hasAttribute(selectors$12.dataGridImageTarget) && this.imageSlide.getAttribute(selectors$12.dataGridImageTarget) !== this.imageId) {
-                    this.imageSlide.classList.add(classes$F.fade);
-                    const timeoutDelay = parseFloat(window.getComputedStyle(this.imageSlide).getPropertyValue('animation-duration')) * 1000;
-                    setTimeout(()=>{
-                        this.imageSlide.classList.remove(classes$F.fade);
-                    }, timeoutDelay);
-                }
-                this.imageSlide.setAttribute(selectors$12.dataGridImageTarget, this.imageId);
-                this.imageSlide.style.setProperty('background-color', '#fff');
-                if (!this.imageSlide.hasAttribute(selectors$12.dataGridImageDefault)) {
-                    this.imageSlide.setAttribute(selectors$12.dataGridImageDefault, window.getComputedStyle(this.imageSlide).backgroundImage);
-                }
-                this.imageSlide.style.setProperty('background-image', this.imageReplace);
-            }
-        }
-        constructor(){
-            super();
-            this.element = this.querySelector(`[${selectors$12.swatch}]`);
-            this.colorString = this.element.getAttribute(selectors$12.swatch);
-            this.image = this.element.getAttribute(selectors$12.image);
-            this.imageId = this.element.getAttribute(selectors$12.imageId);
-            this.variant = this.element.getAttribute(selectors$12.variant);
-            this.outer = this.element.closest(selectors$12.outerGrid);
-            this.media = null;
-            this.imageSlide = null;
-            this.imageDefault = null;
-            this.stopSlideAnimation = false;
-            const matcher = new ColorMatch({
-                color: this.colorString
-            });
-            matcher.getColor().then((result)=>{
-                this.colorMatch = result;
-                this.init();
-            });
-        }
-    };
-    let GridSwatch = class GridSwatch {
-        init() {
-            this.wrap.innerHTML = '';
-            this.swatches.forEach((swatch, index)=>{
-                let variant1 = this.product.variants.find((variant)=>{
-                    return variant.options.includes(swatch);
-                });
-                const image = variant1.featured_media ? variant1.featured_media.preview_image.src : '';
-                const imageId = variant1.featured_media ? variant1.featured_media.id : '';
-                const rand = Math.floor(Math.random() * 9999);
-                this.wrap.innerHTML += Sqrl__namespace.render(this.template, {
-                    color: swatch,
-                    uniq: `${this.product.id}-${variant1.id}-${rand}`,
-                    variant: variant1.id,
-                    product_id: this.product.id,
-                    image_id: imageId,
-                    image,
-                    index
-                });
-            });
-            new NativeScrollbar(this.wrap);
-        }
-        constructor(wrap){
-            this.template = document.querySelector(selectors$12.template).innerHTML;
-            this.wrap = wrap;
-            this.handle = wrap.getAttribute(selectors$12.handle);
-            const label = wrap.getAttribute(selectors$12.label).trim().toLowerCase();
-            getProductJson(this.handle).then((product)=>{
-                this.product = product;
-                this.colorOption = product.options.find(function(element) {
-                    return element.name.toLowerCase() === label || null;
-                });
-                if (this.colorOption) {
-                    this.swatches = this.colorOption.values;
-                    this.init();
-                }
-            });
-        }
-    };
-    function makeGridSwatches(container) {
-        const gridSwatchWrappers = container.querySelectorAll(selectors$12.wrapper);
-        gridSwatchWrappers.forEach((wrap)=>{
-            new GridSwatch(wrap);
-        });
-    }
-    const swatchGridSection = {
-        onLoad () {
-            makeGridSwatches(this.container);
-            makeSwappers(this.container);
-        }
-    };
+    }resolution();
 
     const selectors$11 = {
         holderItems: '[data-custom-scrollbar-items]',
         scrollbar: '[data-custom-scrollbar]',
         scrollbarTrack: '[data-custom-scrollbar-track]'
     };
-    const classes$E = {
+    const classes$B = {
         hide: 'hide'
     };
     const sections$n = {};
@@ -1729,11 +1048,12 @@
                 this.trackWidth = this.trackWidth < 5 ? 5 : this.trackWidth;
                 this.scrollbar.style.setProperty('--track-width', `${this.trackWidth}%`);
                 const hideScrollbar = Math.ceil(this.trackWidth) >= 100;
-                this.scrollbar.classList.toggle(classes$E.hide, hideScrollbar);
+                this.scrollbar.classList.toggle(classes$B.hide, hideScrollbar);
             }, 100);
         }
         calculatePosition() {
-            let position = this.holderItems.scrollLeft / (this.holderItems.scrollWidth - this.holderItems.clientWidth);
+            // Math.abs() to ensure this works when RTL
+            let position = Math.abs(this.holderItems.scrollLeft) / (this.holderItems.scrollWidth - this.holderItems.clientWidth);
             position *= this.scrollbar.clientWidth - this.scrollbarTrack.clientWidth;
             position = position < 0 ? 0 : position;
             position = isNaN(position) ? 0 : position;
@@ -1781,7 +1101,7 @@
         relatedHolder: 'data-related-products',
         sectionHolder: '[data-section-id]'
     };
-    const classes$D = {
+    const classes$A = {
         wrapper: 'wrapper',
         arrowsForceTop: 'flickity-force-arrows-top',
         arrowsOnSide: 'not-moved-arrows',
@@ -1886,11 +1206,11 @@
             });
             this.carouselInstance.on('dragStart', ()=>{
                 this.carouselInstance.slider.style.pointerEvents = 'none';
-                if (!resolution$1.isMobile) this.containDrag();
+                if (!resolution.isMobile) this.containDrag();
             });
             this.carouselInstance.on('dragEnd', ()=>{
                 this.carouselInstance.slider.style.pointerEvents = 'auto';
-                if (!resolution$1.isMobile) this.containDrag();
+                if (!resolution.isMobile) this.containDrag();
             });
             this.carouselInstance.on('change', (index)=>this.lockArrows(index)
             );
@@ -1899,7 +1219,7 @@
             }, 100);
             if (Shopify.designMode) {
                 setTimeout(()=>{
-                    if (this.carouselInstance.options.watchCSS && !this.carousel.classList.contains(classes$D.flickityEnabled)) {
+                    if (this.carouselInstance.options.watchCSS && !this.carousel.classList.contains(classes$A.flickityEnabled)) {
                         this.carouselInstance.destroy();
                         this.carouselInstance = new Flickity(this.carousel, this.options);
                         this.carouselInstance.resize();
@@ -1910,8 +1230,7 @@
                     }
                 }, 10);
             }
-            this.carousel.classList.toggle(classes$D.flickityStatic, this.smallItems === this.carousel.querySelectorAll(selectors$10.carouselSlide).length);
-            makeGridSwatches(this.container);
+            this.carousel.classList.toggle(classes$A.flickityStatic, this.smallItems === this.carousel.querySelectorAll(selectors$10.carouselSlide).length);
             new Siblings(this.container);
         }
         calculatedArrowsTopPosition() {
@@ -1934,14 +1253,14 @@
             this.wrapperWidthWithGutter = wrapperWidth + offsets$1.additionalOffsetWrapper + scrollbarWidth;
             if (window.innerWidth >= this.wrapperWidthWithGutter) {
                 // the screen is wide, have the arrows beside the carousel
-                this.wrapper.classList.remove(classes$D.arrowsForceTop);
-                this.section.classList.add(classes$D.arrowsOnSide);
+                this.wrapper.classList.remove(classes$A.arrowsForceTop);
+                this.section.classList.add(classes$A.arrowsOnSide);
             }
             if (window.innerWidth < this.wrapperWidthWithGutter) {
                 // the screen is too narrow for arrows beside the carousel
                 // add the wrapper--full class to trick the layout
-                this.wrapper.classList.add(classes$D.arrowsForceTop);
-                this.section.classList.remove(classes$D.arrowsOnSide);
+                this.wrapper.classList.add(classes$A.arrowsForceTop);
+                this.section.classList.remove(classes$A.arrowsOnSide);
             }
         }
         progressBarCalculate() {
@@ -1966,10 +1285,10 @@
             const slideWidth = this.carouselInstance !== null && this.carouselInstance.selectedElement ? this.carouselInstance.selectedElement.clientWidth : this.carousel.querySelector(selectors$10.carouselSlide).clientWidth;
             const countSlides = this.carouselInstance !== null && this.carouselInstance.slides ? this.carouselInstance.slides.length : this.carousel.querySelectorAll(selectors$10.carouselSlide).length;
             const numberOfVisibleSlides = Math.floor(carouselWidth / slideWidth);
-            this.section.classList.remove(classes$D.hiddenArrows);
+            this.section.classList.remove(classes$A.hiddenArrows);
             if (this.carouselPrev && this.carouselNext) {
-                this.carouselPrev.classList.remove(classes$D.hide);
-                this.carouselNext.classList.remove(classes$D.hide);
+                this.carouselPrev.classList.remove(classes$A.hide);
+                this.carouselNext.classList.remove(classes$A.hide);
             }
             // Desktop
             if (window.innerWidth > window.theme.sizes.large && !this.options.groupCells) {
@@ -2027,14 +1346,14 @@
             this.carouselNext.disabled = nextIndex >= lastSelectableCell;
         }
         showArrows() {
-            this.carouselPrev.classList.remove(classes$D.hide);
-            this.carouselNext.classList.remove(classes$D.hide);
-            this.section.classList.remove(classes$D.hiddenArrows);
+            this.carouselPrev.classList.remove(classes$A.hide);
+            this.carouselNext.classList.remove(classes$A.hide);
+            this.section.classList.remove(classes$A.hiddenArrows);
         }
         hideArrows() {
-            this.carouselPrev.classList.add(classes$D.hide);
-            this.carouselNext.classList.add(classes$D.hide);
-            this.section.classList.add(classes$D.hiddenArrows);
+            this.carouselPrev.classList.add(classes$A.hide);
+            this.carouselNext.classList.add(classes$A.hide);
+            this.section.classList.add(classes$A.hiddenArrows);
         }
         toggleArrows() {
             if (this.carouselPrev && this.carouselNext) {
@@ -2854,7 +2173,7 @@
         clone: 'data-clone',
         ariaHidden: 'aria-hidden'
     };
-    const classes$C = {
+    const classes$z = {
         animationClass: 'ticker--animated',
         unloadedClass: 'ticker--unloaded',
         comparitorClass: 'ticker__comparitor'
@@ -2869,9 +2188,9 @@
         }
         addComparitor() {
             this.comparitor = this.text.cloneNode(true);
-            this.comparitor.classList.add(classes$C.comparitorClass);
+            this.comparitor.classList.add(classes$z.comparitorClass);
             this.frame.appendChild(this.comparitor);
-            this.scale.classList.remove(classes$C.unloadedClass);
+            this.scale.classList.remove(classes$z.unloadedClass);
         }
         unload() {
             document.removeEventListener('theme:resize', this.resizeEvent);
@@ -2884,7 +2203,7 @@
             const padding = window.getComputedStyle(this.frame).paddingLeft.replace('px', '') * 2;
             // Animate all the items - cloned too
             Array.from(this.text.parentNode.children).forEach((child)=>{
-                child.classList.add(classes$C.animationClass);
+                child.classList.add(classes$z.animationClass);
             });
             if (this.frame.clientWidth - padding < this.comparitor.clientWidth || this.stopClone) {
                 if (this.scale.childElementCount === 1) {
@@ -2908,7 +2227,7 @@
                 if (clone) {
                     this.scale.removeChild(clone);
                 }
-                this.text.classList.remove(classes$C.animationClass);
+                this.text.classList.remove(classes$z.animationClass);
             }
         }
         constructor(el, stopClone = false){
@@ -2944,7 +2263,7 @@
         tickerScale: '[data-ticker-scale]',
         tickerText: '[data-ticker-text]'
     };
-    const classes$B = {
+    const classes$y = {
         trickerAnimated: 'ticker--animated'
     };
     const sections$j = {};
@@ -2969,13 +2288,13 @@
                 const leftPosition = -(element.offsetLeft - gutter);
                 tickerScale.setAttribute('data-stop', '');
                 tickerScale.querySelectorAll(selectors$V.tickerText).forEach((textHolder)=>{
-                    textHolder.classList.remove(classes$B.trickerAnimated);
+                    textHolder.classList.remove(classes$y.trickerAnimated);
                     textHolder.style.transform = `translate3d(${leftPosition}px, 0, 0)`;
                 });
             }
             if (!isStopped) {
                 tickerScale.querySelectorAll(selectors$V.tickerText).forEach((textHolder)=>{
-                    textHolder.classList.add(classes$B.trickerAnimated);
+                    textHolder.classList.add(classes$y.trickerAnimated);
                     textHolder.removeAttribute('style');
                 });
                 tickerScale.removeAttribute('data-stop');
@@ -3027,7 +2346,7 @@
         children: ':scope > * > [data-animates]',
         focusable: 'button, [href], select, textarea, [tabindex]:not([tabindex="-1"])'
     };
-    var classes$A = {
+    var classes$x = {
         isVisible: 'drawer--visible',
         displayNone: 'display-none'
     };
@@ -3048,7 +2367,7 @@
         }
         connectDrawer() {
             this.drawer.addEventListener('theme:drawer:toggle', (function() {
-                if (this.drawer.classList.contains(classes$A.isVisible)) {
+                if (this.drawer.classList.contains(classes$x.isVisible)) {
                     this.drawer.dispatchEvent(new CustomEvent('theme:drawer:close', {
                         bubbles: false
                     }));
@@ -3087,12 +2406,12 @@
             });
         }
         showDrawer() {
-            this.drawer.classList.remove(classes$A.displayNone);
+            this.drawer.classList.remove(classes$x.displayNone);
             // animates after display none is removed
             setTimeout(()=>{
                 this.buttons.forEach((el)=>el.setAttribute('aria-expanded', true)
                 );
-                this.drawer.classList.add(classes$A.isVisible);
+                this.drawer.classList.add(classes$x.isVisible);
                 document.dispatchEvent(new CustomEvent('theme:scroll:lock', {
                     bubbles: true,
                     detail: this.drawerScrolls
@@ -3109,7 +2428,7 @@
             window.theme.state.cartOpen = false;
             this.buttons.forEach((el)=>el.setAttribute('aria-expanded', true)
             );
-            this.drawer.classList.remove(classes$A.isVisible);
+            this.drawer.classList.remove(classes$x.isVisible);
             this.drawerScrolls.dispatchEvent(new CustomEvent('theme:scroll:unlock', {
                 bubbles: true
             }));
@@ -3117,11 +2436,13 @@
                 bubbles: false
             }));
             removeTrapFocus();
-            this.buttons[0].focus();
+            this.buttons[0].focus({
+                preventScroll: true
+            });
             // adds display none after animations
             setTimeout(()=>{
-                if (!this.drawer.classList.contains(classes$A.isVisible)) {
-                    this.drawer.classList.add(classes$A.displayNone);
+                if (!this.drawer.classList.contains(classes$x.isVisible)) {
+                    this.drawer.classList.add(classes$x.displayNone);
                 }
             }, 800);
         }
@@ -3161,7 +2482,7 @@
         transparent: 'data-header-transparent',
         header: '[data-header-wrapper] header'
     };
-    const classes$z = {
+    const classes$w = {
         stuck: 'js__header__stuck',
         stuckAnimated: 'js__header__stuck--animated',
         triggerAnimation: 'js__header__stuck--trigger-animation',
@@ -3201,17 +2522,17 @@
         }
         stickSimple() {
             if (this.animated) {
-                this.cls.add(classes$z.stuckAnimated);
+                this.cls.add(classes$w.stuckAnimated);
             }
-            this.cls.add(classes$z.stuck);
+            this.cls.add(classes$w.stuck);
             this.wrapper.setAttribute(selectors$T.transparent, false);
             this.currentlyStuck = true;
         }
         unstickSimple() {
-            this.cls.remove(classes$z.stuck);
+            this.cls.remove(classes$w.stuck);
             this.wrapper.setAttribute(selectors$T.transparent, this.transparent);
             if (this.animated) {
-                this.cls.remove(classes$z.stuckAnimated);
+                this.cls.remove(classes$w.stuckAnimated);
             }
             this.currentlyStuck = false;
         }
@@ -3224,10 +2545,10 @@
             }
         }
         stickDirectional() {
-            this.cls.add(classes$z.triggerAnimation);
+            this.cls.add(classes$w.triggerAnimation);
         }
         unstickDirectional() {
-            this.cls.remove(classes$z.triggerAnimation);
+            this.cls.remove(classes$w.triggerAnimation);
         }
         scrollDownDirectional() {
             this.unstickDirectional();
@@ -3240,11 +2561,11 @@
             }
         }
         addBlur() {
-            this.cls.add(classes$z.stuckBackdrop);
+            this.cls.add(classes$w.stuckBackdrop);
             this.currentlyBlurred = true;
         }
         removeBlur() {
-            this.cls.remove(classes$z.stuckBackdrop);
+            this.cls.remove(classes$w.stuckBackdrop);
             this.currentlyBlurred = false;
         }
         constructor(el){
@@ -3292,7 +2613,7 @@
         staggerAfter: '[data-stagger-second]',
         staggerImage: '[data-grid-item], [data-header-image]'
     };
-    const classes$y = {
+    const classes$v = {
         isVisible: 'is-visible',
         meganavVisible: 'meganav--visible',
         grandparent: 'grandparent'
@@ -3312,19 +2633,19 @@
         }
         showDisclosure() {
             if (this.grandparent) {
-                this.wrapper.classList.add(classes$y.meganavVisible);
+                this.wrapper.classList.add(classes$v.meganavVisible);
             } else {
-                this.wrapper.classList.remove(classes$y.meganavVisible);
+                this.wrapper.classList.remove(classes$v.meganavVisible);
             }
             this.trigger.setAttribute('aria-expanded', true);
-            this.trigger.classList.add(classes$y.isVisible);
-            this.disclosure.classList.add(classes$y.isVisible);
+            this.trigger.classList.add(classes$v.isVisible);
+            this.disclosure.classList.add(classes$v.isVisible);
         }
         hideDisclosure() {
-            this.disclosure.classList.remove(classes$y.isVisible);
-            this.trigger.classList.remove(classes$y.isVisible);
+            this.disclosure.classList.remove(classes$v.isVisible);
+            this.trigger.classList.remove(classes$v.isVisible);
             this.trigger.setAttribute('aria-expanded', false);
-            this.wrapper.classList.remove(classes$y.meganavVisible);
+            this.wrapper.classList.remove(classes$v.meganavVisible);
         }
         staggerChildAnimations() {
             const simple = this.disclosure.querySelectorAll(selectors$S.stagger);
@@ -3349,7 +2670,7 @@
         handleTablets() {
             // first click opens the popup, second click opens the link
             this.trigger.addEventListener('touchstart', (function(e) {
-                const isOpen = this.disclosure.classList.contains(classes$y.isVisible);
+                const isOpen = this.disclosure.classList.contains(classes$v.isVisible);
                 if (!isOpen) {
                     e.preventDefault();
                     this.showDisclosure();
@@ -3382,7 +2703,7 @@
             const btnSelector = `[${selectors$S.disclosureToggle}='${this.key}']`;
             this.trigger = document.querySelector(btnSelector);
             this.link = this.trigger.querySelector(selectors$S.link);
-            this.grandparent = this.trigger.classList.contains(classes$y.grandparent);
+            this.grandparent = this.trigger.classList.contains(classes$v.grandparent);
             this.trigger.setAttribute('aria-haspopup', true);
             this.trigger.setAttribute('aria-expanded', false);
             this.trigger.setAttribute('aria-controls', this.key);
@@ -3442,13 +2763,13 @@
                 this.setHeight();
                 if (defaultPositions) {
                     if (this.defaultItem) {
-                        const startingLeft = this.defaultItem.offsetLeft || 0;
+                        const startingLeft = Math.round(this.defaultItem.getBoundingClientRect().left) || 0;
                         this.sectionOuter.style.setProperty('--bar-left', `${startingLeft}px`);
                     }
                     this.reset();
                 } else {
                     // initialize at left edge of first item im menu
-                    const startingLeft = this.sectionOuter.querySelector(selectors$R.item).offsetLeft;
+                    const startingLeft = Math.round(this.sectionOuter.querySelector(selectors$R.item).getBoundingClientRect().left);
                     this.sectionOuter.style.setProperty('--bar-left', `${startingLeft}px`);
                     this.sectionOuter.style.setProperty('--bar-width', '0px');
                 }
@@ -3465,7 +2786,7 @@
         setDefault() {
             if (this.defaultItem) {
                 defaultPositions = {
-                    left: this.defaultItem.offsetLeft || null,
+                    left: Math.round(this.defaultItem.getBoundingClientRect().left) || null,
                     width: this.defaultItem.clientWidth || null
                 };
             }
@@ -3493,7 +2814,7 @@
         startBar(item) {
             this.setHeight();
             let active = this.sectionOuter.getAttribute(selectors$R.isActive) !== 'false';
-            let left = item.offsetLeft;
+            let left = Math.round(item.getBoundingClientRect().left);
             let width = item.clientWidth;
             if (active) {
                 this.render(width, left);
@@ -3612,7 +2933,7 @@
         input: '[data-predictive-search-input]',
         underlay: '[data-search-underlay]'
     };
-    const classes$x = {
+    const classes$u = {
         underlayVisible: 'underlay--visible',
         isVisible: 'is-visible'
     };
@@ -3648,8 +2969,8 @@
             }).bind(this));
         }
         hidePopdown() {
-            this.popdown.classList.remove(classes$x.isVisible);
-            this.underlay.classList.remove(classes$x.underlayVisible);
+            this.popdown.classList.remove(classes$u.isVisible);
+            this.underlay.classList.remove(classes$u.underlayVisible);
             this.trigger.focus();
             removeTrapFocus();
             this.popdown.dispatchEvent(new CustomEvent('theme:scroll:unlock', {
@@ -3657,8 +2978,8 @@
             }));
         }
         showPopdown() {
-            this.popdown.classList.add(classes$x.isVisible);
-            this.underlay.classList.add(classes$x.underlayVisible);
+            this.popdown.classList.add(classes$u.isVisible);
+            this.underlay.classList.add(classes$u.underlayVisible);
             trapFocus(this.popdown, {
                 elementToFocus: this.input
             });
@@ -3702,7 +3023,7 @@
         cartToggleButton: '[data-drawer-toggle="drawer-cart"]',
         cartDrawer: '[data-drawer="drawer-cart"]'
     };
-    const classes$w = {
+    const classes$t = {
         visible: 'is-visible',
         focusEnable: 'focus-enabled'
     };
@@ -3720,7 +3041,7 @@
                 instance.connectCartButton();
                 instance.connectCloseButton();
                 // If user is navigating with keyboard, focus on the view cart button after popdown opens
-                if (document.body.classList.contains(classes$w.focusEnable)) {
+                if (document.body.classList.contains(classes$t.focusEnable)) {
                     const cartButton = instance.popdown.querySelector(selectors$O.cartToggleButton);
                     setTimeout(()=>{
                         cartButton.focus();
@@ -3732,11 +3053,11 @@
         }
         connectCloseButton() {
             // Enable close button
-            this.popdown.classList.add(classes$w.visible);
+            this.popdown.classList.add(classes$t.visible);
             const closer = this.popdown.querySelector(selectors$O.closeDrawer);
             closer.addEventListener('click', (function(e) {
                 e.preventDefault();
-                this.popdown.classList.remove(classes$w.visible);
+                this.popdown.classList.remove(classes$t.visible);
             }).bind(this));
             this.popdownTimer();
         }
@@ -3747,7 +3068,7 @@
             if (cartDrawer) {
                 cartButton.addEventListener('click', (function(e) {
                     e.preventDefault();
-                    this.popdown.classList.remove(classes$w.visible);
+                    this.popdown.classList.remove(classes$t.visible);
                     cartDrawer.dispatchEvent(new CustomEvent('theme:drawer:open', {
                         bubbles: false
                     }));
@@ -3761,7 +3082,7 @@
                     // While the user is focused inside of the popdown keep restarting the auto-close timer
                     this.popdownTimer();
                 } else {
-                    this.popdown.classList.remove(classes$w.visible);
+                    this.popdown.classList.remove(classes$t.visible);
                 }
             }, 5000);
         }
@@ -3790,7 +3111,294 @@
         }
     };
 
+    function getScript(url, callback, callbackError) {
+        let head = document.getElementsByTagName('head')[0];
+        let done = false;
+        let script = document.createElement('script');
+        script.src = url;
+        // Attach handlers for all browsers
+        script.onload = script.onreadystatechange = function() {
+            if (!done && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+                done = true;
+                callback();
+            } else {
+                callbackError();
+            }
+        };
+        head.appendChild(script);
+    }
+
+    const loaders = {};
+    function loadScript(options = {}) {
+        if (!options.type) {
+            options.type = 'json';
+        }
+        if (options.url) {
+            if (loaders[options.url]) {
+                return loaders[options.url];
+            } else {
+                return getScriptWithPromise(options.url, options.type);
+            }
+        } else if (options.json) {
+            if (loaders[options.json]) {
+                return Promise.resolve(loaders[options.json]);
+            } else {
+                const request = window.fetch(options.json).then((response)=>{
+                    return response.json();
+                }).then((response)=>{
+                    loaders[options.json] = response;
+                    return response;
+                }).catch((error)=>{
+                    loaders[options.json] = null;
+                });
+                loaders[options.json] = request;
+                return request;
+            }
+        } else if (options.name) {
+            const key = ''.concat(options.name, options.version);
+            if (loaders[key]) {
+                return loaders[key];
+            } else {
+                return loadShopifyWithPromise(options);
+            }
+        } else {
+            return Promise.reject();
+        }
+    }function getScriptWithPromise(url, type) {
+        const loader = new Promise((resolve, reject)=>{
+            if (type === 'text') {
+                fetch(url).then((response)=>response.text()
+                ).then((data)=>{
+                    resolve(data);
+                }).catch((error)=>{
+                    reject(error);
+                });
+            } else {
+                getScript(url, function() {
+                    resolve();
+                }, function() {
+                    reject();
+                });
+            }
+        });
+        loaders[url] = loader;
+        return loader;
+    }
+    function loadShopifyWithPromise(options) {
+        const key = ''.concat(options.name, options.version);
+        const loader = new Promise((resolve, reject)=>{
+            try {
+                window.Shopify.loadFeatures([
+                    {
+                        name: options.name,
+                        version: options.version,
+                        onLoad: (err)=>{
+                            onLoadFromShopify(resolve, reject, err);
+                        }
+                    }, 
+                ]);
+            } catch (err) {
+                reject(err);
+            }
+        });
+        loaders[key] = loader;
+        return loader;
+    }
+    function onLoadFromShopify(resolve, reject, err) {
+        if (err) {
+            return reject(err);
+        } else {
+            return resolve();
+        }
+    }
+
     const selectors$N = {
+        wrapper: '[data-swapper-wrapper]',
+        target: '[data-swapper-target]',
+        hover: 'data-swapper-hover'
+    };
+    let sections$d = {};
+    let Swapper = class Swapper {
+        init() {
+            this.hovers.forEach((hover)=>{
+                hover.addEventListener('mouseenter', (function() {
+                    const newContent = hover.getAttribute(selectors$N.hover);
+                    this.target.innerHTML = `${newContent}`;
+                }).bind(this));
+            });
+            this.hovers.forEach((hover)=>{
+                hover.addEventListener('mouseleave', (function() {
+                    this.target.innerHTML = this.deafaultContent;
+                }).bind(this));
+            });
+            this.hovers.forEach((hover)=>{
+                hover.addEventListener('click', (function() {
+                    const clickedContent = hover.getAttribute(selectors$N.hover);
+                    this.deafaultContent = `${clickedContent}`;
+                }).bind(this));
+            });
+        }
+        constructor(el){
+            this.container = el;
+            this.target = this.container.querySelector(selectors$N.target);
+            this.hovers = this.container.querySelectorAll(`[${selectors$N.hover}]`);
+            if (this.target && this.hovers.length) {
+                this.deafaultContent = this.target.innerHTML;
+                this.init();
+            }
+        }
+    };
+    function makeSwappers(container) {
+        sections$d[container.id] = [];
+        const els = container.querySelectorAll(selectors$N.wrapper);
+        els.forEach((el)=>{
+            sections$d[container.id].push(new Swapper(el));
+        });
+    }
+    const swapperSection = {
+        onLoad () {
+            makeSwappers(this.container);
+        }
+    };
+
+    const defaults = {
+        color: 'ash'
+    };
+    const selectors$M = {
+        swatch: 'data-swatch',
+        outerGrid: '[data-grid-item]',
+        dataGridImageDefault: 'data-grid-image-default',
+        dataGridImageTarget: 'data-grid-image-target',
+        image: 'data-swatch-image',
+        imageId: 'data-swatch-image-id',
+        variant: 'data-swatch-variant'
+    };
+    const classes$s = {
+        fade: 'is-fade'
+    };
+    let ColorMatch = class ColorMatch {
+        getColor() {
+            return this.match;
+        }
+        init() {
+            const getColors = loadScript({
+                json: window.theme.assets.swatches
+            });
+            return getColors.then((colors)=>{
+                return this.matchColors(colors, this.settings.color);
+            }).catch((e)=>{
+                console.log('failed to load swatch colors script');
+                console.log(e);
+            });
+        }
+        matchColors(colors, name) {
+            let bg = '#E5E5E5';
+            let img = null;
+            const path = window.theme.assets.base || '/';
+            const comparisonName = name.toLowerCase().replace(/\s/g, '');
+            const array = colors.colors;
+            if (array) {
+                const variantNameMatch = (nameObject)=>{
+                    const indexName = Object.keys(nameObject).toString();
+                    const neatName = indexName.toLowerCase().replace(/\s/g, '');
+                    return neatName === comparisonName;
+                };
+                const position = array.findIndex(variantNameMatch);
+                if (position > -1) {
+                    const value = Object.values(array[position])[0];
+                    const valueLowerCase = value.toLowerCase();
+                    if (valueLowerCase.includes('.jpg') || valueLowerCase.includes('.jpeg') || valueLowerCase.includes('.png') || valueLowerCase.includes('.svg')) {
+                        img = `${path}${encodeURIComponent(value)}`;
+                        bg = '#888888';
+                    } else {
+                        bg = value;
+                    }
+                }
+            }
+            return {
+                color: this.settings.color,
+                path: img,
+                hex: bg
+            };
+        }
+        constructor(options = {}){
+            this.settings = {
+                ...defaults,
+                ...options
+            };
+            this.match = this.init();
+        }
+    };
+    let RadioSwatch = class RadioSwatch extends HTMLElement {
+        connectedCallback() {
+            this.element = this.querySelector(`[${selectors$M.swatch}]`);
+            this.colorString = this.element.getAttribute(selectors$M.swatch);
+            this.image = this.element.getAttribute(selectors$M.image);
+            this.imageId = this.element.getAttribute(selectors$M.imageId);
+            this.variant = this.element.getAttribute(selectors$M.variant);
+            this.outer = this.element.closest(selectors$M.outerGrid);
+            this.media = null;
+            this.imageSlide = null;
+            this.imageDefault = null;
+            this.stopSlideAnimation = false;
+            // Set swatch color for the old-swatch system
+            if (this.element.getAttribute(selectors$M.swatch) != '') {
+                const matcher = new ColorMatch({
+                    color: this.colorString
+                });
+                matcher.getColor().then((result)=>{
+                    this.colorMatch = result;
+                    this.setStyles();
+                });
+            }
+            this.init();
+        }
+        init() {
+            // Change PGI slider image
+            if (this.variant && this.outer) {
+                // Get images on quickview load
+                this.outer.addEventListener('theme:quickview:media', (e)=>{
+                    if (e && e.detail && e.detail.media) {
+                        this.media = e.detail.media;
+                    }
+                });
+            }
+        }
+        setStyles() {
+            if (this.colorMatch.hex) {
+                this.element.style.setProperty('--swatch', `${this.colorMatch.hex}`);
+            }
+            if (this.colorMatch.path) {
+                this.element.style.setProperty('background-image', `url(${this.colorMatch.path})`);
+                this.element.style.setProperty('background-size', 'cover');
+            }
+        }
+        replaceImage() {
+            // Add new loaded image in PGI slider
+            if (this.imageReplace && this.imageSlide && this.imageId) {
+                if (this.imageSlide.hasAttribute(selectors$M.dataGridImageTarget) && this.imageSlide.getAttribute(selectors$M.dataGridImageTarget) !== this.imageId) {
+                    this.imageSlide.classList.add(classes$s.fade);
+                    const timeoutDelay = parseFloat(window.getComputedStyle(this.imageSlide).getPropertyValue('animation-duration')) * 1000;
+                    setTimeout(()=>{
+                        this.imageSlide.classList.remove(classes$s.fade);
+                    }, timeoutDelay);
+                }
+                this.imageSlide.setAttribute(selectors$M.dataGridImageTarget, this.imageId);
+                this.imageSlide.style.setProperty('background-color', '#fff');
+                if (!this.imageSlide.hasAttribute(selectors$M.dataGridImageDefault)) {
+                    this.imageSlide.setAttribute(selectors$M.dataGridImageDefault, window.getComputedStyle(this.imageSlide).backgroundImage);
+                }
+                this.imageSlide.style.setProperty('background-image', this.imageReplace);
+            }
+        }
+    };
+    const swatchGridSection = {
+        onLoad () {
+            makeSwappers(this.container);
+        }
+    };
+
+    const selectors$L = {
         dataGridItemVariant: 'data-grid-item-variant',
         dataGridImageTarget: 'data-grid-image-target',
         dataSwatchGridImageIndex: 'data-grid-image',
@@ -3802,7 +3410,7 @@
         connectedCallback() {
             if (this.gridItemVariantLinks.length) {
                 this.gridItemVariantLinks.forEach((element)=>{
-                    if (!element.hasAttribute(selectors$N.dataGridItemVariant)) return;
+                    if (!element.hasAttribute(selectors$L.dataGridItemVariant)) return;
                     this.swatchHoverEvent(element);
                     this.swatchClickEvent(element);
                 });
@@ -3810,10 +3418,10 @@
         }
         swatchHoverEvent(swatchLink) {
             swatchLink.addEventListener('mouseenter', ()=>{
-                if (swatchLink.hasAttribute(selectors$N.dataGridItemVariant)) {
-                    const product = swatchLink.getAttribute(selectors$N.dataGridItemVariant);
+                if (swatchLink.hasAttribute(selectors$L.dataGridItemVariant)) {
+                    const product = swatchLink.getAttribute(selectors$L.dataGridItemVariant);
                     // Ensure all images are loaded for this swatch
-                    this.container.querySelectorAll(`product-grid-item-variant[${selectors$N.dataGridItemVariant}="${product}"] product-grid-item-image`).forEach((image)=>{
+                    this.container.querySelectorAll(`product-grid-item-variant[${selectors$L.dataGridItemVariant}="${product}"] product-grid-item-image`).forEach((image)=>{
                         image.setAttribute('loading', 'eager');
                     });
                 }
@@ -3822,14 +3430,14 @@
         swatchClickEvent(swatchLink) {
             swatchLink.addEventListener('click', (e)=>{
                 e.preventDefault();
-                this.container.querySelectorAll(`a[${selectors$N.dataGridItemVariant}]`).forEach((link)=>link.removeAttribute('aria-selected')
+                this.container.querySelectorAll(`a[${selectors$L.dataGridItemVariant}]`).forEach((link)=>link.removeAttribute('aria-selected')
                 );
                 swatchLink.setAttribute('aria-selected', 'true');
-                if (swatchLink.hasAttribute(selectors$N.dataGridItemVariant)) {
-                    const swatchLinkVariant = swatchLink.getAttribute(selectors$N.dataGridItemVariant);
+                if (swatchLink.hasAttribute(selectors$L.dataGridItemVariant)) {
+                    const swatchLinkVariant = swatchLink.getAttribute(selectors$L.dataGridItemVariant);
                     // Show content for swatch
-                    this.container.querySelectorAll(`product-grid-item-variant[${selectors$N.dataGridItemVariant}]`).forEach((swatchElement)=>{
-                        const swatchElementVariant = swatchElement.getAttribute(selectors$N.dataGridItemVariant);
+                    this.container.querySelectorAll(`product-grid-item-variant[${selectors$L.dataGridItemVariant}]`).forEach((swatchElement)=>{
+                        const swatchElementVariant = swatchElement.getAttribute(selectors$L.dataGridItemVariant);
                         if (swatchElementVariant === swatchLinkVariant) {
                             swatchElement.removeAttribute('hidden');
                         } else {
@@ -3842,11 +3450,11 @@
         constructor(){
             super();
             this.container = this;
-            this.gridItemVariantLinks = this.container.querySelectorAll(`a[${selectors$N.dataGridItemVariant}]`);
+            this.gridItemVariantLinks = this.container.querySelectorAll(`a[${selectors$L.dataGridItemVariant}]`);
         }
     };
 
-    const selectors$M = {
+    const selectors$K = {
         productGridItemLink: '[data-grid-link]',
         dataGridImages: 'data-grid-images',
         dataGridImage: 'data-grid-image',
@@ -3860,7 +3468,7 @@
         dataSlideshowStyle: 'data-slideshow-style',
         styleWidth: '--width'
     };
-    const classes$v = {
+    const classes$r = {
         fade: 'is-fade',
         active: 'is-active',
         mobile: 'is-mobile',
@@ -3920,9 +3528,9 @@
         swatchChangeEvent(e) {
             // Change the image if the swatch is clicked
             const id = e.detail.id;
-            const target = this.container.querySelector(`[${selectors$M.dataGridImageTarget}="${id}"]`);
+            const target = this.container.querySelector(`[${selectors$K.dataGridImageTarget}="${id}"]`);
             if (target) {
-                const index = target.getAttribute(selectors$M.dataGridImage);
+                const index = target.getAttribute(selectors$K.dataGridImage);
                 this.pagingProgressCounter = 0;
                 this.changeImage(index);
                 if (e.detail.stopSlideAnimation) {
@@ -3960,17 +3568,17 @@
             }
         }
         toggleMobile() {
-            this.container.classList.toggle(classes$v.mobile, this.isMobile);
+            this.container.classList.toggle(classes$r.mobile, this.isMobile);
         }
         get isMobile() {
             const windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
             return windowWidth < window.theme.sizes.medium;
         }
         resetSlideshow() {
-            const forcedDefaultSlide = this.container.querySelector(`[${selectors$M.dataSlideForFilterSelectedVariant}]`);
+            const forcedDefaultSlide = this.container.querySelector(`[${selectors$K.dataSlideForFilterSelectedVariant}]`);
             // if a variant is selected by a collection filter show the variant image instead of the image at [0]
             if (forcedDefaultSlide) {
-                let imageIndex = Number(forcedDefaultSlide.getAttribute(selectors$M.dataGridImage));
+                let imageIndex = Number(forcedDefaultSlide.getAttribute(selectors$K.dataGridImage));
                 this.changeImage(imageIndex);
             } else {
                 this.changeImage(0);
@@ -3978,10 +3586,10 @@
             this.pagingProgressPause = true;
         }
         showVariant() {
-            const variantImage = this.container.querySelector(`[${selectors$M.dataSlideForVariantMedia}]`);
+            const variantImage = this.container.querySelector(`[${selectors$K.dataSlideForVariantMedia}]`);
             // if a swatch is clicked, show the variant image instead of the image at [0]
             if (variantImage) {
-                let imageIndex = Number(variantImage.getAttribute(selectors$M.dataGridImage));
+                let imageIndex = Number(variantImage.getAttribute(selectors$K.dataGridImage));
                 this.changeImage(imageIndex);
             } else {
                 this.changeImage(0);
@@ -3989,9 +3597,9 @@
             this.pagingProgressPause = true;
         }
         getNextIndex() {
-            let currentImage = this.container.querySelector(`[${selectors$M.dataGridImage}][${selectors$M.dataGridCurrentImage}]`);
+            let currentImage = this.container.querySelector(`[${selectors$K.dataGridImage}][${selectors$K.dataGridCurrentImage}]`);
             if (currentImage) {
-                const currentIndex = Number(currentImage.getAttribute(selectors$M.dataGridImage));
+                const currentIndex = Number(currentImage.getAttribute(selectors$K.dataGridImage));
                 const nextIndex = (currentIndex + 1) % this.imageCount;
                 return nextIndex;
             } else {
@@ -4001,33 +3609,33 @@
         changeImage(index) {
             const currentImage = this.images[index % this.imageCount];
             if (!currentImage) return;
-            this.activeImages.forEach((image)=>image.removeAttribute(selectors$M.dataGridCurrentImage)
+            this.activeImages.forEach((image)=>image.removeAttribute(selectors$K.dataGridCurrentImage)
             );
-            currentImage.setAttribute(selectors$M.dataGridCurrentImage, 'true');
+            currentImage.setAttribute(selectors$K.dataGridCurrentImage, 'true');
             if (this.slideshowStyle === 'cycle_images') {
                 this.changePaging(index);
             }
         }
         changePaging(index = 0) {
             // Change active class on slider pagination
-            const activePage = this.container.querySelector(`[${selectors$M.dataGridPage}].${classes$v.active}`);
-            const currentPage = this.container.querySelector(`[${selectors$M.dataGridPage}="${index}"]`);
+            const activePage = this.container.querySelector(`[${selectors$K.dataGridPage}].${classes$r.active}`);
+            const currentPage = this.container.querySelector(`[${selectors$K.dataGridPage}="${index}"]`);
             if (activePage) {
-                activePage.style.setProperty(selectors$M.styleWidth, '100%');
-                activePage.classList.remove(classes$v.active);
+                activePage.style.setProperty(selectors$K.styleWidth, '100%');
+                activePage.classList.remove(classes$r.active);
             }
             if (currentPage) {
-                currentPage.classList.add(classes$v.active);
+                currentPage.classList.add(classes$r.active);
                 this.progressPaging();
             }
         }
         progressPaging() {
             // Play/pause the PGI images slider
-            const element = this.container.querySelector(`[${selectors$M.dataGridPage}].${classes$v.active}`);
+            const element = this.container.querySelector(`[${selectors$K.dataGridPage}].${classes$r.active}`);
             if (!element || this.isMobile) return;
             this.stopPaging();
             if (this.pagingProgressCounter === 0) {
-                element.style.setProperty(selectors$M.styleWidth, '0%');
+                element.style.setProperty(selectors$K.styleWidth, '0%');
             }
             this.interval = setInterval(()=>{
                 if (this.pagingProgressCounter >= 100 && !this.pagingProgressPause) {
@@ -4036,7 +3644,7 @@
                     this.changeImage(this.getNextIndex());
                 } else if (!this.pagingProgressPause) {
                     this.pagingProgressCounter++;
-                    element.style.setProperty(selectors$M.styleWidth, `${this.pagingProgressCounter}%`);
+                    element.style.setProperty(selectors$K.styleWidth, `${this.pagingProgressCounter}%`);
                 }
             }, this.timeout / 100);
         }
@@ -4053,16 +3661,16 @@
                 for(let index = 0; index < this.imageCount; index++){
                     let activeClass = '';
                     if (index === 0) {
-                        activeClass = `class="${classes$v.active}"`;
+                        activeClass = `class="${classes$r.active}"`;
                     }
-                    pagination += `<span ${activeClass} ${selectors$M.dataGridPage}="${index}">${index + 1}</span>`;
+                    pagination += `<span ${activeClass} ${selectors$K.dataGridPage}="${index}">${index + 1}</span>`;
                 }
                 if (pagination !== '') {
-                    let pagingContainer = this.container.querySelector(`[${selectors$M.dataGridPagination}]`);
+                    let pagingContainer = this.container.querySelector(`[${selectors$K.dataGridPagination}]`);
                     if (!pagingContainer) {
                         pagingContainer = document.createElement('div');
-                        pagingContainer.className = classes$v.pagination;
-                        pagingContainer.setAttribute(selectors$M.dataGridPagination, '');
+                        pagingContainer.className = classes$r.pagination;
+                        pagingContainer.setAttribute(selectors$K.dataGridPagination, '');
                     }
                     pagingContainer.innerHTML = pagination;
                     this.imagesHolder.parentElement.prepend(pagingContainer);
@@ -4071,25 +3679,25 @@
         }
         removePaging() {
             // Remove the slider pagination holder
-            const pagingContainer = this.container.querySelector(`[${selectors$M.dataGridPagination}]`);
+            const pagingContainer = this.container.querySelector(`[${selectors$K.dataGridPagination}]`);
             if (pagingContainer) {
                 pagingContainer.remove();
             }
         }
         get imagesHolder() {
-            return this.container.querySelector(`[${selectors$M.dataGridImages}]`);
+            return this.container.querySelector(`[${selectors$K.dataGridImages}]`);
         }
         get images() {
-            return this.imagesHolder.querySelectorAll(`[${selectors$M.dataGridImage}]`);
+            return this.imagesHolder.querySelectorAll(`[${selectors$K.dataGridImage}]`);
         }
         get activeImages() {
-            return this.imagesHolder.querySelectorAll(`[${selectors$M.dataGridImage}][${selectors$M.dataGridCurrentImage}]`);
+            return this.imagesHolder.querySelectorAll(`[${selectors$K.dataGridImage}][${selectors$K.dataGridCurrentImage}]`);
         }
         get links() {
-            return this.container.querySelectorAll(selectors$M.productGridItemLink);
+            return this.container.querySelectorAll(selectors$K.productGridItemLink);
         }
         get slideshowStyle() {
-            return this.container.getAttribute(selectors$M.dataSlideshowStyle);
+            return this.container.getAttribute(selectors$K.dataSlideshowStyle);
         }
         get imageCount() {
             return this.images.length;
@@ -4119,21 +3727,21 @@
         }
     };
 
-    const selectors$L = {
+    const selectors$J = {
         dataGridCurrentImage: 'data-grid-current-image'
     };
-    const classes$u = {
+    const classes$q = {
         active: 'is-active'
     };
     let ProductGridItemImage = class ProductGridItemImage extends HTMLElement {
         static get observedAttributes() {
             return [
                 'loading',
-                selectors$L.dataGridCurrentImage
+                selectors$J.dataGridCurrentImage
             ];
         }
         connectedCallback() {
-            if (this.getAttribute(selectors$L.dataGridCurrentImage) === null) {
+            if (this.getAttribute(selectors$J.dataGridCurrentImage) === null) {
                 this.hide();
             } else {
                 this.show();
@@ -4146,7 +3754,7 @@
                         this.eagerLoad();
                     }
                     break;
-                case selectors$L.dataGridCurrentImage:
+                case selectors$J.dataGridCurrentImage:
                     if (newValue === null) {
                         this.hide();
                     } else {
@@ -4156,10 +3764,10 @@
             }
         }
         show() {
-            this.classList.add(classes$u.active);
+            this.classList.add(classes$q.active);
         }
         hide() {
-            this.classList.remove(classes$u.active);
+            this.classList.remove(classes$q.active);
         }
         // Ensure that child image has loaded in case the child was wrapped in `<template>` to prevent eager loading
         eagerLoad() {
@@ -4185,7 +3793,7 @@
         }
     };
 
-    const selectors$K = {
+    const selectors$I = {
         popoutWrapper: '[data-popout]',
         popoutList: '[data-popout-list]',
         popoutListScroll: 'data-popout-list-scroll',
@@ -4198,7 +3806,7 @@
         ariaExpanded: 'aria-expanded',
         ariaCurrent: 'aria-current'
     };
-    const classes$t = {
+    const classes$p = {
         listVisible: 'popout-list--visible',
         currentSuffix: '--current'
     };
@@ -4220,11 +3828,11 @@
             }
         }
         popupToggleClick(evt) {
-            const ariaExpanded = evt.currentTarget.getAttribute(selectors$K.ariaExpanded) === 'true';
-            evt.currentTarget.setAttribute(selectors$K.ariaExpanded, !ariaExpanded);
-            this.popoutList.classList.toggle(classes$t.listVisible);
+            const ariaExpanded = evt.currentTarget.getAttribute(selectors$I.ariaExpanded) === 'true';
+            evt.currentTarget.setAttribute(selectors$I.ariaExpanded, !ariaExpanded);
+            this.popoutList.classList.toggle(classes$p.listVisible);
             this.popupListMaxWidth();
-            if (this.popoutList.hasAttribute(selectors$K.popoutListScroll)) {
+            if (this.popoutList.hasAttribute(selectors$I.popoutListScroll)) {
                 setTimeout(()=>{
                     this.popoutList.dispatchEvent(new CustomEvent('theme:scroll:lock', {
                         bubbles: true
@@ -4240,7 +3848,7 @@
         }
         popupListFocusout(evt) {
             const childInFocus = evt.currentTarget.contains(evt.relatedTarget);
-            const isVisible = this.popoutList.classList.contains(classes$t.listVisible);
+            const isVisible = this.popoutList.classList.contains(classes$p.listVisible);
             if (isVisible && !childInFocus) {
                 this._hideList();
             }
@@ -4249,24 +3857,24 @@
             this.popoutList.style.maxWidth = `${parseInt(document.body.clientWidth - this.popoutList.getBoundingClientRect().left)}px`;
         }
         popupOptionsClick(evt) {
-            const link = evt.target.closest(selectors$K.popoutOptions);
+            const link = evt.target.closest(selectors$I.popoutOptions);
             if (link.attributes.href.value === '#') {
                 evt.preventDefault();
                 let attrValue = '';
-                if (evt.currentTarget.getAttribute(selectors$K.dataValue)) {
-                    attrValue = evt.currentTarget.getAttribute(selectors$K.dataValue);
+                if (evt.currentTarget.getAttribute(selectors$I.dataValue)) {
+                    attrValue = evt.currentTarget.getAttribute(selectors$I.dataValue);
                 }
                 this.popoutInput.value = attrValue;
                 if (this.popoutPrevent) {
                     this.popoutInput.dispatchEvent(new Event('change'));
-                    if (!evt.detail.preventTrigger && this.popoutInput.hasAttribute(selectors$K.popoutQuantity)) {
+                    if (!evt.detail.preventTrigger && this.popoutInput.hasAttribute(selectors$I.popoutQuantity)) {
                         this.popoutInput.dispatchEvent(new Event('input'));
                     }
-                    const currentElement = this.popoutList.querySelector(`[class*="${classes$t.currentSuffix}"]`);
-                    let targetClass = classes$t.currentSuffix;
+                    const currentElement = this.popoutList.querySelector(`[class*="${classes$p.currentSuffix}"]`);
+                    let targetClass = classes$p.currentSuffix;
                     if (currentElement && currentElement.classList.length) {
                         for (const currentElementClass of currentElement.classList){
-                            if (currentElementClass.includes(classes$t.currentSuffix)) {
+                            if (currentElementClass.includes(classes$p.currentSuffix)) {
                                 targetClass = currentElementClass;
                                 break;
                             }
@@ -4277,10 +3885,10 @@
                         listTargetElement.classList.remove(`${targetClass}`);
                         evt.currentTarget.parentElement.classList.add(`${targetClass}`);
                     }
-                    const targetAttribute = this.popoutList.querySelector(`[${selectors$K.ariaCurrent}]`);
-                    if (targetAttribute && targetAttribute.hasAttribute(`${selectors$K.ariaCurrent}`)) {
-                        targetAttribute.removeAttribute(`${selectors$K.ariaCurrent}`);
-                        evt.currentTarget.setAttribute(`${selectors$K.ariaCurrent}`, 'true');
+                    const targetAttribute = this.popoutList.querySelector(`[${selectors$I.ariaCurrent}]`);
+                    if (targetAttribute && targetAttribute.hasAttribute(`${selectors$I.ariaCurrent}`)) {
+                        targetAttribute.removeAttribute(`${selectors$I.ariaCurrent}`);
+                        evt.currentTarget.setAttribute(`${selectors$I.ariaCurrent}`, 'true');
                     }
                     if (attrValue !== '') {
                         this.replaceTextContent(this.popoutToggle, attrValue);
@@ -4303,7 +3911,7 @@
             });
         }
         updatePopout(evt) {
-            const targetElement = this.popoutList.querySelector(`[${selectors$K.dataValue}="${this.popoutInput.value}"]`);
+            const targetElement = this.popoutList.querySelector(`[${selectors$I.dataValue}="${this.popoutInput.value}"]`);
             if (targetElement) {
                 targetElement.dispatchEvent(new CustomEvent('theme:popout:click', {
                     cancelable: true,
@@ -4323,7 +3931,7 @@
         }
         bodyClick(evt) {
             const isOption = this.container.contains(evt.target);
-            const isVisible = this.popoutList.classList.contains(classes$t.listVisible);
+            const isVisible = this.popoutList.classList.contains(classes$p.listVisible);
             this.outsidePopupToggle === evt.target;
             if (isVisible && !isOption) {
                 this._hideList();
@@ -4371,26 +3979,26 @@
             }
         }
         _hideList() {
-            this.popoutList.classList.remove(classes$t.listVisible);
-            this.popoutToggle.setAttribute(selectors$K.ariaExpanded, false);
+            this.popoutList.classList.remove(classes$p.listVisible);
+            this.popoutToggle.setAttribute(selectors$I.ariaExpanded, false);
             if (this.outsidePopupToggle) {
-                this.outsidePopupToggle.setAttribute(selectors$K.ariaExpanded, false);
+                this.outsidePopupToggle.setAttribute(selectors$I.ariaExpanded, false);
             }
         }
         constructor(){
             super();
-            this.container = this.querySelector(selectors$K.popoutWrapper);
-            this.popoutList = this.container.querySelector(selectors$K.popoutList);
-            this.popoutToggle = this.container.querySelector(`[${selectors$K.popoutToggle}]`);
-            this.outsidePopupToggle = document.querySelector(`[${selectors$K.popoutToggle}="${this.popoutList.id}"]`);
-            this.popoutInput = this.container.querySelector(selectors$K.popoutInput);
-            this.popoutOptions = this.container.querySelectorAll(selectors$K.popoutOptions);
-            this.popoutPrevent = this.container.getAttribute(selectors$K.popoutPrevent) === 'true';
+            this.container = this.querySelector(selectors$I.popoutWrapper);
+            this.popoutList = this.container.querySelector(selectors$I.popoutList);
+            this.popoutToggle = this.container.querySelector(`[${selectors$I.popoutToggle}]`);
+            this.outsidePopupToggle = document.querySelector(`[${selectors$I.popoutToggle}="${this.popoutList.id}"]`);
+            this.popoutInput = this.container.querySelector(selectors$I.popoutInput);
+            this.popoutOptions = this.container.querySelectorAll(selectors$I.popoutOptions);
+            this.popoutPrevent = this.container.getAttribute(selectors$I.popoutPrevent) === 'true';
             this._connectOptions();
             this._connectToggle();
             this._onFocusOut();
             this.popupListMaxWidth();
-            if (this.popoutInput && this.popoutInput.hasAttribute(selectors$K.popoutQuantity)) {
+            if (this.popoutInput && this.popoutInput.hasAttribute(selectors$I.popoutQuantity)) {
                 document.addEventListener('theme:popout:update', this.updatePopout.bind(this));
             }
             document.addEventListener('theme:resize', ()=>{
@@ -4460,7 +4068,7 @@
         }, duration);
     };
 
-    const selectors$J = {
+    const selectors$H = {
         accordionGroup: '[data-accordion-group]',
         accordionToggle: 'data-accordion-trigger',
         accordionBody: '[data-accordion-body]',
@@ -4468,10 +4076,10 @@
         rangeSlider: 'data-range-holder',
         section: '[data-section-id]'
     };
-    const classes$s = {
+    const classes$o = {
         open: 'accordion-is-open'
     };
-    let sections$d = {};
+    let sections$c = {};
     let Accordion = class Accordion {
         mobileAccordions() {
             if (window.innerWidth < window.theme.sizes.medium) {
@@ -4520,22 +4128,22 @@
             this.body.removeEventListener('theme:accordion:close', this.hideEvent);
         }
         setDefaultState() {
-            if (this.trigger.classList.contains(classes$s.open)) {
+            if (this.trigger.classList.contains(classes$o.open)) {
                 showElement(this.body);
             } else {
                 this.hideAccordion();
             }
         }
         getSiblings() {
-            const section = this.body.closest(selectors$J.section);
+            const section = this.body.closest(selectors$H.section);
             const groupsArray = [
-                ...section.querySelectorAll(selectors$J.accordionGroup)
+                ...section.querySelectorAll(selectors$H.accordionGroup)
             ];
             const syncWrapper = groupsArray.filter((el)=>el.contains(this.body)
             ).shift();
             if (syncWrapper) {
                 const allChilden = [
-                    ...syncWrapper.querySelectorAll(selectors$J.accordionBody)
+                    ...syncWrapper.querySelectorAll(selectors$H.accordionBody)
                 ];
                 const onlySiblings = allChilden.filter((el)=>!el.contains(this.body)
                 );
@@ -4550,14 +4158,14 @@
             });
         }
         toggleState() {
-            if (this.trigger.classList.contains(classes$s.open)) {
+            if (this.trigger.classList.contains(classes$o.open)) {
                 this.hideAccordion();
             } else {
                 this.showAccordion();
                 this.closeSiblings();
                 // Collection filters
                 // Accordion with range slider custom event to reload
-                if (this.body.hasAttribute(selectors$J.rangeSlider)) {
+                if (this.body.hasAttribute(selectors$H.rangeSlider)) {
                     setTimeout(()=>{
                         document.dispatchEvent(new CustomEvent('theme:price-range:reset', {
                             bubbles: false
@@ -4567,11 +4175,11 @@
             }
         }
         hideAccordion() {
-            this.trigger.classList.remove(classes$s.open);
+            this.trigger.classList.remove(classes$o.open);
             slideUp(this.body);
         }
         showAccordion() {
-            this.trigger.classList.add(classes$s.open);
+            this.trigger.classList.add(classes$o.open);
             slideDown(this.body);
             setTimeout(()=>{
                 this.checkInViewportAndScrollTo();
@@ -4602,7 +4210,7 @@
         constructor(el){
             this.body = el;
             this.key = this.body.id;
-            const btnSelector = `[${selectors$J.accordionToggle}='${this.key}']`;
+            const btnSelector = `[${selectors$H.accordionToggle}='${this.key}']`;
             this.trigger = document.querySelector(btnSelector);
             this.toggleEvent = (e)=>this.clickEvents(e)
             ;
@@ -4611,7 +4219,7 @@
             this.hideEvent = ()=>this.hideEvents()
             ;
             this.syncBodies = this.getSiblings();
-            if (this.body.hasAttribute(selectors$J.accordionBodyMobile)) {
+            if (this.body.hasAttribute(selectors$H.accordionBodyMobile)) {
                 this.mobileAccordions();
             } else {
                 this.init();
@@ -4620,14 +4228,14 @@
     };
     const accordion = {
         onLoad () {
-            sections$d[this.id] = [];
-            const els = this.container.querySelectorAll(selectors$J.accordionBody);
+            sections$c[this.id] = [];
+            const els = this.container.querySelectorAll(selectors$H.accordionBody);
             els.forEach((el)=>{
-                sections$d[this.id].push(new Accordion(el));
+                sections$c[this.id].push(new Accordion(el));
             });
         },
         onUnload: function() {
-            sections$d[this.id].forEach((el)=>{
+            sections$c[this.id].forEach((el)=>{
                 if (typeof el.unload === 'function') {
                     el.unload();
                 }
@@ -4635,23 +4243,23 @@
         },
         onSelect: function() {
             if (this.type === 'accordion-single') {
-                this.container.querySelector(`[${selectors$J.accordionToggle}]`).click();
+                this.container.querySelector(`[${selectors$H.accordionToggle}]`).click();
             }
         },
         onDeselect: function() {
             if (this.type === 'accordion-single') {
-                this.container.querySelector(`[${selectors$J.accordionToggle}]`).click();
+                this.container.querySelector(`[${selectors$H.accordionToggle}]`).click();
             }
         },
         onBlockSelect (evt) {
-            sections$d[this.id].forEach((el)=>{
+            sections$c[this.id].forEach((el)=>{
                 if (typeof el.onBlockSelect === 'function') {
                     el.onBlockSelect(evt);
                 }
             });
         },
         onBlockDeselect (evt) {
-            sections$d[this.id].forEach((el)=>{
+            sections$c[this.id].forEach((el)=>{
                 if (typeof el.onBlockSelect === 'function') {
                     el.onBlockDeselect(evt);
                 }
@@ -4665,28 +4273,28 @@
         }
     };
 
-    const selectors$I = {
+    const selectors$G = {
         inputSearch: 'input[type="search"]',
         focusedElements: '[aria-selected="true"] a',
         resetButton: 'button[type="reset"]'
     };
-    const classes$r = {
+    const classes$n = {
         hidden: 'is-hidden'
     };
     let HeaderSearchForm = class HeaderSearchForm extends HTMLElement {
         toggleResetButton() {
-            const resetIsHidden = this.resetButton.classList.contains(classes$r.hidden);
+            const resetIsHidden = this.resetButton.classList.contains(classes$n.hidden);
             if (this.input.value.length > 0 && resetIsHidden) {
-                this.resetButton.classList.remove(classes$r.hidden);
+                this.resetButton.classList.remove(classes$n.hidden);
             } else if (this.input.value.length === 0 && !resetIsHidden) {
-                this.resetButton.classList.add(classes$r.hidden);
+                this.resetButton.classList.add(classes$n.hidden);
             }
         }
         onChange() {
             this.toggleResetButton();
         }
         shouldResetForm() {
-            return !document.querySelector(selectors$I.focusedElements);
+            return !document.querySelector(selectors$G.focusedElements);
         }
         onFormReset(event) {
             // Prevent default so the form reset doesn't set the value gotten from the url on page load
@@ -4695,13 +4303,13 @@
             if (this.shouldResetForm()) {
                 this.input.value = '';
                 this.toggleResetButton();
-                event.target.querySelector(selectors$I.inputSearch).focus();
+                event.target.querySelector(selectors$G.inputSearch).focus();
             }
         }
         constructor(){
             super();
-            this.input = this.querySelector(selectors$I.inputSearch);
-            this.resetButton = this.querySelector(selectors$I.resetButton);
+            this.input = this.querySelector(selectors$G.inputSearch);
+            this.resetButton = this.querySelector(selectors$G.resetButton);
             if (this.input) {
                 this.input.form.addEventListener('reset', this.onFormReset.bind(this));
                 this.input.addEventListener('input', debounce$1((event)=>{
@@ -4712,7 +4320,7 @@
     };
     customElements.define('header-search-form', HeaderSearchForm);
 
-    const selectors$H = {
+    const selectors$F = {
         allVisibleElements: '[role="option"]',
         ariaSelected: '[aria-selected="true"]',
         predictiveSearch: 'predictive-search',
@@ -4745,7 +4353,7 @@
                 var // Remove the results when they are no longer relevant for the new search term
                 // so they don't show up when the dropdown opens again
                 ref;
-                (ref = this.querySelector(selectors$H.searchResultsGroupsWrapper)) === null || ref === void 0 ? void 0 : ref.remove();
+                (ref = this.querySelector(selectors$F.searchResultsGroupsWrapper)) === null || ref === void 0 ? void 0 : ref.remove();
             }
             // Update the term asap, don't wait for the predictive search query to finish loading
             this.updateSearchForTerm(this.searchTerm, newSearchTerm);
@@ -4757,7 +4365,7 @@
             this.getSearchResults(this.searchTerm);
         }
         onFormSubmit(event) {
-            if (!this.getQuery().length || this.querySelector(selectors$H.selectedLink)) event.preventDefault();
+            if (!this.getQuery().length || this.querySelector(selectors$F.selectedLink)) event.preventDefault();
         }
         onFormReset(event) {
             super.onFormReset(event);
@@ -4769,7 +4377,7 @@
             }
         }
         shouldResetForm() {
-            return !document.querySelector(selectors$H.selectedLink);
+            return !document.querySelector(selectors$F.selectedLink);
         }
         onFocus() {
             const currentSearchTerm = this.getQuery();
@@ -4810,7 +4418,7 @@
             }
         }
         updateSearchForTerm(previousTerm, newTerm) {
-            const searchForTextElement = this.querySelector(selectors$H.searchForText);
+            const searchForTextElement = this.querySelector(selectors$F.searchForText);
             const currentButtonText = searchForTextElement === null || searchForTextElement === void 0 ? void 0 : searchForTextElement.innerText;
             if (currentButtonText) {
                 var ref;
@@ -4825,10 +4433,10 @@
         switchOption(direction) {
             if (!this.getAttribute('open')) return;
             const moveUp = direction === 'up';
-            const selectedElement = this.querySelector(selectors$H.ariaSelected);
+            const selectedElement = this.querySelector(selectors$F.ariaSelected);
             // Filter out hidden elements (duplicated page and article resources) thanks
             // to this https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetParent
-            const allVisibleElements = Array.from(this.querySelectorAll(selectors$H.allVisibleElements)).filter((element)=>element.offsetParent !== null
+            const allVisibleElements = Array.from(this.querySelectorAll(selectors$F.allVisibleElements)).filter((element)=>element.offsetParent !== null
             );
             let activeElementIndex = 0;
             if (moveUp && !selectedElement) return;
@@ -4853,7 +4461,7 @@
             this.input.setAttribute('aria-activedescendant', activeElement.id);
         }
         selectOption() {
-            const selectedOption = this.querySelector(selectors$H.selectedOption);
+            const selectedOption = this.querySelector(selectors$F.selectedOption);
             if (selectedOption) selectedOption.click();
         }
         getSearchResults(searchTerm) {
@@ -4868,7 +4476,7 @@
                 signal: this.abortController.signal
             }).then(this.handleErrors).then((response)=>response.text()
             ).then((response)=>{
-                const resultsMarkup = new DOMParser().parseFromString(response, 'text/html').querySelector(selectors$H.sectionPredictiveSearch).innerHTML;
+                const resultsMarkup = new DOMParser().parseFromString(response, 'text/html').querySelector(selectors$F.sectionPredictiveSearch).innerHTML;
                 // Save bandwidth keeping the cache in all instances synced
                 this.allPredictiveSearchInstances.forEach((predictiveSearchInstance)=>{
                     predictiveSearchInstance.cachedResults[queryKey] = resultsMarkup;
@@ -4881,7 +4489,7 @@
             });
         }
         setLiveRegionLoadingState() {
-            this.statusElement = this.statusElement || this.querySelector(selectors$H.predictiveSearchStatus);
+            this.statusElement = this.statusElement || this.querySelector(selectors$F.predictiveSearchStatus);
             this.loadingText = this.loadingText || this.getAttribute('data-loading-text');
             this.setLiveRegionText(this.loadingText);
             this.setAttribute('loading', true);
@@ -4901,7 +4509,7 @@
         }
         setLiveRegionResults() {
             this.removeAttribute('loading');
-            this.setLiveRegionText(this.querySelector(selectors$H.searchResultsLiveRegion).textContent);
+            this.setLiveRegionText(this.querySelector(selectors$F.searchResultsLiveRegion).textContent);
         }
         open() {
             this.setAttribute('open', true);
@@ -4918,7 +4526,7 @@
                 this.input.value = '';
                 this.removeAttribute('results');
             }
-            const selected = this.querySelector(selectors$H.ariaSelected);
+            const selected = this.querySelector(selectors$F.ariaSelected);
             if (selected) selected.setAttribute('aria-selected', false);
             this.input.setAttribute('aria-activedescendant', '');
             this.removeAttribute('loading');
@@ -4949,13 +4557,13 @@
             this.wrapper = this;
             this.a11y = a11y;
             this.abortController = new AbortController();
-            this.allPredictiveSearchInstances = document.querySelectorAll(selectors$H.predictiveSearch);
+            this.allPredictiveSearchInstances = document.querySelectorAll(selectors$F.predictiveSearch);
             this.cachedResults = {};
-            this.input = this.wrapper.querySelector(selectors$H.searchInput);
+            this.input = this.wrapper.querySelector(selectors$F.searchInput);
             this.isOpen = false;
-            this.predictiveSearchResults = this.querySelector(selectors$H.predictiveSearchResults);
+            this.predictiveSearchResults = this.querySelector(selectors$F.predictiveSearchResults);
             this.searchTerm = '';
-            this.loader = this.wrapper.querySelector(selectors$H.loader);
+            this.loader = this.wrapper.querySelector(selectors$F.loader);
         }
     };
 
@@ -4969,7 +4577,7 @@
         return getWindowWidth() < window.theme.sizes.small;
     }
 
-    const selectors$G = {
+    const selectors$E = {
         inputSearch: 'input[type="search"]'
     };
     let MainSearch = class MainSearch extends HeaderSearchForm {
@@ -5010,12 +4618,12 @@
         }
         constructor(){
             super();
-            this.allSearchInputs = document.querySelectorAll(selectors$G.inputSearch);
+            this.allSearchInputs = document.querySelectorAll(selectors$E.inputSearch);
             this.setupEventListeners();
         }
     };
 
-    const selectors$F = {
+    const selectors$D = {
         drawer: 'data-drawer-scrolls',
         slideruleOpen: 'data-sliderule-open',
         slideruleClose: 'data-sliderule-close',
@@ -5027,12 +4635,12 @@
              :scope > * > * >[data-animates],
              :scope .sliderule-grid  > *`
     };
-    const classes$q = {
+    const classes$m = {
         isVisible: 'is-visible',
         isHiding: 'is-hiding',
         isHidden: 'is-hidden'
     };
-    let sections$c = {};
+    let sections$b = {};
     let HeaderMobileSliderule = class HeaderMobileSliderule {
         clickEvents() {
             this.trigger.addEventListener('click', (function() {
@@ -5068,45 +4676,45 @@
         hideSliderule(close = false) {
             const paneStyle = window.getComputedStyle(this.pane);
             const paneTransitionDuration = parseFloat(paneStyle.getPropertyValue('transition-duration')) * 1000;
-            const children = close ? this.pane.querySelectorAll(`.${classes$q.isVisible}`) : this.children;
+            const children = close ? this.pane.querySelectorAll(`.${classes$m.isVisible}`) : this.children;
             this.pane.style.setProperty('--sliderule-height', 'auto');
             this.staggerChildAnimations(true);
-            this.pane.classList.add(classes$q.isHiding);
-            this.sliderule.classList.add(classes$q.isHiding);
-            this.sliderule.classList.remove(classes$q.isVisible);
+            this.pane.classList.add(classes$m.isHiding);
+            this.sliderule.classList.add(classes$m.isHiding);
+            this.sliderule.classList.remove(classes$m.isVisible);
             children.forEach((el)=>{
-                el.classList.remove(classes$q.isVisible);
+                el.classList.remove(classes$m.isVisible);
             });
             const newPosition = parseInt(this.pane.dataset.sliderulePane, 10) - 1;
-            this.pane.setAttribute(selectors$F.sliderulePane, newPosition);
-            const hidedSelector = close ? `[${selectors$F.dataAnimates}].${classes$q.isHidden}` : `[${selectors$F.dataAnimates}="${newPosition}"].${classes$q.isHidden}`;
+            this.pane.setAttribute(selectors$D.sliderulePane, newPosition);
+            const hidedSelector = close ? `[${selectors$D.dataAnimates}].${classes$m.isHidden}` : `[${selectors$D.dataAnimates}="${newPosition}"].${classes$m.isHidden}`;
             const hidedItems = this.pane.querySelectorAll(hidedSelector);
             if (hidedItems.length) {
                 hidedItems.forEach((element)=>{
-                    element.classList.remove(classes$q.isHidden);
+                    element.classList.remove(classes$m.isHidden);
                 });
             }
             setTimeout(()=>{
-                this.pane.classList.remove(classes$q.isHiding);
-                this.sliderule.classList.remove(classes$q.isHiding);
+                this.pane.classList.remove(classes$m.isHiding);
+                this.sliderule.classList.remove(classes$m.isHiding);
                 this.staggerChildAnimations();
             }, paneTransitionDuration);
         }
         showSliderule() {
             this.pane.style.setProperty('--sliderule-height', 'auto');
-            this.sliderule.classList.add(classes$q.isVisible);
+            this.sliderule.classList.add(classes$m.isVisible);
             this.children.forEach((el)=>{
-                el.classList.add(classes$q.isVisible);
+                el.classList.add(classes$m.isVisible);
             });
             const oldPosition = parseInt(this.pane.dataset.sliderulePane, 10);
             const newPosition = oldPosition + 1;
-            this.pane.setAttribute(selectors$F.sliderulePane, newPosition);
-            const hidedItems = this.pane.querySelectorAll(`[${selectors$F.dataAnimates}="${oldPosition}"]`);
+            this.pane.setAttribute(selectors$D.sliderulePane, newPosition);
+            const hidedItems = this.pane.querySelectorAll(`[${selectors$D.dataAnimates}="${oldPosition}"]`);
             if (hidedItems.length) {
                 const hidedItemsTransition = parseFloat(window.getComputedStyle(hidedItems[0]).getPropertyValue('transition-duration')) * 1000;
                 setTimeout(()=>{
                     hidedItems.forEach((element)=>{
-                        element.classList.add(classes$q.isHidden);
+                        element.classList.add(classes$m.isHidden);
                     });
                 }, hidedItemsTransition);
             }
@@ -5124,24 +4732,24 @@
             }
         }
         closeSliderule() {
-            if (this.pane && this.pane.hasAttribute(selectors$F.sliderulePane) && parseInt(this.pane.getAttribute(selectors$F.sliderulePane)) > 0) {
+            if (this.pane && this.pane.hasAttribute(selectors$D.sliderulePane) && parseInt(this.pane.getAttribute(selectors$D.sliderulePane)) > 0) {
                 this.hideSliderule(true);
-                if (parseInt(this.pane.getAttribute(selectors$F.sliderulePane)) > 0) {
-                    this.pane.setAttribute(selectors$F.sliderulePane, 0);
+                if (parseInt(this.pane.getAttribute(selectors$D.sliderulePane)) > 0) {
+                    this.pane.setAttribute(selectors$D.sliderulePane, 0);
                 }
             }
         }
         constructor(el){
             this.sliderule = el;
-            this.wrapper = el.closest(selectors$F.wrapper);
+            this.wrapper = el.closest(selectors$D.wrapper);
             this.key = this.sliderule.id;
-            const btnSelector = `[${selectors$F.slideruleOpen}='${this.key}']`;
-            const exitSelector = `[${selectors$F.slideruleClose}='${this.key}']`;
+            const btnSelector = `[${selectors$D.slideruleOpen}='${this.key}']`;
+            const exitSelector = `[${selectors$D.slideruleClose}='${this.key}']`;
             this.trigger = document.querySelector(btnSelector);
-            this.drawer = document.querySelector(`[${selectors$F.drawer}]`);
+            this.drawer = document.querySelector(`[${selectors$D.drawer}]`);
             this.exit = document.querySelectorAll(exitSelector);
-            this.pane = document.querySelector(`[${selectors$F.sliderulePane}]`);
-            this.children = this.sliderule.querySelectorAll(selectors$F.children);
+            this.pane = document.querySelector(`[${selectors$D.sliderulePane}]`);
+            this.children = this.sliderule.querySelectorAll(selectors$D.children);
             this.trigger.setAttribute('aria-haspopup', true);
             this.trigger.setAttribute('aria-expanded', false);
             this.trigger.setAttribute('aria-controls', this.key);
@@ -5152,15 +4760,15 @@
     };
     const headerMobileSliderule = {
         onLoad () {
-            sections$c[this.id] = [];
-            const els = this.container.querySelectorAll(selectors$F.slideruleWrappper);
+            sections$b[this.id] = [];
+            const els = this.container.querySelectorAll(selectors$D.slideruleWrappper);
             els.forEach((el)=>{
-                sections$c[this.id].push(new HeaderMobileSliderule(el));
+                sections$b[this.id].push(new HeaderMobileSliderule(el));
             });
         }
     };
 
-    const selectors$E = {
+    const selectors$C = {
         widthContent: '[data-takes-space]',
         desktop: '[data-header-desktop]',
         cloneClass: 'js__header__clone',
@@ -5172,27 +4780,27 @@
         preventTransparentHeader: '.main-content > .shopify-section:first-child [data-prevent-transparent-header]',
         deadLink: '.navlink[href="#"]'
     };
-    const classes$p = {
+    const classes$l = {
         hasOverlay: 'has-overlay'
     };
-    let sections$b = {};
+    let sections$a = {};
     let Header = class Header {
         unload() {
             document.removeEventListener('theme:resize', this.checkWidth);
         }
         checkForImage() {
-            this.overlayedImages = document.querySelectorAll(selectors$E.firstSectionHasImage);
-            let preventTransparentHeader = document.querySelectorAll(selectors$E.preventTransparentHeader).length;
+            this.overlayedImages = document.querySelectorAll(selectors$C.firstSectionHasImage);
+            let preventTransparentHeader = document.querySelectorAll(selectors$C.preventTransparentHeader).length;
             if (this.overlayedImages.length && !preventTransparentHeader && this.transparent) {
                 // is transparent and has image, overlay the image
-                document.querySelector(selectors$E.backfill).style.display = 'none';
+                document.querySelector(selectors$C.backfill).style.display = 'none';
                 this.listenOverlay();
             } else {
-                this.wrapper.setAttribute(selectors$E.transparent, false);
+                this.wrapper.setAttribute(selectors$C.transparent, false);
             }
             if (this.overlayedImages.length && !preventTransparentHeader && !this.transparent) {
                 // Have image but not transparent, remove border bottom
-                this.wrapper.classList.add(selectors$E.overrideBorder);
+                this.wrapper.classList.add(selectors$C.overrideBorder);
                 this.subtractHeaderHeight();
             }
         }
@@ -5215,7 +4823,7 @@
             const { windowHeight , announcementHeight  } = readHeights();
             this.overlayedImages.forEach((el)=>{
                 el.style.setProperty('--full-screen', `${windowHeight - announcementHeight}px`);
-                el.classList.add(classes$p.hasOverlay);
+                el.classList.add(classes$l.hasOverlay);
             });
         }
         subtractHeaderHeight() {
@@ -5226,16 +4834,16 @@
         }
         checkWidth() {
             if (document.body.clientWidth < this.minWidth) {
-                this.wrapper.classList.add(selectors$E.showMobileClass);
+                this.wrapper.classList.add(selectors$C.showMobileClass);
             } else {
-                this.wrapper.classList.remove(selectors$E.showMobileClass);
+                this.wrapper.classList.remove(selectors$C.showMobileClass);
             }
         }
         getMinWidth() {
             const comparitor = this.wrapper.cloneNode(true);
-            comparitor.classList.add(selectors$E.cloneClass);
+            comparitor.classList.add(selectors$C.cloneClass);
             document.body.appendChild(comparitor);
-            const wideElements = comparitor.querySelectorAll(selectors$E.widthContent);
+            const wideElements = comparitor.querySelectorAll(selectors$C.widthContent);
             let minWidth = 0;
             if (wideElements.length === 3) {
                 minWidth = _sumSplitWidths(wideElements);
@@ -5248,10 +4856,10 @@
         constructor(el){
             this.wrapper = el;
             this.style = this.wrapper.dataset.style;
-            this.desktop = this.wrapper.querySelector(selectors$E.desktop);
-            this.transparent = this.wrapper.getAttribute(selectors$E.transparent) !== 'false';
-            this.overlayedImages = document.querySelectorAll(selectors$E.firstSectionHasImage);
-            this.deadLinks = document.querySelectorAll(selectors$E.deadLink);
+            this.desktop = this.wrapper.querySelector(selectors$C.desktop);
+            this.transparent = this.wrapper.getAttribute(selectors$C.transparent) !== 'false';
+            this.overlayedImages = document.querySelectorAll(selectors$C.firstSectionHasImage);
+            this.deadLinks = document.querySelectorAll(selectors$C.deadLink);
             this.killDeadLinks();
             if (this.style !== 'drawer' && this.desktop) {
                 this.minWidth = this.getMinWidth();
@@ -5285,11 +4893,11 @@
     }
     const header = {
         onLoad () {
-            sections$b = new Header(this.container);
+            sections$a = new Header(this.container);
         },
         onUnload: function() {
-            if (typeof sections$b.unload === 'function') {
-                sections$b.unload();
+            if (typeof sections$a.unload === 'function') {
+                sections$a.unload();
             }
         }
     };
@@ -5329,14 +4937,14 @@
         customElements.define('main-search', MainSearch);
     }
 
-    const selectors$D = {
+    const selectors$B = {
         newsletterForm: '[data-newsletter-form]'
     };
-    const classes$o = {
+    const classes$k = {
         success: 'has-success',
         error: 'has-error'
     };
-    const sections$a = {};
+    const sections$9 = {};
     let NewsletterCheckForResult = class NewsletterCheckForResult {
         init() {
             this.newsletter.addEventListener('submit', this.newsletterSubmit);
@@ -5371,11 +4979,11 @@
             if (this.newsletter.id === this.formID) {
                 const newsletter = document.getElementById(this.formID);
                 if (window.location.search.indexOf('?customer_posted=true') !== -1) {
-                    newsletter.classList.remove(classes$o.error);
-                    newsletter.classList.add(classes$o.success);
+                    newsletter.classList.remove(classes$k.error);
+                    newsletter.classList.add(classes$k.success);
                 } else if (window.location.search.indexOf('accepts_marketing') !== -1) {
-                    newsletter.classList.remove(classes$o.success);
-                    newsletter.classList.add(classes$o.error);
+                    newsletter.classList.remove(classes$k.success);
+                    newsletter.classList.add(classes$k.error);
                 }
                 // Prevents the form from scrolling subsequent pagloads
                 this.removeStorage();
@@ -5414,14 +5022,14 @@
     };
     const newsletterCheckForResultSection = {
         onLoad () {
-            sections$a[this.id] = [];
-            const newsletters = this.container.querySelectorAll(selectors$D.newsletterForm);
+            sections$9[this.id] = [];
+            const newsletters = this.container.querySelectorAll(selectors$B.newsletterForm);
             newsletters.forEach((form)=>{
-                sections$a[this.id].push(new NewsletterCheckForResult(form));
+                sections$9[this.id].push(new NewsletterCheckForResult(form));
             });
         },
         onUnload () {
-            sections$a[this.id].forEach((form)=>{
+            sections$9[this.id].forEach((form)=>{
                 if (typeof form.unload === 'function') {
                     form.unload();
                 }
@@ -5429,7 +5037,7 @@
         }
     };
 
-    const selectors$C = {
+    const selectors$A = {
         shopPayWrapper: '[data-shop-pay-wrapper]',
         shopLoginButton: 'shop-login-button',
         shopFollowButton: 'shop-follow-button',
@@ -5437,7 +5045,7 @@
         heartIcon: 'heart-icon',
         shopLogo: 'shop-logo'
     };
-    const sections$9 = {};
+    const sections$8 = {};
     let ShopPayLink = class ShopPayLink {
         init() {
             if (!this.shopLoginButton || !this.shopPayWrapper) return;
@@ -5484,17 +5092,17 @@
         color: ${this.shopPayWrapper.dataset.text};
       }
     `;
-            customElements.whenDefined(selectors$C.shopLoginButton).then((res)=>{
+            customElements.whenDefined(selectors$A.shopLoginButton).then((res)=>{
                 requestAnimationFrame(()=>{
                     const shadowRoot1 = this.shopLoginButton.shadowRoot;
-                    const shopFollowButton = shadowRoot1 === null || shadowRoot1 === void 0 ? void 0 : shadowRoot1.querySelector(selectors$C.shopFollowButton);
+                    const shopFollowButton = shadowRoot1 === null || shadowRoot1 === void 0 ? void 0 : shadowRoot1.querySelector(selectors$A.shopFollowButton);
                     const shadowRoot2 = shopFollowButton === null || shopFollowButton === void 0 ? void 0 : shopFollowButton.shadowRoot;
-                    const followOnShopButton = shadowRoot2 === null || shadowRoot2 === void 0 ? void 0 : shadowRoot2.querySelector(selectors$C.followOnShopButton);
+                    const followOnShopButton = shadowRoot2 === null || shadowRoot2 === void 0 ? void 0 : shadowRoot2.querySelector(selectors$A.followOnShopButton);
                     const shadowRoot3 = followOnShopButton === null || followOnShopButton === void 0 ? void 0 : followOnShopButton.shadowRoot;
                     if (shadowRoot3) this.overwriteStyles(shadowRoot3.host.shadowRoot, this.mainButtonStyles);
-                    const heartIcon = shadowRoot3.querySelector(selectors$C.heartIcon);
+                    const heartIcon = shadowRoot3.querySelector(selectors$A.heartIcon);
                     const shadowRoot4 = heartIcon === null || heartIcon === void 0 ? void 0 : heartIcon.shadowRoot;
-                    const shopLogo = shadowRoot3.querySelector(selectors$C.shopLogo);
+                    const shopLogo = shadowRoot3.querySelector(selectors$A.shopLogo);
                     const shadowRoot5 = shopLogo === null || shopLogo === void 0 ? void 0 : shopLogo.shadowRoot;
                     if (shadowRoot4) this.overwriteStyles(shadowRoot4.host.shadowRoot, this.svgIconsStyles);
                     if (shadowRoot5) this.overwriteStyles(shadowRoot5.host.shadowRoot, this.svgIconsStyles);
@@ -5508,14 +5116,14 @@
         }
         constructor(container){
             this.container = container;
-            this.shopPayWrapper = document.querySelector(selectors$C.shopPayWrapper);
-            this.shopLoginButton = document.querySelector(selectors$C.shopLoginButton);
+            this.shopPayWrapper = document.querySelector(selectors$A.shopPayWrapper);
+            this.shopLoginButton = document.querySelector(selectors$A.shopLoginButton);
             this.init();
         }
     };
     const shopPayLink = {
         onLoad () {
-            sections$9[this.id] = new ShopPayLink(this.container);
+            sections$8[this.id] = new ShopPayLink(this.container);
         }
     };
 
@@ -5539,7 +5147,7 @@
         fs: 1,
         rel: 0
     };
-    const selectors$B = {
+    const selectors$z = {
         player: 'iframe, [data-replace]',
         videoId: 'data-video-id'
     };
@@ -5549,8 +5157,8 @@
             ...options
         };
         const playerWrapper = document.querySelector(`[data-player="${uniqueKey}"]`);
-        const playerElement = playerWrapper.querySelector(selectors$B.player);
-        const youtubeKey = playerWrapper.querySelector(`[${selectors$B.videoId}]`).getAttribute(selectors$B.videoId);
+        const playerElement = playerWrapper.querySelector(selectors$z.player);
+        const youtubeKey = playerWrapper.querySelector(`[${selectors$z.videoId}]`).getAttribute(selectors$z.videoId);
         loadScript({
             url: 'https://www.youtube.com/iframe_api'
         });
@@ -5618,7 +5226,7 @@
         muted: false,
         playsinline: true
     };
-    const selectors$A = {
+    const selectors$y = {
         player: 'iframe, [data-replace]',
         videoId: 'data-video-id'
     };
@@ -5628,8 +5236,8 @@
             ...options
         };
         const playerWrapper = document.querySelector(`[data-player="${uniqueKey}"]`);
-        const playerElement = playerWrapper.querySelector(selectors$A.player);
-        const vimeoKey = playerWrapper.querySelector(`[${selectors$A.videoId}]`).getAttribute(selectors$A.videoId);
+        const playerElement = playerWrapper.querySelector(selectors$y.player);
+        const vimeoKey = playerWrapper.querySelector(`[${selectors$y.videoId}]`).getAttribute(selectors$y.videoId);
         const loadedPromise = loadScript({
             url: 'https://player.vimeo.com/api/player.js'
         });
@@ -5682,7 +5290,7 @@
         return returnPlayer;
     }
 
-    const selectors$z = {
+    const selectors$x = {
         videoPopup: '[data-video-popup]',
         videoAutoplay: '[data-video-autoplay]',
         attrUnique: 'data-unique',
@@ -5693,13 +5301,13 @@
     let PopupVideo = class PopupVideo {
         init() {
             this.triggers.forEach((trigger)=>{
-                const unique = trigger.getAttribute(selectors$z.attrUnique);
-                const video = trigger.getAttribute(selectors$z.attrVideoId);
-                const type = trigger.getAttribute(selectors$z.attrVideoType);
+                const unique = trigger.getAttribute(selectors$x.attrUnique);
+                const video = trigger.getAttribute(selectors$x.attrVideoId);
+                const type = trigger.getAttribute(selectors$x.attrVideoType);
                 // Find the modal body, which has been moved to the document root
                 // and append a unique ID for youtube and vimeo to init players.
                 const uniqueKey = `${video}-${unique}`;
-                const player = document.querySelector(`[${selectors$z.attrPlayer}="${uniqueKey}"]`);
+                const player = document.querySelector(`[${selectors$x.attrPlayer}="${uniqueKey}"]`);
                 // Modal Event Logic:
                 // When a modal opens it creates and plays the video
                 // When a modal opens it pauses background videos in this section
@@ -5734,8 +5342,8 @@
         }
         constructor(section){
             this.container = section.container;
-            this.triggers = this.container.querySelectorAll(selectors$z.videoPopup);
-            this.backgroundVideo = this.container.querySelector(selectors$z.videoAutoplay);
+            this.triggers = this.container.querySelectorAll(selectors$x.videoPopup);
+            this.backgroundVideo = this.container.querySelector(selectors$x.videoAutoplay);
             this.init();
         }
     };
@@ -5745,12 +5353,12 @@
         }
     };
 
-    const selectors$y = {
+    const selectors$w = {
         button: '[data-scroll-down]'
     };
     let ScrollButton = class ScrollButton {
         init() {
-            const buttons = this.wrapper.querySelectorAll(selectors$y.button);
+            const buttons = this.wrapper.querySelectorAll(selectors$w.button);
             if (buttons) {
                 buttons.forEach((btn)=>{
                     btn.addEventListener('click', this.scroll.bind(this));
@@ -5793,7 +5401,7 @@
         customScrollbar
     ]);
 
-    const selectors$x = {
+    const selectors$v = {
         slider: '[data-slider]',
         photo: '[data-grid-slide]',
         wrapper: '[data-wrapper]',
@@ -5802,7 +5410,7 @@
     const attributes = {
         showDots: 'data-show-dots'
     };
-    const classes$n = {
+    const classes$j = {
         wrapper: 'wrapper',
         wrapperModifier: 'wrapper--full',
         hide: 'hide'
@@ -5811,7 +5419,7 @@
         scrollbarWidth: window.innerWidth - document.documentElement.clientWidth,
         additionalOffsetWrapper: 112
     };
-    const sections$8 = {};
+    const sections$7 = {};
     let Slider = class Slider {
         init() {
             const instance = this;
@@ -5850,16 +5458,16 @@
             });
             this.toggleWrapperModifier();
             document.addEventListener('theme:resize:width', this.toggleWrapperModifier.bind(this));
-            if (this.slideshow.hasAttribute(selectors$x.carouselCustomScrollbar)) {
+            if (this.slideshow.hasAttribute(selectors$v.carouselCustomScrollbar)) {
                 new CustomScrollbar(this.container);
             }
             new Siblings(this.container);
         }
         toggleWrapperModifier() {
-            if (!this.wrapper.classList.contains(classes$n.wrapper)) {
+            if (!this.wrapper.classList.contains(classes$j.wrapper)) {
                 return;
             }
-            this.wrapper.classList.toggle(classes$n.wrapperModifier, this.wrapperWidthWithGutter >= window.innerWidth);
+            this.wrapper.classList.toggle(classes$j.wrapperModifier, this.wrapperWidthWithGutter >= window.innerWidth);
         }
         // Flickity VERY annoyingly adds aria-hidden="true" to all slides except the current one which causes lighthouse accessibility failure
         // see https://github.com/metafizzy/flickity/issues/1228
@@ -5877,11 +5485,11 @@
         constructor(container, el){
             this.container = container;
             this.slideshow = el;
-            this.wrapper = this.container.querySelector(selectors$x.wrapper);
+            this.wrapper = this.container.querySelector(selectors$v.wrapper);
             this.wrapperWidth = Number(getComputedStyle(document.documentElement).getPropertyValue('--LAYOUT-WIDTH').replace('px', ''));
             this.wrapperWidthWithGutter = this.wrapperWidth + offsets.additionalOffsetWrapper + offsets.scrollbarWidth;
             this.pageDots = this.slideshow.getAttribute(attributes.showDots) === 'true';
-            this.firstPhoto = this.container.querySelector(selectors$x.photo);
+            this.firstPhoto = this.container.querySelector(selectors$v.photo);
             if (this.firstPhoto) {
                 const buttonOffset = this.firstPhoto.offsetHeight / 2;
                 this.slideshow.style.setProperty('--buttons-top', `${buttonOffset}px`);
@@ -5893,14 +5501,14 @@
     };
     const productSliderSection = {
         onLoad () {
-            sections$8[this.id] = [];
-            const els = this.container.querySelectorAll(selectors$x.slider);
+            sections$7[this.id] = [];
+            const els = this.container.querySelectorAll(selectors$v.slider);
             els.forEach((el)=>{
-                sections$8[this.id].push(new Slider(this.container, el));
+                sections$7[this.id].push(new Slider(this.container, el));
             });
         },
         onUnload (e) {
-            sections$8[this.id].forEach((el)=>{
+            sections$7[this.id].forEach((el)=>{
                 if (typeof el.onUnload === 'function') {
                     el.onUnload(e);
                 }
@@ -5927,8 +5535,8 @@
         customElements.define('product-grid-item-image', ProductGridItemImage);
     }
 
-    const sections$7 = [];
-    const selectors$w = {
+    const sections$6 = [];
+    const selectors$u = {
         wrapper: '[data-slideshow-wrapper]',
         speed: 'data-slideshow-speed',
         autoplay: 'data-slideshow-autoplay',
@@ -5937,7 +5545,7 @@
         nextButton: '[data-slide-custom-next]',
         slideshoIndex: 'data-slideshow-index'
     };
-    const classes$m = {
+    const classes$i = {
         isEnable: 'flickity-enabled'
     };
     let Slideshow = class Slideshow {
@@ -5986,13 +5594,13 @@
         }
         unload() {
             document.removeEventListener('theme:scroll', this.scrollEvent);
-            if (this.flkty && this.wrapper && this.wrapper.classList.contains(classes$m.isEnable)) {
+            if (this.flkty && this.wrapper && this.wrapper.classList.contains(classes$i.isEnable)) {
                 this.flkty.destroy();
             }
         }
         onBlockSelect(evt) {
-            const indexEl = evt.target.closest(`[${selectors$w.slideshoIndex}]`);
-            const slideIndex = indexEl.getAttribute(selectors$w.slideshoIndex);
+            const indexEl = evt.target.closest(`[${selectors$u.slideshoIndex}]`);
+            const slideIndex = indexEl.getAttribute(selectors$u.slideshoIndex);
             const select = parseInt(slideIndex);
             this.flkty.selectCell(select);
             this.flkty.stopPlayer();
@@ -6004,12 +5612,12 @@
         }
         constructor(section){
             this.container = section.container;
-            this.wrapper = section.container.querySelector(selectors$w.wrapper);
-            this.speed = this.wrapper.getAttribute(selectors$w.speed);
-            this.autoplay = this.wrapper.getAttribute(selectors$w.autoplay) === 'true';
-            this.slideCount = parseInt(this.wrapper.getAttribute(selectors$w.slideCount), 10);
-            this.prevButtons = this.wrapper.querySelectorAll(selectors$w.prevButton);
-            this.nextButtons = this.wrapper.querySelectorAll(selectors$w.nextButton);
+            this.wrapper = section.container.querySelector(selectors$u.wrapper);
+            this.speed = this.wrapper.getAttribute(selectors$u.speed);
+            this.autoplay = this.wrapper.getAttribute(selectors$u.autoplay) === 'true';
+            this.slideCount = parseInt(this.wrapper.getAttribute(selectors$u.slideCount), 10);
+            this.prevButtons = this.wrapper.querySelectorAll(selectors$u.prevButton);
+            this.nextButtons = this.wrapper.querySelectorAll(selectors$u.nextButton);
             this.flkty = null;
             this.scrollEvent = ()=>this.scrollEvents()
             ;
@@ -6018,21 +5626,21 @@
     };
     const slideshowSection = {
         onLoad () {
-            sections$7[this.id] = new Slideshow(this);
+            sections$6[this.id] = new Slideshow(this);
         },
         onUnload () {
-            if (typeof sections$7[this.id].unload === 'function') {
-                sections$7[this.id].unload();
+            if (typeof sections$6[this.id].unload === 'function') {
+                sections$6[this.id].unload();
             }
         },
         onBlockSelect (evt) {
-            if (typeof sections$7[this.id].onBlockSelect === 'function') {
-                sections$7[this.id].onBlockSelect(evt);
+            if (typeof sections$6[this.id].onBlockSelect === 'function') {
+                sections$6[this.id].onBlockSelect(evt);
             }
         },
         onBlockDeselect (evt) {
-            if (typeof sections$7[this.id].onBlockSelect === 'function') {
-                sections$7[this.id].onBlockDeselect(evt);
+            if (typeof sections$6[this.id].onBlockSelect === 'function') {
+                sections$6[this.id].onBlockDeselect(evt);
             }
         }
     };
@@ -6042,7 +5650,7 @@
         scrollButton
     ]);
 
-    const selectors$v = {
+    const selectors$t = {
         rangeSlider: '[data-range-slider]',
         rangeDotLeft: '[data-range-left]',
         rangeDotRight: '[data-range-right]',
@@ -6057,7 +5665,7 @@
         priceMin: '[data-field-price-min]',
         priceMax: '[data-field-price-max]'
     };
-    const classes$l = {
+    const classes$h = {
         isInitialized: 'is-initialized'
     };
     let RangeSlider = class RangeSlider {
@@ -6069,17 +5677,17 @@
             this.touchLeft.addEventListener('touchstart', this.onStartEvent);
             this.touchRight.addEventListener('touchstart', this.onStartEvent);
             // initialize
-            this.slider.classList.add(classes$l.isInitialized);
+            this.slider.classList.add(classes$h.isInitialized);
         }
         setDefaultValues() {
             // retrieve default values
             let defaultMinValue = this.min;
-            if (this.slider.hasAttribute(selectors$v.dataMinValue)) {
-                defaultMinValue = parseFloat(this.slider.getAttribute(selectors$v.dataMinValue));
+            if (this.slider.hasAttribute(selectors$t.dataMinValue)) {
+                defaultMinValue = parseFloat(this.slider.getAttribute(selectors$t.dataMinValue));
             }
             let defaultMaxValue = this.max;
-            if (this.slider.hasAttribute(selectors$v.dataMaxValue)) {
-                defaultMaxValue = parseFloat(this.slider.getAttribute(selectors$v.dataMaxValue));
+            if (this.slider.hasAttribute(selectors$t.dataMaxValue)) {
+                defaultMaxValue = parseFloat(this.slider.getAttribute(selectors$t.dataMaxValue));
             }
             // check values are correct
             if (defaultMinValue < this.min) {
@@ -6091,8 +5699,8 @@
             if (defaultMinValue > defaultMaxValue) {
                 defaultMinValue = defaultMaxValue;
             }
-            if (this.slider.getAttribute(selectors$v.dataStep)) {
-                this.step = Math.abs(parseFloat(this.slider.getAttribute(selectors$v.dataStep)));
+            if (this.slider.getAttribute(selectors$t.dataStep)) {
+                this.step = Math.abs(parseFloat(this.slider.getAttribute(selectors$t.dataStep)));
             }
             // initial reset
             this.reset();
@@ -6117,14 +5725,14 @@
             this.touchLeft.style.left = Math.ceil(ratio * (this.slider.offsetWidth - (this.touchLeft.offsetWidth + this.normalizeFact))) + 'px';
             this.lineSpan.style.marginLeft = this.touchLeft.offsetLeft + 'px';
             this.lineSpan.style.width = this.touchRight.offsetLeft - this.touchLeft.offsetLeft + 'px';
-            this.slider.setAttribute(selectors$v.dataMinValue, minValue);
+            this.slider.setAttribute(selectors$t.dataMinValue, minValue);
         }
         setMaxValue(maxValue) {
             const ratio = (maxValue - this.min) / (this.max - this.min);
             this.touchRight.style.left = Math.ceil(ratio * (this.slider.offsetWidth - (this.touchLeft.offsetWidth + this.normalizeFact)) + this.normalizeFact) + 'px';
             this.lineSpan.style.marginLeft = this.touchLeft.offsetLeft + 'px';
             this.lineSpan.style.width = this.touchRight.offsetLeft - this.touchLeft.offsetLeft + 'px';
-            this.slider.setAttribute(selectors$v.dataMaxValue, maxValue);
+            this.slider.setAttribute(selectors$t.dataMaxValue, maxValue);
         }
         onStart(event) {
             // Prevent default dragging of selected content
@@ -6174,9 +5782,9 @@
             // call on change
             if (this.slider.getAttribute('on-change')) {
                 const fn = new Function('min, max', this.slider.getAttribute('on-change'));
-                fn(this.slider.getAttribute(selectors$v.dataMinValue), this.slider.getAttribute(selectors$v.dataMaxValue));
+                fn(this.slider.getAttribute(selectors$t.dataMinValue), this.slider.getAttribute(selectors$t.dataMaxValue));
             }
-            this.onChange(this.slider.getAttribute(selectors$v.dataMinValue), this.slider.getAttribute(selectors$v.dataMaxValue));
+            this.onChange(this.slider.getAttribute(selectors$t.dataMinValue), this.slider.getAttribute(selectors$t.dataMaxValue));
         }
         onStop(event) {
             document.removeEventListener('mousemove', this.onMoveEvent);
@@ -6187,13 +5795,13 @@
             // write new value
             this.calculateValue();
             // call did changed
-            this.onChanged(this.slider.getAttribute(selectors$v.dataMinValue), this.slider.getAttribute(selectors$v.dataMaxValue));
+            this.onChanged(this.slider.getAttribute(selectors$t.dataMinValue), this.slider.getAttribute(selectors$t.dataMaxValue));
         }
         onChange(min, max) {
-            const rangeHolder = this.slider.closest(selectors$v.rangeHolder);
+            const rangeHolder = this.slider.closest(selectors$t.rangeHolder);
             if (rangeHolder) {
-                const priceMin = rangeHolder.querySelector(selectors$v.priceMin);
-                const priceMax = rangeHolder.querySelector(selectors$v.priceMax);
+                const priceMin = rangeHolder.querySelector(selectors$t.priceMin);
+                const priceMax = rangeHolder.querySelector(selectors$t.priceMax);
                 if (priceMin && priceMax) {
                     priceMin.value = min;
                     priceMax.value = max;
@@ -6201,7 +5809,7 @@
             }
         }
         onChanged(min, max) {
-            if (this.slider.hasAttribute(selectors$v.dataFilterUpdate)) {
+            if (this.slider.hasAttribute(selectors$t.dataFilterUpdate)) {
                 this.slider.dispatchEvent(new CustomEvent('theme:range:update', {
                     bubbles: true
                 }));
@@ -6220,15 +5828,15 @@
                 maxValue = this.step * multi;
             }
             if (this.selectedTouch === this.touchLeft) {
-                this.slider.setAttribute(selectors$v.dataMinValue, minValue);
+                this.slider.setAttribute(selectors$t.dataMinValue, minValue);
             }
             if (this.selectedTouch === this.touchRight) {
-                this.slider.setAttribute(selectors$v.dataMaxValue, maxValue);
+                this.slider.setAttribute(selectors$t.dataMaxValue, maxValue);
             }
         }
         constructor(section){
             this.container = section.container;
-            this.slider = section.querySelector(selectors$v.rangeSlider);
+            this.slider = section.querySelector(selectors$t.rangeSlider);
             if (this.slider) {
                 this.onMoveEvent = (event)=>this.onMove(event)
                 ;
@@ -6239,12 +5847,12 @@
                 this.startX = 0;
                 this.x = 0;
                 // retrieve touch button
-                this.touchLeft = this.slider.querySelector(selectors$v.rangeDotLeft);
-                this.touchRight = this.slider.querySelector(selectors$v.rangeDotRight);
-                this.lineSpan = this.slider.querySelector(selectors$v.rangeLine);
+                this.touchLeft = this.slider.querySelector(selectors$t.rangeDotLeft);
+                this.touchRight = this.slider.querySelector(selectors$t.rangeDotRight);
+                this.lineSpan = this.slider.querySelector(selectors$t.rangeLine);
                 // get some properties
-                this.min = parseFloat(this.slider.getAttribute(selectors$v.dataMin));
-                this.max = parseFloat(this.slider.getAttribute(selectors$v.dataMax));
+                this.min = parseFloat(this.slider.getAttribute(selectors$t.dataMin));
+                this.max = parseFloat(this.slider.getAttribute(selectors$t.dataMax));
                 this.step = 0.0;
                 // normalize flag
                 this.normalizeFact = 26;
@@ -6271,7 +5879,7 @@
         };
     };
 
-    const selectors$u = {
+    const selectors$s = {
         filtersWrappper: 'data-filters',
         underlay: '[data-filters-underlay]',
         filtersHideDesktop: 'data-default-hide',
@@ -6280,7 +5888,7 @@
         groupHeading: 'data-group-heading',
         showMore: 'data-show-more'
     };
-    const classes$k = {
+    const classes$g = {
         show: 'drawer--visible',
         defaultVisible: 'filters--default-visible',
         hide: 'hidden',
@@ -6288,7 +5896,7 @@
         hidden: 'is-hidden',
         focusEnable: 'focus-enabled'
     };
-    const sections$6 = {};
+    const sections$5 = {};
     let Filters = class Filters {
         unload() {
             if (this.filtersToggleButtons.length) {
@@ -6310,15 +5918,15 @@
             }
         }
         showHiddenOptions(evt) {
-            const element = evt.target.hasAttribute(selectors$u.showMore) ? evt.target : evt.target.closest(`[${selectors$u.showMore}]`);
-            element.classList.add(classes$k.hidden);
-            element.previousElementSibling.querySelectorAll(`.${classes$k.hidden}`).forEach((option)=>{
-                option.classList.remove(classes$k.hidden);
+            const element = evt.target.hasAttribute(selectors$s.showMore) ? evt.target : evt.target.closest(`[${selectors$s.showMore}]`);
+            element.classList.add(classes$g.hidden);
+            element.previousElementSibling.querySelectorAll(`.${classes$g.hidden}`).forEach((option)=>{
+                option.classList.remove(classes$g.hidden);
             });
         }
         connectToggle(refresh = false) {
             this.filtersToggleButtons.forEach((button)=>{
-                const isDynamic = button.closest(`[${selectors$u.filtersWrappper}]`) !== null;
+                const isDynamic = button.closest(`[${selectors$s.filtersWrappper}]`) !== null;
                 if (isDynamic && refresh || isDynamic && !refresh || !isDynamic && !refresh) {
                     button.addEventListener('click', this.connectToggleMemory.bind(this));
                 }
@@ -6338,8 +5946,8 @@
                     return;
                 }
                 const childInFocus = evt.currentTarget.contains(evt.relatedTarget);
-                const isVisible = this.container.classList.contains(classes$k.show);
-                const isFocusEnabled = document.body.classList.contains(classes$k.focusEnable);
+                const isVisible = this.container.classList.contains(classes$g.show);
+                const isFocusEnabled = document.body.classList.contains(classes$g.focusEnable);
                 if (isFocusEnabled && isVisible && !childInFocus) {
                     this.hideFilters();
                 }
@@ -6356,7 +5964,7 @@
             }).bind(this));
         }
         getShowOnLoad() {
-            const selector = `[${selectors$u.filtersHideDesktop}='false']`;
+            const selector = `[${selectors$s.filtersHideDesktop}='false']`;
             const showOnDesktop = document.querySelector(selector);
             const isDesktop = window.innerWidth >= window.theme.sizes.medium;
             if (showOnDesktop && isDesktop) {
@@ -6367,41 +5975,41 @@
         }
         showFilters() {
             this.filtersToggleButtons = document.querySelectorAll(this.selector);
-            this.container.classList.remove(classes$k.hide);
+            this.container.classList.remove(classes$g.hide);
             // animates after display none is removed
             setTimeout(()=>{
                 this.filtersToggleButtons.forEach((btn)=>btn.setAttribute('aria-expanded', true)
                 );
-                this.filtersToggleButtons.forEach((btn)=>btn.classList.add(classes$k.show)
+                this.filtersToggleButtons.forEach((btn)=>btn.classList.add(classes$g.show)
                 );
-                this.container.classList.add(classes$k.show);
-                this.container.querySelector(selectors$u.focusable).focus();
+                this.container.classList.add(classes$g.show);
+                this.container.querySelector(selectors$s.focusable).focus();
             }, 1);
         }
         hideFilters() {
             this.filtersToggleButtons = document.querySelectorAll(this.selector);
             this.filtersToggleButtons.forEach((btn)=>btn.setAttribute('aria-expanded', false)
             );
-            this.container.classList.remove(classes$k.show);
-            this.container.classList.remove(classes$k.defaultVisible);
-            this.filtersToggleButtons.forEach((btn)=>btn.classList.remove(classes$k.show)
+            this.container.classList.remove(classes$g.show);
+            this.container.classList.remove(classes$g.defaultVisible);
+            this.filtersToggleButtons.forEach((btn)=>btn.classList.remove(classes$g.show)
             );
-            this.filtersToggleButtons.forEach((btn)=>btn.classList.remove(classes$k.defaultVisible)
+            this.filtersToggleButtons.forEach((btn)=>btn.classList.remove(classes$g.defaultVisible)
             );
             // adds display none after animations
             setTimeout(()=>{
-                if (!this.container.classList.contains(classes$k.show)) {
-                    this.container.classList.add(classes$k.hide);
+                if (!this.container.classList.contains(classes$g.show)) {
+                    this.container.classList.add(classes$g.hide);
                 }
             }, 800);
         }
         constructor(filters, refresh = false){
             this.container = filters;
-            this.underlay = this.container.querySelector(selectors$u.underlay);
-            this.groupHeadings = this.container.querySelectorAll(`[${selectors$u.groupHeading}]`);
-            this.showMoreButtons = this.container.querySelectorAll(`[${selectors$u.showMore}]`);
-            this.triggerKey = this.container.getAttribute(selectors$u.filtersWrappper);
-            this.selector = `[${selectors$u.filtersToggle}='${this.triggerKey}']`;
+            this.underlay = this.container.querySelector(selectors$s.underlay);
+            this.groupHeadings = this.container.querySelectorAll(`[${selectors$s.groupHeading}]`);
+            this.showMoreButtons = this.container.querySelectorAll(`[${selectors$s.showMore}]`);
+            this.triggerKey = this.container.getAttribute(selectors$s.filtersWrappper);
+            this.selector = `[${selectors$s.filtersToggle}='${this.triggerKey}']`;
             this.filtersToggleButtons = document.querySelectorAll(this.selector);
             this.connectToggleMemory = (evt)=>this.connectToggleFunction(evt)
             ;
@@ -6419,14 +6027,14 @@
     };
     const collectionFiltersSidebar = {
         onLoad () {
-            sections$6[this.id] = [];
-            const wrappers = this.container.querySelectorAll(`[${selectors$u.filtersWrappper}]`);
+            sections$5[this.id] = [];
+            const wrappers = this.container.querySelectorAll(`[${selectors$s.filtersWrappper}]`);
             wrappers.forEach((wrapper)=>{
-                sections$6[this.id].push(new Filters(wrapper));
+                sections$5[this.id].push(new Filters(wrapper));
             });
         },
         onUnload: function() {
-            sections$6[this.id].forEach((filters)=>{
+            sections$5[this.id].forEach((filters)=>{
                 if (typeof filters.unload === 'function') {
                     filters.unload();
                 }
@@ -6434,7 +6042,7 @@
         }
     };
 
-    const selectors$t = {
+    const selectors$r = {
         collectionSidebar: '[data-collection-sidebar]',
         form: '[data-sidebar-filter-form]',
         inputs: 'input, select, label, textarea',
@@ -6460,7 +6068,7 @@
         checkedOption: 'input:checked',
         optionHolder: '[data-option-holder]'
     };
-    const classes$j = {
+    const classes$f = {
         classHidden: 'is-hidden',
         classLoading: 'is-loading'
     };
@@ -6476,16 +6084,16 @@
                 this.sidebar.addEventListener('input', debounce$1((e)=>{
                     const type = e.type;
                     const target = e.target;
-                    if (!selectors$t.inputs.includes(type) || !this.form || typeof this.form.submit !== 'function') {
+                    if (!selectors$r.inputs.includes(type) || !this.form || typeof this.form.submit !== 'function') {
                         return;
                     }
-                    const priceMin = this.form.querySelector(`[${selectors$t.priceMin}]`);
-                    const priceMax = this.form.querySelector(`[${selectors$t.priceMax}]`);
-                    if (target.hasAttribute(selectors$t.priceMin) || target.hasAttribute(selectors$t.priceMax)) {
-                        const rangeMin = this.form.querySelector(`[${selectors$t.rangeMin}]`);
-                        const rangeMax = this.form.querySelector(`[${selectors$t.rangeMax}]`);
-                        const rangeMinDefault = parseInt(rangeMin.getAttribute(selectors$t.rangeMinDefault));
-                        const rangeMaxDefault = parseInt(rangeMax.getAttribute(selectors$t.rangeMaxDefault));
+                    const priceMin = this.form.querySelector(`[${selectors$r.priceMin}]`);
+                    const priceMax = this.form.querySelector(`[${selectors$r.priceMax}]`);
+                    if (target.hasAttribute(selectors$r.priceMin) || target.hasAttribute(selectors$r.priceMax)) {
+                        const rangeMin = this.form.querySelector(`[${selectors$r.rangeMin}]`);
+                        const rangeMax = this.form.querySelector(`[${selectors$r.rangeMax}]`);
+                        const rangeMinDefault = parseInt(rangeMin.getAttribute(selectors$r.rangeMinDefault));
+                        const rangeMaxDefault = parseInt(rangeMax.getAttribute(selectors$r.rangeMaxDefault));
                         if (priceMin.value && !priceMax.value) {
                             priceMax.value = rangeMaxDefault;
                         }
@@ -6524,16 +6132,16 @@
        * @param {Object} e
        */ updateRange(e) {
             if (this.form && typeof this.form.submit === 'function') {
-                const rangeMin = this.form.querySelector(`[${selectors$t.rangeMin}]`);
-                const rangeMax = this.form.querySelector(`[${selectors$t.rangeMax}]`);
-                const priceMin = this.form.querySelector(`[${selectors$t.priceMin}]`);
-                const priceMax = this.form.querySelector(`[${selectors$t.priceMax}]`);
+                const rangeMin = this.form.querySelector(`[${selectors$r.rangeMin}]`);
+                const rangeMax = this.form.querySelector(`[${selectors$r.rangeMax}]`);
+                const priceMin = this.form.querySelector(`[${selectors$r.priceMin}]`);
+                const priceMax = this.form.querySelector(`[${selectors$r.priceMax}]`);
                 const checkElements = rangeMin && rangeMax && priceMin && priceMax;
-                if (checkElements && rangeMin.hasAttribute(selectors$t.rangeMin) && rangeMax.hasAttribute(selectors$t.rangeMax)) {
+                if (checkElements && rangeMin.hasAttribute(selectors$r.rangeMin) && rangeMax.hasAttribute(selectors$r.rangeMax)) {
                     const priceMinValue = parseInt(priceMin.placeholder);
                     const priceMaxValue = parseInt(priceMax.placeholder);
-                    const rangeMinValue = parseInt(rangeMin.getAttribute(selectors$t.rangeMin));
-                    const rangeMaxValue = parseInt(rangeMax.getAttribute(selectors$t.rangeMax));
+                    const rangeMinValue = parseInt(rangeMin.getAttribute(selectors$r.rangeMin));
+                    const rangeMaxValue = parseInt(rangeMax.getAttribute(selectors$r.rangeMax));
                     if (priceMinValue !== rangeMinValue || priceMaxValue !== rangeMaxValue) {
                         priceMin.value = rangeMinValue;
                         priceMax.value = rangeMaxValue;
@@ -6547,9 +6155,9 @@
        * @param {Object} e
        */ updateFilterFromUrl(e) {
             const target = e.target;
-            if (target.matches(selectors$t.filterUpdateUrlButton) || target.closest(selectors$t.filterUpdateUrlButton) && target) {
+            if (target.matches(selectors$r.filterUpdateUrlButton) || target.closest(selectors$r.filterUpdateUrlButton) && target) {
                 e.preventDefault();
-                const button = target.matches(selectors$t.filterUpdateUrlButton) ? target : target.closest(selectors$t.filterUpdateUrlButton);
+                const button = target.matches(selectors$r.filterUpdateUrlButton) ? target : target.closest(selectors$r.filterUpdateUrlButton);
                 this.filtering(e, button.getAttribute('href'));
             }
         }
@@ -6559,7 +6167,7 @@
        * @param {Object} e
        * @param {String} replaceHref
        */ addToHistory(e, replaceHref = '') {
-            const sortValue = this.sort ? this.sort.getAttribute(selectors$t.dataSort) : '';
+            const sortValue = this.sort ? this.sort.getAttribute(selectors$r.dataSort) : '';
             if (!e || e && e.type !== 'popstate') {
                 if (replaceHref === '') {
                     const searchParams = new window.URL(window.location.href).searchParams;
@@ -6580,14 +6188,14 @@
                             }
                         }
                         // if submitted price equal to price range min and max remove price parameters
-                        const rangeMin = this.form.querySelector(`[${selectors$t.rangeMin}]`);
-                        const rangeMax = this.form.querySelector(`[${selectors$t.rangeMax}]`);
-                        const priceMin = this.form.querySelector(`[${selectors$t.priceMin}]`);
-                        const priceMax = this.form.querySelector(`[${selectors$t.priceMax}]`);
+                        const rangeMin = this.form.querySelector(`[${selectors$r.rangeMin}]`);
+                        const rangeMax = this.form.querySelector(`[${selectors$r.rangeMax}]`);
+                        const priceMin = this.form.querySelector(`[${selectors$r.priceMin}]`);
+                        const priceMax = this.form.querySelector(`[${selectors$r.priceMax}]`);
                         const checkElements = rangeMin && rangeMax && priceMin && priceMax;
-                        if (checkElements && rangeMin.hasAttribute(selectors$t.rangeMinDefault) && rangeMax.hasAttribute(selectors$t.rangeMaxDefault)) {
-                            const rangeMinDefault = parseFloat(rangeMin.getAttribute(selectors$t.rangeMinDefault), 10);
-                            const rangeMaxDefault = parseFloat(rangeMax.getAttribute(selectors$t.rangeMaxDefault), 10);
+                        if (checkElements && rangeMin.hasAttribute(selectors$r.rangeMinDefault) && rangeMax.hasAttribute(selectors$r.rangeMaxDefault)) {
+                            const rangeMinDefault = parseFloat(rangeMin.getAttribute(selectors$r.rangeMinDefault), 10);
+                            const rangeMaxDefault = parseFloat(rangeMax.getAttribute(selectors$r.rangeMaxDefault), 10);
                             const priceMinValue = priceMin.value === '' ? parseFloat(priceMin.placeholder, 10) : parseFloat(priceMin.value, 10);
                             const priceMaxValue = priceMax.value === '' ? parseFloat(priceMax.placeholder, 10) : parseFloat(priceMax.value, 10);
                             if (priceMinValue <= rangeMinDefault && priceMaxValue >= rangeMaxDefault) {
@@ -6611,7 +6219,7 @@
         /**
        * Get filter result and append them to their holders
        */ getFilterResult() {
-            this.productsContainer.classList.add(classes$j.classLoading);
+            this.productsContainer.classList.add(classes$f.classLoading);
             this.getGridValues();
             // use the section_id to target the collection section and exclude other sections on the page
             const url = new window.URL(window.location.href);
@@ -6622,22 +6230,22 @@
                 const responseHolder = document.createElement('div');
                 responseHolder.innerHTML = response;
                 if (this.sidebar) {
-                    this.sidebar.innerHTML = responseHolder.querySelector(selectors$t.collectionSidebar).innerHTML;
+                    this.sidebar.innerHTML = responseHolder.querySelector(selectors$r.collectionSidebar).innerHTML;
                 }
                 if (this.activeFiltersCount) {
-                    this.activeFiltersCount.innerHTML = responseHolder.querySelector(selectors$t.activeFiltersCount).innerHTML;
+                    this.activeFiltersCount.innerHTML = responseHolder.querySelector(selectors$r.activeFiltersCount).innerHTML;
                 }
-                this.productsContainer.innerHTML = responseHolder.querySelector(selectors$t.productsContainer).innerHTML;
+                this.productsContainer.innerHTML = responseHolder.querySelector(selectors$r.productsContainer).innerHTML;
                 // Show active filters holder
-                this.activeFiltersHolder.innerHTML = responseHolder.querySelector(selectors$t.activeFiltersHolder).innerHTML;
-                this.activeFiltersHolder.parentNode.classList.toggle(classes$j.classHidden, this.activeFiltersHolder.innerHTML === '');
+                this.activeFiltersHolder.innerHTML = responseHolder.querySelector(selectors$r.activeFiltersHolder).innerHTML;
+                this.activeFiltersHolder.parentNode.classList.toggle(classes$f.classHidden, this.activeFiltersHolder.innerHTML === '');
                 if (this.productsCount) {
-                    this.productsCount.innerHTML = responseHolder.querySelector(selectors$t.productsCount).innerHTML;
+                    this.productsCount.innerHTML = responseHolder.querySelector(selectors$r.productsCount).innerHTML;
                 }
                 this.setGridValues();
                 this.refreshFunctionalities();
                 setTimeout(()=>{
-                    this.productsContainer.classList.remove(classes$j.classLoading);
+                    this.productsContainer.classList.remove(classes$f.classLoading);
                 }, times.loadingDelay);
             });
         }
@@ -6645,19 +6253,19 @@
        * Refresh functionalities
        */ refreshFunctionalities() {
             // Init range slider
-            this.form = this.container.querySelector(selectors$t.form);
+            this.form = this.container.querySelector(selectors$r.form);
             if (this.form) {
                 new RangeSlider(this.form);
                 this.form.addEventListener('theme:range:update', (e)=>this.updateRange(e)
                 );
             }
             // Init filters
-            const filters = this.container.querySelectorAll(selectors$t.filtersWrappper);
+            const filters = this.container.querySelectorAll(selectors$r.filtersWrappper);
             filters.forEach((filter)=>{
                 new Filters(filter, true);
             });
             // Init accordions
-            const accordions = this.container.querySelectorAll(selectors$t.accordionBody);
+            const accordions = this.container.querySelectorAll(selectors$r.accordionBody);
             accordions.forEach((accordion)=>{
                 new Accordion(accordion);
             });
@@ -6667,37 +6275,35 @@
             if (this.sidebar) {
                 makeSwappers(this.sidebar);
             }
-            // Init product swatches
-            makeGridSwatches(this.container);
             this.showAllOptions();
         }
         // Get grid values
         getGridValues() {
             if (this.layoutLarge) {
-                this.layoutLargeValue = this.layoutLarge.getAttribute(selectors$t.gridLarge);
+                this.layoutLargeValue = this.layoutLarge.getAttribute(selectors$r.gridLarge);
             }
             if (this.layoutSmall) {
-                this.layoutSmallValue = this.layoutSmall.getAttribute(selectors$t.gridSmall);
+                this.layoutSmallValue = this.layoutSmall.getAttribute(selectors$r.gridSmall);
             }
         }
         // Set grid values on AJAX
         setGridValues() {
             if (this.layoutLarge) {
-                this.layoutLarge = this.container.querySelector(`[${selectors$t.gridLarge}]`);
-                this.layoutLarge.setAttribute(selectors$t.gridLarge, this.layoutLargeValue);
+                this.layoutLarge = this.container.querySelector(`[${selectors$r.gridLarge}]`);
+                this.layoutLarge.setAttribute(selectors$r.gridLarge, this.layoutLargeValue);
             }
             if (this.layoutSmall) {
-                this.layoutSmall = this.container.querySelector(`[${selectors$t.gridSmall}]`);
-                this.layoutSmall.setAttribute(selectors$t.gridSmall, this.layoutSmallValue);
+                this.layoutSmall = this.container.querySelector(`[${selectors$r.gridSmall}]`);
+                this.layoutSmall.setAttribute(selectors$r.gridSmall, this.layoutSmallValue);
             }
         }
         // Show all options if in the filter have selected option but it is hidden
         showAllOptions() {
-            const checkedOptions = this.container.querySelectorAll(selectors$t.checkedOption);
+            const checkedOptions = this.container.querySelectorAll(selectors$r.checkedOption);
             checkedOptions.forEach((option)=>{
-                if (option.closest(selectors$t.optionHolder) && option.closest(selectors$t.optionHolder).classList.contains(classes$j.classHidden)) {
-                    const button = option.closest(selectors$t.accordionBody).nextElementSibling;
-                    if (!button.classList.contains(selectors$t.classHidden)) {
+                if (option.closest(selectors$r.optionHolder) && option.closest(selectors$r.optionHolder).classList.contains(classes$f.classHidden)) {
+                    const button = option.closest(selectors$r.accordionBody).nextElementSibling;
+                    if (!button.classList.contains(selectors$r.classHidden)) {
                         button.dispatchEvent(new Event('click'));
                     }
                 }
@@ -6710,7 +6316,7 @@
        */ filtering(e, replaceHref = '') {
             if (e.state === null) return; // skip when we update the url with a button with href="#id" used for link
             // Scroll to filter tools
-            const headerH = this.headerIsSticky ? document.querySelector(selectors$t.headerHeight).getBoundingClientRect().height : 0;
+            const headerH = this.headerIsSticky ? document.querySelector(selectors$r.headerHeight).getBoundingClientRect().height : 0;
             const scrollToElement = this.container.offsetTop - headerH;
             let options = {
                 root: null,
@@ -6737,16 +6343,16 @@
         constructor(section){
             this.section = section;
             this.container = this.section.container;
-            this.sidebar = this.container.querySelector(selectors$t.collectionSidebar);
-            this.form = section.container.querySelector(selectors$t.form);
-            this.sort = this.container.querySelector(`[${selectors$t.dataSort}]`);
-            this.productsContainer = this.container.querySelector(selectors$t.productsContainer);
-            this.activeFiltersHolder = this.container.querySelector(selectors$t.activeFiltersHolder);
-            this.activeFiltersCount = this.container.querySelector(selectors$t.activeFiltersCount);
-            this.productsCount = this.container.querySelector(selectors$t.productsCount);
-            this.headerIsSticky = document.querySelector(selectors$t.headerSticky) !== null;
-            this.layoutLarge = this.container.querySelector(`[${selectors$t.gridLarge}]`);
-            this.layoutSmall = this.container.querySelector(`[${selectors$t.gridSmall}]`);
+            this.sidebar = this.container.querySelector(selectors$r.collectionSidebar);
+            this.form = section.container.querySelector(selectors$r.form);
+            this.sort = this.container.querySelector(`[${selectors$r.dataSort}]`);
+            this.productsContainer = this.container.querySelector(selectors$r.productsContainer);
+            this.activeFiltersHolder = this.container.querySelector(selectors$r.activeFiltersHolder);
+            this.activeFiltersCount = this.container.querySelector(selectors$r.activeFiltersCount);
+            this.productsCount = this.container.querySelector(selectors$r.productsCount);
+            this.headerIsSticky = document.querySelector(selectors$r.headerSticky) !== null;
+            this.layoutLarge = this.container.querySelector(`[${selectors$r.gridLarge}]`);
+            this.layoutSmall = this.container.querySelector(`[${selectors$r.gridSmall}]`);
             if (this.productsContainer && this.sidebar) {
                 this.init();
             }
@@ -6793,7 +6399,7 @@
         customElements.define('product-grid-item-image', ProductGridItemImage);
     }
 
-    const selectors$s = {
+    const selectors$q = {
         zoomImage: '[data-image-zoom]',
         modalContainer: '[data-modal-container]',
         attrUnique: 'data-unique',
@@ -6802,7 +6408,7 @@
     let GalleryZoom = class GalleryZoom {
         init() {
             this.triggers.forEach((trigger)=>{
-                const unique = trigger.getAttribute(selectors$s.attrUnique);
+                const unique = trigger.getAttribute(selectors$q.attrUnique);
                 const modalIsAdded = this.modalContainer.querySelector(`#zoom-${unique}`);
                 if (modalIsAdded) {
                     const newModal = this.container.querySelector(`#zoom-${unique}`);
@@ -6815,10 +6421,10 @@
                     disableScroll: true,
                     openTrigger: `data-popup-${unique}`,
                     onShow: (modal)=>{
-                        var images = modal.querySelectorAll(`[${selectors$s.image}]`, modal);
+                        var images = modal.querySelectorAll(`[${selectors$q.image}]`, modal);
                         images.forEach((image)=>{
                             if (image.getAttribute('src') === null) {
-                                const bigImage = image.getAttribute(selectors$s.image);
+                                const bigImage = image.getAttribute(selectors$q.image);
                                 image.setAttribute('src', bigImage);
                             }
                         });
@@ -6831,8 +6437,8 @@
         }
         constructor(container){
             this.container = container;
-            this.triggers = this.container.querySelectorAll(selectors$s.zoomImage);
-            this.modalContainer = document.querySelector(selectors$s.modalContainer);
+            this.triggers = this.container.querySelectorAll(selectors$q.zoomImage);
+            this.modalContainer = document.querySelector(selectors$q.modalContainer);
             this.init();
         }
     };
@@ -6925,7 +6531,7 @@
     let modelJsonSections = {};
     let models = {};
     let xrButtons = {};
-    const selectors$r = {
+    const selectors$p = {
         productSlideshow: '[data-product-slideshow]',
         productXr: '[data-shopify-xr]',
         dataMediaId: 'data-media-id',
@@ -6938,11 +6544,11 @@
         modelJsonSections[sectionId] = {
             loaded: false
         };
-        const mediaId = modelViewerContainer.getAttribute(selectors$r.dataMediaId);
-        const modelViewerElement = modelViewerContainer.querySelector(selectors$r.modelViewer);
-        const modelId = modelViewerElement.getAttribute(selectors$r.dataModelId);
-        if (modelViewerContainer.closest(selectors$r.productSlideshow) !== null) {
-            const xrButton = modelViewerContainer.closest(selectors$r.productSlideshow).parentElement.querySelector(selectors$r.productXr);
+        const mediaId = modelViewerContainer.getAttribute(selectors$p.dataMediaId);
+        const modelViewerElement = modelViewerContainer.querySelector(selectors$p.modelViewer);
+        const modelId = modelViewerElement.getAttribute(selectors$p.dataModelId);
+        if (modelViewerContainer.closest(selectors$p.productSlideshow) !== null) {
+            const xrButton = modelViewerContainer.closest(selectors$p.productSlideshow).parentElement.querySelector(selectors$p.productXr);
             xrButtons[sectionId] = {
                 $element: xrButton,
                 defaultId: modelId
@@ -6982,7 +6588,7 @@
             if (modelJsonSections.hasOwnProperty(sectionId)) {
                 const modelSection = modelJsonSections[sectionId];
                 if (modelSection.loaded) continue;
-                const modelJson = document.querySelector(`${selectors$r.modelJson}${sectionId}`);
+                const modelJson = document.querySelector(`${selectors$p.modelJson}${sectionId}`);
                 if (modelJson) {
                     window.ShopifyXR.addModels(JSON.parse(modelJson.innerHTML));
                     modelSection.loaded = true;
@@ -7016,8 +6622,8 @@
         model.$container.addEventListener('play', function() {
             if (model.modelViewerUi.play) {
                 model.modelViewerUi.play();
-                if (xrButton && xrButton.$element && model && model.modelId && selectors$r.dataModel3d) {
-                    xrButton.$element.setAttribute(selectors$r.dataModel3d, model.modelId);
+                if (xrButton && xrButton.$element && model && model.modelId && selectors$p.dataModel3d) {
+                    xrButton.$element.setAttribute(selectors$p.dataModel3d, model.modelId);
                 }
             }
         });
@@ -7071,7 +6677,7 @@
         return player;
     }
 
-    const selectors$q = {
+    const selectors$o = {
         productSlideshow: '[data-product-slideshow]',
         slideshowMobileStyle: 'data-slideshow-mobile-style',
         slideshowDesktopStyle: 'data-slideshow-desktop-style',
@@ -7094,7 +6700,7 @@
         aspectRatio: 'data-aspect-ratio',
         flickitylockHeight: 'flickity-lock-height'
     };
-    const classes$i = {
+    const classes$e = {
         flickityDisableClass: 'flickity-disabled-mobile',
         flickityEnabled: 'flickity-enabled',
         selected: 'is-selected',
@@ -7113,12 +6719,12 @@
             document.addEventListener('theme:resize:width', ()=>{
                 this.scrollThumbs();
             });
-            resolution$1.onChange(()=>{
+            resolution.onChange(()=>{
                 this.connectSliderMediaEvents();
             });
         }
         connectSliderMediaEvents() {
-            resolution$1.isMobile() ? this.createMobileSlider() : this.createDesktopSlider();
+            resolution.isMobile() ? this.createMobileSlider() : this.createDesktopSlider();
         }
         createMobileSlider() {
             if (this.hasDesktopSlider && this.flkty) {
@@ -7180,7 +6786,7 @@
         createSlider(options) {
             this.flkty = new Flickity(this.slideshow, options);
             this.flkty.resize();
-            this.currentSlide = this.slideshow.querySelectorAll(selectors$q.mediaSlide)[0];
+            this.currentSlide = this.slideshow.querySelectorAll(selectors$o.mediaSlide)[0];
             this.setDraggable();
             this.addEventListeners();
         }
@@ -7231,12 +6837,12 @@
         addMediaEventListeners(media) {
             if (!media) return;
             media.addEventListener('play', ()=>{
-                if (resolution$1.isMobile() || resolution$1.isTouch()) {
+                if (resolution.isMobile() || resolution.isTouch()) {
                     this.updateDraggable(false);
                 }
             });
             media.addEventListener('pause', ()=>{
-                if (resolution$1.isMobile() || resolution$1.isTouch()) {
+                if (resolution.isMobile() || resolution.isTouch()) {
                     this.updateDraggable(true);
                 }
             });
@@ -7248,16 +6854,16 @@
                 this.currentSlide.dispatchEvent(new CustomEvent('pause'));
             }
             this.currentSlide = this.flkty.cells[index].element;
-            this.slideshow.classList.remove(selectors$q.flickitylockHeight);
-            const id = this.currentSlide.getAttribute(selectors$q.dataMediaId);
-            const currentThumb = (ref = this.thumbWrapper) === null || ref === void 0 ? void 0 : ref.querySelector(`[${selectors$q.dataMediaSelect}="${id}"]`);
-            (ref5 = this.thumbWrapper) === null || ref5 === void 0 ? void 0 : ref5.querySelector(`.${classes$i.active}`).classList.remove(classes$i.active);
-            currentThumb === null || currentThumb === void 0 ? void 0 : currentThumb.classList.add(classes$i.active);
+            this.slideshow.classList.remove(selectors$o.flickitylockHeight);
+            const id = this.currentSlide.getAttribute(selectors$o.dataMediaId);
+            const currentThumb = (ref = this.thumbWrapper) === null || ref === void 0 ? void 0 : ref.querySelector(`[${selectors$o.dataMediaSelect}="${id}"]`);
+            (ref5 = this.thumbWrapper) === null || ref5 === void 0 ? void 0 : ref5.querySelector(`.${classes$e.active}`).classList.remove(classes$e.active);
+            currentThumb === null || currentThumb === void 0 ? void 0 : currentThumb.classList.add(classes$e.active);
             this.scrollThumbs();
             // when swatch images are hidden by specific alt-text, the slider breaks on change so we select the featured variant image to "fix" it
             // Timeout is needed to slow it down a bit until the images refresh and the currentThumb variable has the right value
             setTimeout(()=>{
-                if ((currentThumb === null || currentThumb === void 0 ? void 0 : currentThumb.classList.contains(classes$i.hide)) || this.currentSlide.classList.contains(classes$i.hide)) {
+                if ((currentThumb === null || currentThumb === void 0 ? void 0 : currentThumb.classList.contains(classes$e.hide)) || this.currentSlide.classList.contains(classes$e.hide)) {
                     //Select the next visible media - the image may not be apart of any group and is at the end.
                     let length = this.flkty.cells.length;
                     //Move to index 0 if drag is to the left otherwise increase index
@@ -7269,8 +6875,8 @@
                         // When index + n is >= length minus length to wrap
                         if (position >= length) position = position - length;
                         const mediaSelect = this.flkty.cells[position].element;
-                        if (!mediaSelect.classList.contains(classes$i.hide)) {
-                            this.lastMediaSelect = mediaSelect.getAttribute(selectors$q.dataMediaId);
+                        if (!mediaSelect.classList.contains(classes$e.hide)) {
+                            this.lastMediaSelect = mediaSelect.getAttribute(selectors$o.dataMediaId);
                             break;
                         }
                     }
@@ -7288,14 +6894,14 @@
             this.allSlides = this.flkty.cells;
             this.currentSlide = this.flkty.cells[index].element;
             this.setDraggable();
-            const isFocusEnabled = document.body.classList.contains(selectors$q.focusEnabled);
+            const isFocusEnabled = document.body.classList.contains(selectors$o.focusEnabled);
             if (isFocusEnabled) this.currentSlide.dispatchEvent(new Event('focus'));
             this.scrollThumbs();
         }
         doImageChange(event) {
             var mediaId = event.detail.id;
             this.lastMediaSelect = mediaId;
-            const mediaIdString = `[${selectors$q.dataMediaId}="${mediaId}"]`;
+            const mediaIdString = `[${selectors$o.dataMediaId}="${mediaId}"]`;
             const matchesMedia = (cell)=>{
                 return cell.element.matches(mediaIdString);
             };
@@ -7313,7 +6919,7 @@
             this.scrollThumbs('clickNext');
         }
         doThumbClick(event) {
-            const id = event.currentTarget.getAttribute(selectors$q.dataMediaSelect);
+            const id = event.currentTarget.getAttribute(selectors$o.dataMediaSelect);
             this.slideshow.dispatchEvent(new CustomEvent('theme:image:change', {
                 detail: {
                     id: id
@@ -7322,9 +6928,9 @@
         }
         setDraggable() {
             if (this.currentSlide) {
-                this.mediaType = this.currentSlide.getAttribute(selectors$q.mediaType);
+                this.mediaType = this.currentSlide.getAttribute(selectors$o.mediaType);
                 if (this.mediaType === 'model' || this.mediaType === 'video' || this.mediaType === 'external_video') {
-                    if (!resolution$1.isMobile() || !resolution$1.isTouch()) {
+                    if (!resolution.isMobile() || !resolution.isTouch()) {
                         // Play on Desktop
                         this.currentSlide.dispatchEvent(new CustomEvent('play'));
                         this.updateDraggable(false);
@@ -7340,10 +6946,10 @@
             if (!this.flkty) return;
             this.flkty.options.draggable = state;
             this.flkty.updateDraggable();
-            this.slideshow.classList.toggle(classes$i.enableVideoDraggable, state);
+            this.slideshow.classList.toggle(classes$e.enableVideoDraggable, state);
         }
         detect3d() {
-            const modelViewerElements = this.container.querySelectorAll(selectors$q.modelViewer);
+            const modelViewerElements = this.container.querySelectorAll(selectors$o.modelViewer);
             if (modelViewerElements) {
                 modelViewerElements.forEach((element)=>{
                     initSectionModels(element, this.section.id);
@@ -7355,14 +6961,14 @@
                     });
                 });
                 document.addEventListener('shopify_xr_launch', (function() {
-                    this.container.querySelectorAll(selectors$q.allPlayers).forEach((player)=>{
+                    this.container.querySelectorAll(selectors$o.allPlayers).forEach((player)=>{
                         player.dispatchEvent(new CustomEvent('pause'));
                     });
                 }).bind(this));
             }
         }
         detectVideos() {
-            const playerElements = this.section.container.querySelectorAll(`${selectors$q.videoPlayerExternal}, ${selectors$q.videoPlayerNative}`);
+            const playerElements = this.section.container.querySelectorAll(`${selectors$o.videoPlayerExternal}, ${selectors$o.videoPlayerNative}`);
             for (var player of playerElements){
                 const uniqueKey = player.dataset.player;
                 const host = player.dataset.host;
@@ -7395,29 +7001,29 @@
             }
         }
         pauseAllMedia() {
-            const all = this.container.querySelector(selectors$q.mediaSlide);
+            const all = this.container.querySelector(selectors$o.mediaSlide);
             all.dispatchEvent(new CustomEvent('pause'));
         }
         pauseOtherMedia(uniqueKey) {
-            const otherMedia = this.container.querySelector(`${selectors$q.mediaSlide}:not([data-player="${uniqueKey}"])`);
+            const otherMedia = this.container.querySelector(`${selectors$o.mediaSlide}:not([data-player="${uniqueKey}"])`);
             otherMedia.dispatchEvent(new CustomEvent('pause'));
         }
         destroy() {
-            this.container.querySelectorAll(selectors$q.allPlayers).forEach((player)=>{
+            this.container.querySelectorAll(selectors$o.allPlayers).forEach((player)=>{
                 player.dispatchEvent(new CustomEvent('destroy'));
             });
         }
         scrollThumbs(event) {
-            this.thumbs = this.container.querySelector(selectors$q.productThumbs);
+            this.thumbs = this.container.querySelector(selectors$o.productThumbs);
             if (this.thumbs) {
-                this.thumb = this.thumbs.querySelector(`.${classes$i.active}`);
-                this.thumbItems = this.container.querySelectorAll(selectors$q.thumbImage);
+                this.thumb = this.thumbs.querySelector(`.${classes$e.active}`);
+                this.thumbItems = this.container.querySelectorAll(selectors$o.thumbImage);
                 this.lastThumb = this.thumbItems[this.thumbItems.length - 1];
                 if (!this.thumb) return;
                 this.thumbsScrollTop = this.thumbs.scrollTop;
                 this.thumbsScrollLeft = this.thumbs.scrollLeft;
                 this.thumbsWidth = this.thumbs.offsetWidth;
-                this.thumbsHeight = this.slideshow.offsetWidth / this.thumb.getAttribute(selectors$q.aspectRatio);
+                this.thumbsHeight = this.slideshow.offsetWidth / this.thumb.getAttribute(selectors$o.aspectRatio);
                 this.thumbsPositionBottom = this.thumbsScrollTop + this.thumbsHeight;
                 this.thumbsPositionRight = this.thumbsScrollLeft + this.thumbsWidth;
                 this.checkThumbPositions();
@@ -7470,31 +7076,31 @@
         }
         toggleArrows() {
             if (this.verticalCheck || this.verticalAlignment && !this.verticalCheck) {
-                this.arrowPrev.classList.toggle(classes$i.show, this.topCheck);
-                this.arrowNext.classList.toggle(classes$i.show, this.bottomCheck);
+                this.arrowPrev.classList.toggle(classes$e.show, this.topCheck);
+                this.arrowNext.classList.toggle(classes$e.show, this.bottomCheck);
             }
             if (this.horizontalCheck || !this.verticalAlignment && !this.horizontalCheck) {
-                this.arrowPrev.classList.toggle(classes$i.show, this.leftCheck);
-                this.arrowNext.classList.toggle(classes$i.show, this.rightCheck);
+                this.arrowPrev.classList.toggle(classes$e.show, this.leftCheck);
+                this.arrowNext.classList.toggle(classes$e.show, this.rightCheck);
             }
         }
         constructor(section){
             var ref, ref6;
             this.section = section;
             this.container = section.container;
-            this.slideshow = this.container.querySelector(selectors$q.productSlideshow);
-            this.mobileStyle = ((ref = this.slideshow) === null || ref === void 0 ? void 0 : ref.getAttribute(selectors$q.slideshowMobileStyle)) || 'none';
-            this.desktopStyle = ((ref6 = this.slideshow) === null || ref6 === void 0 ? void 0 : ref6.getAttribute(selectors$q.slideshowDesktopStyle)) || 'none';
-            this.arrowPrev = this.container.querySelector(selectors$q.arrowPrev);
-            this.arrowNext = this.container.querySelector(selectors$q.arrowNext);
-            this.leftThumbsHolder = this.container.querySelector(selectors$q.leftThumbsHolder);
-            this.thumbWrapper = this.container.querySelector(selectors$q.productThumbs);
-            this.thumbImages = this.container.querySelectorAll(selectors$q.thumbImage);
-            this.loopVideo = this.container.getAttribute(selectors$q.loopVideo) === 'true';
-            this.verticalAlignment = Boolean(this.container.querySelector(selectors$q.verticalAlignment));
+            this.slideshow = this.container.querySelector(selectors$o.productSlideshow);
+            this.mobileStyle = ((ref = this.slideshow) === null || ref === void 0 ? void 0 : ref.getAttribute(selectors$o.slideshowMobileStyle)) || 'none';
+            this.desktopStyle = ((ref6 = this.slideshow) === null || ref6 === void 0 ? void 0 : ref6.getAttribute(selectors$o.slideshowDesktopStyle)) || 'none';
+            this.arrowPrev = this.container.querySelector(selectors$o.arrowPrev);
+            this.arrowNext = this.container.querySelector(selectors$o.arrowNext);
+            this.leftThumbsHolder = this.container.querySelector(selectors$o.leftThumbsHolder);
+            this.thumbWrapper = this.container.querySelector(selectors$o.productThumbs);
+            this.thumbImages = this.container.querySelectorAll(selectors$o.thumbImage);
+            this.loopVideo = this.container.getAttribute(selectors$o.loopVideo) === 'true';
+            this.verticalAlignment = Boolean(this.container.querySelector(selectors$o.verticalAlignment));
             this.flkty = null;
             this.lastMediaSelect = null;
-            this.thumbs = this.container.querySelector(selectors$q.productThumbs);
+            this.thumbs = this.container.querySelector(selectors$o.productThumbs);
             this.currentSlide = null;
             this.mediaType = null;
             this.hasMobileSlider = false;
@@ -7519,7 +7125,7 @@
         return player;
     }
 
-    const selectors$p = {
+    const selectors$n = {
         pickupContainer: 'data-store-availability-container',
         shopifySection: '[data-api-content]',
         drawer: '[data-pickup-drawer]',
@@ -7527,50 +7133,34 @@
         drawerClose: '[data-pickup-drawer-close]',
         drawerBody: '[data-pickup-body]'
     };
-    const classes$h = {
+    const classes$d = {
         isVisible: 'drawer--visible',
         isHidden: 'hide',
         isPickupVisible: 'is-pickup-visible'
     };
-    let sections$5 = {};
-    let PickupAvailability = class PickupAvailability {
-        fetchPickupAvailability(event) {
-            const container = this.container.querySelector(`[${selectors$p.pickupContainer}]`);
-            if (!container) return;
-            const variantID = event && event.detail.variant ? event.detail.variant.id : container.getAttribute(selectors$p.pickupContainer);
-            if (event && !event.detail.variant) {
-                container.classList.add(classes$h.isHidden);
-                return;
+    let PickupAvailability = class PickupAvailability extends HTMLElement {
+        connectedCallback() {
+            this.container = this;
+            this.drawer = this.container.querySelector(selectors$n.drawer);
+            this.buttonDrawerOpen = this.container.querySelector(selectors$n.drawerOpen);
+            this.buttonDrawerClose = this.container.querySelectorAll(selectors$n.drawerClose);
+            this.drawerBody = this.container.querySelector(selectors$n.drawerBody);
+            if (this.buttonDrawerOpen) {
+                var ref;
+                (ref = this.buttonDrawerOpen) === null || ref === void 0 ? void 0 : ref.addEventListener('click', ()=>this.openDrawer()
+                );
             }
-            if (variantID) {
-                fetch(`${window.theme.routes.root_url}variants/${variantID}/?section_id=api-pickup-availability`).then(this.handleErrors).then((response)=>response.text()
-                ).then((text)=>{
-                    const pickupAvailabilityHTML = new DOMParser().parseFromString(text, 'text/html').querySelector(selectors$p.shopifySection).innerHTML;
-                    container.innerHTML = pickupAvailabilityHTML;
-                    container.classList.remove(classes$h.isHidden);
-                    this.drawer = this.container.querySelector(selectors$p.drawer);
-                    this.buttonDrawerOpen = this.container.querySelector(selectors$p.drawerOpen);
-                    this.buttonDrawerClose = this.container.querySelectorAll(selectors$p.drawerClose);
-                    this.drawerBody = this.container.querySelector(selectors$p.drawerBody);
-                    if (this.buttonDrawerOpen) {
-                        this.buttonDrawerOpen.addEventListener('click', ()=>this.openDrawer()
-                        );
-                    }
-                    if (this.buttonDrawerClose.length) {
-                        this.buttonDrawerClose.forEach((element)=>{
-                            element.addEventListener('click', ()=>this.closeDrawer()
-                            );
-                        });
-                    }
-                }).catch((e)=>{
-                    console.error(e);
+            if (this.buttonDrawerClose) {
+                this.buttonDrawerClose.forEach((element)=>{
+                    element.addEventListener('click', ()=>this.closeDrawer()
+                    );
                 });
             }
         }
         openDrawer() {
             if (this.drawer) {
-                document.body.classList.add(classes$h.isPickupVisible);
-                this.drawer.classList.add(classes$h.isVisible);
+                document.body.classList.add(classes$d.isPickupVisible);
+                this.drawer.classList.add(classes$d.isVisible);
                 this.drawer.dispatchEvent(new CustomEvent('theme:scroll:lock', {
                     bubbles: true
                 }));
@@ -7581,8 +7171,8 @@
         }
         closeDrawer() {
             if (this.drawer) {
-                document.body.classList.remove(classes$h.isPickupVisible);
-                this.drawer.classList.remove(classes$h.isVisible);
+                document.body.classList.remove(classes$d.isPickupVisible);
+                this.drawer.classList.remove(classes$d.isVisible);
                 this.drawer.dispatchEvent(new CustomEvent('theme:scroll:unlock', {
                     bubbles: true
                 }));
@@ -7603,682 +7193,6 @@
                 });
             }
             return response;
-        }
-        constructor(section){
-            this.container = section.container;
-            this.drawer = null;
-            this.buttonDrawerOpen = null;
-            this.buttonDrawerClose = null;
-            this.drawerBody = null;
-            this.fetchPickupAvailability();
-            this.container.addEventListener('theme:variant:change', (event)=>this.fetchPickupAvailability(event)
-            );
-        }
-    };
-    const pickupAvailability = {
-        onLoad () {
-            sections$5[this.id] = new PickupAvailability(this);
-        }
-    };
-
-    const selectors$o = {
-        wrapper: '[data-quantity-selector]',
-        increase: '[data-increase-quantity]',
-        decrease: '[data-decrease-quantity]',
-        input: '[data-quantity-input]'
-    };
-    let Quantity = class Quantity {
-        initButtons() {
-            this.increase.addEventListener('click', (function(e) {
-                e.preventDefault();
-                let v = parseInt(this.input.value, 10);
-                v = isNaN(v) ? 0 : v;
-                v++;
-                this.input.value = v;
-                this.input.dispatchEvent(new Event('change'));
-            }).bind(this));
-            this.decrease.addEventListener('click', (function(e) {
-                e.preventDefault();
-                let v = parseInt(this.input.value, 10);
-                v = isNaN(v) ? 0 : v;
-                v--;
-                v = Math.max(this.min, v);
-                this.input.value = v;
-                this.input.dispatchEvent(new Event('change'));
-            }).bind(this));
-        }
-        constructor(wrapper){
-            this.wrapper = wrapper;
-            this.increase = this.wrapper.querySelector(selectors$o.increase);
-            this.decrease = this.wrapper.querySelector(selectors$o.decrease);
-            this.input = this.wrapper.querySelector(selectors$o.input);
-            this.min = parseInt(this.input.getAttribute('min'), 10);
-            this.initButtons();
-        }
-    };
-    function initQtySection(container) {
-        const quantityWrappers = container.querySelectorAll(selectors$o.wrapper);
-        quantityWrappers.forEach((qty)=>{
-            new Quantity(qty);
-        });
-    }
-
-    const selectors$n = {
-        form: '[data-product-form]',
-        optionPosition: 'data-option-position',
-        optionInput: '[name^="options"], [data-popout-option]',
-        selectOptionValue: 'data-value'
-    };
-    const classes$g = {
-        soldOut: 'sold-out',
-        unavailable: 'unavailable'
-    };
-    /**
-     * Variant Sellout Precrime Click Preview
-     * I think of this like the precrime machine in Minority report.  It gives a preview
-     * of every possible click action, given the current form state.  The logic is:
-     *
-     * for each clickable name=options[] variant selection element
-     * find the value of the form if the element were clicked
-     * lookup the variant with those value in the product json
-     * clear the classes, add .unavailable if it's not found,
-     * and add .sold-out if it is out of stock
-     *
-     * Caveat: we rely on the option position so we don't need
-     * to keep a complex map of keys and values.
-     */ let SelloutVariants = class SelloutVariants {
-        init() {
-            this.update();
-        }
-        update() {
-            this.getCurrentState();
-            this.optionElements.forEach((el)=>{
-                const val = el.value || el.getAttribute(selectors$n.selectOptionValue);
-                const positionString = el.closest(`[${selectors$n.optionPosition}]`).getAttribute(selectors$n.optionPosition);
-                // subtract one because option.position in liquid does not count form zero, but JS arrays do
-                const position = parseInt(positionString, 10) - 1;
-                let newVals = [
-                    ...this.selections
-                ];
-                newVals[position] = val;
-                const found = this.productJSON.variants.find((element)=>{
-                    // only return true if every option matches our hypothetical selection
-                    let perfectMatch = true;
-                    for(let index = 0; index < newVals.length; index++){
-                        if (element.options[index] !== newVals[index]) {
-                            perfectMatch = false;
-                        }
-                    }
-                    return perfectMatch;
-                });
-                el.classList.remove(classes$g.soldOut, classes$g.unavailable);
-                if (typeof found === 'undefined') {
-                    el.classList.add(classes$g.unavailable);
-                } else if (found && found.available === false) {
-                    el.classList.add(classes$g.soldOut);
-                }
-            });
-        }
-        getCurrentState() {
-            this.formData = new FormData(this.form);
-            this.selections = [];
-            for (var value of this.formData.entries()){
-                if (value[0].includes('options[')) {
-                    // push the current state of the form, dont worry about the group name
-                    // we will be using the array position instead of the name to match values
-                    this.selections.push(value[1]);
-                }
-            }
-        }
-        constructor(section, productJSON){
-            this.container = section;
-            this.productJSON = productJSON;
-            this.form = this.container.querySelector(selectors$n.form);
-            this.formData = new FormData(this.form);
-            this.optionElements = this.container.querySelectorAll(selectors$n.optionInput);
-            if (this.productJSON && this.form) {
-                this.init();
-            }
-        }
-    };
-
-    const selectors$m = {
-        outerSection: '[data-section-id]',
-        quickviewModal: '[data-quickview-modal]',
-        productFormWrapper: '[data-product-form-wrapper]',
-        productForm: '[data-product-form]',
-        productSlideshow: '[data-product-slideshow]',
-        addToCart: '[data-add-to-cart]',
-        addToCartText: '[data-add-to-cart-text]',
-        comparePrice: '[data-compare-price]',
-        comparePriceText: '[data-compare-text]',
-        buttonsWrapper: '[data-buttons-wrapper]',
-        originalSelectorId: '[data-product-select]',
-        priceWrapper: '[data-price-wrapper]',
-        priceButton: '[data-button-price]',
-        productJson: '[data-product-json]',
-        productPrice: '[data-product-price]',
-        unitPrice: '[data-product-unit-price]',
-        unitBase: '[data-product-base]',
-        unitWrapper: '[data-product-unit]',
-        dataEnableHistoryState: 'data-enable-history-state',
-        optionPosition: 'data-option-position',
-        optionValue: '[data-option-value]',
-        subPrices: '[data-subscription-watch-price]',
-        subSelectors: '[data-subscription-selectors]',
-        priceOffWrap: '[data-price-off]',
-        priceOffType: '[data-price-off-type]',
-        priceOffAmount: '[data-price-off-amount]',
-        subsToggle: '[data-toggles-group]',
-        subsChild: 'data-group-toggle',
-        subDescription: '[data-plan-description]',
-        remainingCount: '[data-remaining-count]',
-        remainingMax: 'data-remaining-max',
-        remainingWrapper: '[data-remaining-wrapper]',
-        remainingJSON: '[data-product-remaining-json]',
-        isPreOrder: '[data-product-preorder]'
-    };
-    const classes$f = {
-        hide: 'hide',
-        variantSoldOut: 'variant--soldout',
-        variantUnavailable: 'variant--unavailable',
-        productPriceSale: 'product__price--sale',
-        remainingLow: 'count-is-low',
-        remainingIn: 'count-is-in',
-        remainingOut: 'count-is-out',
-        remainingUnavailable: 'count-is-unavailable'
-    };
-    let ProductForm = class ProductForm extends HTMLElement {
-        connectedCallback() {
-            this.outerSection = this.container.closest(selectors$m.outerSection);
-            this.quickview = this.container.closest(selectors$m.quickviewModal);
-            this.outerWrapper = this.quickview ? this.quickview : this.outerSection;
-            this.productFormWrapper = this.container.closest(selectors$m.productFormWrapper);
-            this.productFormElement = this.container.querySelector(selectors$m.productForm);
-            this.productForm = this.container.querySelector(selectors$m.productForm);
-            this.slideshow = this.outerWrapper.querySelector(selectors$m.productSlideshow);
-            this.enableHistoryState = this.outerSection && this.outerSection.hasAttribute(selectors$m.dataEnableHistoryState) ? this.outerSection.getAttribute(selectors$m.dataEnableHistoryState) === 'true' : false;
-            this.hasUnitPricing = this.outerWrapper.querySelector(selectors$m.unitWrapper);
-            this.subSelectors = this.outerWrapper.querySelector(selectors$m.subSelectors);
-            this.subPrices = this.outerWrapper.querySelector(selectors$m.subPrices);
-            this.priceOffWrap = this.outerWrapper.querySelector(selectors$m.priceOffWrap);
-            this.priceOffAmount = this.outerWrapper.querySelector(selectors$m.priceOffAmount);
-            this.priceOffType = this.outerWrapper.querySelector(selectors$m.priceOffType);
-            this.planDecription = this.outerWrapper.querySelector(selectors$m.subDescription);
-            this.isPreOrder = this.container.querySelector(selectors$m.isPreOrder);
-            this.remainingWrapper = this.outerWrapper.querySelector(selectors$m.remainingWrapper);
-            const remainingMaxWrap = this.outerWrapper.querySelector(`[${selectors$m.remainingMax}]`);
-            this.sellout = null;
-            if (this.remainingWrapper && remainingMaxWrap) {
-                this.remainingMaxInt = parseInt(remainingMaxWrap.getAttribute(selectors$m.remainingMax), 10);
-                this.remainingCount = this.outerWrapper.querySelector(selectors$m.remainingCount);
-                this.remainingJSONWrapper = this.outerWrapper.querySelector(selectors$m.remainingJSON);
-                this.remainingJSON = null;
-                if (this.remainingJSONWrapper && this.remainingJSONWrapper.innerHTML !== '') {
-                    this.remainingJSON = JSON.parse(this.remainingJSONWrapper.innerHTML);
-                } else {
-                    console.warn('Missing product quantity JSON');
-                }
-            }
-            initQtySection(this.outerWrapper);
-            let productJSONText = null;
-            this.productJSON = null;
-            const productElemJSON = this.outerWrapper.querySelector(selectors$m.productJson);
-            if (productElemJSON) {
-                productJSONText = productElemJSON.innerHTML;
-            }
-            if (productJSONText && this.productForm) {
-                this.productJSON = JSON.parse(productJSONText);
-                this.sellout = new SelloutVariants(this.outerWrapper, this.productJSON);
-                this.linkForm();
-            } else {
-                console.warn('Missing product form or product JSON');
-            }
-            // Add cookie for recent products
-            if (this.productJSON) {
-                new RecordRecentlyViewed(this.productJSON.handle);
-            }
-        }
-        destroy() {
-            this.productForm.destroy();
-        }
-        linkForm() {
-            this.productForm = new ProductFormReader(this.outerWrapper, this.productFormElement, this.productJSON, {
-                onOptionChange: this.onOptionChange.bind(this),
-                onPlanChange: this.onPlanChange.bind(this),
-                onQuantityChange: this.onQuantityChange.bind(this)
-            });
-            this.pushState(this.productForm.getFormState(), true);
-            this.subsToggleListeners();
-        }
-        onOptionChange(evt) {
-            this.pushState(evt.dataset);
-        }
-        onPlanChange(evt) {
-            if (this.subPrices) {
-                this.pushState(evt.dataset);
-            }
-        }
-        onQuantityChange(evt) {
-            const formState = evt.dataset;
-            this.productState = this.setProductState(formState);
-            this.updateButtonPrices(formState);
-        }
-        pushState(formState, init = false) {
-            this.productState = this.setProductState(formState);
-            this.updateProductImage(formState);
-            this.updateAddToCartState(formState);
-            this.updateProductPrices(formState);
-            this.updateSaleText(formState);
-            this.updateSubscriptionText(formState);
-            this.updateLegend(formState);
-            this.updateRemaining(formState);
-            this.fireHookEvent(formState);
-            if (this.sellout) {
-                this.sellout.update(formState);
-            }
-            if (this.enableHistoryState && !init) {
-                this.updateHistoryState(formState);
-            }
-        }
-        updateAddToCartState(formState) {
-            const variant = formState.variant;
-            let addText = theme.strings.addToCart;
-            const priceWrapper = this.outerWrapper.querySelectorAll(selectors$m.priceWrapper);
-            const buttonsWrapper = this.outerWrapper.querySelector(selectors$m.buttonsWrapper);
-            const addToCart = buttonsWrapper === null || buttonsWrapper === void 0 ? void 0 : buttonsWrapper.querySelectorAll(selectors$m.addToCart);
-            const addToCartText = buttonsWrapper === null || buttonsWrapper === void 0 ? void 0 : buttonsWrapper.querySelectorAll(selectors$m.addToCartText);
-            if (this.isPreOrder) {
-                addText = theme.strings.preOrder;
-            }
-            if (priceWrapper.length && variant) {
-                priceWrapper.forEach((element)=>{
-                    element.classList.remove(classes$f.hide);
-                });
-            }
-            if (addToCart === null || addToCart === void 0 ? void 0 : addToCart.length) {
-                addToCart.forEach((element)=>{
-                    if (variant) {
-                        if (variant.available) {
-                            element.disabled = false;
-                        } else {
-                            element.disabled = true;
-                        }
-                    } else {
-                        element.disabled = true;
-                    }
-                });
-            }
-            if (addToCartText === null || addToCartText === void 0 ? void 0 : addToCartText.length) {
-                addToCartText.forEach((element)=>{
-                    if (variant) {
-                        if (variant.available) {
-                            element.innerHTML = addText;
-                        } else {
-                            element.innerHTML = theme.strings.soldOut;
-                        }
-                    } else {
-                        element.innerHTML = theme.strings.unavailable;
-                    }
-                });
-            }
-            /*
-          Critical JS: Update the hidden form input to the new variand ID
-        */ if (buttonsWrapper && variant) {
-                const formSelect = buttonsWrapper.querySelector(selectors$m.originalSelectorId);
-                if (formSelect) {
-                    formSelect.value = variant.id;
-                }
-            }
-            /*
-          Add or remove the CSS classes for sold out and unavailable variant states
-        */ if (buttonsWrapper && this.productFormWrapper) {
-                if (variant) {
-                    if (variant.available) {
-                        this.productFormWrapper.classList.remove(classes$f.variantSoldOut, classes$f.variantUnavailable);
-                    } else {
-                        this.productFormWrapper.classList.add(classes$f.variantSoldOut);
-                        this.productFormWrapper.classList.remove(classes$f.variantUnavailable);
-                    }
-                } else {
-                    this.productFormWrapper.classList.add(classes$f.variantUnavailable);
-                    this.productFormWrapper.classList.remove(classes$f.variantSoldOut);
-                }
-            }
-        }
-        updateLegend(formState) {
-            const variant = formState.variant;
-            if (variant) {
-                const vals = this.container.parentNode.querySelectorAll(selectors$m.optionValue);
-                vals.forEach((val)=>{
-                    const wrapper = val.closest(`[${selectors$m.optionPosition}]`);
-                    if (wrapper) {
-                        const position = wrapper.getAttribute(selectors$m.optionPosition);
-                        const index = parseInt(position, 10) - 1;
-                        this.newValue = variant.options[index];
-                        val.innerHTML = this.newValue;
-                    }
-                });
-            }
-        }
-        updateHistoryState(formState) {
-            const variant = formState.variant;
-            const plan = formState.plan;
-            const location = window.location.href;
-            if (variant && location.includes('/product')) {
-                const url = new window.URL(location);
-                const params = url.searchParams;
-                params.set('variant', variant.id);
-                if (plan && plan.detail && plan.detail.id && this.productState.hasPlan) {
-                    params.set('selling_plan', plan.detail.id);
-                } else {
-                    params.delete('selling_plan');
-                }
-                url.search = params.toString();
-                const urlString = url.toString();
-                window.history.replaceState({
-                    path: urlString
-                }, '', urlString);
-            }
-        }
-        updateRemaining(formState) {
-            const variant = formState.variant;
-            if (variant && this.remainingWrapper && this.remainingJSON && this.remainingCount) {
-                const newQuantity = this.remainingJSON[variant.id];
-                if (newQuantity && newQuantity <= this.remainingMaxInt && newQuantity > 0) {
-                    this.remainingWrapper.classList.remove(classes$f.remainingIn, classes$f.remainingOut, classes$f.remainingUnavailable);
-                    this.remainingWrapper.classList.add(classes$f.remainingLow);
-                    this.remainingCount.innerHTML = newQuantity;
-                } else if (this.productState.soldOut) {
-                    this.remainingWrapper.classList.remove(classes$f.remainingLow, classes$f.remainingIn, classes$f.remainingUnavailable);
-                    this.remainingWrapper.classList.add(classes$f.remainingOut);
-                } else if (this.productState.available) {
-                    this.remainingWrapper.classList.remove(classes$f.remainingLow, classes$f.remainingOut, classes$f.remainingUnavailable);
-                    this.remainingWrapper.classList.add(classes$f.remainingIn);
-                }
-            } else if (this.remainingWrapper) {
-                this.remainingWrapper.classList.remove(classes$f.remainingIn, classes$f.remainingOut, classes$f.remainingLow);
-                this.remainingWrapper.classList.add(classes$f.remainingUnavailable);
-            }
-        }
-        getBaseUnit(variant) {
-            return variant.unit_price_measurement.reference_value === 1 ? variant.unit_price_measurement.reference_unit : variant.unit_price_measurement.reference_value + variant.unit_price_measurement.reference_unit;
-        }
-        subsToggleListeners() {
-            const toggles = this.outerWrapper.querySelectorAll(selectors$m.subsToggle);
-            toggles.forEach((toggle)=>{
-                toggle.addEventListener('change', (function(e) {
-                    const val = e.target.value.toString();
-                    const selected = this.outerWrapper.querySelector(`[${selectors$m.subsChild}="${val}"]`);
-                    const groups = this.outerWrapper.querySelectorAll(`[${selectors$m.subsChild}]`);
-                    if (selected) {
-                        selected.classList.remove(classes$f.hide);
-                        const first = selected.querySelector(`[name="selling_plan"]`);
-                        first.checked = true;
-                        first.dispatchEvent(new Event('change'));
-                    }
-                    groups.forEach((group)=>{
-                        if (group !== selected) {
-                            group.classList.add(classes$f.hide);
-                            const plans = group.querySelectorAll(`[name="selling_plan"]`);
-                            plans.forEach((plan)=>{
-                                plan.checked = false;
-                                plan.dispatchEvent(new Event('change'));
-                            });
-                        }
-                    });
-                }).bind(this));
-            });
-        }
-        updateSaleText(formState) {
-            if (this.productState.planSale) {
-                this.updateSaleTextSubscription(formState);
-            } else if (this.productState.onSale) {
-                this.updateSaleTextStandard(formState);
-            } else if (this.priceOffWrap) {
-                this.priceOffWrap.classList.add(classes$f.hide);
-            }
-        }
-        updateSaleTextStandard(formState) {
-            if (!this.priceOffType) return;
-            this.priceOffType.innerHTML = window.theme.strings.sale || 'sale';
-            const variant = formState.variant;
-            if (window.theme.settings.badge_sale_type && window.theme.settings.badge_sale_type === 'percentage') {
-                const discountFloat = (variant.compare_at_price - variant.price) / variant.compare_at_price;
-                const discountInt = Math.floor(discountFloat * 100);
-                this.priceOffAmount.innerHTML = `${discountInt}%`;
-            } else {
-                const discount = variant.compare_at_price - variant.price;
-                this.priceOffAmount.innerHTML = this.formattingMoney(discount);
-            }
-            this.priceOffWrap.classList.remove(classes$f.hide);
-        }
-        updateSaleTextSubscription(formState) {
-            this.priceOffType.innerHTML = window.theme.strings.subscription || 'subscripton';
-            const variant = formState.variant;
-            const adjustment = formState.plan.detail.price_adjustments[0];
-            const discount = adjustment.value;
-            if (adjustment && adjustment.value_type === 'percentage') {
-                this.priceOffAmount.innerHTML = `${discount}%`;
-            } else if (adjustment && adjustment.value_type === 'price') {
-                this.priceOffAmount.innerHTML = this.formattingMoney(variant.price - adjustment.value);
-            } else {
-                this.priceOffAmount.innerHTML = this.formattingMoney(discount);
-            }
-            this.priceOffWrap.classList.remove(classes$f.hide);
-        }
-        updateSubscriptionText(formState) {
-            if (formState.plan && this.planDecription && formState.plan.detail.description !== null) {
-                this.planDecription.innerHTML = formState.plan.detail.description;
-                this.planDecription.classList.remove(classes$f.hide);
-            } else if (this.planDecription) {
-                this.planDecription.classList.add(classes$f.hide);
-            }
-        }
-        getPrices(formState) {
-            const variant = formState.variant;
-            const plan = formState.plan;
-            let comparePrice = '';
-            let price = '';
-            if (this.productState.available) {
-                comparePrice = variant.compare_at_price;
-                price = variant.price;
-            }
-            if (this.productState.hasPlan) {
-                price = plan.allocation.price;
-            }
-            if (this.productState.planSale) {
-                comparePrice = plan.allocation.compare_at_price;
-                price = plan.allocation.price;
-            }
-            return {
-                price: price,
-                comparePrice: comparePrice
-            };
-        }
-        updateButtonPrices(formState) {
-            const priceButtons = this.outerWrapper.querySelectorAll(selectors$m.priceButton);
-            const { price  } = this.getPrices(formState);
-            if (priceButtons.length) {
-                priceButtons.forEach((btn)=>{
-                    const btnPrice = formState.quantity * price;
-                    btn.innerHTML = this.formattingMoney(btnPrice);
-                });
-            }
-        }
-        updateProductPrices(formState) {
-            const variant = formState.variant;
-            const priceWrappers = this.outerWrapper.querySelectorAll(selectors$m.priceWrapper);
-            const priceButtons = this.outerWrapper.querySelectorAll(selectors$m.priceButton);
-            const { price , comparePrice  } = this.getPrices(formState);
-            priceWrappers.forEach((wrap)=>{
-                const comparePriceEl = wrap.querySelector(selectors$m.comparePrice);
-                const productPriceEl = wrap.querySelector(selectors$m.productPrice);
-                const comparePriceText = wrap.querySelector(selectors$m.comparePriceText);
-                if (comparePriceEl) {
-                    if (this.productState.onSale || this.productState.planSale) {
-                        comparePriceEl.classList.remove(classes$f.hide);
-                        comparePriceText.classList.remove(classes$f.hide);
-                        productPriceEl.classList.add(classes$f.productPriceSale);
-                    } else {
-                        comparePriceEl.classList.add(classes$f.hide);
-                        comparePriceText.classList.add(classes$f.hide);
-                        productPriceEl.classList.remove(classes$f.productPriceSale);
-                    }
-                    comparePriceEl.innerHTML = this.formattingMoney(comparePrice);
-                }
-                if (productPriceEl) {
-                    if (variant) {
-                        productPriceEl.innerHTML = this.formattingMoney(price);
-                    } else {
-                        productPriceEl.innerHTML = '&nbsp;';
-                    }
-                }
-            });
-            if (priceButtons.length) {
-                priceButtons.forEach((btn)=>{
-                    const btnPrice = formState.quantity * price;
-                    btn.innerHTML = this.formattingMoney(btnPrice);
-                });
-            }
-            if (this.hasUnitPricing) {
-                this.updateProductUnits(formState);
-            }
-        }
-        updateProductUnits(formState) {
-            const variant = formState.variant;
-            const plan = formState.plan;
-            let unitPrice = null;
-            if (variant && variant.unit_price) {
-                unitPrice = variant.unit_price;
-            }
-            if (plan && plan.allocation && plan.allocation.unit_price) {
-                unitPrice = plan.allocation.unit_price;
-            }
-            if (unitPrice) {
-                const base = this.getBaseUnit(variant);
-                this.outerWrapper.querySelector(selectors$m.unitPrice).innerHTML = this.formattingMoney(unitPrice);
-                this.outerWrapper.querySelector(selectors$m.unitBase).innerHTML = base;
-                showElement(this.outerWrapper.querySelector(selectors$m.unitWrapper));
-            } else {
-                hideElement(this.outerWrapper.querySelector(selectors$m.unitWrapper));
-            }
-        }
-        fireHookEvent(formState) {
-            const variant = formState.variant;
-            this.container.dispatchEvent(new CustomEvent('theme:variant:change', {
-                detail: {
-                    variant: variant
-                },
-                bubbles: true
-            }));
-        }
-        /**
-       * Tracks aspects of the product state that are relevant to UI updates
-       * @param {object} evt - variant change event
-       * @return {object} productState - represents state of variant + plans
-       *  productState.available - current variant and selling plan options result in valid offer
-       *  productState.soldOut - variant is sold out
-       *  productState.onSale - variant is on sale
-       *  productState.showUnitPrice - variant has unit price
-       *  productState.requiresPlan - all the product variants requires a selling plan
-       *  productState.hasPlan - there is a valid selling plan
-       *  productState.planSale - plan has a discount to show next to price
-       *  productState.planPerDelivery - plan price does not equal per_delivery_price - a prepaid subscribtion
-       */ setProductState(dataset) {
-            const variant = dataset.variant;
-            const plan = dataset.plan;
-            const productState = {
-                available: true,
-                soldOut: false,
-                onSale: false,
-                showUnitPrice: false,
-                requiresPlan: false,
-                hasPlan: false,
-                planPerDelivery: false,
-                planSale: false
-            };
-            if (!variant || variant.requires_selling_plan && !plan) {
-                productState.available = false;
-            } else {
-                if (!variant.available) {
-                    productState.soldOut = true;
-                }
-                if (variant.compare_at_price > variant.price) {
-                    productState.onSale = true;
-                }
-                if (variant.unit_price) {
-                    productState.showUnitPrice = true;
-                }
-                if (this.productJSON && this.productJSON.requires_selling_plan) {
-                    productState.requiresPlan = true;
-                }
-                if (plan && this.subPrices) {
-                    productState.hasPlan = true;
-                    if (plan.allocation.per_delivery_price !== plan.allocation.price) {
-                        productState.planPerDelivery = true;
-                    }
-                    if (plan.allocation.compare_at_price > plan.allocation.price) {
-                        productState.planSale = true;
-                    }
-                }
-            }
-            return productState;
-        }
-        updateProductImage(formState) {
-            const variant = formState.variant;
-            if (variant) {
-                if (this.slideshow && variant.featured_media && variant.featured_media.id) {
-                    // Update variant image, if one is set
-                    this.slideshow.dispatchEvent(new CustomEvent('theme:image:change', {
-                        detail: {
-                            id: variant.featured_media.id
-                        }
-                    }));
-                    // Scroll viewport so image is in view
-                    this.scrollImageViewport(variant);
-                }
-            }
-        }
-        scrollImageViewport(variant) {
-            // Scroll to fit variant image in window, if images are stacked and image is not in viewport
-            const desktopOrTablet = resolution$1.isDesktop() || resolution$1.isTablet();
-            if (desktopOrTablet && this.slideshow.hasAttribute('data-vertical-images')) {
-                const selectedImage = this.slideshow.querySelector(`[data-media-id="${variant.featured_media.id}"]`);
-                // Get the top and bottom position of the selected image relative to the viewport
-                const imageRect = selectedImage.getBoundingClientRect();
-                const selectedImageTop = imageRect.top;
-                const selectedImageBottom = imageRect.bottom;
-                const imageWithinViewport = imageRect.height < window.innerHeight;
-                // Check if the image is not fully within the viewport
-                if (selectedImageTop < 0 || imageWithinViewport && selectedImageBottom > window.innerHeight) {
-                    // Calculate scroll position based on whether the top or the bottom of the image is out of view
-                    let scrollPosition = selectedImageTop + window.scrollY;
-                    // If the top of the image is above the viewport, adjust the scroll position to the top of the image
-                    if (selectedImageTop < 0) {
-                        scrollPosition = selectedImageTop + window.scrollY;
-                    } else if (selectedImageBottom > window.innerHeight) {
-                        scrollPosition = selectedImageTop + window.scrollY - (window.innerHeight - imageRect.height);
-                    }
-                    // Scroll to the calculated position
-                    window.scrollTo({
-                        top: scrollPosition,
-                        left: 0,
-                        behavior: 'smooth'
-                    });
-                }
-            }
-        }
-        formattingMoney(money) {
-            if (theme.settings.currency_code_enable) {
-                return themeCurrency.formatMoney(money, theme.moneyFormat) + ` ${theme.currencyCode}`;
-            } else {
-                return themeCurrency.formatMoney(money, theme.moneyFormat);
-            }
-        }
-        constructor(){
-            super();
-            this.container = this;
         }
     };
 
@@ -8307,7 +7221,7 @@
         }
     };
 
-    const selectors$l = {
+    const selectors$m = {
         slideshow: '[data-product-slideshow]',
         singeImage: '[data-product-image]',
         zoomButton: '[data-zoom-button]',
@@ -8321,11 +7235,11 @@
         const returnZoom = loadedPromise.then(()=>{
             const PhotoSwipe = window.themePhotoswipe.PhotoSwipe.default;
             const PhotoSwipeUI = window.themePhotoswipe.PhotoSwipeUI.default;
-            const triggers = container.querySelectorAll(selectors$l.zoomButton);
+            const triggers = container.querySelectorAll(selectors$m.zoomButton);
             triggers.forEach((trigger)=>{
                 trigger.addEventListener('click', (event)=>{
-                    const el = container.querySelector(selectors$l.zoomWrapper);
-                    const dataId = event.target.closest(`[${selectors$l.mediaId}]`).getAttribute(selectors$l.mediaId).toString();
+                    const el = container.querySelector(selectors$m.zoomWrapper);
+                    const dataId = event.target.closest(`[${selectors$m.mediaId}]`).getAttribute(selectors$m.mediaId).toString();
                     const items = [];
                     for(let i = 0; i < json.media.length; i++){
                         if (json.media[i].media_type === 'image') {
@@ -8363,9 +7277,9 @@
                             }
                         },
                         getThumbBoundsFn: function getThumbBoundsFn() {
-                            let imageLocation = container.querySelector(selectors$l.slideshow);
+                            let imageLocation = container.querySelector(selectors$m.slideshow);
                             if (!imageLocation) {
-                                imageLocation = container.querySelector(selectors$l.singeImage);
+                                imageLocation = container.querySelector(selectors$m.singeImage);
                             }
                             const pageYScroll = window.pageYOffset || document.documentElement.scrollTop;
                             const rect = imageLocation.getBoundingClientRect();
@@ -8394,7 +7308,7 @@
         return returnZoom;
     }
 
-    const selectors$k = {
+    const selectors$l = {
         body: 'body',
         dataRelatedSectionElem: '[data-related-section]',
         dataTabsHolder: '[data-tabs-holder]',
@@ -8410,7 +7324,7 @@
         scrollbarArrowNext: '[data-scrollbar-arrow-next]',
         firstElement: 'a:first-child, input:first-child'
     };
-    const classes$e = {
+    const classes$c = {
         classCurrent: 'current',
         classHide: 'hide',
         classAlt: 'alt',
@@ -8420,14 +7334,14 @@
     let GlobalTabs = class GlobalTabs {
         init() {
             const ctx = this.container;
-            const tabsNavList = ctx.querySelectorAll(selectors$k.tabsLi);
-            const firstTabLink = ctx.querySelector(`${selectors$k.tabLink}-0`);
-            const firstTabContent = ctx.querySelector(`${selectors$k.tabContent}-0`);
+            const tabsNavList = ctx.querySelectorAll(selectors$l.tabsLi);
+            const firstTabLink = ctx.querySelector(`${selectors$l.tabLink}-0`);
+            const firstTabContent = ctx.querySelector(`${selectors$l.tabContent}-0`);
             if (firstTabContent) {
-                firstTabContent.classList.add(classes$e.classCurrent);
+                firstTabContent.classList.add(classes$c.classCurrent);
             }
             if (firstTabLink) {
-                firstTabLink.classList.add(classes$e.classCurrent);
+                firstTabLink.classList.add(classes$c.classCurrent);
             }
             this.checkVisibleTabLinks();
             this.container.addEventListener('theme:tabs:check', ()=>this.checkRecentTab()
@@ -8436,18 +7350,18 @@
             );
             if (tabsNavList.length) {
                 tabsNavList.forEach((element)=>{
-                    const tabId = parseInt(element.getAttribute(selectors$k.dataTab));
-                    const tab = ctx.querySelector(`${selectors$k.tabContent}-${tabId}`);
+                    const tabId = parseInt(element.getAttribute(selectors$l.dataTab));
+                    const tab = ctx.querySelector(`${selectors$l.tabContent}-${tabId}`);
                     element.addEventListener('click', ()=>{
                         this.tabChange(element, tab);
                     });
                     element.addEventListener('keyup', (event)=>{
-                        if ((event.code === 'Space' || event.code === 'Enter') && this.body.classList.contains(classes$e.isFocused)) {
+                        if ((event.code === 'Space' || event.code === 'Enter') && this.body.classList.contains(classes$c.isFocused)) {
                             this.tabChange(element, tab);
                             if (tab.querySelector('a, input')) {
                                 this.accessibility.lastFocused = element;
                                 this.accessibility.a11y.trapFocus(tab, {
-                                    elementToFocus: tab.querySelector(selectors$k.firstElement)
+                                    elementToFocus: tab.querySelector(selectors$l.firstElement)
                                 });
                             }
                         }
@@ -8456,12 +7370,12 @@
             }
         }
         tabChange(element, tab) {
-            this.container.querySelector(`${selectors$k.tabsLi}.${classes$e.classCurrent}`).classList.remove(classes$e.classCurrent);
-            this.container.querySelector(`${selectors$k.tabContent}.${classes$e.classCurrent}`).classList.remove(classes$e.classCurrent);
-            element.classList.add(classes$e.classCurrent);
-            tab.classList.add(classes$e.classCurrent);
-            if (element.classList.contains(classes$e.classHide)) {
-                tab.classList.add(classes$e.classHide);
+            this.container.querySelector(`${selectors$l.tabsLi}.${classes$c.classCurrent}`).classList.remove(classes$c.classCurrent);
+            this.container.querySelector(`${selectors$l.tabContent}.${classes$c.classCurrent}`).classList.remove(classes$c.classCurrent);
+            element.classList.add(classes$c.classCurrent);
+            tab.classList.add(classes$c.classCurrent);
+            if (element.classList.contains(classes$c.classHide)) {
+                tab.classList.add(classes$c.classHide);
             }
             this.checkVisibleTabLinks();
             this.container.dispatchEvent(new CustomEvent('theme:tab:change'));
@@ -8474,50 +7388,50 @@
             }
         }
         checkVisibleTabLinks() {
-            const tabsNavList = this.container.querySelectorAll(selectors$k.tabsLi);
-            const tabsNavListHided = this.container.querySelectorAll(`${selectors$k.tabLink}.${classes$e.classHide}`);
+            const tabsNavList = this.container.querySelectorAll(selectors$l.tabsLi);
+            const tabsNavListHided = this.container.querySelectorAll(`${selectors$l.tabLink}.${classes$c.classHide}`);
             const difference = tabsNavList.length - tabsNavListHided.length;
             if (difference < 2) {
-                this.container.classList.add(classes$e.classAlt);
+                this.container.classList.add(classes$c.classAlt);
             } else {
-                this.container.classList.remove(classes$e.classAlt);
+                this.container.classList.remove(classes$c.classAlt);
             }
         }
         checkRecentTab() {
-            const tabLink = this.container.querySelector(selectors$k.tabLinkRecent);
+            const tabLink = this.container.querySelector(selectors$l.tabLinkRecent);
             if (tabLink) {
-                tabLink.classList.remove(classes$e.classHide);
-                const tabLinkIdx = parseInt(tabLink.getAttribute(selectors$k.dataTab));
-                const tabContent = this.container.querySelector(`${selectors$k.tabContent}[${selectors$k.dataTabIndex}="${tabLinkIdx}"]`);
+                tabLink.classList.remove(classes$c.classHide);
+                const tabLinkIdx = parseInt(tabLink.getAttribute(selectors$l.dataTab));
+                const tabContent = this.container.querySelector(`${selectors$l.tabContent}[${selectors$l.dataTabIndex}="${tabLinkIdx}"]`);
                 if (tabContent) {
-                    tabContent.classList.remove(classes$e.classHide);
+                    tabContent.classList.remove(classes$c.classHide);
                 }
                 this.checkVisibleTabLinks();
                 this.initNativeScrollbar();
             }
         }
         hideRelatedTab() {
-            const relatedSection = this.container.querySelector(selectors$k.dataRelatedSectionElem);
+            const relatedSection = this.container.querySelector(selectors$l.dataRelatedSectionElem);
             if (!relatedSection) {
                 return;
             }
-            const parentTabContent = relatedSection.closest(`${selectors$k.tabContent}.${classes$e.classCurrent}`);
+            const parentTabContent = relatedSection.closest(`${selectors$l.tabContent}.${classes$c.classCurrent}`);
             if (!parentTabContent) {
                 return;
             }
-            const parentTabContentIdx = parseInt(parentTabContent.getAttribute(selectors$k.dataTabIndex));
-            const tabsNavList = this.container.querySelectorAll(selectors$k.tabsLi);
+            const parentTabContentIdx = parseInt(parentTabContent.getAttribute(selectors$l.dataTabIndex));
+            const tabsNavList = this.container.querySelectorAll(selectors$l.tabsLi);
             if (tabsNavList.length > parentTabContentIdx) {
                 const nextTabsNavLink = tabsNavList[parentTabContentIdx].nextElementSibling;
                 if (nextTabsNavLink) {
-                    tabsNavList[parentTabContentIdx].classList.add(classes$e.classHide);
+                    tabsNavList[parentTabContentIdx].classList.add(classes$c.classHide);
                     nextTabsNavLink.dispatchEvent(new Event('click'));
                     this.initNativeScrollbar();
                 }
             }
         }
         onBlockSelect(evt) {
-            const element = this.container.querySelector(`${selectors$k.tabLink}[${selectors$k.blockId}="${evt.detail.blockId}"]`);
+            const element = this.container.querySelector(`${selectors$l.tabLink}[${selectors$l.blockId}="${evt.detail.blockId}"]`);
             if (element) {
                 element.dispatchEvent(new Event('click'));
                 element.parentNode.scrollTo({
@@ -8529,10 +7443,10 @@
         }
         constructor(holder){
             this.container = holder;
-            this.body = document.querySelector(selectors$k.body);
+            this.body = document.querySelector(selectors$l.body);
             this.accessibility = window.accessibility;
             if (this.container) {
-                this.scrollbarHolder = this.container.querySelectorAll(selectors$k.scrollbarHolder);
+                this.scrollbarHolder = this.container.querySelectorAll(selectors$l.scrollbarHolder);
                 this.init();
                 // Init native scrollbar
                 this.initNativeScrollbar();
@@ -8542,7 +7456,7 @@
     const tabs$1 = {
         onLoad () {
             sections$4[this.id] = [];
-            const tabHolders = this.container.querySelectorAll(selectors$k.dataTabsHolder);
+            const tabHolders = this.container.querySelectorAll(selectors$l.dataTabsHolder);
             tabHolders.forEach((holder)=>{
                 sections$4[this.id].push(new GlobalTabs(holder));
             });
@@ -8556,7 +7470,7 @@
         }
     };
 
-    const selectors$j = {
+    const selectors$k = {
         urlInput: '[data-share-url]',
         section: 'data-section-type',
         shareDetails: '[data-share-details]',
@@ -8567,14 +7481,27 @@
         successMessage: '[data-success-message]',
         shareHolder: '[data-share-holder]'
     };
-    const classes$d = {
+    const classes$b = {
         hidden: 'is-hidden'
     };
     let ShareButton = class ShareButton extends HTMLElement {
+        connectedCallback() {
+            this.container = this.closest(`[${selectors$k.section}]`);
+            this.mainDetailsToggle = this.querySelector(selectors$k.shareDetails);
+            this.shareButton = this.querySelector(selectors$k.shareButton);
+            this.shareCopy = this.querySelector(selectors$k.shareCopy);
+            this.shareSummary = this.querySelector(selectors$k.shareSummary);
+            this.closeButton = this.querySelector(selectors$k.closeButton);
+            this.successMessage = this.querySelector(selectors$k.successMessage);
+            this.shareHolder = this.querySelector(selectors$k.shareHolder);
+            this.urlInput = this.querySelector(selectors$k.urlInput);
+            this.urlToShare = this.urlInput ? this.urlInput.value : document.location.href;
+            this.init();
+        }
         init() {
             if (navigator.share) {
-                this.mainDetailsToggle.classList.add(classes$d.hidden);
-                this.shareButton.classList.remove(classes$d.hidden);
+                this.mainDetailsToggle.classList.add(classes$b.hidden);
+                this.shareButton.classList.remove(classes$b.hidden);
                 this.shareButton.addEventListener('click', ()=>{
                     navigator.share({
                         url: this.urlToShare,
@@ -8595,31 +7522,19 @@
                 this.container.addEventListener('keyup', this.keyboardEvents.bind(this));
             }
         }
-        updateShareLink() {
-            if (this.container.getAttribute(selectors$j.section) == 'product') {
-                this.container.addEventListener('theme:variant:change', (event)=>{
-                    if (event.detail.variant) {
-                        this.urlToShare = `${this.urlToShare.split('?')[0]}?variant=${event.detail.variant.id}`;
-                        if (this.urlInput) {
-                            this.urlInput.value = `${this.urlToShare.split('?')[0]}?variant=${event.detail.variant.id}`;
-                        }
-                    }
-                });
-            }
-        }
         toggleDetails() {
             if (!this.mainDetailsToggle.open) {
-                this.successMessage.classList.add(classes$d.hidden);
+                this.successMessage.classList.add(classes$b.hidden);
                 this.successMessage.textContent = '';
-                this.closeButton.classList.add(classes$d.hidden);
+                this.closeButton.classList.add(classes$b.hidden);
                 this.shareCopy.focus();
             }
         }
         copyToClipboard() {
             navigator.clipboard.writeText(this.urlInput.value).then(()=>{
-                this.successMessage.classList.remove(classes$d.hidden);
+                this.successMessage.classList.remove(classes$b.hidden);
                 this.successMessage.textContent = theme.strings.successMessage;
-                this.closeButton.classList.remove(classes$d.hidden);
+                this.closeButton.classList.remove(classes$b.hidden);
                 this.closeButton.focus();
             });
         }
@@ -8634,144 +7549,48 @@
             this.mainDetailsToggle.focus();
             this.close();
         }
-        constructor(){
-            super();
-            this.container = this.closest(`[${selectors$j.section}]`);
-            this.mainDetailsToggle = this.querySelector(selectors$j.shareDetails);
-            this.shareButton = this.querySelector(selectors$j.shareButton);
-            this.shareCopy = this.querySelector(selectors$j.shareCopy);
-            this.shareSummary = this.querySelector(selectors$j.shareSummary);
-            this.closeButton = this.querySelector(selectors$j.closeButton);
-            this.successMessage = this.querySelector(selectors$j.successMessage);
-            this.shareHolder = this.querySelector(selectors$j.shareHolder);
-            this.urlInput = this.querySelector(selectors$j.urlInput);
-            this.urlToShare = this.urlInput ? this.urlInput.value : document.location.href;
-            this.init();
-            this.updateShareLink();
-        }
     };
 
-    const selectors$i = {
-        groupImage: 'data-image-filter',
-        slider: '[data-product-slideshow]',
-        thumbSlider: '[data-product-thumbs]',
-        thumbs: '[data-slideshow-thumbnail]',
-        slides: '[data-media-slide]'
-    };
-    const classes$c = {
-        hide: 'hide',
-        flickityEnable: 'flickity-enabled'
-    };
-    let GroupVariantImages = class GroupVariantImages {
-        listen() {
-            this.container.addEventListener('theme:variant:change', (event)=>{
-                if (event.detail.variant) {
-                    this.variantImage = event.detail.variant.featured_image;
-                    this.filterImages();
-                }
-            });
-        }
-        filterImages() {
-            if (this.variantImage !== null && this.variantImage.alt !== null) {
-                this.variantImageAlt = this.variantImage.alt.split('#')[1];
-                this.showImages();
-            } else {
-                this.resetImages();
-            }
-            this.refreshSliders();
-        }
-        resetImages() {
-            this.thumbs.forEach((thumb)=>thumb.classList.remove(classes$c.hide)
-            );
-            this.slides.forEach((slide)=>slide.classList.remove(classes$c.hide)
-            );
-        }
-        showImages() {
-            this.thumbs.forEach((thumb)=>{
-                if (thumb.getAttribute(selectors$i.groupImage) === '' || thumb.getAttribute(selectors$i.groupImage) === this.variantImageAlt) {
-                    thumb.classList.remove(classes$c.hide);
-                } else {
-                    thumb.classList.add(classes$c.hide);
-                }
-            });
-            this.slides.forEach((slide)=>{
-                if (slide.getAttribute(selectors$i.groupImage) === '' || slide.getAttribute(selectors$i.groupImage) === this.variantImageAlt) {
-                    slide.classList.remove(classes$c.hide);
-                } else {
-                    slide.classList.add(classes$c.hide);
-                }
-            });
-        }
-        refreshSliders() {
-            if (this.slider !== null) {
-                if (this.slider.classList.contains(classes$c.flickityEnable)) {
-                    const slider = FlickityFade.data(this.slider);
-                    if (typeof slider !== 'undefined') {
-                        slider.reloadCells();
-                    }
-                }
-            }
-            if (this.thumbSlider !== null) {
-                if (this.thumbSlider.classList.contains(classes$c.flickityEnable)) {
-                    const thumbSlider = FlickitySync.data(this.thumbSlider);
-                    if (typeof thumbSlider !== 'undefined') {
-                        thumbSlider.reloadCells();
-                    }
-                }
-            }
-        }
-        constructor(section){
-            this.section = section;
-            this.container = section.container;
-            this.slider = this.container.querySelector(selectors$i.slider);
-            this.thumbSlider = this.container.querySelector(selectors$i.thumbSlider);
-            this.thumbs = this.container.querySelectorAll(selectors$i.thumbs);
-            this.slides = this.container.querySelectorAll(selectors$i.slides);
-            this.variantImage = null;
-            this.listen();
-        }
-    };
-
-    const selectors$h = {
+    const selectors$j = {
         sizeButton: '[data-size-button]',
         mediaHolder: '[data-media-slide]'
     };
-    const classes$b = {
+    const classes$a = {
         classExpanded: 'is-expanded'
     };
     let ImageCaption = class ImageCaption {
         init() {
             this.sizeButtons.forEach((button)=>{
                 button.addEventListener('click', ()=>{
-                    button.classList.toggle(classes$b.classExpanded);
-                    button.closest(selectors$h.mediaHolder).classList.toggle(classes$b.classExpanded);
+                    button.classList.toggle(classes$a.classExpanded);
+                    button.closest(selectors$j.mediaHolder).classList.toggle(classes$a.classExpanded);
                 });
             });
         }
         constructor(container){
             this.container = container;
-            this.sizeButtons = this.container.querySelectorAll(selectors$h.sizeButton);
+            this.sizeButtons = this.container.querySelectorAll(selectors$j.sizeButton);
             if (this.sizeButtons.length > 0) {
                 this.init();
             }
         }
     };
 
-    const selectors$g = {
+    const selectors$i = {
         productJson: '[data-product-json]',
         zoomButton: '[data-zoom-button]',
         toggleTruncateHolder: '[data-truncated-holder]',
         toggleTruncateButton: '[data-truncated-button]',
         toggleTruncateContent: 'data-truncated-content'
     };
-    const classes$a = {
+    const classes$9 = {
         classExpanded: 'is-expanded',
         classVisible: 'is-visible'
     };
     const sections$3 = [];
     let ProductTemplate = class ProductTemplate {
         init() {
-            this.zoomEnabled = this.container.querySelector(selectors$g.zoomButton) !== null;
+            this.zoomEnabled = this.container.querySelector(selectors$i.zoomButton) !== null;
             if (this.zoomEnabled) {
                 productPhotoswipeZoom(this.container, this.product);
             }
@@ -8782,7 +7601,7 @@
             new ImageCaption(this.container);
         }
         truncateText() {
-            if (this.truncateElementHolder.classList.contains(classes$a.classVisible)) return;
+            if (this.truncateElementHolder.classList.contains(classes$9.classVisible)) return;
             const styles = this.truncateElement.querySelectorAll('style');
             if (styles.length) {
                 styles.forEach((style)=>{
@@ -8790,7 +7609,7 @@
                 });
             }
             const truncateElementCloned = this.truncateElement.cloneNode(true);
-            const truncateElementClass = this.truncateElement.getAttribute(selectors$g.toggleTruncateContent);
+            const truncateElementClass = this.truncateElement.getAttribute(selectors$i.toggleTruncateContent);
             const truncateNextElement = this.truncateElement.nextElementSibling;
             if (truncateNextElement) {
                 truncateNextElement.remove();
@@ -8798,7 +7617,7 @@
             this.truncateElement.parentElement.append(truncateElementCloned);
             const truncateAppendedElement = this.truncateElement.nextElementSibling;
             truncateAppendedElement.classList.add(truncateElementClass);
-            truncateAppendedElement.removeAttribute(selectors$g.toggleTruncateContent);
+            truncateAppendedElement.removeAttribute(selectors$i.toggleTruncateContent);
             showElement(truncateAppendedElement);
             ellipsis(truncateAppendedElement, 5, {
                 replaceStr: '',
@@ -8806,20 +7625,20 @@
             });
             hideElement(truncateAppendedElement);
             if (this.truncateElement.innerHTML !== truncateAppendedElement.innerHTML) {
-                this.truncateElementHolder.classList.add(classes$a.classExpanded);
+                this.truncateElementHolder.classList.add(classes$9.classExpanded);
             } else {
                 truncateAppendedElement.remove();
-                this.truncateElementHolder.classList.remove(classes$a.classExpanded);
+                this.truncateElementHolder.classList.remove(classes$9.classExpanded);
             }
             this.toggleTruncatedContent(this.truncateElementHolder);
         }
         toggleTruncatedContent(holder) {
-            const toggleButton = holder.querySelector(selectors$g.toggleTruncateButton);
+            const toggleButton = holder.querySelector(selectors$i.toggleTruncateButton);
             if (toggleButton) {
                 toggleButton.addEventListener('click', (e)=>{
                     e.preventDefault();
-                    holder.classList.remove(classes$a.classExpanded);
-                    holder.classList.add(classes$a.classVisible);
+                    holder.classList.remove(classes$9.classExpanded);
+                    holder.classList.add(classes$9.classVisible);
                 });
             }
         }
@@ -8848,16 +7667,15 @@
             this.settings = section.settings;
             modal(this.id);
             this.media = new Media(section);
-            new GroupVariantImages(section);
-            const productJSON = this.container.querySelector(selectors$g.productJson);
+            const productJSON = this.container.querySelector(selectors$i.productJson);
             if (productJSON && productJSON.innerHTML !== '') {
                 this.product = JSON.parse(productJSON.innerHTML);
             } else {
                 console.error('Missing product JSON');
                 return;
             }
-            this.truncateElementHolder = this.container.querySelector(selectors$g.toggleTruncateHolder);
-            this.truncateElement = this.container.querySelector(`[${selectors$g.toggleTruncateContent}]`);
+            this.truncateElementHolder = this.container.querySelector(selectors$i.toggleTruncateHolder);
+            this.truncateElement = this.container.querySelector(`[${selectors$i.toggleTruncateContent}]`);
             this.resizeEventTruncate = ()=>this.truncateText()
             ;
             this.init();
@@ -8885,13 +7703,12 @@
     };
     register('product', [
         productSection,
-        pickupAvailability,
         accordion,
         tabs$1,
         swapperSection
     ]);
-    if (!customElements.get('product-form')) {
-        customElements.define('product-form', ProductForm);
+    if (!customElements.get('pickup-availability')) {
+        customElements.define('pickup-availability', PickupAvailability);
     }
     if (!customElements.get('product-complimentary')) {
         customElements.define('product-complimentary', ProductComplimentary);
@@ -8906,12 +7723,12 @@
         customElements.define('share-button', ShareButton);
     }
 
-    const selectors$f = {
+    const selectors$h = {
         toggle: 'data-toggle-grid',
         large: 'data-grid-large',
         small: 'data-grid-small'
     };
-    const classes$9 = {
+    const classes$8 = {
         active: 'is-active'
     };
     const options = {
@@ -8931,26 +7748,26 @@
         toggleEvent(evt = true) {
             const clickEvent = evt && evt.type === 'click';
             const isLarge = window.innerWidth >= options.breakpoint;
-            const selector = isLarge ? selectors$f.large : selectors$f.small;
+            const selector = isLarge ? selectors$h.large : selectors$h.small;
             const grid = this.container.querySelector(`[${selector}]`);
             const gridNumber = grid.getAttribute(selector);
-            const activeToggle = this.toggle.parentElement.querySelector(`[${selectors$f.toggle}].${classes$9.active}`);
-            let currentToggle = this.toggle.parentElement.querySelector(`[${selectors$f.toggle}="${gridNumber}"]`);
+            const activeToggle = this.toggle.parentElement.querySelector(`[${selectors$h.toggle}].${classes$8.active}`);
+            let currentToggle = this.toggle.parentElement.querySelector(`[${selectors$h.toggle}="${gridNumber}"]`);
             if (clickEvent) {
                 currentToggle = this.toggle;
                 grid.setAttribute(selector, this.value);
             }
             if (activeToggle) {
-                activeToggle.classList.remove(classes$9.active);
+                activeToggle.classList.remove(classes$8.active);
             }
             if (currentToggle) {
-                currentToggle.classList.add(classes$9.active);
+                currentToggle.classList.add(classes$8.active);
             }
         }
         constructor(toggle, container){
             this.container = container || document;
             this.toggle = toggle;
-            this.value = this.toggle.getAttribute(selectors$f.toggle);
+            this.value = this.toggle.getAttribute(selectors$h.toggle);
             this.toggleFunction = (evt)=>this.toggleEvent(evt)
             ;
             this.init();
@@ -8959,7 +7776,7 @@
     const toggleSection = {
         onLoad () {
             sections$2[this.id] = [];
-            const buttons = this.container.querySelectorAll(`[${selectors$f.toggle}]`);
+            const buttons = this.container.querySelectorAll(`[${selectors$h.toggle}]`);
             buttons.forEach((button)=>{
                 sections$2[this.id].push(new Toggle(button, this.container));
             });
@@ -8973,13 +7790,13 @@
         }
     };
 
-    const selectors$e = {
+    const selectors$g = {
         sort: 'data-sort-enabled',
         sortLinks: '[data-sort-link]',
         sortButtonText: '[data-sort-button-text]',
         sortValue: 'data-value'
     };
-    const classes$8 = {
+    const classes$7 = {
         active: 'popout-list__item--current'
     };
     let Sort = class Sort {
@@ -8993,13 +7810,13 @@
         }
         sortingResults(e) {
             const link = e.currentTarget;
-            const sort = link.getAttribute(selectors$e.sortValue);
+            const sort = link.getAttribute(selectors$g.sortValue);
             const text = link.innerText;
             this.sortButtonText.innerText = text;
             this.sortButtonText.parentNode.dispatchEvent(new Event('click'));
-            this.sort.querySelector(`.${classes$8.active}`).classList.remove(classes$8.active);
-            link.parentNode.classList.add(classes$8.active);
-            this.sort.setAttribute(selectors$e.sort, sort);
+            this.sort.querySelector(`.${classes$7.active}`).classList.remove(classes$7.active);
+            link.parentNode.classList.add(classes$7.active);
+            this.sort.setAttribute(selectors$g.sort, sort);
             this.container.dispatchEvent(new CustomEvent('theme:form:filter', {
                 bubbles: true,
                 detail: {
@@ -9009,16 +7826,16 @@
         }
         constructor(section){
             this.container = section.container;
-            this.sort = this.container.querySelector(`[${selectors$e.sort}]`);
-            this.sortLinks = this.container.querySelectorAll(selectors$e.sortLinks);
-            this.sortButtonText = this.container.querySelector(selectors$e.sortButtonText);
+            this.sort = this.container.querySelector(`[${selectors$g.sort}]`);
+            this.sortLinks = this.container.querySelectorAll(selectors$g.sortLinks);
+            this.sortButtonText = this.container.querySelector(selectors$g.sortButtonText);
             if (this.sort) {
                 this.init();
             }
         }
     };
 
-    var selectors$d = {
+    var selectors$f = {
         swatch: 'data-swatch'
     };
     let Collection = class Collection {
@@ -9028,7 +7845,7 @@
         constructor(section){
             this.section = section;
             this.container = this.section.container;
-            this.swatches = this.container.querySelectorAll(`[${selectors$d.swatch}]`);
+            this.swatches = this.container.querySelectorAll(`[${selectors$f.swatch}]`);
             this.init();
         }
     };
@@ -9065,7 +7882,8 @@
     register('collection-row', [
         swatchGridSection,
         siblings,
-        customScrollbar
+        customScrollbar,
+        parallaxImage
     ]);
     if (!customElements.get('radio-swatch')) {
         customElements.define('radio-swatch', RadioSwatch);
@@ -10579,7 +9397,7 @@
 
     window.theme.allMaps = window.theme.allMaps || {};
     let allMaps = window.theme.allMaps;
-    const selectors$c = {
+    const selectors$e = {
         mapContainer: '[data-map-container]',
         style: 'data-style',
         apiKey: 'data-api-key',
@@ -10626,14 +9444,14 @@
         }
         constructor(section){
             this.container = section.container;
-            this.mapWrap = this.container.querySelector(selectors$c.mapContainer);
-            this.styleString = this.container.getAttribute(selectors$c.style) || '';
-            this.key = this.container.getAttribute(selectors$c.apiKey);
-            this.zoomString = this.container.getAttribute(selectors$c.zoom) || 14;
-            this.address = this.container.getAttribute(selectors$c.address);
-            this.enableCorrection = this.container.getAttribute(selectors$c.latLongCorrection);
-            this.lat = this.container.getAttribute(selectors$c.lat);
-            this.long = this.container.getAttribute(selectors$c.long);
+            this.mapWrap = this.container.querySelector(selectors$e.mapContainer);
+            this.styleString = this.container.getAttribute(selectors$e.style) || '';
+            this.key = this.container.getAttribute(selectors$e.apiKey);
+            this.zoomString = this.container.getAttribute(selectors$e.zoom) || 14;
+            this.address = this.container.getAttribute(selectors$e.address);
+            this.enableCorrection = this.container.getAttribute(selectors$e.latLongCorrection);
+            this.lat = this.container.getAttribute(selectors$e.lat);
+            this.long = this.container.getAttribute(selectors$e.long);
             if (this.key) {
                 this.initMaps();
             }
@@ -10680,14 +9498,17 @@
             }
         }
     };
-    register('section-map', mapSection);
+    register('section-map', [
+        mapSection,
+        parallaxImage
+    ]);
 
     register('section-columns', [
         popupVideoSection,
         customScrollbar
     ]);
 
-    const selectors$b = {
+    const selectors$d = {
         dataRelatedSectionElem: '[data-related-section]',
         dataRelatedProduct: '[data-grid-item]',
         carousel: '[data-carousel]',
@@ -10702,27 +9523,27 @@
     };
     let Related = class Related {
         init() {
-            const relatedSection1 = this.container.querySelector(selectors$b.dataRelatedSectionElem);
+            const relatedSection1 = this.container.querySelector(selectors$d.dataRelatedSectionElem);
             if (!relatedSection1) {
                 return;
             }
-            const productId = relatedSection1.getAttribute(selectors$b.productId);
-            const limit = relatedSection1.getAttribute(selectors$b.dataLimit);
-            const layoutLarge = relatedSection1.getAttribute(selectors$b.dataLargeLayout);
-            const layoutMedium = relatedSection1.getAttribute(selectors$b.dataMediumLayout);
-            const layoutSmall = relatedSection1.getAttribute(selectors$b.dataSmallLayout);
+            const productId = relatedSection1.getAttribute(selectors$d.productId);
+            const limit = relatedSection1.getAttribute(selectors$d.dataLimit);
+            const layoutLarge = relatedSection1.getAttribute(selectors$d.dataLargeLayout);
+            const layoutMedium = relatedSection1.getAttribute(selectors$d.dataMediumLayout);
+            const layoutSmall = relatedSection1.getAttribute(selectors$d.dataSmallLayout);
             const route = window.theme.routes.product_recommendations_url || '/recommendations/products/';
             const requestUrl = `${route}?section_id=related&limit=${limit}&product_id=${productId}`;
             axios.get(requestUrl).then((response)=>{
                 const fresh = document.createElement('div');
                 fresh.innerHTML = response.data;
-                const inner = fresh.querySelector(selectors$b.dataRelatedSectionElem);
-                if (inner.querySelector(selectors$b.dataRelatedProduct)) {
+                const inner = fresh.querySelector(selectors$d.dataRelatedSectionElem);
+                if (inner.querySelector(selectors$d.dataRelatedProduct)) {
                     const innerHtml = inner.innerHTML;
                     relatedSection1.innerHTML = innerHtml;
-                    relatedSection1.querySelector(selectors$b.carousel).style.setProperty('--grid-large-items', layoutLarge);
-                    relatedSection1.querySelector(selectors$b.carousel).style.setProperty('--grid-medium-items', layoutMedium);
-                    relatedSection1.querySelector(selectors$b.carousel).style.setProperty('--grid-small-items', layoutSmall);
+                    relatedSection1.querySelector(selectors$d.carousel).style.setProperty('--grid-large-items', layoutLarge);
+                    relatedSection1.querySelector(selectors$d.carousel).style.setProperty('--grid-medium-items', layoutMedium);
+                    relatedSection1.querySelector(selectors$d.carousel).style.setProperty('--grid-small-items', layoutSmall);
                     relatedSection1.dispatchEvent(new CustomEvent('theme:related-products:added', {
                         bubbles: true
                     }));
@@ -10736,10 +9557,10 @@
             });
         }
         recent() {
-            const recentlyViewedHolder = this.container.querySelector(selectors$b.recentlyViewed);
-            const recentlyViewedWrapper = this.container.querySelector(selectors$b.recentlyViewedWrapper);
-            const recentProducts1 = this.container.querySelectorAll(selectors$b.dataRelatedProduct);
-            const minimumNumberProducts = recentlyViewedHolder.hasAttribute(selectors$b.dataMinimum) ? parseInt(recentlyViewedHolder.getAttribute(selectors$b.dataMinimum)) : 4;
+            const recentlyViewedHolder = this.container.querySelector(selectors$d.recentlyViewed);
+            const recentlyViewedWrapper = this.container.querySelector(selectors$d.recentlyViewedWrapper);
+            const recentProducts1 = this.container.querySelectorAll(selectors$d.dataRelatedProduct);
+            const minimumNumberProducts = recentlyViewedHolder.hasAttribute(selectors$d.dataMinimum) ? parseInt(recentlyViewedHolder.getAttribute(selectors$d.dataMinimum)) : 4;
             const checkRecentInRelated = !recentlyViewedWrapper && recentProducts1.length > 0;
             const checkRecentOutsideRelated = recentlyViewedWrapper && recentProducts1.length >= minimumNumberProducts;
             if (checkRecentInRelated || checkRecentOutsideRelated) {
@@ -10780,7 +9601,7 @@
         customElements.define('product-grid-item-image', ProductGridItemImage);
     }
 
-    const selectors$a = {
+    const selectors$c = {
         cartNote: '[data-cart-note]'
     };
     class CartNotes {
@@ -10806,7 +9627,7 @@
             });
         }
         constructor(element){
-            this.inputs = element.querySelectorAll(selectors$a.cartNote);
+            this.inputs = element.querySelectorAll(selectors$c.cartNote);
             this.initInputs();
         }
     }
@@ -10843,7 +9664,7 @@
         return p;
     };
 
-    const selectors$9 = {
+    const selectors$b = {
         html: 'html',
         submitButton: '[data-submit-shipping]',
         form: '[data-shipping-estimate-form]',
@@ -10856,7 +9677,7 @@
         lang: 'lang',
         defaultData: 'data-default'
     };
-    const classes$7 = {
+    const classes$6 = {
         success: 'shipping--success',
         error: 'errors',
         disable: 'disabled'
@@ -10864,11 +9685,11 @@
     class ShippingCalculator {
         enableButtons() {
             this.button.removeAttribute('disabled');
-            this.button.classList.remove(classes$7.disable);
+            this.button.classList.remove(classes$6.disable);
         }
         disableButtons() {
             this.button.setAttribute('disabled', 'disabled');
-            this.button.classList.add(classes$7.disable);
+            this.button.classList.add(classes$6.disable);
         }
         render(rates) {
             if (this.template && this.ratesWrapper) {
@@ -10898,7 +9719,7 @@
         }
         sanitize(response) {
             const sanitized = {};
-            sanitized.class = classes$7.success;
+            sanitized.class = classes$6.success;
             sanitized.items = [];
             if (response.data.shipping_rates && response.data.shipping_rates.length > 0) {
                 const rates = response.data.shipping_rates;
@@ -10917,7 +9738,7 @@
         }
         sanitizeErrors(response) {
             const errors = {};
-            errors.class = classes$7.error;
+            errors.class = classes$6.error;
             errors.items = [];
             if (typeof response.data === 'object') {
                 for (const [key, value] of Object.entries(response.data)){
@@ -10934,20 +9755,20 @@
             return errors;
         }
         init() {
-            const htmlEl = document.querySelector(selectors$9.html);
+            const htmlEl = document.querySelector(selectors$b.html);
             let locale = 'en';
-            if (htmlEl.hasAttribute(selectors$9.lang) && htmlEl.getAttribute(selectors$9.lang) !== '') {
-                locale = htmlEl.getAttribute(selectors$9.lang);
+            if (htmlEl.hasAttribute(selectors$b.lang) && htmlEl.getAttribute(selectors$b.lang) !== '') {
+                locale = htmlEl.getAttribute(selectors$b.lang);
             }
             if (this.form) {
                 themeAddresses.AddressForm(this.form, locale, {
                     shippingCountriesOnly: true
                 });
             }
-            if (this.country && this.country.hasAttribute(selectors$9.defaultData) && this.province && this.province.hasAttribute(selectors$9.defaultData)) {
+            if (this.country && this.country.hasAttribute(selectors$b.defaultData) && this.province && this.province.hasAttribute(selectors$b.defaultData)) {
                 this.country.addEventListener('change', function() {
-                    this.country.removeAttribute(selectors$9.defaultData);
-                    this.province.removeAttribute(selectors$9.defaultData);
+                    this.country.removeAttribute(selectors$b.defaultData);
+                    this.province.removeAttribute(selectors$b.defaultData);
                 });
             }
             if (this.button) {
@@ -10959,11 +9780,11 @@
                     const shippingAddress = {};
                     let elemCountryVal = this.country.value;
                     let elemProvinceVal = this.province.value;
-                    const elemCountryData = this.country.getAttribute(selectors$9.defaultData);
+                    const elemCountryData = this.country.getAttribute(selectors$b.defaultData);
                     if (elemCountryVal === '' && elemCountryData && elemCountryData !== '') {
                         elemCountryVal = elemCountryData;
                     }
-                    const elemProvinceData = this.province.getAttribute(selectors$9.defaultData);
+                    const elemProvinceData = this.province.getAttribute(selectors$b.defaultData);
                     if (elemProvinceVal === '' && elemProvinceData && elemProvinceData !== '') {
                         elemProvinceVal = elemProvinceData;
                     }
@@ -10975,18 +9796,18 @@
             }
         }
         constructor(section){
-            this.button = section.container.querySelector(selectors$9.submitButton);
-            this.template = section.container.querySelector(selectors$9.template).innerHTML;
-            this.ratesWrapper = section.container.querySelector(selectors$9.wrapper);
-            this.form = section.container.querySelector(selectors$9.form);
-            this.country = section.container.querySelector(selectors$9.country);
-            this.province = section.container.querySelector(selectors$9.province);
-            this.zip = section.container.querySelector(selectors$9.zip);
+            this.button = section.container.querySelector(selectors$b.submitButton);
+            this.template = section.container.querySelector(selectors$b.template).innerHTML;
+            this.ratesWrapper = section.container.querySelector(selectors$b.wrapper);
+            this.form = section.container.querySelector(selectors$b.form);
+            this.country = section.container.querySelector(selectors$b.country);
+            this.province = section.container.querySelector(selectors$b.province);
+            this.zip = section.container.querySelector(selectors$b.zip);
             this.init();
         }
     }
 
-    const selectors$8 = {
+    const selectors$a = {
         cartMessage: '[data-cart-message]',
         cartMessageValue: 'data-cart-message',
         leftToSpend: '[data-left-to-spend]',
@@ -10994,13 +9815,13 @@
         limit: 'data-limit',
         percent: 'data-percent'
     };
-    const classes$6 = {
+    const classes$5 = {
         isHidden: 'is-hidden',
         isSuccess: 'is-success'
     };
     let CartShippingMessage = class CartShippingMessage {
         init() {
-            this.cartFreeLimitShipping = Number(this.cartMessage[0].getAttribute(selectors$8.limit)) * 100 * this.rate;
+            this.cartFreeLimitShipping = Number(this.cartMessage[0].getAttribute(selectors$a.limit)) * 100 * this.rate;
             this.shippingAmount = 0;
             this.circumference = 28 * Math.PI; // radius - stroke * 4 * PI
             this.exchangeRateConversions(this.cartFreeLimitShipping, this.shippingAmount);
@@ -11026,15 +9847,15 @@
         }
         freeShippingMessageHandle(total) {
             if (this.cartMessage.length > 0) {
-                this.container.querySelectorAll(selectors$8.cartMessage).forEach((message)=>{
-                    const hasFreeShipping = message.hasAttribute(selectors$8.cartMessageValue) && message.getAttribute(selectors$8.cartMessageValue) === 'true' && total >= this.cartFreeLimitShipping && total !== 0;
-                    message.classList.toggle(classes$6.isSuccess, hasFreeShipping);
+                this.container.querySelectorAll(selectors$a.cartMessage).forEach((message)=>{
+                    const hasFreeShipping = message.hasAttribute(selectors$a.cartMessageValue) && message.getAttribute(selectors$a.cartMessageValue) === 'true' && total >= this.cartFreeLimitShipping && total !== 0;
+                    message.classList.toggle(classes$5.isSuccess, hasFreeShipping);
                 });
             }
         }
         cartBarProgress(progress = null) {
-            this.container.querySelectorAll(selectors$8.cartProgress).forEach((element)=>{
-                this.setProgress(element, progress === null ? element.getAttribute(selectors$8.percent) : progress);
+            this.container.querySelectorAll(selectors$a.cartProgress).forEach((element)=>{
+                this.setProgress(element, progress === null ? element.getAttribute(selectors$a.percent) : progress);
             });
         }
         setProgress(holder, percent) {
@@ -11048,13 +9869,13 @@
         }
         exchangeRateConversions(cartFreeLimitShipping, shippingAmount) {
             const leftToSpend = theme.settings.currency_code_enable ? themeCurrency.formatMoney(cartFreeLimitShipping - shippingAmount, theme.moneyFormat) + ` ${theme.currencyCode}` : themeCurrency.formatMoney(cartFreeLimitShipping - shippingAmount, theme.moneyFormat);
-            this.container.querySelectorAll(selectors$8.leftToSpend).forEach((element)=>{
+            this.container.querySelectorAll(selectors$a.leftToSpend).forEach((element)=>{
                 element.innerHTML = leftToSpend.replace('.00', '');
             });
         }
         constructor(section){
             this.container = section;
-            this.cartMessage = this.container.querySelectorAll(selectors$8.cartMessage);
+            this.cartMessage = this.container.querySelectorAll(selectors$a.cartMessage);
             this.rate = window.Shopify.currency.rate;
             if (this.cartMessage.length > 0) {
                 this.init();
@@ -11062,7 +9883,49 @@
         }
     };
 
-    const selectors$7 = {
+    const selectors$9 = {
+        wrapper: '[data-quantity-selector]',
+        increase: '[data-increase-quantity]',
+        decrease: '[data-decrease-quantity]',
+        input: '[data-quantity-input]'
+    };
+    let Quantity = class Quantity {
+        initButtons() {
+            this.increase.addEventListener('click', (function(e) {
+                e.preventDefault();
+                let v = parseInt(this.input.value, 10);
+                v = isNaN(v) ? 0 : v;
+                v++;
+                this.input.value = v;
+                this.input.dispatchEvent(new Event('change'));
+            }).bind(this));
+            this.decrease.addEventListener('click', (function(e) {
+                e.preventDefault();
+                let v = parseInt(this.input.value, 10);
+                v = isNaN(v) ? 0 : v;
+                v--;
+                v = Math.max(this.min, v);
+                this.input.value = v;
+                this.input.dispatchEvent(new Event('change'));
+            }).bind(this));
+        }
+        constructor(wrapper){
+            this.wrapper = wrapper;
+            this.increase = this.wrapper.querySelector(selectors$9.increase);
+            this.decrease = this.wrapper.querySelector(selectors$9.decrease);
+            this.input = this.wrapper.querySelector(selectors$9.input);
+            this.min = parseInt(this.input.getAttribute('min'), 10);
+            this.initButtons();
+        }
+    };
+    function initQtySection(container) {
+        const quantityWrappers = container.querySelectorAll(selectors$9.wrapper);
+        quantityWrappers.forEach((qty)=>{
+            new Quantity(qty);
+        });
+    }
+
+    const selectors$8 = {
         drawer: '[data-drawer="drawer-cart"]',
         shipping: '[data-shipping-estimate-form]',
         loader: '[data-cart-loading]',
@@ -11086,7 +9949,7 @@
         cartMessageContainer: '[data-cart-message-container]',
         apiContent: '[data-api-content]'
     };
-    const classes$5 = {
+    const classes$4 = {
         hidden: 'cart--hidden',
         loading: 'cart--loading'
     };
@@ -11151,32 +10014,32 @@
             this.stale = false;
         }
         initInputs() {
-            this.inputs = this.container.querySelectorAll(`[${selectors$7.key}]`);
+            this.inputs = this.container.querySelectorAll(`[${selectors$8.key}]`);
             this.inputs.forEach((input)=>{
-                const key = input.getAttribute(selectors$7.key);
+                const key = input.getAttribute(selectors$8.key);
                 input.addEventListener('change', (function(e) {
                     const quantity = parseInt(e.target.value, 10);
-                    this.latestClick = e.target.closest(selectors$7.item);
+                    this.latestClick = e.target.closest(selectors$8.item);
                     this.lockState();
                     this.updateCart(key, quantity);
                 }).bind(this));
             });
         }
         initRemove() {
-            this.removers = this.container.querySelectorAll(`[${selectors$7.remove}]`);
+            this.removers = this.container.querySelectorAll(`[${selectors$8.remove}]`);
             this.removers.forEach((remover)=>{
-                const key = remover.getAttribute(selectors$7.remove);
+                const key = remover.getAttribute(selectors$8.remove);
                 remover.addEventListener('click', (function(e) {
                     e.preventDefault();
-                    this.latestClick = e.target.closest(selectors$7.item);
+                    this.latestClick = e.target.closest(selectors$8.item);
                     this.lockState();
                     this.updateCart(key, 0);
                 }).bind(this));
             });
         }
         lockState() {
-            this.latestClick.querySelector(selectors$7.itemLoadbar).style.display = 'block';
-            this.loader.classList.add(classes$5.loading);
+            this.latestClick.querySelector(selectors$8.itemLoadbar).style.display = 'block';
+            this.loader.classList.add(classes$4.loading);
         }
         updateCart(clickedKey, newQuantity) {
             window.fetch(`${window.theme.routes.cart}/change.js`, {
@@ -11232,7 +10095,7 @@
                 }).then((response)=>{
                     const fresh = document.createElement('div');
                     fresh.innerHTML = response;
-                    this.subtotal.innerHTML = fresh.querySelector(selectors$7.apiContent).innerHTML;
+                    this.subtotal.innerHTML = fresh.querySelector(selectors$8.apiContent).innerHTML;
                 });
             }
         }
@@ -11256,7 +10119,7 @@
             }).then((response)=>{
                 const fresh = document.createElement('div');
                 fresh.innerHTML = response;
-                this.items.innerHTML = fresh.querySelector(selectors$7.apiContent).innerHTML;
+                this.items.innerHTML = fresh.querySelector(selectors$8.apiContent).innerHTML;
                 this.showForm();
                 this.initQuantity();
                 this.initQuickview();
@@ -11264,8 +10127,8 @@
             });
         }
         initQuickview() {
-            const pageUpsellWrapper = this.items.querySelector(selectors$7.pageUpsellWrapper);
-            const oldPageUpsellWrapper = this.bottom.querySelector(selectors$7.pageUpsellWrapper);
+            const pageUpsellWrapper = this.items.querySelector(selectors$8.pageUpsellWrapper);
+            const oldPageUpsellWrapper = this.bottom.querySelector(selectors$8.pageUpsellWrapper);
             if (oldPageUpsellWrapper) {
                 oldPageUpsellWrapper.remove();
             }
@@ -11282,33 +10145,33 @@
         }
         showForm() {
             if (this.bar) {
-                this.bar.classList.remove(classes$5.hidden);
+                this.bar.classList.remove(classes$4.hidden);
             }
             if (this.ship) {
-                this.ship.classList.remove(classes$5.hidden);
+                this.ship.classList.remove(classes$4.hidden);
             }
             if (this.progress) {
-                this.progress.classList.remove(classes$5.hidden);
+                this.progress.classList.remove(classes$4.hidden);
             }
-            this.form.classList.remove(classes$5.hidden);
-            this.bottom.classList.remove(classes$5.hidden);
-            this.loader.classList.remove(classes$5.loading);
-            this.emptystate.classList.add(classes$5.hidden);
+            this.form.classList.remove(classes$4.hidden);
+            this.bottom.classList.remove(classes$4.hidden);
+            this.loader.classList.remove(classes$4.loading);
+            this.emptystate.classList.add(classes$4.hidden);
         }
         showEmpty() {
             if (this.bar) {
-                this.bar.classList.add(classes$5.hidden);
+                this.bar.classList.add(classes$4.hidden);
             }
             if (this.ship) {
-                this.ship.classList.add(classes$5.hidden);
+                this.ship.classList.add(classes$4.hidden);
             }
             if (this.progress) {
-                this.progress.classList.add(classes$5.hidden);
+                this.progress.classList.add(classes$4.hidden);
             }
-            this.emptystate.classList.remove(classes$5.hidden);
-            this.loader.classList.remove(classes$5.loading);
-            this.form.classList.add(classes$5.hidden);
-            this.bottom.classList.add(classes$5.hidden);
+            this.emptystate.classList.remove(classes$4.hidden);
+            this.loader.classList.remove(classes$4.loading);
+            this.form.classList.add(classes$4.hidden);
+            this.bottom.classList.add(classes$4.hidden);
         }
         handleErrors(response) {
             if (!response.ok) {
@@ -11326,33 +10189,33 @@
         constructor(section){
             this.section = section;
             this.container = section.container;
-            this.cartMessages = document.querySelectorAll(selectors$7.cartMessageContainer);
-            this.bar = this.container.querySelector(selectors$7.bar);
-            this.ship = this.container.querySelector(selectors$7.ship);
-            this.drawer = this.container.querySelector(selectors$7.drawer);
-            this.form = this.container.querySelector(selectors$7.form);
-            this.loader = this.container.querySelector(selectors$7.loader);
-            this.bottom = this.container.querySelector(selectors$7.bottom);
-            this.items = this.container.querySelector(selectors$7.items);
-            this.subtotal = this.container.querySelector(selectors$7.subtotal);
-            this.errors = this.container.querySelector(selectors$7.errors);
-            this.finalPrice = this.container.querySelector(selectors$7.finalPrice);
-            this.emptystate = this.container.querySelector(selectors$7.emptystate);
-            this.progress = this.container.querySelector(selectors$7.progress);
+            this.cartMessages = document.querySelectorAll(selectors$8.cartMessageContainer);
+            this.bar = this.container.querySelector(selectors$8.bar);
+            this.ship = this.container.querySelector(selectors$8.ship);
+            this.drawer = this.container.querySelector(selectors$8.drawer);
+            this.form = this.container.querySelector(selectors$8.form);
+            this.loader = this.container.querySelector(selectors$8.loader);
+            this.bottom = this.container.querySelector(selectors$8.bottom);
+            this.items = this.container.querySelector(selectors$8.items);
+            this.subtotal = this.container.querySelector(selectors$8.subtotal);
+            this.errors = this.container.querySelector(selectors$8.errors);
+            this.finalPrice = this.container.querySelector(selectors$8.finalPrice);
+            this.emptystate = this.container.querySelector(selectors$8.emptystate);
+            this.progress = this.container.querySelector(selectors$8.progress);
             this.latestClick = null;
             this.cart = null;
             this.stale = true;
-            this.cartPage = document.querySelector(selectors$7.cartPage);
+            this.cartPage = document.querySelector(selectors$8.cartPage);
             this.listen();
         }
     };
     const cartDrawer = {
         onLoad () {
-            const isDrawerCart = document.querySelector(selectors$7.drawer);
+            const isDrawerCart = document.querySelector(selectors$8.drawer);
             if (isDrawerCart) {
                 this.cart = new CartItems(this);
             }
-            const hasShipping = this.container.querySelector(selectors$7.shipping);
+            const hasShipping = this.container.querySelector(selectors$8.shipping);
             if (hasShipping) {
                 new ShippingCalculator(this);
             }
@@ -11364,7 +10227,7 @@
         }
     };
 
-    const selectors$6 = {
+    const selectors$7 = {
         ajaxDisable: 'data-ajax-disable',
         shipping: '[data-shipping-estimate-form]',
         input: '[data-update-cart]',
@@ -11372,17 +10235,17 @@
         bottom: '[data-cart-bottom]',
         upsellWrapper: '[data-cart-page-upsell-wrapper]'
     };
-    const classes$4 = {
+    const classes$3 = {
         dirty: 'cart--dirty',
         heartBeat: 'heart-beat'
     };
     const cartSection = {
         onLoad () {
-            const hasShipping = this.container.querySelector(selectors$6.shipping);
+            const hasShipping = this.container.querySelector(selectors$7.shipping);
             if (hasShipping) {
                 new ShippingCalculator(this);
             }
-            this.disabled = this.container.getAttribute(selectors$6.ajaxDisable) == 'true';
+            this.disabled = this.container.getAttribute(selectors$7.ajaxDisable) == 'true';
             if (this.disabled) {
                 this.cart = new AjaxDisabledCart(this);
                 return;
@@ -11399,16 +10262,16 @@
             initQtySection(this.container);
         }
         moveUpsell() {
-            const bottom = this.container.querySelector(selectors$6.bottom);
+            const bottom = this.container.querySelector(selectors$7.bottom);
             bottom.insertBefore(this.upsellWrapper, bottom.firstChild);
         }
         initInputs() {
             this.inputs.forEach((input)=>{
                 input.addEventListener('change', (function() {
-                    this.updateBtn.classList.add(classes$4.dirty);
-                    this.updateBtn.classList.add(classes$4.heartBeat);
+                    this.updateBtn.classList.add(classes$3.dirty);
+                    this.updateBtn.classList.add(classes$3.heartBeat);
                     setTimeout((function() {
-                        this.updateBtn.classList.remove(classes$4.heartBeat);
+                        this.updateBtn.classList.remove(classes$3.heartBeat);
                     }).bind(this), 1300);
                 }).bind(this));
             });
@@ -11417,10 +10280,10 @@
             window.theme.state.cartOpen = true;
             this.section = section;
             this.container = section.container;
-            this.inputs = this.container.querySelectorAll(selectors$6.input);
-            this.quantityWrappers = this.container.querySelectorAll(selectors$6.qty);
-            this.updateBtn = this.container.querySelector(selectors$6.update);
-            this.upsellWrapper = this.container.querySelector(selectors$6.upsellWrapper);
+            this.inputs = this.container.querySelectorAll(selectors$7.input);
+            this.quantityWrappers = this.container.querySelectorAll(selectors$7.qty);
+            this.updateBtn = this.container.querySelector(selectors$7.update);
+            this.upsellWrapper = this.container.querySelector(selectors$7.upsellWrapper);
             this.initQuantity();
             this.initInputs();
             if (this.upsellWrapper) {
@@ -11473,7 +10336,7 @@
         })();
     };
 
-    const selectors$5 = {
+    const selectors$6 = {
         tracking: '[data-tracking-consent]',
         trackingAccept: '[data-confirm-cookies]',
         close: '[data-close-modal]',
@@ -11487,7 +10350,7 @@
         cookieNameAttribute: 'data-cookie-name',
         dataTargetReferrer: 'data-target-referrer'
     };
-    const classes$3 = {
+    const classes$2 = {
         hide: 'hide',
         hasValue: 'has-value',
         success: 'has-success',
@@ -11616,7 +10479,7 @@
         constructor(holder, element){
             this.show = true;
             this.element = element;
-            this.delay = holder.getAttribute(selectors$5.delayAttribite);
+            this.delay = holder.getAttribute(selectors$6.delayAttribite);
             if (this.delay === 'always') {
                 this.always();
             }
@@ -11633,14 +10496,14 @@
     };
     let TargetReferrer = class TargetReferrer {
         init() {
-            if (this.locationPath.indexOf(this.el.getAttribute(selectors$5.dataTargetReferrer)) === -1 && !window.Shopify.designMode) {
+            if (this.locationPath.indexOf(this.el.getAttribute(selectors$6.dataTargetReferrer)) === -1 && !window.Shopify.designMode) {
                 this.el.parentNode.removeChild(this.el);
             }
         }
         constructor(el){
             this.el = el;
             this.locationPath = location.href;
-            if (!this.el.hasAttribute(selectors$5.dataTargetReferrer)) {
+            if (!this.el.hasAttribute(selectors$6.dataTargetReferrer)) {
                 return;
             }
             this.init();
@@ -11680,10 +10543,10 @@
         }
         constructor(el){
             this.popup = el;
-            this.modal = document.querySelector(selectors$5.tracking);
-            this.modalInner = this.popup.querySelector(selectors$5.popupInner);
-            this.close = this.modal.querySelector(selectors$5.close);
-            this.acceptButton = this.modal.querySelector(selectors$5.trackingAccept);
+            this.modal = document.querySelector(selectors$6.tracking);
+            this.modalInner = this.popup.querySelector(selectors$6.popupInner);
+            this.close = this.modal.querySelector(selectors$6.close);
+            this.acceptButton = this.modal.querySelector(selectors$6.trackingAccept);
             this.enable = this.modal.getAttribute('data-enable') === 'true';
             this.showPopup = false;
             window.Shopify.loadFeatures([
@@ -11725,11 +10588,11 @@
             });
         }
         onBlockSelect(evt) {
-            if (this.popup.classList.contains(classes$3.mobile)) {
-                this.hasDeviceClass = classes$3.mobile;
+            if (this.popup.classList.contains(classes$2.mobile)) {
+                this.hasDeviceClass = classes$2.mobile;
             }
-            if (this.popup.classList.contains(classes$3.desktop)) {
-                this.hasDeviceClass = classes$3.desktop;
+            if (this.popup.classList.contains(classes$2.desktop)) {
+                this.hasDeviceClass = classes$2.desktop;
             }
             if (this.hasDeviceClass !== '') {
                 this.popup.classList.remove(this.hasDeviceClass);
@@ -11748,9 +10611,9 @@
         }
         constructor(el){
             this.popup = el;
-            this.popupInner = this.popup.querySelector(selectors$5.popupInner);
-            this.close = this.popup.querySelector(selectors$5.close);
-            this.cookie = new PopupCookie(this.popup.getAttribute(selectors$5.cookieNameAttribute), 'user_has_closed');
+            this.popupInner = this.popup.querySelector(selectors$6.popupInner);
+            this.close = this.popup.querySelector(selectors$6.close);
+            this.cookie = new PopupCookie(this.popup.getAttribute(selectors$6.cookieNameAttribute), 'user_has_closed');
             this.isTargeted = new TargetReferrer(this.popup);
             this.hasDeviceClass = '';
             this.init();
@@ -11781,8 +10644,8 @@
         }
         checkForSuccess() {
             //check for success or error message to show the form without delay
-            const hasError = this.form.classList.contains(classes$3.error);
-            const hasSuccess = this.form.classList.contains(classes$3.success);
+            const hasError = this.form.classList.contains(classes$2.error);
+            const hasSuccess = this.form.classList.contains(classes$2.success);
             if (hasSuccess || hasError) {
                 fadeIn(this.popupInner);
                 this.preventDelayShow();
@@ -11803,17 +10666,17 @@
         inputField() {
             this.newsletterField.addEventListener('input', ()=>{
                 if (this.newsletterField.value !== '') {
-                    this.holder.classList.add(classes$3.hasValue, this.newsletterField.value !== '');
+                    this.holder.classList.add(classes$2.hasValue, this.newsletterField.value !== '');
                 }
             });
             this.newsletterField.addEventListener('focus', ()=>{
                 if (this.newsletterField.value !== '') {
-                    this.holder.classList.add(classes$3.hasValue, this.newsletterField.value !== '');
+                    this.holder.classList.add(classes$2.hasValue, this.newsletterField.value !== '');
                 }
             });
             this.newsletterField.addEventListener('focusout', ()=>{
                 setTimeout(()=>{
-                    this.holder.classList.remove(classes$3.hasValue);
+                    this.holder.classList.remove(classes$2.hasValue);
                 }, 2000);
             });
         }
@@ -11829,12 +10692,12 @@
         }
         constructor(el){
             this.popup = el;
-            this.popupInner = this.popup.querySelector(selectors$5.popupInner);
-            this.holder = this.popup.querySelector(selectors$5.newsletterPopupHolder);
-            this.close = this.popup.querySelector(selectors$5.close);
-            this.newsletterField = this.popup.querySelector(selectors$5.newsletterField);
-            this.cookie = new PopupCookie(this.popup.getAttribute(selectors$5.cookieNameAttribute), 'newsletter_is_closed');
-            this.form = this.popup.querySelector(selectors$5.newsletterForm);
+            this.popupInner = this.popup.querySelector(selectors$6.popupInner);
+            this.holder = this.popup.querySelector(selectors$6.newsletterPopupHolder);
+            this.close = this.popup.querySelector(selectors$6.close);
+            this.newsletterField = this.popup.querySelector(selectors$6.newsletterField);
+            this.cookie = new PopupCookie(this.popup.getAttribute(selectors$6.cookieNameAttribute), 'newsletter_is_closed');
+            this.form = this.popup.querySelector(selectors$6.newsletterForm);
             this.isTargeted = new TargetReferrer(this.popup);
             this.delayShow = null;
             this.init();
@@ -11843,15 +10706,15 @@
     const popupSection = {
         onLoad () {
             sections$1[this.id] = [];
-            const tracking = this.container.querySelectorAll(selectors$5.tracking);
+            const tracking = this.container.querySelectorAll(selectors$6.tracking);
             tracking.forEach((el)=>{
                 sections$1[this.id].push(new Tracking(el));
             });
-            const newsletterPopup = this.container.querySelectorAll(selectors$5.newsletterPopup);
+            const newsletterPopup = this.container.querySelectorAll(selectors$6.newsletterPopup);
             newsletterPopup.forEach((el)=>{
                 sections$1[this.id].push(new NewsletterPopup(el));
             });
-            const promoPopup = this.container.querySelectorAll(selectors$5.promoPopup);
+            const promoPopup = this.container.querySelectorAll(selectors$6.promoPopup);
             promoPopup.forEach((el)=>{
                 sections$1[this.id].push(new PromoText(el));
             });
@@ -11876,7 +10739,7 @@
         popupSection
     ]);
 
-    const selectors$4 = {
+    const selectors$5 = {
         dot: 'data-look-dot',
         productsHolder: 'data-products-holder',
         slider: '[data-carousel]',
@@ -11885,7 +10748,7 @@
         blockId: 'data-block-id',
         focusable: 'button'
     };
-    const classes$2 = {
+    const classes$1 = {
         active: 'is-active',
         expand: 'is-expanded'
     };
@@ -11916,8 +10779,8 @@
             this.carousel.options.freeScroll = false;
             this.carousel.resize();
             this.carousel.on('change', (index)=>{
-                this.currentDot = this.container.querySelector(`[${selectors$4.dot}="${index}"]`);
-                this.currentDot.classList.add(classes$2.active);
+                this.currentDot = this.container.querySelector(`[${selectors$5.dot}="${index}"]`);
+                this.currentDot.classList.add(classes$1.active);
                 this.removeClassOnSiblingDots();
             });
         }
@@ -11937,17 +10800,17 @@
         /**
        * Show products holder
        */ showProductsHolder() {
-            const selectCellAnimate = !this.productsHolder.classList.contains(classes$2.expand);
-            this.currentDot.classList.toggle(classes$2.active);
-            this.productsHolder.classList.toggle(classes$2.expand, this.currentDot.classList.contains(classes$2.active));
+            const selectCellAnimate = !this.productsHolder.classList.contains(classes$1.expand);
+            this.currentDot.classList.toggle(classes$1.active);
+            this.productsHolder.classList.toggle(classes$1.expand, this.currentDot.classList.contains(classes$1.active));
             if (isMobile()) {
                 this.productsHolder.dispatchEvent(new CustomEvent('theme:scroll:lock', {
                     bubbles: true
                 }));
             }
-            if (this.currentDot.classList.contains(classes$2.active)) {
+            if (this.currentDot.classList.contains(classes$1.active)) {
                 this.hasDefaultOpen = true;
-                this.carousel.selectCell(Number(this.currentDot.getAttribute(selectors$4.dot)), true, selectCellAnimate);
+                this.carousel.selectCell(Number(this.currentDot.getAttribute(selectors$5.dot)), true, selectCellAnimate);
             }
             this.removeClassOnSiblingDots();
         }
@@ -11969,8 +10832,8 @@
             this.productsHolder.dispatchEvent(new CustomEvent('theme:scroll:unlock', {
                 bubbles: true
             }));
-            this.productsHolder.classList.remove(classes$2.expand);
-            this.currentDot.classList.remove(classes$2.active);
+            this.productsHolder.classList.remove(classes$1.expand);
+            this.currentDot.classList.remove(classes$1.active);
             this.hasDefaultOpen = false;
         }
         /**
@@ -11994,7 +10857,7 @@
                 return;
             }
             setTimeout(()=>{
-                const firstFocus = this.productsHolder.querySelector(selectors$4.focusable);
+                const firstFocus = this.productsHolder.querySelector(selectors$5.focusable);
                 trapFocus(this.productsHolder, {
                     elementToFocus: firstFocus
                 });
@@ -12007,8 +10870,8 @@
                 if (window.innerWidth < window.theme.sizes.medium) {
                     this.removeClasses();
                 } else if (this.hasDefaultOpen) {
-                    this.currentDot.classList.add(classes$2.active);
-                    this.productsHolder.classList.add(classes$2.expand);
+                    this.currentDot.classList.add(classes$1.active);
+                    this.productsHolder.classList.add(classes$1.expand);
                 }
             }
         }
@@ -12030,7 +10893,7 @@
        */ removeClassOnSiblingDots() {
             for (let sibling of this.currentDot.parentNode.children){
                 if (sibling !== this.currentDot) {
-                    sibling.classList.remove(classes$2.active);
+                    sibling.classList.remove(classes$1.active);
                 }
             }
         }
@@ -12042,25 +10905,25 @@
         }
         onBlockSelect(e) {
             if (this.slider && this.carousel) {
-                const slide = this.container.querySelector(`[${selectors$4.blockId}="${e.detail.blockId}"]`);
-                this.productsHolder.classList.add(classes$2.expand);
-                this.carousel.selectCell(Number(slide.getAttribute(selectors$4.slideIndex)), true, true);
+                const slide = this.container.querySelector(`[${selectors$5.blockId}="${e.detail.blockId}"]`);
+                this.productsHolder.classList.add(classes$1.expand);
+                this.carousel.selectCell(Number(slide.getAttribute(selectors$5.slideIndex)), true, true);
             }
         }
         onBlockDeselect() {
             if (window.innerWidth < window.theme.sizes.medium) {
-                this.productsHolder.classList.remove(classes$2.expand);
-                this.currentDot.classList.remove(classes$2.active);
+                this.productsHolder.classList.remove(classes$1.expand);
+                this.currentDot.classList.remove(classes$1.active);
             }
         }
         constructor(section){
             this.section = section;
             this.container = this.section.container;
-            this.dots = this.container.querySelectorAll(`[${selectors$4.dot}]`);
-            this.productsHolder = this.container.querySelector(`[${selectors$4.productsHolder}]`);
-            this.slider = this.container.querySelector(selectors$4.slider);
-            this.buttonClose = this.container.querySelector(selectors$4.buttonClose);
-            this.currentDot = this.container.querySelector(`[${selectors$4.dot}].${classes$2.active}`);
+            this.dots = this.container.querySelectorAll(`[${selectors$5.dot}]`);
+            this.productsHolder = this.container.querySelector(`[${selectors$5.productsHolder}]`);
+            this.slider = this.container.querySelector(selectors$5.slider);
+            this.buttonClose = this.container.querySelector(selectors$5.buttonClose);
+            this.currentDot = this.container.querySelector(`[${selectors$5.dot}].${classes$1.active}`);
             this.hasDefaultOpen = Boolean(this.currentDot);
             this.init();
         }
@@ -12095,6 +10958,8 @@
     register('look', [
         lookSection
     ]);
+
+    register('featured-article', parallaxImage);
 
     const wrap$1 = (toWrap, wrapperClass = '', wrapper)=>{
         wrapper = wrapper || document.createElement('div');
@@ -12241,11 +11106,11 @@
         var checked = getCheckedRadio(radioSet, node.form);
         return !checked || checked === node;
     };
-    var isRadio = function isRadio2(node) {
+    var isRadio$1 = function isRadio2(node) {
         return isInput(node) && node.type === "radio";
     };
     var isNonTabbableRadio = function isNonTabbableRadio2(node) {
-        return isRadio(node) && !isTabbableRadio(node);
+        return isRadio$1(node) && !isTabbableRadio(node);
     };
     var isHidden = function isHidden2(node, displayCheck) {
         if (getComputedStyle(node).visibility === "hidden") {
@@ -12804,7 +11669,7 @@
         return trap;
     };
     // packages/focus/src/index.js
-    function src_default$2(Alpine) {
+    function src_default$4(Alpine) {
         let lastFocused;
         let currentFocused;
         window.addEventListener("focusin", ()=>{
@@ -12992,10 +11857,10 @@
         };
     }
     // packages/focus/builds/module.js
-    var module_default$2 = src_default$2;
+    var module_default$4 = src_default$4;
 
     // packages/intersect/src/index.js
-    function src_default$1(Alpine) {
+    function src_default$3(Alpine) {
         Alpine.directive("intersect", Alpine.skipDuringClone((el, { value , expression , modifiers  }, { evaluateLater , cleanup  })=>{
             let evaluate = evaluateLater(expression);
             let options = {
@@ -13042,6 +11907,470 @@
         return values.length ? values.join(" ").trim() : fallback;
     }
     // packages/intersect/builds/module.js
+    var module_default$3 = src_default$3;
+
+    // packages/collapse/src/index.js
+    function src_default$2(Alpine) {
+        Alpine.directive("collapse", collapse);
+        collapse.inline = (el, { modifiers  })=>{
+            if (!modifiers.includes("min")) return;
+            el._x_doShow = ()=>{};
+            el._x_doHide = ()=>{};
+        };
+        function collapse(el, { modifiers  }) {
+            let duration = modifierValue$1(modifiers, "duration", 250) / 1e3;
+            let floor = modifierValue$1(modifiers, "min", 0);
+            let fullyHide = !modifiers.includes("min");
+            if (!el._x_isShown) el.style.height = `${floor}px`;
+            if (!el._x_isShown && fullyHide) el.hidden = true;
+            if (!el._x_isShown) el.style.overflow = "hidden";
+            let setFunction = (el2, styles)=>{
+                let revertFunction = Alpine.setStyles(el2, styles);
+                return styles.height ? ()=>{} : revertFunction;
+            };
+            let transitionStyles = {
+                transitionProperty: "height",
+                transitionDuration: `${duration}s`,
+                transitionTimingFunction: "cubic-bezier(0.4, 0.0, 0.2, 1)"
+            };
+            el._x_transition = {
+                in (before = ()=>{}, after = ()=>{}) {
+                    if (fullyHide) el.hidden = false;
+                    if (fullyHide) el.style.display = null;
+                    let current = el.getBoundingClientRect().height;
+                    el.style.height = "auto";
+                    let full = el.getBoundingClientRect().height;
+                    if (current === full) {
+                        current = floor;
+                    }
+                    Alpine.transition(el, Alpine.setStyles, {
+                        during: transitionStyles,
+                        start: {
+                            height: current + "px"
+                        },
+                        end: {
+                            height: full + "px"
+                        }
+                    }, ()=>el._x_isShown = true
+                    , ()=>{
+                        if (Math.abs(el.getBoundingClientRect().height - full) < 1) {
+                            el.style.overflow = null;
+                        }
+                    });
+                },
+                out (before = ()=>{}, after = ()=>{}) {
+                    let full = el.getBoundingClientRect().height;
+                    Alpine.transition(el, setFunction, {
+                        during: transitionStyles,
+                        start: {
+                            height: full + "px"
+                        },
+                        end: {
+                            height: floor + "px"
+                        }
+                    }, ()=>el.style.overflow = "hidden"
+                    , ()=>{
+                        el._x_isShown = false;
+                        if (el.style.height == `${floor}px` && fullyHide) {
+                            el.style.display = "none";
+                            el.hidden = true;
+                        }
+                    });
+                }
+            };
+        }
+    }
+    function modifierValue$1(modifiers, key, fallback) {
+        if (modifiers.indexOf(key) === -1) return fallback;
+        const rawValue = modifiers[modifiers.indexOf(key) + 1];
+        if (!rawValue) return fallback;
+        if (key === "duration") {
+            let match = rawValue.match(/([0-9]+)ms/);
+            if (match) return match[1];
+        }
+        if (key === "min") {
+            let match = rawValue.match(/([0-9]+)px/);
+            if (match) return match[1];
+        }
+        return rawValue;
+    }
+    // packages/collapse/builds/module.js
+    var module_default$2 = src_default$2;
+
+    // packages/morph/src/morph.js
+    function morph(from, toHtml, options) {
+        monkeyPatchDomSetAttributeToAllowAtSymbols();
+        let context = createMorphContext(options);
+        let toEl = typeof toHtml === "string" ? createElement(toHtml) : toHtml;
+        if (window.Alpine && window.Alpine.closestDataStack && !from._x_dataStack) {
+            toEl._x_dataStack = window.Alpine.closestDataStack(from);
+            toEl._x_dataStack && window.Alpine.cloneNode(from, toEl);
+        }
+        context.patch(from, toEl);
+        return from;
+    }
+    function morphBetween(startMarker, endMarker, toHtml, options = {}) {
+        monkeyPatchDomSetAttributeToAllowAtSymbols();
+        let context = createMorphContext(options);
+        let fromContainer = startMarker.parentNode;
+        let fromBlock = new Block(startMarker, endMarker);
+        let toContainer = typeof toHtml === "string" ? (()=>{
+            let container = document.createElement("div");
+            container.insertAdjacentHTML("beforeend", toHtml);
+            return container;
+        })() : toHtml;
+        let toStartMarker = document.createComment("[morph-start]");
+        let toEndMarker = document.createComment("[morph-end]");
+        toContainer.insertBefore(toStartMarker, toContainer.firstChild);
+        toContainer.appendChild(toEndMarker);
+        let toBlock = new Block(toStartMarker, toEndMarker);
+        if (window.Alpine && window.Alpine.closestDataStack) {
+            toContainer._x_dataStack = window.Alpine.closestDataStack(fromContainer);
+            toContainer._x_dataStack && window.Alpine.cloneNode(fromContainer, toContainer);
+        }
+        context.patchChildren(fromBlock, toBlock);
+    }
+    function createMorphContext(options = {}) {
+        let defaultGetKey = (el)=>el.getAttribute("key")
+        ;
+        let noop = ()=>{};
+        let context = {
+            key: options.key || defaultGetKey,
+            lookahead: options.lookahead || false,
+            updating: options.updating || noop,
+            updated: options.updated || noop,
+            removing: options.removing || noop,
+            removed: options.removed || noop,
+            adding: options.adding || noop,
+            added: options.added || noop
+        };
+        context.patch = function(from, to) {
+            if (context.differentElementNamesTypesOrKeys(from, to)) {
+                return context.swapElements(from, to);
+            }
+            let updateChildrenOnly = false;
+            let skipChildren = false;
+            let skipUntil = (predicate)=>context.skipUntilCondition = predicate
+            ;
+            if (shouldSkipChildren(context.updating, ()=>skipChildren = true
+            , skipUntil, from, to, ()=>updateChildrenOnly = true
+            )) return;
+            if (from.nodeType === 1 && window.Alpine) {
+                window.Alpine.cloneNode(from, to);
+                if (from._x_teleport && to._x_teleport) {
+                    context.patch(from._x_teleport, to._x_teleport);
+                }
+            }
+            if (textOrComment(to)) {
+                context.patchNodeValue(from, to);
+                context.updated(from, to);
+                return;
+            }
+            if (!updateChildrenOnly) {
+                context.patchAttributes(from, to);
+            }
+            context.updated(from, to);
+            if (!skipChildren) {
+                context.patchChildren(from, to);
+            }
+        };
+        context.differentElementNamesTypesOrKeys = function(from, to) {
+            return from.nodeType != to.nodeType || from.nodeName != to.nodeName || context.getKey(from) != context.getKey(to);
+        };
+        context.swapElements = function(from, to) {
+            if (shouldSkip(context.removing, from)) return;
+            let toCloned = to.cloneNode(true);
+            if (shouldSkip(context.adding, toCloned)) return;
+            from.replaceWith(toCloned);
+            context.removed(from);
+            context.added(toCloned);
+        };
+        context.patchNodeValue = function(from, to) {
+            let value = to.nodeValue;
+            if (from.nodeValue !== value) {
+                from.nodeValue = value;
+            }
+        };
+        context.patchAttributes = function(from, to) {
+            if (from._x_transitioning) return;
+            if (from._x_isShown && !to._x_isShown) {
+                return;
+            }
+            if (!from._x_isShown && to._x_isShown) {
+                return;
+            }
+            let domAttributes = Array.from(from.attributes);
+            let toAttributes = Array.from(to.attributes);
+            for(let i = domAttributes.length - 1; i >= 0; i--){
+                let name = domAttributes[i].name;
+                if (!to.hasAttribute(name)) {
+                    from.removeAttribute(name);
+                }
+            }
+            for(let i1 = toAttributes.length - 1; i1 >= 0; i1--){
+                let name = toAttributes[i1].name;
+                let value = toAttributes[i1].value;
+                if (from.getAttribute(name) !== value) {
+                    from.setAttribute(name, value);
+                }
+            }
+        };
+        context.patchChildren = function(from, to) {
+            let fromKeys = context.keyToMap(from.children);
+            let fromKeyHoldovers = {};
+            let currentTo = getFirstNode(to);
+            let currentFrom = getFirstNode(from);
+            while(currentTo){
+                seedingMatchingId(currentTo, currentFrom);
+                let toKey = context.getKey(currentTo);
+                let fromKey = context.getKey(currentFrom);
+                if (context.skipUntilCondition) {
+                    let fromDone = !currentFrom || context.skipUntilCondition(currentFrom);
+                    let toDone = !currentTo || context.skipUntilCondition(currentTo);
+                    if (fromDone && toDone) {
+                        context.skipUntilCondition = null;
+                    } else {
+                        if (!fromDone) currentFrom = currentFrom && getNextSibling(from, currentFrom);
+                        if (!toDone) currentTo = currentTo && getNextSibling(to, currentTo);
+                        continue;
+                    }
+                }
+                if (!currentFrom) {
+                    if (toKey && fromKeyHoldovers[toKey]) {
+                        let holdover = fromKeyHoldovers[toKey];
+                        from.appendChild(holdover);
+                        currentFrom = holdover;
+                        fromKey = context.getKey(currentFrom);
+                    } else {
+                        if (!shouldSkip(context.adding, currentTo)) {
+                            let clone = currentTo.cloneNode(true);
+                            from.appendChild(clone);
+                            context.added(clone);
+                        }
+                        currentTo = getNextSibling(to, currentTo);
+                        continue;
+                    }
+                }
+                let isIf = (node)=>node && node.nodeType === 8 && node.textContent === "[if BLOCK]><![endif]"
+                ;
+                let isEnd = (node)=>node && node.nodeType === 8 && node.textContent === "[if ENDBLOCK]><![endif]"
+                ;
+                if (isIf(currentTo) && isIf(currentFrom)) {
+                    let nestedIfCount = 0;
+                    let fromBlockStart = currentFrom;
+                    while(currentFrom){
+                        let next = getNextSibling(from, currentFrom);
+                        if (isIf(next)) {
+                            nestedIfCount++;
+                        } else if (isEnd(next) && nestedIfCount > 0) {
+                            nestedIfCount--;
+                        } else if (isEnd(next) && nestedIfCount === 0) {
+                            currentFrom = next;
+                            break;
+                        }
+                        currentFrom = next;
+                    }
+                    let fromBlockEnd = currentFrom;
+                    nestedIfCount = 0;
+                    let toBlockStart = currentTo;
+                    while(currentTo){
+                        let next = getNextSibling(to, currentTo);
+                        if (isIf(next)) {
+                            nestedIfCount++;
+                        } else if (isEnd(next) && nestedIfCount > 0) {
+                            nestedIfCount--;
+                        } else if (isEnd(next) && nestedIfCount === 0) {
+                            currentTo = next;
+                            break;
+                        }
+                        currentTo = next;
+                    }
+                    let toBlockEnd = currentTo;
+                    let fromBlock = new Block(fromBlockStart, fromBlockEnd);
+                    let toBlock = new Block(toBlockStart, toBlockEnd);
+                    context.patchChildren(fromBlock, toBlock);
+                    continue;
+                }
+                if (currentFrom.nodeType === 1 && context.lookahead && !currentFrom.isEqualNode(currentTo)) {
+                    let nextToElementSibling = getNextSibling(to, currentTo);
+                    let found = false;
+                    while(!found && nextToElementSibling){
+                        if (nextToElementSibling.nodeType === 1 && currentFrom.isEqualNode(nextToElementSibling)) {
+                            found = true;
+                            currentFrom = context.addNodeBefore(from, currentTo, currentFrom);
+                            fromKey = context.getKey(currentFrom);
+                        }
+                        nextToElementSibling = getNextSibling(to, nextToElementSibling);
+                    }
+                }
+                if (toKey !== fromKey) {
+                    if (!toKey && fromKey) {
+                        fromKeyHoldovers[fromKey] = currentFrom;
+                        currentFrom = context.addNodeBefore(from, currentTo, currentFrom);
+                        fromKeyHoldovers[fromKey].remove();
+                        currentFrom = getNextSibling(from, currentFrom);
+                        currentTo = getNextSibling(to, currentTo);
+                        continue;
+                    }
+                    if (toKey && !fromKey) {
+                        if (fromKeys[toKey]) {
+                            currentFrom.replaceWith(fromKeys[toKey]);
+                            currentFrom = fromKeys[toKey];
+                            fromKey = context.getKey(currentFrom);
+                        }
+                    }
+                    if (toKey && fromKey) {
+                        let fromKeyNode = fromKeys[toKey];
+                        if (fromKeyNode) {
+                            fromKeyHoldovers[fromKey] = currentFrom;
+                            currentFrom.replaceWith(fromKeyNode);
+                            currentFrom = fromKeyNode;
+                            fromKey = context.getKey(currentFrom);
+                        } else {
+                            fromKeyHoldovers[fromKey] = currentFrom;
+                            currentFrom = context.addNodeBefore(from, currentTo, currentFrom);
+                            fromKeyHoldovers[fromKey].remove();
+                            currentFrom = getNextSibling(from, currentFrom);
+                            currentTo = getNextSibling(to, currentTo);
+                            continue;
+                        }
+                    }
+                }
+                let currentFromNext = currentFrom && getNextSibling(from, currentFrom);
+                context.patch(currentFrom, currentTo);
+                currentTo = currentTo && getNextSibling(to, currentTo);
+                currentFrom = currentFromNext;
+            }
+            let removals = [];
+            while(currentFrom){
+                if (!shouldSkip(context.removing, currentFrom)) removals.push(currentFrom);
+                currentFrom = getNextSibling(from, currentFrom);
+            }
+            while(removals.length){
+                let domForRemoval = removals.shift();
+                domForRemoval.remove();
+                context.removed(domForRemoval);
+            }
+        };
+        context.getKey = function(el) {
+            return el && el.nodeType === 1 && context.key(el);
+        };
+        context.keyToMap = function(els) {
+            let map = {};
+            for (let el of els){
+                let theKey = context.getKey(el);
+                if (theKey) {
+                    map[theKey] = el;
+                }
+            }
+            return map;
+        };
+        context.addNodeBefore = function(parent, node, beforeMe) {
+            if (!shouldSkip(context.adding, node)) {
+                let clone = node.cloneNode(true);
+                parent.insertBefore(clone, beforeMe);
+                context.added(clone);
+                return clone;
+            }
+            return node;
+        };
+        return context;
+    }
+    morph.step = ()=>{};
+    morph.log = ()=>{};
+    function shouldSkip(hook, ...args) {
+        let skip = false;
+        hook(...args, ()=>skip = true
+        );
+        return skip;
+    }
+    function shouldSkipChildren(hook, skipChildren, skipUntil, ...args) {
+        let skip = false;
+        hook(...args, ()=>skip = true
+        , skipChildren, skipUntil);
+        return skip;
+    }
+    var patched = false;
+    function createElement(html) {
+        const template = document.createElement("template");
+        template.innerHTML = html;
+        return template.content.firstElementChild;
+    }
+    function textOrComment(el) {
+        return el.nodeType === 3 || el.nodeType === 8;
+    }
+    var Block = class {
+        get children() {
+            let children = [];
+            let currentNode = this.startComment.nextSibling;
+            while(currentNode && currentNode !== this.endComment){
+                children.push(currentNode);
+                currentNode = currentNode.nextSibling;
+            }
+            return children;
+        }
+        appendChild(child) {
+            this.endComment.before(child);
+        }
+        get firstChild() {
+            let first = this.startComment.nextSibling;
+            if (first === this.endComment) return;
+            return first;
+        }
+        nextNode(reference) {
+            let next = reference.nextSibling;
+            if (next === this.endComment) return;
+            return next;
+        }
+        insertBefore(newNode, reference) {
+            reference.before(newNode);
+            return newNode;
+        }
+        constructor(start, end){
+            this.startComment = start;
+            this.endComment = end;
+        }
+    };
+    function getFirstNode(parent) {
+        return parent.firstChild;
+    }
+    function getNextSibling(parent, reference) {
+        let next;
+        if (parent instanceof Block) {
+            next = parent.nextNode(reference);
+        } else {
+            next = reference.nextSibling;
+        }
+        return next;
+    }
+    function monkeyPatchDomSetAttributeToAllowAtSymbols() {
+        if (patched) return;
+        patched = true;
+        let original = Element.prototype.setAttribute;
+        let hostDiv = document.createElement("div");
+        Element.prototype.setAttribute = function newSetAttribute(name, value) {
+            if (!name.includes("@")) {
+                return original.call(this, name, value);
+            }
+            hostDiv.innerHTML = `<span ${name}="${value}"></span>`;
+            let attr = hostDiv.firstElementChild.getAttributeNode(name);
+            hostDiv.firstElementChild.removeAttributeNode(attr);
+            this.setAttributeNode(attr);
+        };
+    }
+    function seedingMatchingId(to, from) {
+        let fromId = from && from._x_bindings && from._x_bindings.id;
+        if (!fromId) return;
+        if (!to.setAttribute) return;
+        to.setAttribute("id", fromId);
+        to.id = fromId;
+    }
+    // packages/morph/src/index.js
+    function src_default$1(Alpine) {
+        Alpine.morph = morph;
+        Alpine.morphBetween = morphBetween;
+    }
+    // packages/morph/builds/module.js
     var module_default$1 = src_default$1;
 
     // packages/alpinejs/src/scheduler.js
@@ -13111,7 +12440,7 @@
         let wrappedEffect = (callback)=>{
             let effectReference = effect(callback);
             if (!el._x_effects) {
-                el._x_effects = new Set();
+                el._x_effects = /* @__PURE__ */ new Set();
                 el._x_runEffects = ()=>{
                     el._x_effects.forEach((i)=>i()
                     );
@@ -13131,6 +12460,25 @@
                 cleanup2();
             }
         ];
+    }
+    function watch(getter, callback) {
+        let firstTime = true;
+        let oldValue;
+        let effectReference = effect(()=>{
+            let value = getter();
+            JSON.stringify(value);
+            if (!firstTime) {
+                queueMicrotask(()=>{
+                    callback(value, oldValue);
+                    oldValue = value;
+                });
+            } else {
+                oldValue = value;
+            }
+            firstTime = false;
+        });
+        return ()=>release(effectReference)
+        ;
     }
     // packages/alpinejs/src/mutation.js
     var onAttributeAddeds = [];
@@ -13166,6 +12514,11 @@
             }
         });
     }
+    function cleanupElement(el) {
+        var ref, ref1;
+        (ref = el._x_effects) === null || ref === void 0 ? void 0 : ref.forEach(dequeueJob);
+        while((ref1 = el._x_cleanups) === null || ref1 === void 0 ? void 0 : ref1.length)el._x_cleanups.pop()();
+    }
     var observer$1 = new MutationObserver(onMutate);
     var currentlyObserving = false;
     function startObservingMutations() {
@@ -13182,21 +12535,17 @@
         observer$1.disconnect();
         currentlyObserving = false;
     }
-    var recordQueue = [];
-    var willProcessRecordQueue = false;
+    var queuedMutations = [];
     function flushObserver() {
-        recordQueue = recordQueue.concat(observer$1.takeRecords());
-        if (recordQueue.length && !willProcessRecordQueue) {
-            willProcessRecordQueue = true;
-            queueMicrotask(()=>{
-                processRecordQueue();
-                willProcessRecordQueue = false;
-            });
-        }
-    }
-    function processRecordQueue() {
-        onMutate(recordQueue);
-        recordQueue.length = 0;
+        let records = observer$1.takeRecords();
+        queuedMutations.push(()=>records.length > 0 && onMutate(records)
+        );
+        let queueLengthWhenTriggered = queuedMutations.length;
+        queueMicrotask(()=>{
+            if (queuedMutations.length === queueLengthWhenTriggered) {
+                while(queuedMutations.length > 0)queuedMutations.shift()();
+            }
+        });
     }
     function mutateDom(callback) {
         if (!currentlyObserving) return callback();
@@ -13221,16 +12570,26 @@
             return;
         }
         let addedNodes = [];
-        let removedNodes = [];
-        let addedAttributes = new Map();
-        let removedAttributes = new Map();
+        let removedNodes = /* @__PURE__ */ new Set();
+        let addedAttributes = /* @__PURE__ */ new Map();
+        let removedAttributes = /* @__PURE__ */ new Map();
         for(let i1 = 0; i1 < mutations.length; i1++){
             if (mutations[i1].target._x_ignoreMutationObserver) continue;
             if (mutations[i1].type === "childList") {
-                mutations[i1].addedNodes.forEach((node)=>node.nodeType === 1 && addedNodes.push(node)
-                );
-                mutations[i1].removedNodes.forEach((node)=>node.nodeType === 1 && removedNodes.push(node)
-                );
+                mutations[i1].removedNodes.forEach((node)=>{
+                    if (node.nodeType !== 1) return;
+                    if (!node._x_marker) return;
+                    removedNodes.add(node);
+                });
+                mutations[i1].addedNodes.forEach((node)=>{
+                    if (node.nodeType !== 1) return;
+                    if (removedNodes.has(node)) {
+                        removedNodes.delete(node);
+                        return;
+                    }
+                    if (node._x_marker) return;
+                    addedNodes.push(node);
+                });
             }
             if (mutations[i1].type === "attributes") {
                 let el = mutations[i1].target;
@@ -13265,31 +12624,16 @@
             );
         });
         for (let node2 of removedNodes){
-            if (addedNodes.includes(node2)) continue;
+            if (addedNodes.some((i)=>i.contains(node2)
+            )) continue;
             onElRemoveds.forEach((i)=>i(node2)
             );
-            if (node2._x_cleanups) {
-                while(node2._x_cleanups.length)node2._x_cleanups.pop()();
-            }
         }
-        addedNodes.forEach((node)=>{
-            node._x_ignoreSelf = true;
-            node._x_ignore = true;
-        });
         for (let node1 of addedNodes){
-            if (removedNodes.includes(node1)) continue;
             if (!node1.isConnected) continue;
-            delete node1._x_ignoreSelf;
-            delete node1._x_ignore;
             onElAddeds.forEach((i)=>i(node1)
             );
-            node1._x_ignore = true;
-            node1._x_ignoreSelf = true;
         }
-        addedNodes.forEach((node)=>{
-            delete node._x_ignoreSelf;
-            delete node._x_ignore;
-        });
         addedNodes = null;
         removedNodes = null;
         addedAttributes = null;
@@ -13320,53 +12664,39 @@
         return closestDataStack(node.parentNode);
     }
     function mergeProxies(objects) {
-        let thisProxy = new Proxy({}, {
-            ownKeys: ()=>{
-                return Array.from(new Set(objects.flatMap((i)=>Object.keys(i)
-                )));
-            },
-            has: (target, name)=>{
-                return objects.some((obj)=>obj.hasOwnProperty(name)
-                );
-            },
-            get: (target, name)=>{
-                return (objects.find((obj)=>{
-                    if (obj.hasOwnProperty(name)) {
-                        let descriptor = Object.getOwnPropertyDescriptor(obj, name);
-                        if (descriptor.get && descriptor.get._x_alreadyBound || descriptor.set && descriptor.set._x_alreadyBound) {
-                            return true;
-                        }
-                        if ((descriptor.get || descriptor.set) && descriptor.enumerable) {
-                            let getter = descriptor.get;
-                            let setter = descriptor.set;
-                            let property = descriptor;
-                            getter = getter && getter.bind(thisProxy);
-                            setter = setter && setter.bind(thisProxy);
-                            if (getter) getter._x_alreadyBound = true;
-                            if (setter) setter._x_alreadyBound = true;
-                            Object.defineProperty(obj, name, {
-                                ...property,
-                                get: getter,
-                                set: setter
-                            });
-                        }
-                        return true;
-                    }
-                    return false;
-                }) || {})[name];
-            },
-            set: (target, name, value)=>{
-                let closestObjectWithKey = objects.find((obj)=>obj.hasOwnProperty(name)
-                );
-                if (closestObjectWithKey) {
-                    closestObjectWithKey[name] = value;
-                } else {
-                    objects[objects.length - 1][name] = value;
-                }
-                return true;
-            }
-        });
-        return thisProxy;
+        return new Proxy({
+            objects
+        }, mergeProxyTrap);
+    }
+    var mergeProxyTrap = {
+        ownKeys ({ objects  }) {
+            return Array.from(new Set(objects.flatMap((i)=>Object.keys(i)
+            )));
+        },
+        has ({ objects  }, name) {
+            if (name == Symbol.unscopables) return false;
+            return objects.some((obj)=>Object.prototype.hasOwnProperty.call(obj, name) || Reflect.has(obj, name)
+            );
+        },
+        get ({ objects  }, name, thisProxy) {
+            if (name == "toJSON") return collapseProxies;
+            return Reflect.get(objects.find((obj)=>Reflect.has(obj, name)
+            ) || {}, name, thisProxy);
+        },
+        set ({ objects  }, name, value, thisProxy) {
+            const target = objects.find((obj)=>Object.prototype.hasOwnProperty.call(obj, name)
+            ) || objects[objects.length - 1];
+            const descriptor = Object.getOwnPropertyDescriptor(target, name);
+            if ((descriptor === null || descriptor === void 0 ? void 0 : descriptor.set) && (descriptor === null || descriptor === void 0 ? void 0 : descriptor.get)) return descriptor.set.call(thisProxy, value) || true;
+            return Reflect.set(target, name, value);
+        }
+    };
+    function collapseProxies() {
+        let keys = Reflect.ownKeys(this);
+        return keys.reduce((acc, key)=>{
+            acc[key] = Reflect.get(this, key);
+            return acc;
+        }, {});
     }
     // packages/alpinejs/src/interceptor.js
     function initInterceptors(data2) {
@@ -13375,6 +12705,7 @@
         let recurse = (obj, basePath = "")=>{
             Object.entries(Object.getOwnPropertyDescriptors(obj)).forEach(([key, { value , enumerable  }])=>{
                 if (enumerable === false || value === void 0) return;
+                if (typeof value === "object" && value !== null && value.__v_skip) return;
                 let path = basePath === "" ? key : `${basePath}.${key}`;
                 if (typeof value === "object" && value !== null && value._x_interceptor) {
                     obj[key] = value.initialize(data2, path, key);
@@ -13434,29 +12765,25 @@
         magics[name] = callback;
     }
     function injectMagics(obj, el) {
+        let memoizedUtilities = getUtilities(el);
         Object.entries(magics).forEach(([name, callback])=>{
-            let memoizedUtilities = null;
-            function getUtilities() {
-                if (memoizedUtilities) {
-                    return memoizedUtilities;
-                } else {
-                    let [utilities, cleanup2] = getElementBoundUtilities(el);
-                    memoizedUtilities = {
-                        interceptor,
-                        ...utilities
-                    };
-                    onElRemoved(el, cleanup2);
-                    return memoizedUtilities;
-                }
-            }
             Object.defineProperty(obj, `$${name}`, {
                 get () {
-                    return callback(el, getUtilities());
+                    return callback(el, memoizedUtilities);
                 },
                 enumerable: false
             });
         });
         return obj;
+    }
+    function getUtilities(el) {
+        let [utilities, cleanup2] = getElementBoundUtilities(el);
+        let utils = {
+            interceptor,
+            ...utilities
+        };
+        onElRemoved(el, cleanup2);
+        return utils;
     }
     // packages/alpinejs/src/utils/error.js
     function tryCatch(el, expression, callback, ...args) {
@@ -13467,7 +12794,9 @@
         }
     }
     function handleError(error2, el, expression = void 0) {
-        Object.assign(error2, {
+        error2 = Object.assign(error2 !== null && error2 !== void 0 ? error2 : {
+            message: "No error message given."
+        }, {
             el,
             expression
         });
@@ -13525,13 +12854,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             return evaluatorMemo[expression];
         }
         let AsyncFunction = Object.getPrototypeOf(async function() {}).constructor;
-        let rightSideSafeExpression = /^[\n\s]*if.*\(.*\)/.test(expression) || /^(let|const)\s/.test(expression) ? `(async()=>{ ${expression} })()` : expression;
+        let rightSideSafeExpression = /^[\n\s]*if.*\(.*\)/.test(expression.trim()) || /^(let|const)\s/.test(expression.trim()) ? `(async()=>{ ${expression} })()` : expression;
         const safeAsyncFunction = ()=>{
             try {
-                return new AsyncFunction([
+                let func2 = new AsyncFunction([
                     "__self",
                     "scope"
                 ], `with (scope) { __self.result = ${rightSideSafeExpression} }; __self.finished = true; return __self.result;`);
+                Object.defineProperty(func2, "name", {
+                    value: `[Alpine] ${expression}`
+                });
+                return func2;
             } catch (error2) {
                 handleError(error2, el, expression);
                 return Promise.resolve();
@@ -13597,13 +12930,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return {
             before (directive2) {
                 if (!directiveHandlers[directive2]) {
-                    console.warn("Cannot find directive `${directive}`. `${name}` will use the default order of execution");
+                    console.warn(String.raw`Cannot find directive \`${directive2}\`. \`${name}\` will use the default order of execution`);
                     return;
                 }
                 const pos = directiveOrder.indexOf(directive2);
                 directiveOrder.splice(pos >= 0 ? pos : directiveOrder.indexOf("DEFAULT"), 0, name);
             }
         };
+    }
+    function directiveExists(name) {
+        return Object.keys(directiveHandlers).includes(name);
     }
     function directives(el, attributes, originalAttributeOverride) {
         attributes = Array.from(attributes);
@@ -13638,7 +12974,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         );
     }
     var isDeferringHandlers = false;
-    var directiveHandlerStacks = new Map();
+    var directiveHandlerStacks = /* @__PURE__ */ new Map();
     var currentHandlerStackKey = Symbol();
     function deferHandlingDirectives(callback) {
         isDeferringHandlers = true;
@@ -13728,7 +13064,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     function toParsedDirectives(transformedAttributeMap, originalAttributeOverride) {
         return ({ name , value  })=>{
             let typeMatch = name.match(alpineAttributeRegex());
-            let valueMatch = name.match(/:([a-zA-Z0-9\-:]+)/);
+            let valueMatch = name.match(/:([a-zA-Z0-9\-_:]+)/);
             let modifiers = name.match(/\.[^.\]]+(?=[^\]]*$)/g) || [];
             let original = originalAttributeOverride || transformedAttributeMap[name] || name;
             return {
@@ -13747,6 +13083,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         "ref",
         "data",
         "id",
+        "anchor",
         "bind",
         "init",
         "for",
@@ -13768,6 +13105,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         el.dispatchEvent(new CustomEvent(name, {
             detail,
             bubbles: true,
+            // Allows events to pass the shadow DOM barrier.
             composed: true,
             cancelable: true
         }));
@@ -13795,7 +13133,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     // packages/alpinejs/src/lifecycle.js
     var started = false;
-    function start() {
+    function start$1() {
         if (started) warn("Alpine has already been initialized on this page. Calling Alpine.start() more than once can cause problems.");
         started = true;
         if (!document.body) warn("Unable to initialize. Trying to load Alpine before `<body>` is available. Did you forget to add `defer` in Alpine's `<script>` tag?");
@@ -13812,10 +13150,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         });
         let outNestedComponents = (el)=>!closestRoot(el.parentElement, true)
         ;
-        Array.from(document.querySelectorAll(allSelectors())).filter(outNestedComponents).forEach((el)=>{
+        Array.from(document.querySelectorAll(allSelectors().join(","))).filter(outNestedComponents).forEach((el)=>{
             initTree(el);
         });
         dispatch(document, "alpine:initialized");
+        setTimeout(()=>{
+            warnAboutMissingPlugins();
+        });
     }
     var rootSelectorCallbacks = [];
     var initSelectorCallbacks = [];
@@ -13855,21 +13196,63 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     function interceptInit(callback) {
         initInterceptors2.push(callback);
     }
+    var markerDispenser = 1;
     function initTree(el, walker = walk, intercept = ()=>{}) {
+        if (findClosest(el, (i)=>i._x_ignore
+        )) return;
         deferHandlingDirectives(()=>{
             walker(el, (el2, skip)=>{
+                if (el2._x_marker) return;
                 intercept(el2, skip);
                 initInterceptors2.forEach((i)=>i(el2, skip)
                 );
                 directives(el2, el2.attributes).forEach((handle)=>handle()
                 );
+                if (!el2._x_ignore) el2._x_marker = markerDispenser++;
                 el2._x_ignore && skip();
             });
         });
     }
-    function destroyTree(root) {
-        walk(root, (el)=>cleanupAttributes(el)
-        );
+    function destroyTree(root, walker = walk) {
+        walker(root, (el)=>{
+            cleanupElement(el);
+            cleanupAttributes(el);
+            delete el._x_marker;
+        });
+    }
+    function warnAboutMissingPlugins() {
+        let pluginDirectives = [
+            [
+                "ui",
+                "dialog",
+                [
+                    "[x-dialog], [x-popover]"
+                ]
+            ],
+            [
+                "anchor",
+                "anchor",
+                [
+                    "[x-anchor]"
+                ]
+            ],
+            [
+                "sort",
+                "sort",
+                [
+                    "[x-sort]"
+                ]
+            ]
+        ];
+        pluginDirectives.forEach(([plugin2, directive2, selectors])=>{
+            if (directiveExists(directive2)) return;
+            selectors.some((selector)=>{
+                if (document.querySelector(selector)) {
+                    warn(`found "${selector}", but missing ${plugin2} plugin`);
+                    return true;
+                }
+            });
+        });
     }
     // packages/alpinejs/src/nextTick.js
     var tickStack = [];
@@ -14006,7 +13389,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     function registerTransitionsFromClassString(el, classString, stage) {
         registerTransitionObject(el, setClasses, "");
         let directiveStorageMap = {
-            enter: (classes)=>{
+            "enter": (classes)=>{
                 el._x_transition.enter.during = classes;
             },
             "enter-start": (classes)=>{
@@ -14015,7 +13398,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             "enter-end": (classes)=>{
                 el._x_transition.enter.end = classes;
             },
-            leave: (classes)=>{
+            "leave": (classes)=>{
                 el._x_transition.leave.during = classes;
             },
             "leave-start": (classes)=>{
@@ -14133,7 +13516,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         el._x_hidePromise = el._x_transition ? new Promise((resolve, reject)=>{
             el._x_transition.out(()=>{}, ()=>resolve(hide)
             );
-            el._x_transitioning.beforeCancel(()=>reject({
+            el._x_transitioning && el._x_transitioning.beforeCancel(()=>reject({
                     isFromCancelledTransition: true
                 })
             );
@@ -14149,8 +13532,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                         let carry = Promise.all([
                             el2._x_hidePromise,
                             ...(el2._x_hideChildren || []).map(hideAfterChildren)
-                        ]).then(([i])=>i()
-                        );
+                        ]).then(([i])=>{
+                            return i === null || i === void 0 ? void 0 : i();
+                        });
                         delete el2._x_hidePromise;
                         delete el2._x_hideChildren;
                         return carry;
@@ -14284,13 +13668,31 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return (...args)=>isCloning && callback(...args)
         ;
     }
-    function clone(oldEl, newEl) {
+    var interceptors = [];
+    function interceptClone(callback) {
+        interceptors.push(callback);
+    }
+    function cloneNode(from, to) {
+        interceptors.forEach((i)=>i(from, to)
+        );
+        isCloning = true;
+        dontRegisterReactiveSideEffects(()=>{
+            initTree(to, (el, callback)=>{
+                callback(el, ()=>{});
+            });
+        });
+        isCloning = false;
+    }
+    var isCloningLegacy = false;
+    function clone$1(oldEl, newEl) {
         if (!newEl._x_dataStack) newEl._x_dataStack = oldEl._x_dataStack;
         isCloning = true;
+        isCloningLegacy = true;
         dontRegisterReactiveSideEffects(()=>{
             cloneTree(newEl);
         });
         isCloning = false;
+        isCloningLegacy = false;
     }
     function cloneTree(el) {
         let hasRunThroughFirstEl = false;
@@ -14338,17 +13740,21 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
     }
     function bindInputValue(el, value) {
-        if (el.type === "radio") {
+        if (isRadio(el)) {
             if (el.attributes.value === void 0) {
                 el.value = value;
             }
             if (window.fromModel) {
-                el.checked = checkedAttrLooseCompare(el.value, value);
+                if (typeof value === "boolean") {
+                    el.checked = safeParseBoolean(el.value) === value;
+                } else {
+                    el.checked = checkedAttrLooseCompare(el.value, value);
+                }
             }
-        } else if (el.type === "checkbox") {
+        } else if (isCheckbox(el)) {
             if (Number.isInteger(value)) {
                 el.value = value;
-            } else if (!Number.isInteger(value) && !Array.isArray(value) && typeof value !== "boolean" && ![
+            } else if (!Array.isArray(value) && typeof value !== "boolean" && ![
                 null,
                 void 0
             ].includes(value)) {
@@ -14365,7 +13771,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             updateSelect(el, value);
         } else {
             if (el.value === value) return;
-            el.value = value;
+            el.value = value === void 0 ? "" : value;
         }
     }
     function bindClasses(el, value) {
@@ -14417,35 +13823,60 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     function checkedAttrLooseCompare(valueA, valueB) {
         return valueA == valueB;
     }
+    function safeParseBoolean(rawValue) {
+        if ([
+            1,
+            "1",
+            "true",
+            "on",
+            "yes",
+            true
+        ].includes(rawValue)) {
+            return true;
+        }
+        if ([
+            0,
+            "0",
+            "false",
+            "off",
+            "no",
+            false
+        ].includes(rawValue)) {
+            return false;
+        }
+        return rawValue ? Boolean(rawValue) : null;
+    }
+    var booleanAttributes = /* @__PURE__ */ new Set([
+        "allowfullscreen",
+        "async",
+        "autofocus",
+        "autoplay",
+        "checked",
+        "controls",
+        "default",
+        "defer",
+        "disabled",
+        "formnovalidate",
+        "inert",
+        "ismap",
+        "itemscope",
+        "loop",
+        "multiple",
+        "muted",
+        "nomodule",
+        "novalidate",
+        "open",
+        "playsinline",
+        "readonly",
+        "required",
+        "reversed",
+        "selected",
+        "shadowrootclonable",
+        "shadowrootdelegatesfocus",
+        "shadowrootserializable"
+    ]);
     function isBooleanAttr(attrName) {
-        const booleanAttributes = [
-            "disabled",
-            "checked",
-            "required",
-            "readonly",
-            "hidden",
-            "open",
-            "selected",
-            "autofocus",
-            "itemscope",
-            "multiple",
-            "novalidate",
-            "allowfullscreen",
-            "allowpaymentrequest",
-            "formnovalidate",
-            "autoplay",
-            "controls",
-            "loop",
-            "muted",
-            "playsinline",
-            "default",
-            "ismap",
-            "reversed",
-            "async",
-            "defer",
-            "nomodule"
-        ];
-        return booleanAttributes.includes(attrName);
+        return booleanAttributes.has(attrName);
     }
     function attributeShouldntBePreservedIfFalsy(name) {
         return ![
@@ -14482,6 +13913,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
         return attr;
     }
+    function isCheckbox(el) {
+        return el.type === "checkbox" || el.localName === "ui-checkbox" || el.localName === "ui-switch";
+    }
+    function isRadio(el) {
+        return el.type === "radio" || el.localName === "ui-radio";
+    }
     // packages/alpinejs/src/utils/debounce.js
     function debounce(func, wait) {
         var timeout;
@@ -14508,6 +13945,35 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             }
         };
     }
+    // packages/alpinejs/src/entangle.js
+    function entangle({ get: outerGet , set: outerSet  }, { get: innerGet , set: innerSet  }) {
+        let firstRun = true;
+        let outerHash;
+        let reference = effect(()=>{
+            let outer = outerGet();
+            let inner = innerGet();
+            if (firstRun) {
+                innerSet(cloneIfObject(outer));
+                firstRun = false;
+            } else {
+                let outerHashLatest = JSON.stringify(outer);
+                let innerHashLatest = JSON.stringify(inner);
+                if (outerHashLatest !== outerHash) {
+                    innerSet(cloneIfObject(outer));
+                } else if (outerHashLatest !== innerHashLatest) {
+                    outerSet(cloneIfObject(inner));
+                } else ;
+            }
+            outerHash = JSON.stringify(outerGet());
+            JSON.stringify(innerGet());
+        });
+        return ()=>{
+            release(reference);
+        };
+    }
+    function cloneIfObject(value) {
+        return typeof value === "object" ? JSON.parse(JSON.stringify(value)) : value;
+    }
     // packages/alpinejs/src/plugin.js
     function plugin(callback) {
         let callbacks = Array.isArray(callback) ? callback : [
@@ -14528,10 +13994,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             return stores[name];
         }
         stores[name] = value;
+        initInterceptors(stores[name]);
         if (typeof value === "object" && value !== null && value.hasOwnProperty("init") && typeof value.init === "function") {
             stores[name].init();
         }
-        initInterceptors(stores[name]);
     }
     function getStores() {
         return stores;
@@ -14542,10 +14008,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         let getBindings = typeof bindings !== "function" ? ()=>bindings
          : bindings;
         if (name instanceof Element) {
-            applyBindingsObject(name, getBindings());
+            return applyBindingsObject(name, getBindings());
         } else {
             binds[name] = getBindings;
         }
+        return ()=>{};
     }
     function injectBindingProviders(obj) {
         Object.entries(binds).forEach(([name, callback])=>{
@@ -14582,10 +14049,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             cleanupRunners.push(handle.runCleanups);
             handle();
         });
+        return ()=>{
+            while(cleanupRunners.length)cleanupRunners.pop()();
+        };
     }
     // packages/alpinejs/src/datas.js
     var datas = {};
-    function data$1(name, callback) {
+    function data(name, callback) {
         datas[name] = callback;
     }
     function injectDataProviders(obj, context) {
@@ -14615,18 +14085,21 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         get raw () {
             return raw;
         },
-        version: "3.12.3",
+        version: "3.14.9",
         flushAndStopDeferringMutations,
         dontAutoEvaluateFunctions,
         disableEffectScheduling,
         startObservingMutations,
         stopObservingMutations,
         setReactivityEngine,
+        onAttributeRemoved,
+        onAttributesAdded,
         closestDataStack,
         skipDuringClone,
         onlyDuringClone,
         addRootSelector,
         addInitSelector,
+        interceptClone,
         addScopeToNode,
         deferMutations,
         mapAttributes,
@@ -14636,13 +14109,18 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         mergeProxies,
         extractProp,
         findClosest,
+        onElRemoved,
         closestRoot,
         destroyTree,
         interceptor,
+        // INTERNAL: not public API and is subject to change without major release.
         transition,
+        // INTERNAL
         setStyles,
+        // INTERNAL
         mutateDom,
         directive,
+        entangle,
         throttle,
         debounce,
         evaluate,
@@ -14653,18 +14131,22 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         plugin,
         magic,
         store,
-        start,
-        clone,
+        start: start$1,
+        clone: clone$1,
+        // INTERNAL
+        cloneNode,
+        // INTERNAL
         bound: getBinding,
         $data: scope,
+        watch,
         walk,
-        data: data$1,
+        data,
         bind: bind2
     };
     var alpine_default = Alpine$1;
     // node_modules/@vue/shared/dist/shared.esm-bundler.js
     function makeMap(str, expectsLowerCase) {
-        const map = Object.create(null);
+        const map = /* @__PURE__ */ Object.create(null);
         const list = str.split(",");
         for(let i = 0; i < list.length; i++){
             map[list[i]] = true;
@@ -14673,18 +14155,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         ;
     }
     var EMPTY_OBJ = Object.freeze({}) ;
-    var extend = Object.assign;
     var hasOwnProperty = Object.prototype.hasOwnProperty;
     var hasOwn = (val, key)=>hasOwnProperty.call(val, key)
     ;
     var isArray = Array.isArray;
     var isMap = (val)=>toTypeString(val) === "[object Map]"
     ;
-    var isString$1 = (val)=>typeof val === "string"
+    var isString = (val)=>typeof val === "string"
     ;
     var isSymbol = (val)=>typeof val === "symbol"
     ;
-    var isObject = (val)=>val !== null && typeof val === "object"
+    var isObject$1 = (val)=>val !== null && typeof val === "object"
     ;
     var objectToString = Object.prototype.toString;
     var toTypeString = (value)=>objectToString.call(value)
@@ -14692,10 +14173,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var toRawType = (value)=>{
         return toTypeString(value).slice(8, -1);
     };
-    var isIntegerKey = (key)=>isString$1(key) && key !== "NaN" && key[0] !== "-" && "" + parseInt(key, 10) === key
+    var isIntegerKey = (key)=>isString(key) && key !== "NaN" && key[0] !== "-" && "" + parseInt(key, 10) === key
     ;
     var cacheStringFunction = (fn)=>{
-        const cache = Object.create(null);
+        const cache = /* @__PURE__ */ Object.create(null);
         return (str)=>{
             const hit = cache[str];
             return hit || (cache[str] = fn(str));
@@ -14706,7 +14187,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var hasChanged = (value, oldValue)=>value !== oldValue && (value === value || oldValue === oldValue)
     ;
     // node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js
-    var targetMap = new WeakMap();
+    var targetMap = /* @__PURE__ */ new WeakMap();
     var effectStack = [];
     var activeEffect;
     var ITERATE_KEY = Symbol("iterate" );
@@ -14791,11 +14272,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
         let depsMap = targetMap.get(target);
         if (!depsMap) {
-            targetMap.set(target, depsMap = new Map());
+            targetMap.set(target, depsMap = /* @__PURE__ */ new Map());
         }
         let dep = depsMap.get(key);
         if (!dep) {
-            depsMap.set(key, dep = new Set());
+            depsMap.set(key, dep = /* @__PURE__ */ new Set());
         }
         if (!dep.has(activeEffect)) {
             dep.add(activeEffect);
@@ -14815,7 +14296,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (!depsMap) {
             return;
         }
-        const effects = new Set();
+        const effects = /* @__PURE__ */ new Set();
         const add2 = (effectsToAdd)=>{
             if (effectsToAdd) {
                 effectsToAdd.forEach((effect3)=>{
@@ -14887,44 +14368,44 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     var builtInSymbols = new Set(Object.getOwnPropertyNames(Symbol).map((key)=>Symbol[key]
     ).filter(isSymbol));
     var get2 = /* @__PURE__ */ createGetter();
-    var shallowGet = /* @__PURE__ */ createGetter(false, true);
     var readonlyGet = /* @__PURE__ */ createGetter(true);
-    var shallowReadonlyGet = /* @__PURE__ */ createGetter(true, true);
-    var arrayInstrumentations = {};
-    [
-        "includes",
-        "indexOf",
-        "lastIndexOf"
-    ].forEach((key)=>{
-        const method = Array.prototype[key];
-        arrayInstrumentations[key] = function(...args) {
-            const arr = toRaw(this);
-            for(let i = 0, l = this.length; i < l; i++){
-                track(arr, "get", i + "");
-            }
-            const res = method.apply(arr, args);
-            if (res === -1 || res === false) {
-                return method.apply(arr, args.map(toRaw));
-            } else {
+    var arrayInstrumentations = /* @__PURE__ */ createArrayInstrumentations();
+    function createArrayInstrumentations() {
+        const instrumentations = {};
+        [
+            "includes",
+            "indexOf",
+            "lastIndexOf"
+        ].forEach((key)=>{
+            instrumentations[key] = function(...args) {
+                const arr = toRaw(this);
+                for(let i = 0, l = this.length; i < l; i++){
+                    track(arr, "get", i + "");
+                }
+                const res = arr[key](...args);
+                if (res === -1 || res === false) {
+                    return arr[key](...args.map(toRaw));
+                } else {
+                    return res;
+                }
+            };
+        });
+        [
+            "push",
+            "pop",
+            "shift",
+            "unshift",
+            "splice"
+        ].forEach((key)=>{
+            instrumentations[key] = function(...args) {
+                pauseTracking();
+                const res = toRaw(this)[key].apply(this, args);
+                resetTracking();
                 return res;
-            }
-        };
-    });
-    [
-        "push",
-        "pop",
-        "shift",
-        "unshift",
-        "splice"
-    ].forEach((key)=>{
-        const method = Array.prototype[key];
-        arrayInstrumentations[key] = function(...args) {
-            pauseTracking();
-            const res = method.apply(this, args);
-            resetTracking();
-            return res;
-        };
-    });
+            };
+        });
+        return instrumentations;
+    }
     function createGetter(isReadonly = false, shallow = false) {
         return function get3(target, key, receiver) {
             if (key === "__v_isReactive") {
@@ -14952,14 +14433,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 const shouldUnwrap = !targetIsArray || !isIntegerKey(key);
                 return shouldUnwrap ? res.value : res;
             }
-            if (isObject(res)) {
+            if (isObject$1(res)) {
                 return isReadonly ? readonly(res) : reactive2(res);
             }
             return res;
         };
     }
     var set2 = /* @__PURE__ */ createSetter();
-    var shallowSet = /* @__PURE__ */ createSetter(true);
     function createSetter(shallow = false) {
         return function set3(target, key, value, receiver) {
             let oldValue = target[key];
@@ -15025,16 +14505,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             return true;
         }
     };
-    extend({}, mutableHandlers, {
-        get: shallowGet,
-        set: shallowSet
-    });
-    extend({}, readonlyHandlers, {
-        get: shallowReadonlyGet
-    });
-    var toReactive = (value)=>isObject(value) ? reactive2(value) : value
+    var toReactive = (value)=>isObject$1(value) ? reactive2(value) : value
     ;
-    var toReadonly = (value)=>isObject(value) ? readonly(value) : value
+    var toReadonly = (value)=>isObject$1(value) ? readonly(value) : value
     ;
     var toShallow = (value)=>value
     ;
@@ -15154,6 +14627,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             const wrap = isShallow ? toShallow : isReadonly ? toReadonly : toReactive;
             !isReadonly && track(rawTarget, "iterate", isKeyOnly ? MAP_KEY_ITERATE_KEY : ITERATE_KEY);
             return {
+                // iterator protocol
                 next () {
                     const { value , done  } = innerIterator.next();
                     return done ? {
@@ -15167,6 +14641,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                         done
                     };
                 },
+                // iterable protocol
                 [Symbol.iterator] () {
                     return this;
                 }
@@ -15182,80 +14657,89 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             return type === "delete" ? false : this;
         };
     }
-    var mutableInstrumentations = {
-        get (key) {
-            return get$1(this, key);
-        },
-        get size () {
-            return size(this);
-        },
-        has: has$1,
-        add,
-        set: set$1,
-        delete: deleteEntry,
-        clear,
-        forEach: createForEach(false, false)
-    };
-    var shallowInstrumentations = {
-        get (key) {
-            return get$1(this, key, false, true);
-        },
-        get size () {
-            return size(this);
-        },
-        has: has$1,
-        add,
-        set: set$1,
-        delete: deleteEntry,
-        clear,
-        forEach: createForEach(false, true)
-    };
-    var readonlyInstrumentations = {
-        get (key) {
-            return get$1(this, key, true);
-        },
-        get size () {
-            return size(this, true);
-        },
-        has (key) {
-            return has$1.call(this, key, true);
-        },
-        add: createReadonlyMethod("add"),
-        set: createReadonlyMethod("set"),
-        delete: createReadonlyMethod("delete"),
-        clear: createReadonlyMethod("clear"),
-        forEach: createForEach(true, false)
-    };
-    var shallowReadonlyInstrumentations = {
-        get (key) {
-            return get$1(this, key, true, true);
-        },
-        get size () {
-            return size(this, true);
-        },
-        has (key) {
-            return has$1.call(this, key, true);
-        },
-        add: createReadonlyMethod("add"),
-        set: createReadonlyMethod("set"),
-        delete: createReadonlyMethod("delete"),
-        clear: createReadonlyMethod("clear"),
-        forEach: createForEach(true, true)
-    };
-    var iteratorMethods = [
-        "keys",
-        "values",
-        "entries",
-        Symbol.iterator
-    ];
-    iteratorMethods.forEach((method)=>{
-        mutableInstrumentations[method] = createIterableMethod(method, false, false);
-        readonlyInstrumentations[method] = createIterableMethod(method, true, false);
-        shallowInstrumentations[method] = createIterableMethod(method, false, true);
-        shallowReadonlyInstrumentations[method] = createIterableMethod(method, true, true);
-    });
+    function createInstrumentations() {
+        const mutableInstrumentations2 = {
+            get (key) {
+                return get$1(this, key);
+            },
+            get size () {
+                return size(this);
+            },
+            has: has$1,
+            add,
+            set: set$1,
+            delete: deleteEntry,
+            clear,
+            forEach: createForEach(false, false)
+        };
+        const shallowInstrumentations2 = {
+            get (key) {
+                return get$1(this, key, false, true);
+            },
+            get size () {
+                return size(this);
+            },
+            has: has$1,
+            add,
+            set: set$1,
+            delete: deleteEntry,
+            clear,
+            forEach: createForEach(false, true)
+        };
+        const readonlyInstrumentations2 = {
+            get (key) {
+                return get$1(this, key, true);
+            },
+            get size () {
+                return size(this, true);
+            },
+            has (key) {
+                return has$1.call(this, key, true);
+            },
+            add: createReadonlyMethod("add"),
+            set: createReadonlyMethod("set"),
+            delete: createReadonlyMethod("delete"),
+            clear: createReadonlyMethod("clear"),
+            forEach: createForEach(true, false)
+        };
+        const shallowReadonlyInstrumentations2 = {
+            get (key) {
+                return get$1(this, key, true, true);
+            },
+            get size () {
+                return size(this, true);
+            },
+            has (key) {
+                return has$1.call(this, key, true);
+            },
+            add: createReadonlyMethod("add"),
+            set: createReadonlyMethod("set"),
+            delete: createReadonlyMethod("delete"),
+            clear: createReadonlyMethod("clear"),
+            forEach: createForEach(true, true)
+        };
+        const iteratorMethods = [
+            "keys",
+            "values",
+            "entries",
+            Symbol.iterator
+        ];
+        iteratorMethods.forEach((method)=>{
+            mutableInstrumentations2[method] = createIterableMethod(method, false, false);
+            readonlyInstrumentations2[method] = createIterableMethod(method, true, false);
+            shallowInstrumentations2[method] = createIterableMethod(method, false, true);
+            shallowReadonlyInstrumentations2[method] = createIterableMethod(method, true, true);
+        });
+        return [
+            mutableInstrumentations2,
+            readonlyInstrumentations2,
+            shallowInstrumentations2,
+            shallowReadonlyInstrumentations2
+        ];
+    }
+    var [mutableInstrumentations, readonlyInstrumentations, shallowInstrumentations, shallowReadonlyInstrumentations] = /* @__PURE__ */ createInstrumentations();
     function createInstrumentationGetter(isReadonly, shallow) {
-        const instrumentations = shallow ? isReadonly ? shallowReadonlyInstrumentations : shallowInstrumentations : isReadonly ? readonlyInstrumentations : mutableInstrumentations;
+        const instrumentations = isReadonly ? readonlyInstrumentations : mutableInstrumentations;
         return (target, key, receiver)=>{
             if (key === "__v_isReactive") {
                 return !isReadonly;
@@ -15268,10 +14752,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         };
     }
     var mutableCollectionHandlers = {
-        get: createInstrumentationGetter(false, false)
+        get: /* @__PURE__ */ createInstrumentationGetter(false)
     };
     var readonlyCollectionHandlers = {
-        get: createInstrumentationGetter(true, false)
+        get: /* @__PURE__ */ createInstrumentationGetter(true)
     };
     function checkIdentityKeys(target, has2, key) {
         const rawKey = toRaw(key);
@@ -15280,10 +14764,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             console.warn(`Reactive ${type} contains both the raw and reactive versions of the same object${type === `Map` ? ` as keys` : ``}, which can lead to inconsistencies. Avoid differentiating between the raw and reactive versions of an object and only use the reactive version if possible.`);
         }
     }
-    var reactiveMap = new WeakMap();
-    var shallowReactiveMap = new WeakMap();
-    var readonlyMap = new WeakMap();
-    var shallowReadonlyMap = new WeakMap();
+    var reactiveMap = /* @__PURE__ */ new WeakMap();
+    var shallowReactiveMap = /* @__PURE__ */ new WeakMap();
+    var readonlyMap = /* @__PURE__ */ new WeakMap();
+    var shallowReadonlyMap = /* @__PURE__ */ new WeakMap();
     function targetTypeMap(rawType) {
         switch(rawType){
             case "Object":
@@ -15311,7 +14795,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return createReactiveObject(target, true, readonlyHandlers, readonlyCollectionHandlers, readonlyMap);
     }
     function createReactiveObject(target, isReadonly, baseHandlers, collectionHandlers, proxyMap) {
-        if (!isObject(target)) {
+        if (!isObject$1(target)) {
             {
                 console.warn(`value cannot be made reactive: ${String(target)}`);
             }
@@ -15345,24 +14829,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     magic("dispatch", (el)=>dispatch.bind(dispatch, el)
     );
     // packages/alpinejs/src/magics/$watch.js
-    magic("watch", (el, { evaluateLater: evaluateLater2 , effect: effect3  })=>(key, callback)=>{
+    magic("watch", (el, { evaluateLater: evaluateLater2 , cleanup: cleanup2  })=>(key, callback)=>{
             let evaluate2 = evaluateLater2(key);
-            let firstTime = true;
-            let oldValue;
-            let effectReference = effect3(()=>evaluate2((value)=>{
-                    JSON.stringify(value);
-                    if (!firstTime) {
-                        queueMicrotask(()=>{
-                            callback(value, oldValue);
-                            oldValue = value;
-                        });
-                    } else {
-                        oldValue = value;
-                    }
-                    firstTime = false;
-                })
-            );
-            el._x_effects.delete(effectReference);
+            let getter = ()=>{
+                let value;
+                evaluate2((i)=>value = i
+                );
+                return value;
+            };
+            let unwatch = watch(getter, callback);
+            cleanup2(unwatch);
         }
     );
     // packages/alpinejs/src/magics/$store.js
@@ -15381,11 +14857,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
     function getArrayOfRefObject(el) {
         let refObjects = [];
-        let currentEl = el;
-        while(currentEl){
-            if (currentEl._x_refs) refObjects.push(currentEl._x_refs);
-            currentEl = currentEl.parentNode;
-        }
+        findClosest(el, (i)=>{
+            if (i._x_refs) refObjects.push(i._x_refs);
+        });
         return refObjects;
     }
     // packages/alpinejs/src/ids.js
@@ -15404,12 +14878,30 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (!el._x_ids[name]) el._x_ids[name] = findAndIncrementId(name);
     }
     // packages/alpinejs/src/magics/$id.js
-    magic("id", (el)=>(name, key = null)=>{
-            let root = closestIdRoot(el, name);
-            let id = root ? root._x_ids[name] : findAndIncrementId(name);
-            return key ? `${name}-${id}-${key}` : `${name}-${id}`;
+    magic("id", (el, { cleanup: cleanup2  })=>(name, key = null)=>{
+            let cacheKey = `${name}${key ? `-${key}` : ""}`;
+            return cacheIdByNameOnElement(el, cacheKey, cleanup2, ()=>{
+                let root = closestIdRoot(el, name);
+                let id = root ? root._x_ids[name] : findAndIncrementId(name);
+                return key ? `${name}-${id}-${key}` : `${name}-${id}`;
+            });
         }
     );
+    interceptClone((from, to)=>{
+        if (from._x_id) {
+            to._x_id = from._x_id;
+        }
+    });
+    function cacheIdByNameOnElement(el, cacheKey, cleanup2, callback) {
+        if (!el._x_id) el._x_id = {};
+        if (el._x_id[cacheKey]) return el._x_id[cacheKey];
+        let output = callback();
+        el._x_id[cacheKey] = output;
+        cleanup2(()=>{
+            delete el._x_id[cacheKey];
+        });
+        return output;
+    }
     // packages/alpinejs/src/magics/$el.js
     magic("el", (el)=>el
     );
@@ -15417,40 +14909,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     warnMissingPluginMagic("Focus", "focus", "focus");
     warnMissingPluginMagic("Persist", "persist", "persist");
     function warnMissingPluginMagic(name, magicName, slug) {
-        magic(magicName, (el)=>warn(`You can't use [$${directiveName}] without first installing the "${name}" plugin here: https://alpinejs.dev/plugins/${slug}`, el)
+        magic(magicName, (el)=>warn(`You can't use [$${magicName}] without first installing the "${name}" plugin here: https://alpinejs.dev/plugins/${slug}`, el)
         );
-    }
-    // packages/alpinejs/src/entangle.js
-    function entangle({ get: outerGet , set: outerSet  }, { get: innerGet , set: innerSet  }) {
-        let firstRun = true;
-        let outerHash, outerHashLatest;
-        let reference = effect(()=>{
-            let outer, inner;
-            if (firstRun) {
-                outer = outerGet();
-                innerSet(outer);
-                inner = innerGet();
-                firstRun = false;
-            } else {
-                outer = outerGet();
-                inner = innerGet();
-                outerHashLatest = JSON.stringify(outer);
-                JSON.stringify(inner);
-                if (outerHashLatest !== outerHash) {
-                    inner = innerGet();
-                    innerSet(outer);
-                    inner = outer;
-                } else {
-                    outerSet(inner);
-                    outer = inner;
-                }
-            }
-            outerHash = JSON.stringify(outer);
-            JSON.stringify(inner);
-        });
-        return ()=>{
-            release(reference);
-        };
     }
     // packages/alpinejs/src/directives/x-modelable.js
     directive("modelable", (el, { expression  }, { effect: effect3 , evaluateLater: evaluateLater2 , cleanup: cleanup2  })=>{
@@ -15464,7 +14924,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         let evaluateInnerSet = evaluateLater2(`${expression} = __placeholder`);
         let innerSet = (val)=>evaluateInnerSet(()=>{}, {
                 scope: {
-                    __placeholder: val
+                    "__placeholder": val
                 }
             })
         ;
@@ -15494,18 +14954,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         });
     });
     // packages/alpinejs/src/directives/x-teleport.js
-    var teleportContainerDuringClone = document.createElement("div");
     directive("teleport", (el, { modifiers , expression  }, { cleanup: cleanup2  })=>{
         if (el.tagName.toLowerCase() !== "template") warn("x-teleport can only be used on a <template> tag", el);
-        let target = skipDuringClone(()=>{
-            return document.querySelector(expression);
-        }, ()=>{
-            return teleportContainerDuringClone;
-        })();
-        if (!target) warn(`Cannot find x-teleport element for selector: "${expression}"`);
+        let target = getTarget(expression);
         let clone2 = el.content.cloneNode(true).firstElementChild;
         el._x_teleport = clone2;
         clone2._x_teleportBack = el;
+        el.setAttribute("data-teleport-template", true);
+        clone2.setAttribute("data-teleport-target", true);
         if (el._x_forwardEvents) {
             el._x_forwardEvents.forEach((eventName)=>{
                 clone2.addEventListener(eventName, (e)=>{
@@ -15515,20 +14971,43 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             });
         }
         addScopeToNode(clone2, {}, el);
-        mutateDom(()=>{
-            if (modifiers.includes("prepend")) {
-                target.parentNode.insertBefore(clone2, target);
-            } else if (modifiers.includes("append")) {
-                target.parentNode.insertBefore(clone2, target.nextSibling);
+        let placeInDom = (clone3, target2, modifiers2)=>{
+            if (modifiers2.includes("prepend")) {
+                target2.parentNode.insertBefore(clone3, target2);
+            } else if (modifiers2.includes("append")) {
+                target2.parentNode.insertBefore(clone3, target2.nextSibling);
             } else {
-                target.appendChild(clone2);
+                target2.appendChild(clone3);
             }
-            initTree(clone2);
-            clone2._x_ignore = true;
+        };
+        mutateDom(()=>{
+            placeInDom(clone2, target, modifiers);
+            skipDuringClone(()=>{
+                initTree(clone2);
+            })();
         });
-        cleanup2(()=>clone2.remove()
+        el._x_teleportPutBack = ()=>{
+            let target2 = getTarget(expression);
+            mutateDom(()=>{
+                placeInDom(el._x_teleport, target2, modifiers);
+            });
+        };
+        cleanup2(()=>mutateDom(()=>{
+                clone2.remove();
+                destroyTree(clone2);
+            })
         );
     });
+    var teleportContainerDuringClone = document.createElement("div");
+    function getTarget(expression) {
+        let target = skipDuringClone(()=>{
+            return document.querySelector(expression);
+        }, ()=>{
+            return teleportContainerDuringClone;
+        })();
+        if (!target) warn(`Cannot find x-teleport element for selector: "${expression}"`);
+        return target;
+    }
     // packages/alpinejs/src/directives/x-ignore.js
     var handler = ()=>{};
     handler.inline = (el, { modifiers  }, { cleanup: cleanup2  })=>{
@@ -15539,8 +15018,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     };
     directive("ignore", handler);
     // packages/alpinejs/src/directives/x-effect.js
-    directive("effect", (el, { expression  }, { effect: effect3  })=>effect3(evaluateLater(el, expression))
-    );
+    directive("effect", skipDuringClone((el, { expression  }, { effect: effect3  })=>{
+        effect3(evaluateLater(el, expression));
+    }));
     // packages/alpinejs/src/utils/on.js
     function on(el, event, modifiers, callback) {
         let listenerTarget = el;
@@ -15557,12 +15037,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (modifiers.includes("document")) listenerTarget = document;
         if (modifiers.includes("debounce")) {
             let nextModifier = modifiers[modifiers.indexOf("debounce") + 1] || "invalid-wait";
-            let wait = isNumeric(nextModifier.split("ms")[0]) ? Number(nextModifier.split("ms")[0]) : 250;
+            let wait = isNumeric$1(nextModifier.split("ms")[0]) ? Number(nextModifier.split("ms")[0]) : 250;
             handler4 = debounce(handler4, wait);
         }
         if (modifiers.includes("throttle")) {
             let nextModifier = modifiers[modifiers.indexOf("throttle") + 1] || "invalid-wait";
-            let wait = isNumeric(nextModifier.split("ms")[0]) ? Number(nextModifier.split("ms")[0]) : 250;
+            let wait = isNumeric$1(nextModifier.split("ms")[0]) ? Number(nextModifier.split("ms")[0]) : 250;
             handler4 = throttle(handler4, wait);
         }
         if (modifiers.includes("prevent")) handler4 = wrapHandler(handler4, (next, e)=>{
@@ -15573,9 +15053,12 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             e.stopPropagation();
             next(e);
         });
-        if (modifiers.includes("self")) handler4 = wrapHandler(handler4, (next, e)=>{
-            e.target === el && next(e);
-        });
+        if (modifiers.includes("once")) {
+            handler4 = wrapHandler(handler4, (next, e)=>{
+                next(e);
+                listenerTarget.removeEventListener(event, handler4, options);
+            });
+        }
         if (modifiers.includes("away") || modifiers.includes("outside")) {
             listenerTarget = document;
             handler4 = wrapHandler(handler4, (next, e)=>{
@@ -15586,20 +15069,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 next(e);
             });
         }
-        if (modifiers.includes("once")) {
+        if (modifiers.includes("self")) handler4 = wrapHandler(handler4, (next, e)=>{
+            e.target === el && next(e);
+        });
+        if (isKeyEvent(event) || isClickEvent(event)) {
             handler4 = wrapHandler(handler4, (next, e)=>{
-                next(e);
-                listenerTarget.removeEventListener(event, handler4, options);
-            });
-        }
-        handler4 = wrapHandler(handler4, (next, e)=>{
-            if (isKeyEvent(event)) {
                 if (isListeningForASpecificKeyThatHasntBeenPressed(e, modifiers)) {
                     return;
                 }
-            }
-            next(e);
-        });
+                next(e);
+            });
+        }
         listenerTarget.addEventListener(event, handler4, options);
         return ()=>{
             listenerTarget.removeEventListener(event, handler4, options);
@@ -15612,7 +15092,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return subject.toLowerCase().replace(/-(\w)/g, (match, char)=>char.toUpperCase()
         );
     }
-    function isNumeric(subject) {
+    function isNumeric$1(subject) {
         return !Array.isArray(subject) && !isNaN(subject);
     }
     function kebabCase2(subject) {
@@ -15628,6 +15108,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             "keyup"
         ].includes(event);
     }
+    function isClickEvent(event) {
+        return [
+            "contextmenu",
+            "click",
+            "mouse"
+        ].some((i)=>event.includes(i)
+        );
+    }
     function isListeningForASpecificKeyThatHasntBeenPressed(e, modifiers) {
         let keyModifiers = modifiers.filter((i)=>{
             return ![
@@ -15636,16 +15124,20 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 "prevent",
                 "stop",
                 "once",
-                "capture"
+                "capture",
+                "self",
+                "away",
+                "outside",
+                "passive"
             ].includes(i);
         });
         if (keyModifiers.includes("debounce")) {
             let debounceIndex = keyModifiers.indexOf("debounce");
-            keyModifiers.splice(debounceIndex, isNumeric((keyModifiers[debounceIndex + 1] || "invalid-wait").split("ms")[0]) ? 2 : 1);
+            keyModifiers.splice(debounceIndex, isNumeric$1((keyModifiers[debounceIndex + 1] || "invalid-wait").split("ms")[0]) ? 2 : 1);
         }
         if (keyModifiers.includes("throttle")) {
             let debounceIndex = keyModifiers.indexOf("throttle");
-            keyModifiers.splice(debounceIndex, isNumeric((keyModifiers[debounceIndex + 1] || "invalid-wait").split("ms")[0]) ? 2 : 1);
+            keyModifiers.splice(debounceIndex, isNumeric$1((keyModifiers[debounceIndex + 1] || "invalid-wait").split("ms")[0]) ? 2 : 1);
         }
         if (keyModifiers.length === 0) return false;
         if (keyModifiers.length === 1 && keyToModifiers(e.key).includes(keyModifiers[0])) return false;
@@ -15667,6 +15159,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 return e[`${modifier}Key`];
             });
             if (activelyPressedKeyModifiers.length === selectedSystemKeyModifiers.length) {
+                if (isClickEvent(e.type)) return false;
                 if (keyToModifiers(e.key).includes(keyModifiers[0])) return false;
             }
         }
@@ -15676,20 +15169,21 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (!key) return [];
         key = kebabCase2(key);
         let modifierToKeyMap = {
-            ctrl: "control",
-            slash: "/",
-            space: " ",
-            spacebar: " ",
-            cmd: "meta",
-            esc: "escape",
-            up: "arrow-up",
-            down: "arrow-down",
-            left: "arrow-left",
-            right: "arrow-right",
-            period: ".",
-            equal: "=",
-            minus: "-",
-            underscore: "_"
+            "ctrl": "control",
+            "slash": "/",
+            "space": " ",
+            "spacebar": " ",
+            "cmd": "meta",
+            "esc": "escape",
+            "up": "arrow-up",
+            "down": "arrow-down",
+            "left": "arrow-left",
+            "right": "arrow-right",
+            "period": ".",
+            "comma": ",",
+            "equal": "=",
+            "minus": "-",
+            "underscore": "_"
         };
         modifierToKeyMap[key] = key;
         return Object.keys(modifierToKeyMap).map((modifier)=>{
@@ -15727,7 +15221,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             } else {
                 evaluateSet(()=>{}, {
                     scope: {
-                        __placeholder: value
+                        "__placeholder": value
                     }
                 });
             }
@@ -15744,11 +15238,16 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         let removeListener = isCloning ? ()=>{} : on(el, event, modifiers, (e)=>{
             setValue(getInputValue(el, modifiers, e, getValue()));
         });
-        if (modifiers.includes("fill") && [
-            null,
-            ""
-        ].includes(getValue())) {
-            el.dispatchEvent(new Event(event, {}));
+        if (modifiers.includes("fill")) {
+            if ([
+                void 0,
+                null,
+                ""
+            ].includes(getValue()) || isCheckbox(el) && Array.isArray(getValue()) || el.tagName.toLowerCase() === "select" && el.multiple) {
+                setValue(getInputValue(el, modifiers, {
+                    target: el
+                }, getValue()));
+            }
         }
         if (!el._x_removeModelListeners) el._x_removeModelListeners = {};
         el._x_removeModelListeners["default"] = removeListener;
@@ -15756,7 +15255,9 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         );
         if (el.form) {
             let removeResetListener = on(el.form, "reset", [], (e)=>{
-                nextTick(()=>el._x_model && el._x_model.set(el.value)
+                nextTick(()=>el._x_model && el._x_model.set(getInputValue(el, modifiers, {
+                        target: el
+                    }, getValue()))
                 );
             });
             cleanup2(()=>removeResetListener()
@@ -15771,7 +15272,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             }
         };
         el._x_forceModelUpdate = (value)=>{
-            value = value === void 0 ? getValue() : value;
             if (value === void 0 && typeof expression === "string" && expression.match(/\./)) value = "";
             window.fromModel = true;
             mutateDom(()=>bind(el, "value", value)
@@ -15786,12 +15286,18 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
     function getInputValue(el, modifiers, event, currentValue) {
         return mutateDom(()=>{
-            var _detail;
-            if (event instanceof CustomEvent && event.detail !== void 0) return (_detail = event.detail) !== null && _detail !== void 0 ? _detail : event.target.value;
-            else if (el.type === "checkbox") {
+            if (event instanceof CustomEvent && event.detail !== void 0) return event.detail !== null && event.detail !== void 0 ? event.detail : event.target.value;
+            else if (isCheckbox(el)) {
                 if (Array.isArray(currentValue)) {
-                    let newValue = modifiers.includes("number") ? safeParseNumber(event.target.value) : event.target.value;
-                    return event.target.checked ? currentValue.concat([
+                    let newValue = null;
+                    if (modifiers.includes("number")) {
+                        newValue = safeParseNumber(event.target.value);
+                    } else if (modifiers.includes("boolean")) {
+                        newValue = safeParseBoolean(event.target.value);
+                    } else {
+                        newValue = event.target.value;
+                    }
+                    return event.target.checked ? currentValue.includes(newValue) ? currentValue : currentValue.concat([
                         newValue
                     ]) : currentValue.filter((el2)=>!checkedAttrLooseCompare2(el2, newValue)
                     );
@@ -15799,15 +15305,40 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                     return event.target.checked;
                 }
             } else if (el.tagName.toLowerCase() === "select" && el.multiple) {
-                return modifiers.includes("number") ? Array.from(event.target.selectedOptions).map((option)=>{
-                    let rawValue = option.value || option.text;
-                    return safeParseNumber(rawValue);
-                }) : Array.from(event.target.selectedOptions).map((option)=>{
+                if (modifiers.includes("number")) {
+                    return Array.from(event.target.selectedOptions).map((option)=>{
+                        let rawValue = option.value || option.text;
+                        return safeParseNumber(rawValue);
+                    });
+                } else if (modifiers.includes("boolean")) {
+                    return Array.from(event.target.selectedOptions).map((option)=>{
+                        let rawValue = option.value || option.text;
+                        return safeParseBoolean(rawValue);
+                    });
+                }
+                return Array.from(event.target.selectedOptions).map((option)=>{
                     return option.value || option.text;
                 });
             } else {
-                let rawValue = event.target.value;
-                return modifiers.includes("number") ? safeParseNumber(rawValue) : modifiers.includes("trim") ? rawValue.trim() : rawValue;
+                let newValue;
+                if (isRadio(el)) {
+                    if (event.target.checked) {
+                        newValue = event.target.value;
+                    } else {
+                        newValue = currentValue;
+                    }
+                } else {
+                    newValue = event.target.value;
+                }
+                if (modifiers.includes("number")) {
+                    return safeParseNumber(newValue);
+                } else if (modifiers.includes("boolean")) {
+                    return safeParseBoolean(newValue);
+                } else if (modifiers.includes("trim")) {
+                    return newValue.trim();
+                } else {
+                    return newValue;
+                }
             }
         });
     }
@@ -15865,7 +15396,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
     // packages/alpinejs/src/directives/x-bind.js
     mapAttributes(startingWith(":", into(prefix("bind:"))));
-    var handler2 = (el, { value , modifiers , expression , original  }, { effect: effect3  })=>{
+    var handler2 = (el, { value , modifiers , expression , original  }, { effect: effect3 , cleanup: cleanup2  })=>{
         if (!value) {
             let bindingProviders = {};
             injectBindingProviders(bindingProviders);
@@ -15890,6 +15421,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 );
             })
         );
+        cleanup2(()=>{
+            el._x_undoAddedClasses && el._x_undoAddedClasses();
+            el._x_undoAddedStyles && el._x_undoAddedStyles();
+        });
     };
     handler2.inline = (el, { value , modifiers , expression  })=>{
         if (!value) return;
@@ -15906,7 +15441,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     // packages/alpinejs/src/directives/x-data.js
     addRootSelector(()=>`[${prefix("data")}]`
     );
-    directive("data", skipDuringClone((el, { expression  }, { cleanup: cleanup2  })=>{
+    directive("data", (el, { expression  }, { cleanup: cleanup2  })=>{
+        if (shouldSkipRegisteringDataDuringClone(el)) return;
         expression = expression === "" ? "{}" : expression;
         let magicContext = {};
         injectMagics(magicContext, el);
@@ -15925,7 +15461,18 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             reactiveData["destroy"] && evaluate(el, reactiveData["destroy"]);
             undo();
         });
-    }));
+    });
+    interceptClone((from, to)=>{
+        if (from._x_dataStack) {
+            to._x_dataStack = from._x_dataStack;
+            to.setAttribute("data-has-alpine-state", true);
+        }
+    });
+    function shouldSkipRegisteringDataDuringClone(el) {
+        if (!isCloning) return false;
+        if (isCloningLegacy) return true;
+        return el.hasAttribute("data-has-alpine-state");
+    }
     // packages/alpinejs/src/directives/x-show.js
     directive("show", (el, { modifiers , expression  }, { effect: effect3  })=>{
         let evaluate2 = evaluateLater(el, expression);
@@ -15976,13 +15523,17 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     directive("for", (el, { expression  }, { effect: effect3 , cleanup: cleanup2  })=>{
         let iteratorNames = parseForExpression(expression);
         let evaluateItems = evaluateLater(el, iteratorNames.items);
-        let evaluateKey = evaluateLater(el, el._x_keyExpression || "index");
+        let evaluateKey = evaluateLater(el, // the x-bind:key expression is stored for our use instead of evaluated.
+        el._x_keyExpression || "index");
         el._x_prevKeys = [];
         el._x_lookup = {};
         effect3(()=>loop(el, iteratorNames, evaluateItems, evaluateKey)
         );
         cleanup2(()=>{
-            Object.values(el._x_lookup).forEach((el2)=>el2.remove()
+            Object.values(el._x_lookup).forEach((el2)=>mutateDom(()=>{
+                    destroyTree(el2);
+                    el2.remove();
+                })
             );
             delete el._x_prevKeys;
             delete el._x_lookup;
@@ -16005,8 +15556,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             if (isObject2(items)) {
                 items = Object.entries(items).map(([key, value])=>{
                     let scope2 = getIterationScopeVariables(iteratorNames, value, key, items);
-                    evaluateKey((value2)=>keys.push(value2)
-                    , {
+                    evaluateKey((value2)=>{
+                        if (keys.includes(value2)) warn("Duplicate key on x-for", el);
+                        keys.push(value2);
+                    }, {
                         scope: {
                             index: key,
                             ...scope2
@@ -16017,8 +15570,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             } else {
                 for(let i = 0; i < items.length; i++){
                     let scope2 = getIterationScopeVariables(iteratorNames, items[i], i, items);
-                    evaluateKey((value)=>keys.push(value)
-                    , {
+                    evaluateKey((value)=>{
+                        if (keys.includes(value)) warn("Duplicate key on x-for", el);
+                        keys.push(value);
+                    }, {
                         scope: {
                             index: i,
                             ...scope2
@@ -16063,11 +15618,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             }
             for(let i3 = 0; i3 < removes.length; i3++){
                 let key = removes[i3];
-                if (!!lookup[key]._x_effects) {
-                    lookup[key]._x_effects.forEach(dequeueJob);
-                }
-                lookup[key].remove();
-                lookup[key] = null;
+                if (!(key in lookup)) continue;
+                mutateDom(()=>{
+                    destroyTree(lookup[key]);
+                    lookup[key].remove();
+                });
                 delete lookup[key];
             }
             for(let i4 = 0; i4 < moves.length; i4++){
@@ -16076,7 +15631,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 let elForSpot = lookup[keyForSpot];
                 let marker = document.createElement("div");
                 mutateDom(()=>{
-                    if (!elForSpot) warn(`x-for ":key" is undefined or invalid`, templateEl);
+                    if (!elForSpot) warn(`x-for ":key" is undefined or invalid`, templateEl, keyForSpot, lookup);
                     elForSpot.after(marker);
                     elInSpot.after(elForSpot);
                     elForSpot._x_currentIfEl && elForSpot.after(elForSpot._x_currentIfEl);
@@ -16102,7 +15657,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 };
                 mutateDom(()=>{
                     lastEl.after(clone2);
-                    initTree(clone2);
+                    skipDuringClone(()=>initTree(clone2)
+                    )();
                 });
                 if (typeof key === "object") {
                     warn("x-for key cannot be an object, it must be a string or an integer", templateEl);
@@ -16172,6 +15728,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     directive("ref", handler3);
     // packages/alpinejs/src/directives/x-if.js
     directive("if", (el, { expression  }, { effect: effect3 , cleanup: cleanup2  })=>{
+        if (el.tagName.toLowerCase() !== "template") warn("x-if can only be used on a <template> tag", el);
         let evaluate2 = evaluateLater(el, expression);
         let show = ()=>{
             if (el._x_currentIfEl) return el._x_currentIfEl;
@@ -16179,16 +15736,15 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             addScopeToNode(clone2, {}, el);
             mutateDom(()=>{
                 el.after(clone2);
-                initTree(clone2);
+                skipDuringClone(()=>initTree(clone2)
+                )();
             });
             el._x_currentIfEl = clone2;
             el._x_undoIf = ()=>{
-                walk(clone2, (node)=>{
-                    if (!!node._x_effects) {
-                        node._x_effects.forEach(dequeueJob);
-                    }
+                mutateDom(()=>{
+                    destroyTree(clone2);
+                    clone2.remove();
                 });
-                clone2.remove();
                 delete el._x_currentIfEl;
             };
             return clone2;
@@ -16211,6 +15767,11 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         names.forEach((name)=>setIdRoot(el, name)
         );
     });
+    interceptClone((from, to)=>{
+        if (from._x_ids) {
+            to._x_ids = from._x_ids;
+        }
+    });
     // packages/alpinejs/src/directives/x-on.js
     mapAttributes(startingWith("@", into(prefix("on:"))));
     directive("on", skipDuringClone((el, { value , modifiers , expression  }, { cleanup: cleanup2  })=>{
@@ -16222,7 +15783,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         let removeListener = on(el, value, modifiers, (e)=>{
             evaluate2(()=>{}, {
                 scope: {
-                    $event: e
+                    "$event": e
                 },
                 params: [
                     e
@@ -16237,8 +15798,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     warnMissingPluginDirective("Intersect", "intersect", "intersect");
     warnMissingPluginDirective("Focus", "trap", "focus");
     warnMissingPluginDirective("Mask", "mask", "mask");
-    function warnMissingPluginDirective(name, directiveName2, slug) {
-        directive(directiveName2, (el)=>warn(`You can't use [x-${directiveName2}] without first installing the "${name}" plugin here: https://alpinejs.dev/plugins/${slug}`, el)
+    function warnMissingPluginDirective(name, directiveName, slug) {
+        directive(directiveName, (el)=>warn(`You can't use [x-${directiveName}] without first installing the "${name}" plugin here: https://alpinejs.dev/plugins/${slug}`, el)
         );
     }
     // packages/alpinejs/src/index.js
@@ -16253,12 +15814,579 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     // packages/alpinejs/builds/module.js
     var module_default = src_default;
 
+    function isFormDataSubmitterSupported() {
+        try {
+            new FormData(document.createElement('form'), // @ts-expect-error if FormData supports the submitter parameter, this will throw
+            0);
+        } catch (e) {
+            return false;
+        }
+    }
+    // Inspired by https://github.com/remix-run/react-router/blob/9afac15d8cbe30b37d0f9e8b89c9f1e430dfe35a/packages/react-router-dom/dom.ts#L250
+    function getFormSubmissionInfo(target, submitter) {
+        let method;
+        let action;
+        let formData = undefined;
+        let defaultMethod = 'GET';
+        if (isFormElement(target)) {
+            action = target.action;
+            method = target.getAttribute('method') || defaultMethod;
+            formData = new FormData(target, submitter || null);
+        } else if (isButtonElement(target) || isInputElement(target) && (target.type === 'submit' || target.type === 'image')) {
+            let form = target.form;
+            if (form == null) {
+                throw new Error(`Cannot submit a <button> or <input type="submit"> without a <form>`);
+            }
+            let attr = target.formAction || form.action;
+            action = attr;
+            method = target.getAttribute('formmethod') || form.getAttribute('method') || defaultMethod;
+            // Build a FormData object populated from a form and submitter
+            formData = new FormData(form, target);
+            // If this browser doesn't support the `FormData(el, submitter)` format,
+            // then tack on the submitter value at the end.  This is a lightweight
+            // solution that is not 100% spec compliant.  For complete support in older
+            // browsers, consider using the `formdata-submitter-polyfill` package
+            if (!isFormDataSubmitterSupported()) {
+                let { name , type , value  } = target;
+                if (type === 'image') {
+                    let prefix = name ? `${name}.` : '';
+                    formData.append(`${prefix}x`, '0');
+                    formData.append(`${prefix}y`, '0');
+                } else if (name) {
+                    formData.append(name, value);
+                }
+            }
+        } else if (isHtmlElement(target)) {
+            throw new Error(`Cannot submit element that is not <form>, <button>, or ` + `<input type="submit|image">`);
+        } else {
+            method = defaultMethod;
+            action = null;
+        }
+        return {
+            action,
+            method: method.toUpperCase(),
+            formData
+        };
+    }
+    function isModifiedEvent(event) {
+        return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
+    }
+    // Inspired by https://github.com/remix-run/react-router/blob/9afac15d8cbe30b37d0f9e8b89c9f1e430dfe35a/packages/react-router-dom/dom.ts#L36
+    function shouldProcessLinkClick(event, target) {
+        return event.button === 0 && (!target || target === '_self') && !isModifiedEvent(event) // Ignore clicks with modifier keys
+        ;
+    }
     function isHtmlElement(node) {
-        return node != undefined && node != null && node != false && 'nodeType' in node && node.nodeType === Node.ELEMENT_NODE;
+        return node != undefined && node != null && typeof node.tagName === 'string' && node.nodeType === Node.ELEMENT_NODE;
+    }
+    function isAnchorElement(node) {
+        return isHtmlElement(node) && node.nodeName === 'A';
+    }
+    function isFormElement(node) {
+        return isHtmlElement(node) && node.nodeName === 'FORM';
+    }
+    function isInputElement(node) {
+        return isHtmlElement(node) && node.nodeName === 'INPUT';
+    }
+    function isInputNumberElement(node) {
+        return isHtmlElement(node) && node.nodeName === 'INPUT' && node.getAttribute('type') == 'number';
+    }
+    function isButtonElement(node) {
+        return isHtmlElement(node) && node.nodeName === 'BUTTON';
+    }
+    function isTemplateElement(node) {
+        return isHtmlElement(node) && node.nodeName === 'TEMPLATE';
+    }
+
+    function cache(Alpine1) {
+        Alpine1.store('cache', cacheStore());
+        Alpine1.directive('cache', ($el, { modifiers , expression  }, { Alpine , evaluate  })=>{
+            var _a;
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            if ($el.nodeName !== 'SCRIPT') {
+                throw new Error('Can only be used on script tags');
+            }
+            // Do nothing if the script tag is empty
+            if (((_a = $el.textContent) === null || _a === void 0 ? void 0 : _a.trim()) == '') {
+                return;
+            }
+            let json;
+            try {
+                json = JSON.parse($el.textContent || '{}');
+            } catch (e) {
+                throw new Error(`Could not parse ${$el.textContent} as JSON: ${e}`);
+            }
+            const resourceName = modifiers[0];
+            if (!resourceName) {
+                throw new Error('Must specify a store to cache to e.g. x-cache.products');
+            }
+            const cache = Alpine.store('cache').resources;
+            const cacheResource = cache[resourceName];
+            if (!cacheResource) {
+                throw new Error(`Could not find resource named ${resourceName}. Did you define it in the cache store?`);
+            }
+            if (expression) {
+                const cacheKey = evaluate(expression);
+                cacheResource.set(cacheKey, json);
+            } else {
+                if (isSingletonResource(cacheResource)) {
+                    cacheResource.set(json);
+                } else {
+                    cacheResource.upsert(json);
+                }
+            }
+        }).before('bind');
+        Alpine1.magic('cache', ()=>{
+            return Alpine1.store('cache').resources;
+        });
+    }function isSingletonResource(x) {
+        if ('isSingleton' in x && x.isSingleton) {
+            return true;
+        }
+        return false;
+    }
+    // TODO test me and document me
+    function buildResource(builder) {
+        return {
+            records: {},
+            set (key, value) {
+                this.records[key] = value;
+            },
+            populate (records) {
+                this.records = records;
+            },
+            upsert (records) {
+                this.records = Object.assign(Object.assign({}, this.records), records);
+            },
+            evict (key) {
+                delete this.records[key];
+            },
+            reset () {
+                this.records = {};
+            },
+            get (key) {
+                const result = this.records[key];
+                if (!result) {
+                    return null;
+                }
+                if (builder) {
+                    return builder(result);
+                }
+                return result;
+            },
+            get isSingleton () {
+                return false;
+            }
+        };
+    }
+    // TODO test me and document me
+    function buildSingletonResource(builder) {
+        return {
+            record: null,
+            set (value) {
+                this.record = value;
+            },
+            evict () {
+                this.record = null;
+            },
+            reset () {
+                this.record = null;
+            },
+            get () {
+                const result = this.record;
+                if (!result) {
+                    return null;
+                }
+                if (builder) {
+                    return builder(result);
+                }
+                return result;
+            },
+            get isSingleton () {
+                return true;
+            }
+        };
+    }
+    function cacheStore() {
+        return {
+            resources: {},
+            reset () {
+                Object.keys(this.resources).forEach((key)=>{
+                    this.resources[key].reset();
+                });
+            },
+            addResource (key, options) {
+                if (options === null || options === void 0 ? void 0 : options.singleton) {
+                    this.resources[key] = buildSingletonResource(options === null || options === void 0 ? void 0 : options.builder);
+                } else {
+                    this.resources[key] = buildResource(options === null || options === void 0 ? void 0 : options.builder);
+                }
+            }
+        };
     }
 
     function isPlainObject(x) {
         return typeof x === 'object' && x !== null && !Array.isArray(x) && !(x instanceof Date);
+    }
+    /**
+     * Copy a property on an object and deletes the old property, all while preserving the property descriptor (e.g. getters/setters)
+     * @param obj - The object to copy the property from
+     * @param newObj - The object to copy the property to
+     * @param oldName - The name of the property to copy
+     * @param optionalNewName - The new name of the property (optional, defaults to oldName)
+     */ function copyProperty(obj, newObj, oldName, optionalNewName) {
+        const newName = oldName;
+        const descriptor = Object.getOwnPropertyDescriptor(obj, oldName);
+        if (!descriptor) throw new Error(`Property ${String(oldName)} not found on object`);
+        Object.defineProperty(newObj, newName, descriptor);
+    }
+    function trackProperty(obj, key, trackingKey) {
+        return new Proxy(obj, {
+            set (target, prop, value, receiver) {
+                if (prop == key) {
+                    receiver[trackingKey] = receiver[key];
+                }
+                return Reflect.set(target, prop, value, receiver);
+            }
+        });
+    }
+
+    /**
+     * Returns the modulo of n and m handling negative numbers correctly
+     *
+     * e.g.
+     * mod(1, 5) = 1
+     * mod(7, 5) = 2
+     * mod(-1, 5) = 4
+     * @param n
+     * @param m
+     * @returns
+     */ function mod(n, m) {
+        return (n % m + m) % m;
+    }
+    /**
+     * Return whether a string is numeric
+     * @param value
+     * @returns
+     */ function isNumeric(value) {
+        if (typeof value == 'number') return true;
+        return !isNaN(value) && !isNaN(parseFloat(value)); // ...and ensure strings of whitespace fail
+    }
+
+    var ThemeEditorEvent;
+    (function(ThemeEditorEvent1) {
+        ThemeEditorEvent1["INSPECTOR_ACTIVATED"] = "shopify:inspector:activate";
+        ThemeEditorEvent1["INSPECTOR_DEACTIVATED"] = "shopify:inspector:deactivate";
+        ThemeEditorEvent1["SECTION_LOAD"] = "shopify:section:load";
+        ThemeEditorEvent1["SECTION_UNLOAD"] = "shopify:section:unload";
+        ThemeEditorEvent1["SECTION_SELECT"] = "shopify:section:select";
+        ThemeEditorEvent1["SECTION_DESELECT"] = "shopify:section:deselect";
+        ThemeEditorEvent1["SECTION_REORDER"] = "shopify:section:reorder";
+        ThemeEditorEvent1["BLOCK_SELECT"] = "shopify:block:select";
+        ThemeEditorEvent1["BLOCK_DESELECT"] = "shopify:block:deselect";
+    })(ThemeEditorEvent || (ThemeEditorEvent = {}));
+
+    var ThemeEvent;
+    (function(ThemeEvent1) {
+        ThemeEvent1[ThemeEvent1["theme:cart:add"] = 0] = "theme:cart:add";
+        ThemeEvent1[ThemeEvent1["theme:cart:update"] = 1] = "theme:cart:update";
+        ThemeEvent1[ThemeEvent1["theme:section:navigate"] = 2] = "theme:section:navigate";
+        ThemeEvent1[ThemeEvent1["theme:section:load"] = 3] = "theme:section:load";
+        ThemeEvent1[ThemeEvent1["theme:section:update"] = 4] = "theme:section:update";
+    })(ThemeEvent || (ThemeEvent = {}));
+
+    /**
+     * Returns the containing section element of the current element, or the current element if it is a section
+     */ function closestSectionEl($el) {
+        if (!isHtmlElement($el)) {
+            throw new Error(`Expected HTMLElement but got ${$el}`);
+        }
+        if ($el.classList.contains('shopify-section')) {
+            return $el;
+        }
+        return $el.closest('.shopify-section');
+    }
+    function bindAllThemeSections(Alpine, cb) {
+        document.addEventListener('alpine:init', ()=>{
+            const sections = document.getElementsByClassName('shopify-section');
+            for (const el of sections){
+                if (isHtmlElement(el)) {
+                    cb(el);
+                }
+            }
+            // Re-bind sections when they are re-loaded by the theme editor
+            window.addEventListener(ThemeEditorEvent.SECTION_LOAD, (e)=>{
+                var _a;
+                if ((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode) {
+                    const loadedEvent = e;
+                    const section = document.getElementById(`shopify-section-${loadedEvent.detail.sectionId}`);
+                    if (section) {
+                        Alpine.deferMutations();
+                        cb(section);
+                        Alpine.flushAndStopDeferringMutations();
+                    }
+                }
+            });
+        });
+    }
+
+    /**
+     * StateMachine: A generic finite state machine implementation.
+     *
+     * A state machine is a conceptual model used to design systems and applications. It consists of a finite set of states and
+     * transitions between those states, often driven by events. State machines are ideal for situations where an application or system
+     * can be thought of as having distinct states with well-defined transitions, such as user interfaces, protocols, and life cycles.
+     *
+     * @template TStates A tuple of string literals representing the possible states.
+     * @template TTransitions A mapping of each state to an array of states to which it can transition.
+     * @template TState The current state of the machine, must be one of TStates.
+     *
+     * The `StateMachine` class provides mechanisms to manage states, transitions, and listeners that react to state changes.
+     *
+     * Usage example:
+     *
+     * // Define states and transitions
+     * const states = ['idle', 'loading', 'success', 'error'] as const;
+     * const transitions = {
+     *   idle: ['loading'],
+     *   loading: ['success', 'error'],
+     *   success: ['idle'],
+     *   error: ['idle'],
+     * };
+     *
+     * // Create a state machine
+     * const machine = new StateMachine('idle', states, transitions);
+     *
+     * // Listen for state changes
+     * machine.on((newState, prevState) => {
+     *   console.log(`Transitioned from ${prevState} to ${newState}`);
+     * });
+     *
+     * // Change state
+     * machine.state = 'loading';
+     *
+     * Features:
+     * - Strongly typed states and transitions ensure only valid state changes are possible.
+     * - Event listeners for state changes, to react to or log transitions.
+     * - Custom error handling for invalid transitions.
+     *
+     * The class manages the current state privately and allows state changes only through the state setter,
+     * which checks for valid transitions and notifies listeners.
+     */ class StateMachine {
+        /**
+         *  Attempts to transition the state machine to a new state. Validates the transition against the defined rules
+         *  and, if valid, updates the state and triggers the listeners. Throws an error if the transition is invalid.
+         */ set state(newState) {
+            const validTransitions = intersectArrays(this.states, this.transitions[this._state] || []);
+            if (validTransitions.includes(newState)) {
+                let prevState = this._state;
+                this._prevState = prevState;
+                this._state = newState;
+                this.listeners.forEach((listener)=>listener(newState, prevState)
+                );
+            } else {
+                throw new Error(`Invalid transition from ${this._state} to ${newState}`);
+            }
+        }
+        /**
+         * Transitions the state machine to a new state, but only temporarily. After the specified timeout, the state will transition to the next state
+         * This method is useful for UI interactions that should only be visible for a short period of time, such as a success message after a form submission.
+         */ setTransientState(transientState, nextState, timeout) {
+            return new Promise((resolve)=>{
+                // Transition to the transient state immediately
+                this._state = transientState;
+                // Then, after a timeout, transition to the next state
+                setTimeout(()=>{
+                    this._state = nextState;
+                    resolve();
+                }, timeout);
+            });
+        }
+        /**
+         * Returns the current state of the state machine.
+         */ get state() {
+            return this._state;
+        }
+        /**
+         * Returns the previous state of the state machine (if this is the initial state it will return null)
+         */ get prevState() {
+            return this._prevState;
+        }
+        /**
+         * Registers a new listener function to be called when the state changes.
+         * @param listener
+         */ on(listener) {
+            this.listeners.push(listener);
+        }
+        /**
+         * Removes a previously registered listener function so that it will no longer be called on state changes.
+         * @param listener
+         */ off(listener) {
+            const index = this.listeners.indexOf(listener);
+            if (index !== -1) {
+                this.listeners.splice(index, 1);
+            }
+        }
+        /**
+         * Initializes the state machine with the specified initial state, possible states, and valid transitions.
+         *
+         * @param initialState The starting state of the state machine.
+         * @param states An array of possible states the state machine can be in.
+         * @param transitions A record mapping each state to an array of states to which it can transition.
+         *
+         */ constructor(initialState, states, transitions){
+            this._prevState = null;
+            this.listeners = [];
+            this._state = initialState;
+            this.states = states;
+            this.transitions = transitions;
+        }
+    }
+    function intersectArrays(arr1, arr2) {
+        const set2 = new Set(arr2);
+        return arr1.filter((x)=>set2.has(x)
+        );
+    }
+
+    const DEFAULT_LIST_STATE_NAME = 'listState';
+    function listState(Alpine) {
+        Alpine.directive('list-state', ($el, { value , expression , modifiers  }, { evaluate  })=>{
+            if (value == 'item') {
+                const $data = Alpine.$data($el);
+                let scope = `$${DEFAULT_LIST_STATE_NAME}`;
+                if (modifiers.includes('for') && modifiers.length >= 2) {
+                    const forIndex = modifiers.indexOf('for');
+                    scope = `$${modifiers[forIndex + 1]}`;
+                }
+                if (!(scope in $data)) {
+                    throw new Error(`x-list-state:item must be used within x-list-state directive. To register an item in a scoped list state, use $myScopeName.register($el)`);
+                }
+                Alpine.bind($el, {
+                    'x-data' () {
+                        return {
+                            init () {
+                                $data[scope].register(this.$el);
+                            },
+                            destroy () {
+                                $data[scope].unregister(this.$el);
+                            }
+                        };
+                    }
+                });
+            } else if (value == null) {
+                let options = {};
+                let scope = `$${DEFAULT_LIST_STATE_NAME}`;
+                if (modifiers.includes('as') && modifiers.length >= 2) {
+                    const asIndex = modifiers.indexOf('as');
+                    scope = `$${modifiers[asIndex + 1]}`;
+                }
+                if (expression) {
+                    let evalutatedExpression = evaluate(expression === '' ? '{}' : expression);
+                    if (isPlainObject(evalutatedExpression)) {
+                        options = evalutatedExpression;
+                        if (options.scope) {
+                            scope = `$${options.scope}`;
+                        }
+                    }
+                }
+                let state;
+                if (options.multiple || modifiers.includes('multiple')) {
+                    options = options;
+                    if (options === null || options === void 0 ? void 0 : options.selectedIndices) {
+                        if (!(options.selectedIndices instanceof Set)) {
+                            throw new Error('selectedIndices must be a Set');
+                        }
+                    }
+                    state = buildMultiSelectListState(options);
+                } else {
+                    options = options;
+                    state = buildSingleSelectListState(options);
+                }
+                Alpine.addScopeToNode($el, {
+                    [scope]: Alpine.reactive(state)
+                });
+            } else {
+                throw new Error(`Unknown directive: x-list-state:${value}`);
+            }
+        }).before('bind');
+    }function buildSingleSelectListState(options) {
+        let state = {
+            previousSelectedIndex: null,
+            selectedIndex: null,
+            items: new Set(),
+            get totalItems () {
+                return this.items.size;
+            },
+            isSelected (index) {
+                return this.selectedIndex == index;
+            },
+            register (el) {
+                this.items.add(el);
+            },
+            unregister (el) {
+                this.items.delete(el);
+            },
+            indexOf (el) {
+                return Array.from(this.items).indexOf(el);
+            },
+            toggle (index) {
+                this.selectedIndex == index ? this.deselect(index) : this.select(index);
+            },
+            select (index) {
+                this.selectedIndex = index;
+            },
+            deselect (index) {
+                if (this.selectedIndex == index) {
+                    this.selectedIndex = null;
+                }
+            }
+        };
+        if ('selectedIndex' in options) {
+            copyProperty(options, state, 'selectedIndex');
+        }
+        return state;
+    }
+    function buildMultiSelectListState(options) {
+        let state = {
+            selectedIndices: new Set(),
+            items: new Set(),
+            get totalItems () {
+                return this.items.size;
+            },
+            isSelected (index) {
+                return this.selectedIndices.has(index);
+            },
+            register (el) {
+                this.items.add(el);
+            },
+            unregister (el) {
+                this.items.delete(el);
+            },
+            indexOf (el) {
+                return Array.from(this.items).indexOf(el);
+            },
+            toggle (index) {
+                this.selectedIndices.has(index) ? this.deselect(index) : this.select(index);
+            },
+            select (index) {
+                const selected = this.selectedIndices;
+                selected.add(index);
+                // Copy to a new set so that reactivity works
+                this.selectedIndices = new Set(Array.from(selected));
+            },
+            deselect (index) {
+                const selected = this.selectedIndices;
+                selected.delete(index);
+                // Copy to a new set so that reactivity works
+                this.selectedIndices = new Set(Array.from(selected));
+            }
+        };
+        if ('selectedIndices' in options) {
+            copyProperty(options, state, 'selectedIndices');
+        }
+        return state;
     }
 
     undefined && undefined.__rest || function(s, e) {
@@ -16270,103 +16398,194 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return t;
     };
 
-    function addUniqueItem(array, item) {
-        array.indexOf(item) === -1 && array.push(item);
+    const DEFAULT_MAX_REPEAT_TIME_IN_MS = 1500;
+    /**
+     * Allow repeatedly triggering an action while the mouse is held down or while element is being touched
+     *
+     * e.g.
+     *
+     * <button x-hold.250ms="console.log('clicked')">Hold me down</button>
+     */ function hold(Alpine) {
+        Alpine.directive('hold', ($el, { modifiers , expression  }, { evaluate  })=>{
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            let firstModifier = modifiers[0] || '';
+            let time = isNumeric(firstModifier.split('ms')[0]) ? Number(firstModifier.split('ms')[0]) : 25;
+            let maxModifierIndex = modifiers.indexOf('max');
+            let maxValueModifier = modifiers[maxModifierIndex + 1];
+            let maxTime = isNumeric(maxValueModifier === null || maxValueModifier === void 0 ? void 0 : maxValueModifier.split('ms')[0]) ? Number(maxValueModifier.split('ms')[0]) : DEFAULT_MAX_REPEAT_TIME_IN_MS;
+            Alpine.bind($el, {
+                ['x-data'] () {
+                    return {
+                        __intervalId: undefined,
+                        __onPointerDown (e) {
+                            var _a;
+                            if (isHtmlElement(e.target)) {
+                                if ((_a = e.target) === null || _a === void 0 ? void 0 : _a.hasPointerCapture(e.pointerId)) {
+                                    e.target.releasePointerCapture(e.pointerId);
+                                }
+                            }
+                            let repeats = 0;
+                            this.__intervalId = window.setInterval(()=>{
+                                evaluate(expression);
+                                repeats += 1;
+                                if (repeats * time >= maxTime) {
+                                    // Automatically stop the intervals after a certain amount of time
+                                    // in case somehow the pointerup event is not triggered or there is some
+                                    // other bug that causes the interval to not be cleared
+                                    window.clearInterval(this.__intervalId);
+                                }
+                            }, time);
+                        },
+                        __onPointerUp (_e) {
+                            window.clearInterval(this.__intervalId);
+                        },
+                        __onPointerLeave (_e) {
+                            window.clearInterval(this.__intervalId);
+                        },
+                        destroy () {
+                            window.clearInterval(this.__intervalId);
+                        }
+                    };
+                },
+                '@pointerdown': '__onPointerDown',
+                '@pointerup.window': '__onPointerUp',
+                '@pointerleave': '__onPointerLeave'
+            });
+        }).before('bind');
+    }
+
+    function addUniqueItem(arr, item) {
+        if (arr.indexOf(item) === -1) arr.push(item);
     }
     function removeItem(arr, item) {
         const index = arr.indexOf(item);
-        index > -1 && arr.splice(index, 1);
+        if (index > -1) arr.splice(index, 1);
     }
 
-    const clamp = (min, max, v)=>Math.min(Math.max(v, min), max)
-    ;
-
-    const defaults$1 = {
-        duration: 0.3,
-        delay: 0,
-        endDelay: 0,
-        repeat: 0,
-        easing: "ease"
+    const clamp = (min, max, v)=>{
+        if (v > max) return max;
+        if (v < min) return min;
+        return v;
     };
 
-    const isNumber = (value)=>typeof value === "number"
-    ;
-
-    const isEasingList = (easing)=>Array.isArray(easing) && !isNumber(easing[0])
-    ;
-
-    const wrap = (min, max, v)=>{
-        const rangeSize = max - min;
-        return ((v - min) % rangeSize + rangeSize) % rangeSize + min;
-    };
-
-    function getEasingForSegment(easing, i) {
-        return isEasingList(easing) ? easing[wrap(0, easing.length, i)] : easing;
+    function formatErrorMessage(message, errorCode) {
+        return errorCode ? `${message}. For more information and steps for solving, visit https://motion.dev/troubleshooting/${errorCode}` : message;
     }
 
-    const mix = (min, max, progress)=>-progress * min + progress * max + min
-    ;
-
-    const noop = ()=>{};
-    const noopReturn = (v)=>v
-    ;
-
-    const progress = (min, max, value)=>max - min === 0 ? 1 : (value - min) / (max - min)
-    ;
-
-    function fillOffset(offset, remaining) {
-        const min = offset[offset.length - 1];
-        for(let i = 1; i <= remaining; i++){
-            const offsetProgress = progress(0, remaining, i);
-            offset.push(mix(min, 1, offsetProgress));
-        }
-    }
-    function defaultOffset$1(length) {
-        const offset = [
-            0
-        ];
-        fillOffset(offset, length - 1);
-        return offset;
-    }
-
-    function interpolate(output, input = defaultOffset$1(output.length), easing = noopReturn) {
-        const length = output.length;
-        /**
-         * If the input length is lower than the output we
-         * fill the input to match. This currently assumes the input
-         * is an animation progress value so is a good candidate for
-         * moving outside the function.
-         */ const remainder = length - input.length;
-        remainder > 0 && fillOffset(input, remainder);
-        return (t)=>{
-            let i = 0;
-            for(; i < length - 2; i++){
-                if (t < input[i + 1]) break;
+    let warning = ()=>{};
+    let invariant = ()=>{};
+    if (process.env.NODE_ENV !== "production") {
+        warning = (check, message, errorCode)=>{
+            if (!check && typeof console !== "undefined") {
+                console.warn(formatErrorMessage(message, errorCode));
             }
-            let progressInRange = clamp(0, 1, progress(input[i], input[i + 1], t));
-            const segmentEasing = getEasingForSegment(easing, i);
-            progressInRange = segmentEasing(progressInRange);
-            return mix(output[i], output[i + 1], progressInRange);
+        };
+        invariant = (check, message, errorCode)=>{
+            if (!check) {
+                throw new Error(formatErrorMessage(message, errorCode));
+            }
         };
     }
 
-    const isCubicBezier = (easing)=>Array.isArray(easing) && isNumber(easing[0])
+    const MotionGlobalConfig = {};
+
+    /**
+     * Check if value is a numerical string, ie a string that is purely a number eg "100" or "-100.1"
+     */ const isNumericalString = (v)=>/^-?(?:\d+(?:\.\d+)?|\.\d+)$/u.test(v)
     ;
 
-    const isEasingGenerator = (easing)=>typeof easing === "object" && Boolean(easing.createAnimation)
+    function isObject(value) {
+        return typeof value === "object" && value !== null;
+    }
+
+    /**
+     * Check if the value is a zero value string like "0px" or "0%"
+     */ const isZeroValueString = (v)=>/^0[^.\s]+$/u.test(v)
     ;
 
-    const isFunction$1 = (value)=>typeof value === "function"
+    /*#__NO_SIDE_EFFECTS__*/ function memo(callback) {
+        let result;
+        return ()=>{
+            if (result === undefined) result = callback();
+            return result;
+        };
+    }
+
+    /*#__NO_SIDE_EFFECTS__*/ const noop = (any)=>any
     ;
 
-    const isString = (value)=>typeof value === "string"
+    /**
+     * Pipe
+     * Compose other transformers to run linearily
+     * pipe(min(20), max(40))
+     * @param  {...functions} transformers
+     * @return {function}
+     */ const combineFunctions = (a, b)=>(v)=>b(a(v))
+    ;
+    const pipe = (...transformers)=>transformers.reduce(combineFunctions)
     ;
 
-    const time = {
-        ms: (seconds)=>seconds * 1000
-        ,
-        s: (milliseconds)=>milliseconds / 1000
+    /*
+      Progress within given range
+
+      Given a lower limit and an upper limit, we return the progress
+      (expressed as a number 0-1) represented by the given value, and
+      limit that progress to within 0-1.
+
+      @param [number]: Lower limit
+      @param [number]: Upper limit
+      @param [number]: Value to find progress within given range
+      @return [number]: Progress of value within range as expressed 0-1
+    */ /*#__NO_SIDE_EFFECTS__*/ const progress = (from, to, value)=>{
+        const toFromDifference = to - from;
+        return toFromDifference === 0 ? 1 : (value - from) / toFromDifference;
     };
+
+    let SubscriptionManager = class SubscriptionManager {
+        add(handler) {
+            addUniqueItem(this.subscriptions, handler);
+            return ()=>removeItem(this.subscriptions, handler)
+            ;
+        }
+        notify(a, b, c) {
+            const numSubscriptions = this.subscriptions.length;
+            if (!numSubscriptions) return;
+            if (numSubscriptions === 1) {
+                /**
+                 * If there's only a single handler we can just call it without invoking a loop.
+                 */ this.subscriptions[0](a, b, c);
+            } else {
+                for(let i = 0; i < numSubscriptions; i++){
+                    /**
+                     * Check whether the handler exists before firing as it's possible
+                     * the subscriptions were modified during this loop running.
+                     */ const handler = this.subscriptions[i];
+                    handler && handler(a, b, c);
+                }
+            }
+        }
+        getSize() {
+            return this.subscriptions.length;
+        }
+        clear() {
+            this.subscriptions.length = 0;
+        }
+        constructor(){
+            this.subscriptions = [];
+        }
+    };
+
+    /**
+     * Converts seconds to milliseconds
+     *
+     * @param seconds - Time in seconds.
+     * @return milliseconds - Converted time in milliseconds.
+     */ /*#__NO_SIDE_EFFECTS__*/ const secondsToMilliseconds = (seconds)=>seconds * 1000
+    ;
+    /*#__NO_SIDE_EFFECTS__*/ const millisecondsToSeconds = (milliseconds)=>milliseconds / 1000
+    ;
 
     /*
       Convert velocity into velocity per second
@@ -16377,22 +16596,31 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         return frameDuration ? velocity * (1000 / frameDuration) : 0;
     }
 
+    const warned = new Set();
+    function warnOnce(condition, message, errorCode) {
+        if (condition || warned.has(message)) return;
+        console.warn(formatErrorMessage(message, errorCode));
+        warned.add(message);
+    }
+
+    const wrap = (min, max, v)=>{
+        const rangeSize = max - min;
+        return ((v - min) % rangeSize + rangeSize) % rangeSize + min;
+    };
+
     /*
       Bezier function generator
-
       This has been modified from Gaëtan Renaudeau's BezierEasing
       https://github.com/gre/bezier-easing/blob/master/src/index.js
       https://github.com/gre/bezier-easing/blob/master/LICENSE
       
       I've removed the newtonRaphsonIterate algo because in benchmarking it
-      wasn't noticiably faster than binarySubdivision, indeed removing it
+      wasn't noticeably faster than binarySubdivision, indeed removing it
       usually improved times, depending on the curve.
-
       I also removed the lookup table, as for the added bundle size and loop we're
       only cutting ~4 or so subdivision iterations. I bumped the max iterations up
       to 12 to compensate and this still tended to be faster for no perceivable
       loss in accuracy.
-
       Usage
         const easeOut = cubicBezier(.17,.67,.83,.67);
         const x = easeOut(0.5); // returns 0.627...
@@ -16418,7 +16646,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     function cubicBezier(mX1, mY1, mX2, mY2) {
         // If this is a linear gradient, return linear easing
-        if (mX1 === mY1 && mX2 === mY2) return noopReturn;
+        if (mX1 === mY1 && mX2 === mY2) return noop;
         const getTForX = (aX)=>binarySubdivide(aX, 0, 1, mX1, mX2)
         ;
         // If animation is at start/end, return t without easing
@@ -16426,1047 +16654,1037 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         ;
     }
 
-    const steps = (steps1, direction = "end")=>(progress)=>{
-            progress = direction === "end" ? Math.min(progress, 0.999) : Math.max(progress, 0.001);
-            const expanded = progress * steps1;
-            const rounded = direction === "end" ? Math.floor(expanded) : Math.ceil(expanded);
-            return clamp(0, 1, rounded / steps1);
-        }
+    // Accepts an easing function and returns a new one that outputs mirrored values for
+    // the second half of the animation. Turns easeIn into easeInOut.
+    const mirrorEasing = (easing)=>(p)=>p <= 0.5 ? easing(2 * p) / 2 : (2 - easing(2 * (1 - p))) / 2
     ;
 
-    const namedEasings = {
-        ease: cubicBezier(0.25, 0.1, 0.25, 1.0),
-        "ease-in": cubicBezier(0.42, 0.0, 1.0, 1.0),
-        "ease-in-out": cubicBezier(0.42, 0.0, 0.58, 1.0),
-        "ease-out": cubicBezier(0.0, 0.0, 0.58, 1.0)
-    };
-    const functionArgsRegex = /\((.*?)\)/;
-    function getEasingFunction(definition) {
-        // If already an easing function, return
-        if (isFunction$1(definition)) return definition;
-        // If an easing curve definition, return bezier function
-        if (isCubicBezier(definition)) return cubicBezier(...definition);
-        // If we have a predefined easing function, return
-        if (namedEasings[definition]) return namedEasings[definition];
-        // If this is a steps function, attempt to create easing curve
-        if (definition.startsWith("steps")) {
-            const args = functionArgsRegex.exec(definition);
-            if (args) {
-                const argsArray = args[1].split(",");
-                return steps(parseFloat(argsArray[0]), argsArray[1].trim());
-            }
-        }
-        return noopReturn;
-    }
+    // Accepts an easing function and returns a new one that outputs reversed values.
+    // Turns easeIn into easeOut.
+    const reverseEasing = (easing)=>(p)=>1 - easing(1 - p)
+    ;
 
-    let Animation = class Animation {
-        play() {
-            const now = performance.now();
-            this.playState = "running";
-            if (this.pauseTime !== undefined) {
-                this.startTime = now - this.pauseTime;
-            } else if (!this.startTime) {
-                this.startTime = now;
-            }
-            this.cancelTimestamp = this.startTime;
-            this.pauseTime = undefined;
-            this.frameRequestId = requestAnimationFrame(this.tick);
-        }
-        pause() {
-            this.playState = "paused";
-            this.pauseTime = this.t;
-        }
-        finish() {
-            this.playState = "finished";
-            this.tick(0);
-        }
-        stop() {
-            var _a;
-            this.playState = "idle";
-            if (this.frameRequestId !== undefined) {
-                cancelAnimationFrame(this.frameRequestId);
-            }
-            (_a = this.reject) === null || _a === void 0 ? void 0 : _a.call(this, false);
-        }
-        cancel() {
-            this.stop();
-            this.tick(this.cancelTimestamp);
-        }
-        reverse() {
-            this.rate *= -1;
-        }
-        commitStyles() {}
-        updateDuration(duration) {
-            this.duration = duration;
-            this.totalDuration = duration * (this.repeat + 1);
-        }
-        get currentTime() {
-            return this.t;
-        }
-        set currentTime(t) {
-            if (this.pauseTime !== undefined || this.rate === 0) {
-                this.pauseTime = t;
-            } else {
-                this.startTime = performance.now() - t / this.rate;
-            }
-        }
-        get playbackRate() {
-            return this.rate;
-        }
-        set playbackRate(rate) {
-            this.rate = rate;
-        }
-        constructor(output, keyframes = [
-            0,
-            1
-        ], { easing , duration: initialDuration = defaults$1.duration , delay =defaults$1.delay , endDelay =defaults$1.endDelay , repeat =defaults$1.repeat , offset , direction ="normal" ,  } = {}){
-            this.startTime = null;
-            this.rate = 1;
-            this.t = 0;
-            this.cancelTimestamp = null;
-            this.easing = noopReturn;
-            this.duration = 0;
-            this.totalDuration = 0;
-            this.repeat = 0;
-            this.playState = "idle";
-            this.finished = new Promise((resolve, reject)=>{
-                this.resolve = resolve;
-                this.reject = reject;
-            });
-            easing = easing || defaults$1.easing;
-            if (isEasingGenerator(easing)) {
-                const custom = easing.createAnimation(keyframes);
-                easing = custom.easing;
-                keyframes = custom.keyframes || keyframes;
-                initialDuration = custom.duration || initialDuration;
-            }
-            this.repeat = repeat;
-            this.easing = isEasingList(easing) ? noopReturn : getEasingFunction(easing);
-            this.updateDuration(initialDuration);
-            const interpolate$1 = interpolate(keyframes, offset, isEasingList(easing) ? easing.map(getEasingFunction) : noopReturn);
-            this.tick = (timestamp)=>{
-                var _a;
-                // TODO: Temporary fix for OptionsResolver typing
-                delay = delay;
-                let t = 0;
-                if (this.pauseTime !== undefined) {
-                    t = this.pauseTime;
-                } else {
-                    t = (timestamp - this.startTime) * this.rate;
-                }
-                this.t = t;
-                // Convert to seconds
-                t /= 1000;
-                // Rebase on delay
-                t = Math.max(t - delay, 0);
-                /**
-                 * If this animation has finished, set the current time
-                 * to the total duration.
-                 */ if (this.playState === "finished" && this.pauseTime === undefined) {
-                    t = this.totalDuration;
-                }
-                /**
-                 * Get the current progress (0-1) of the animation. If t is >
-                 * than duration we'll get values like 2.5 (midway through the
-                 * third iteration)
-                 */ const progress = t / this.duration;
-                // TODO progress += iterationStart
-                /**
-                 * Get the current iteration (0 indexed). For instance the floor of
-                 * 2.5 is 2.
-                 */ let currentIteration = Math.floor(progress);
-                /**
-                 * Get the current progress of the iteration by taking the remainder
-                 * so 2.5 is 0.5 through iteration 2
-                 */ let iterationProgress = progress % 1.0;
-                if (!iterationProgress && progress >= 1) {
-                    iterationProgress = 1;
-                }
-                /**
-                 * If iteration progress is 1 we count that as the end
-                 * of the previous iteration.
-                 */ iterationProgress === 1 && currentIteration--;
-                /**
-                 * Reverse progress if we're not running in "normal" direction
-                 */ const iterationIsOdd = currentIteration % 2;
-                if (direction === "reverse" || direction === "alternate" && iterationIsOdd || direction === "alternate-reverse" && !iterationIsOdd) {
-                    iterationProgress = 1 - iterationProgress;
-                }
-                const p = t >= this.totalDuration ? 1 : Math.min(iterationProgress, 1);
-                const latest = interpolate$1(this.easing(p));
-                output(latest);
-                const isAnimationFinished = this.pauseTime === undefined && (this.playState === "finished" || t >= this.totalDuration + endDelay);
-                if (isAnimationFinished) {
-                    this.playState = "finished";
-                    (_a = this.resolve) === null || _a === void 0 ? void 0 : _a.call(this, latest);
-                } else if (this.playState !== "idle") {
-                    this.frameRequestId = requestAnimationFrame(this.tick);
-                }
-            };
-            this.play();
-        }
+    const backOut = /*@__PURE__*/ cubicBezier(0.33, 1.53, 0.69, 0.99);
+    const backIn = /*@__PURE__*/ reverseEasing(backOut);
+    const backInOut = /*@__PURE__*/ mirrorEasing(backIn);
+
+    const anticipate = (p)=>(p *= 2) < 1 ? 0.5 * backIn(p) : 0.5 * (2 - Math.pow(2, -10 * (p - 1)))
+    ;
+
+    const circIn = (p)=>1 - Math.sin(Math.acos(p))
+    ;
+    const circOut = reverseEasing(circIn);
+    const circInOut = mirrorEasing(circIn);
+
+    const easeIn = /*@__PURE__*/ cubicBezier(0.42, 0, 1, 1);
+    const easeOut = /*@__PURE__*/ cubicBezier(0, 0, 0.58, 1);
+    const easeInOut = /*@__PURE__*/ cubicBezier(0.42, 0, 0.58, 1);
+
+    const isEasingArray = (ease)=>{
+        return Array.isArray(ease) && typeof ease[0] !== "number";
     };
 
-    var invariant = function() {};
-    if (process.env.NODE_ENV !== 'production') {
-        invariant = function(check, message) {
-            if (!check) {
-                throw new Error(message);
-            }
-        };
+    function getEasingForSegment(easing, i) {
+        return isEasingArray(easing) ? easing[wrap(0, easing.length, i)] : easing;
     }
 
-    /**
-     * The MotionValue tracks the state of a single animatable
-     * value. Currently, updatedAt and current are unused. The
-     * long term idea is to use this to minimise the number
-     * of DOM reads, and to abstract the DOM interactions here.
-     */ let MotionValue = class MotionValue {
-        setAnimation(animation) {
-            this.animation = animation;
-            animation === null || animation === void 0 ? void 0 : animation.finished.then(()=>this.clearAnimation()
-            ).catch(()=>{});
+    const isBezierDefinition = (easing)=>Array.isArray(easing) && typeof easing[0] === "number"
+    ;
+
+    const easingLookup = {
+        linear: noop,
+        easeIn,
+        easeInOut,
+        easeOut,
+        circIn,
+        circInOut,
+        circOut,
+        backIn,
+        backInOut,
+        backOut,
+        anticipate
+    };
+    const isValidEasing = (easing)=>{
+        return typeof easing === "string";
+    };
+    const easingDefinitionToFunction = (definition)=>{
+        if (isBezierDefinition(definition)) {
+            // If cubic bezier definition, create bezier curve
+            invariant(definition.length === 4, `Cubic bezier arrays must contain four numerical values.`, "cubic-bezier-length");
+            const [x1, y1, x2, y2] = definition;
+            return cubicBezier(x1, y1, x2, y2);
+        } else if (isValidEasing(definition)) {
+            // Else lookup from table
+            invariant(easingLookup[definition] !== undefined, `Invalid easing type '${definition}'`, "invalid-easing-type");
+            return easingLookup[definition];
         }
-        clearAnimation() {
-            this.animation = this.generator = undefined;
-        }
+        return definition;
     };
 
-    const data = new WeakMap();
-    function getAnimationData(element) {
-        if (!data.has(element)) {
-            data.set(element, {
-                transforms: [],
-                values: new Map()
-            });
-        }
-        return data.get(element);
-    }
-    function getMotionValue(motionValues, name) {
-        if (!motionValues.has(name)) {
-            motionValues.set(name, new MotionValue());
-        }
-        return motionValues.get(name);
-    }
-
-    /**
-     * A list of all transformable axes. We'll use this list to generated a version
-     * of each axes for each transform.
-     */ const axes = [
-        "",
-        "X",
-        "Y",
-        "Z"
+    const stepsOrder = [
+        "setup",
+        "read",
+        "resolveKeyframes",
+        "preUpdate",
+        "update",
+        "preRender",
+        "render",
+        "postRender"
     ];
-    /**
-     * An ordered array of each transformable value. By default, transform values
-     * will be sorted to this order.
-     */ const order = [
-        "translate",
-        "scale",
-        "rotate",
-        "skew"
-    ];
-    const transformAlias = {
-        x: "translateX",
-        y: "translateY",
-        z: "translateZ"
+
+    const statsBuffer = {
+        value: null,
+        addProjectionMetrics: null
     };
-    const rotation = {
-        syntax: "<angle>",
-        initialValue: "0deg",
-        toDefaultUnit: (v)=>v + "deg"
-    };
-    const baseTransformProperties = {
-        translate: {
-            syntax: "<length-percentage>",
-            initialValue: "0px",
-            toDefaultUnit: (v)=>v + "px"
-        },
-        rotate: rotation,
-        scale: {
-            syntax: "<number>",
-            initialValue: 1,
-            toDefaultUnit: noopReturn
-        },
-        skew: rotation
-    };
-    const transformDefinitions = new Map();
-    const asTransformCssVar = (name)=>`--motion-${name}`
-    ;
-    /**
-     * Generate a list of every possible transform key
-     */ const transforms = [
-        "x",
-        "y",
-        "z"
-    ];
-    order.forEach((name)=>{
-        axes.forEach((axis)=>{
-            transforms.push(name + axis);
-            transformDefinitions.set(asTransformCssVar(name + axis), baseTransformProperties[name]);
-        });
-    });
-    /**
-     * A function to use with Array.sort to sort transform keys by their default order.
-     */ const compareTransformOrder = (a, b)=>transforms.indexOf(a) - transforms.indexOf(b)
-    ;
-    /**
-     * Provide a quick way to check if a string is the name of a transform
-     */ const transformLookup = new Set(transforms);
-    const isTransform = (name)=>transformLookup.has(name)
-    ;
-    const addTransformToElement = (element, name)=>{
-        // Map x to translateX etc
-        if (transformAlias[name]) name = transformAlias[name];
-        const { transforms: transforms1  } = getAnimationData(element);
-        addUniqueItem(transforms1, name);
+
+    function createRenderStep(runNextFrame, stepName) {
         /**
-         * TODO: An optimisation here could be to cache the transform in element data
-         * and only update if this has changed.
-         */ element.style.transform = buildTransformTemplate(transforms1);
-    };
-    const buildTransformTemplate = (transforms2)=>transforms2.sort(compareTransformOrder).reduce(transformListToString, "").trim()
-    ;
-    const transformListToString = (template, name)=>`${template} ${name}(var(${asTransformCssVar(name)}))`
-    ;
-
-    const isCssVar = (name)=>name.startsWith("--")
-    ;
-    const registeredProperties = new Set();
-    function registerCssVariable(name) {
-        if (registeredProperties.has(name)) return;
-        registeredProperties.add(name);
-        try {
-            const { syntax , initialValue  } = transformDefinitions.has(name) ? transformDefinitions.get(name) : {};
-            CSS.registerProperty({
-                name,
-                inherits: false,
-                syntax,
-                initialValue
-            });
-        } catch (e) {}
+         * We create and reuse two queues, one to queue jobs for the current frame
+         * and one for the next. We reuse to avoid triggering GC after x frames.
+         */ let thisFrame = new Set();
+        let nextFrame = new Set();
+        /**
+         * Track whether we're currently processing jobs in this step. This way
+         * we can decide whether to schedule new jobs for this frame or next.
+         */ let isProcessing = false;
+        let flushNextFrame = false;
+        /**
+         * A set of processes which were marked keepAlive when scheduled.
+         */ const toKeepAlive = new WeakSet();
+        let latestFrameData = {
+            delta: 0.0,
+            timestamp: 0.0,
+            isProcessing: false
+        };
+        let numCalls = 0;
+        function triggerCallback(callback) {
+            if (toKeepAlive.has(callback)) {
+                step.schedule(callback);
+                runNextFrame();
+            }
+            numCalls++;
+            callback(latestFrameData);
+        }
+        const step = {
+            /**
+             * Schedule a process to run on the next frame.
+             */ schedule: (callback, keepAlive = false, immediate = false)=>{
+                const addToCurrentFrame = immediate && isProcessing;
+                const queue = addToCurrentFrame ? thisFrame : nextFrame;
+                if (keepAlive) toKeepAlive.add(callback);
+                if (!queue.has(callback)) queue.add(callback);
+                return callback;
+            },
+            /**
+             * Cancel the provided callback from running on the next frame.
+             */ cancel: (callback)=>{
+                nextFrame.delete(callback);
+                toKeepAlive.delete(callback);
+            },
+            /**
+             * Execute all schedule callbacks.
+             */ process: (frameData)=>{
+                latestFrameData = frameData;
+                /**
+                 * If we're already processing we've probably been triggered by a flushSync
+                 * inside an existing process. Instead of executing, mark flushNextFrame
+                 * as true and ensure we flush the following frame at the end of this one.
+                 */ if (isProcessing) {
+                    flushNextFrame = true;
+                    return;
+                }
+                isProcessing = true;
+                [thisFrame, nextFrame] = [
+                    nextFrame,
+                    thisFrame
+                ];
+                // Execute this frame
+                thisFrame.forEach(triggerCallback);
+                /**
+                 * If we're recording stats then
+                 */ if (stepName && statsBuffer.value) {
+                    statsBuffer.value.frameloop[stepName].push(numCalls);
+                }
+                numCalls = 0;
+                // Clear the frame so no callbacks remain. This is to avoid
+                // memory leaks should this render step not run for a while.
+                thisFrame.clear();
+                isProcessing = false;
+                if (flushNextFrame) {
+                    flushNextFrame = false;
+                    step.process(frameData);
+                }
+            }
+        };
+        return step;
     }
 
-    const testAnimation = (keyframes, options)=>document.createElement("div").animate(keyframes, options)
-    ;
-    const featureTests = {
-        cssRegisterProperty: ()=>typeof CSS !== "undefined" && Object.hasOwnProperty.call(CSS, "registerProperty")
-        ,
-        waapi: ()=>Object.hasOwnProperty.call(Element.prototype, "animate")
-        ,
-        partialKeyframes: ()=>{
-            try {
-                testAnimation({
-                    opacity: [
-                        1
-                    ]
-                });
-            } catch (e) {
-                return false;
+    const maxElapsed$1 = 40;
+    function createRenderBatcher(scheduleNextBatch, allowKeepAlive) {
+        let runNextFrame = false;
+        let useDefaultElapsed = true;
+        const state = {
+            delta: 0.0,
+            timestamp: 0.0,
+            isProcessing: false
+        };
+        const flagRunNextFrame = ()=>runNextFrame = true
+        ;
+        const steps = stepsOrder.reduce((acc, key)=>{
+            acc[key] = createRenderStep(flagRunNextFrame, allowKeepAlive ? key : undefined);
+            return acc;
+        }, {});
+        const { setup , read , resolveKeyframes , preUpdate , update , preRender , render , postRender ,  } = steps;
+        const processBatch = ()=>{
+            const timestamp = MotionGlobalConfig.useManualTiming ? state.timestamp : performance.now();
+            runNextFrame = false;
+            if (!MotionGlobalConfig.useManualTiming) {
+                state.delta = useDefaultElapsed ? 1000 / 60 : Math.max(Math.min(timestamp - state.timestamp, maxElapsed$1), 1);
             }
-            return true;
-        },
-        finished: ()=>Boolean(testAnimation({
-                opacity: [
-                    0,
-                    1
-                ]
-            }, {
-                duration: 0.001
-            }).finished)
-        ,
-        linearEasing: ()=>{
-            try {
-                testAnimation({
-                    opacity: 0
-                }, {
-                    easing: "linear(0, 1)"
-                });
-            } catch (e) {
-                return false;
+            state.timestamp = timestamp;
+            state.isProcessing = true;
+            // Unrolled render loop for better per-frame performance
+            setup.process(state);
+            read.process(state);
+            resolveKeyframes.process(state);
+            preUpdate.process(state);
+            update.process(state);
+            preRender.process(state);
+            render.process(state);
+            postRender.process(state);
+            state.isProcessing = false;
+            if (runNextFrame && allowKeepAlive) {
+                useDefaultElapsed = false;
+                scheduleNextBatch(processBatch);
             }
-            return true;
-        }
-    };
-    const results = {};
-    const supports = {};
-    for(const key in featureTests){
-        supports[key] = ()=>{
-            if (results[key] === undefined) results[key] = featureTests[key]();
-            return results[key];
+        };
+        const wake = ()=>{
+            runNextFrame = true;
+            useDefaultElapsed = true;
+            if (!state.isProcessing) {
+                scheduleNextBatch(processBatch);
+            }
+        };
+        const schedule = stepsOrder.reduce((acc, key)=>{
+            const step = steps[key];
+            acc[key] = (process, keepAlive = false, immediate = false)=>{
+                if (!runNextFrame) wake();
+                return step.schedule(process, keepAlive, immediate);
+            };
+            return acc;
+        }, {});
+        const cancel = (process)=>{
+            for(let i = 0; i < stepsOrder.length; i++){
+                steps[stepsOrder[i]].cancel(process);
+            }
+        };
+        return {
+            schedule,
+            cancel,
+            state,
+            steps
         };
     }
 
-    // Create a linear easing point for every x second
-    const resolution = 0.015;
-    const generateLinearEasingPoints = (easing, duration)=>{
-        let points = "";
-        const numPoints = Math.round(duration / resolution);
-        for(let i = 0; i < numPoints; i++){
-            points += easing(progress(0, numPoints - 1, i)) + ", ";
-        }
-        return points.substring(0, points.length - 2);
-    };
-    const convertEasing = (easing, duration)=>{
-        if (isFunction$1(easing)) {
-            return supports.linearEasing() ? `linear(${generateLinearEasingPoints(easing, duration)})` : defaults$1.easing;
-        } else {
-            return isCubicBezier(easing) ? cubicBezierAsString(easing) : easing;
-        }
-    };
-    const cubicBezierAsString = ([a, b, c, d])=>`cubic-bezier(${a}, ${b}, ${c}, ${d})`
-    ;
+    const { schedule: frame , cancel: cancelFrame , state: frameData , steps: frameSteps ,  } = /* @__PURE__ */ createRenderBatcher(typeof requestAnimationFrame !== "undefined" ? requestAnimationFrame : noop, true);
 
-    function hydrateKeyframes(keyframes, readInitialValue) {
-        for(let i = 0; i < keyframes.length; i++){
-            if (keyframes[i] === null) {
-                keyframes[i] = i ? keyframes[i - 1] : readInitialValue();
-            }
-        }
-        return keyframes;
+    let now;
+    function clearTime() {
+        now = undefined;
     }
-    const keyframesList = (keyframes)=>Array.isArray(keyframes) ? keyframes : [
-            keyframes
-        ]
-    ;
-
-    function getStyleName(key) {
-        if (transformAlias[key]) key = transformAlias[key];
-        return isTransform(key) ? asTransformCssVar(key) : key;
-    }
-
-    const style = {
-        get: (element, name)=>{
-            name = getStyleName(name);
-            let value = isCssVar(name) ? element.style.getPropertyValue(name) : getComputedStyle(element)[name];
-            if (!value && value !== 0) {
-                const definition = transformDefinitions.get(name);
-                if (definition) value = definition.initialValue;
+    /**
+     * An eventloop-synchronous alternative to performance.now().
+     *
+     * Ensures that time measurements remain consistent within a synchronous context.
+     * Usually calling performance.now() twice within the same synchronous context
+     * will return different values which isn't useful for animations when we're usually
+     * trying to sync animations to the same frame.
+     */ const time = {
+        now: ()=>{
+            if (now === undefined) {
+                time.set(frameData.isProcessing || MotionGlobalConfig.useManualTiming ? frameData.timestamp : performance.now());
             }
-            return value;
+            return now;
         },
-        set: (element, name, value)=>{
-            name = getStyleName(name);
-            if (isCssVar(name)) {
-                element.style.setProperty(name, value);
-            } else {
-                element.style[name] = value;
-            }
+        set: (newTime)=>{
+            now = newTime;
+            queueMicrotask(clearTime);
         }
     };
 
-    function stopAnimation(animation, needsCommit = true) {
-        if (!animation || animation.playState === "finished") return;
-        // Suppress error thrown by WAAPI
-        try {
-            if (animation.stop) {
-                animation.stop();
-            } else {
-                needsCommit && animation.commitStyles();
-                animation.cancel();
-            }
-        } catch (e) {}
+    const checkStringStartsWith = (token)=>(key)=>typeof key === "string" && key.startsWith(token)
+    ;
+    const isCSSVariableName = /*@__PURE__*/ checkStringStartsWith("--");
+    const startsAsVariableToken = /*@__PURE__*/ checkStringStartsWith("var(--");
+    const isCSSVariableToken = (value)=>{
+        const startsWithToken = startsAsVariableToken(value);
+        if (!startsWithToken) return false;
+        // Ensure any comments are stripped from the value as this can harm performance of the regex.
+        return singleCssVariableRegex.test(value.split("/*")[0].trim());
+    };
+    const singleCssVariableRegex = /var\(--(?:[\w-]+\s*|[\w-]+\s*,(?:\s*[^)(\s]|\s*\((?:[^)(]|\([^)(]*\))*\))+\s*)\)$/iu;
+
+    const number = {
+        test: (v)=>typeof v === "number"
+        ,
+        parse: parseFloat,
+        transform: (v)=>v
+    };
+    const alpha = {
+        ...number,
+        transform: (v)=>clamp(0, 1, v)
+    };
+    const scale = {
+        ...number,
+        default: 1
+    };
+
+    // If this number is a decimal, make it just five decimal places
+    // to avoid exponents
+    const sanitize = (v)=>Math.round(v * 100000) / 100000
+    ;
+
+    const floatRegex = /-?(?:\d+(?:\.\d+)?|\.\d+)/gu;
+
+    function isNullish(v) {
+        return v == null;
     }
 
-    function getUnitConverter(keyframes, definition) {
-        var _a;
-        let toUnit = (definition === null || definition === void 0 ? void 0 : definition.toDefaultUnit) || noopReturn;
-        const finalKeyframe = keyframes[keyframes.length - 1];
-        if (isString(finalKeyframe)) {
-            const unit = ((_a = finalKeyframe.match(/(-?[\d.]+)([a-z%]*)/)) === null || _a === void 0 ? void 0 : _a[2]) || "";
-            if (unit) toUnit = (value)=>value + unit
+    const singleColorRegex = /^(?:#[\da-f]{3,8}|(?:rgb|hsl)a?\((?:-?[\d.]+%?[,\s]+){2}-?[\d.]+%?\s*(?:[,/]\s*)?(?:\b\d+(?:\.\d+)?|\.\d+)?%?\))$/iu;
+
+    /**
+     * Returns true if the provided string is a color, ie rgba(0,0,0,0) or #000,
+     * but false if a number or multiple colors
+     */ const isColorString = (type, testProp)=>(v)=>{
+            return Boolean(typeof v === "string" && singleColorRegex.test(v) && v.startsWith(type) || testProp && !isNullish(v) && Object.prototype.hasOwnProperty.call(v, testProp));
+        }
+    ;
+    const splitColor = (aName, bName, cName)=>(v)=>{
+            if (typeof v !== "string") return v;
+            const [a, b, c, alpha] = v.match(floatRegex);
+            return {
+                [aName]: parseFloat(a),
+                [bName]: parseFloat(b),
+                [cName]: parseFloat(c),
+                alpha: alpha !== undefined ? parseFloat(alpha) : 1
+            };
+        }
+    ;
+
+    const clampRgbUnit = (v)=>clamp(0, 255, v)
+    ;
+    const rgbUnit = {
+        ...number,
+        transform: (v)=>Math.round(clampRgbUnit(v))
+    };
+    const rgba = {
+        test: /*@__PURE__*/ isColorString("rgb", "red"),
+        parse: /*@__PURE__*/ splitColor("red", "green", "blue"),
+        transform: ({ red , green , blue , alpha: alpha$1 = 1  })=>"rgba(" + rgbUnit.transform(red) + ", " + rgbUnit.transform(green) + ", " + rgbUnit.transform(blue) + ", " + sanitize(alpha.transform(alpha$1)) + ")"
+    };
+
+    function parseHex(v) {
+        let r = "";
+        let g = "";
+        let b = "";
+        let a = "";
+        // If we have 6 characters, ie #FF0000
+        if (v.length > 5) {
+            r = v.substring(1, 3);
+            g = v.substring(3, 5);
+            b = v.substring(5, 7);
+            a = v.substring(7, 9);
+        // Or we have 3 characters, ie #F00
+        } else {
+            r = v.substring(1, 2);
+            g = v.substring(2, 3);
+            b = v.substring(3, 4);
+            a = v.substring(4, 5);
+            r += r;
+            g += g;
+            b += b;
+            a += a;
+        }
+        return {
+            red: parseInt(r, 16),
+            green: parseInt(g, 16),
+            blue: parseInt(b, 16),
+            alpha: a ? parseInt(a, 16) / 255 : 1
+        };
+    }
+    const hex = {
+        test: /*@__PURE__*/ isColorString("#"),
+        parse: parseHex,
+        transform: rgba.transform
+    };
+
+    /*#__NO_SIDE_EFFECTS__*/ const createUnitType = (unit)=>({
+            test: (v)=>typeof v === "string" && v.endsWith(unit) && v.split(" ").length === 1
+            ,
+            parse: parseFloat,
+            transform: (v)=>`${v}${unit}`
+        })
+    ;
+    const degrees = /*@__PURE__*/ createUnitType("deg");
+    const percent = /*@__PURE__*/ createUnitType("%");
+    const px = /*@__PURE__*/ createUnitType("px");
+    const vh = /*@__PURE__*/ createUnitType("vh");
+    const vw = /*@__PURE__*/ createUnitType("vw");
+    const progressPercentage = /*@__PURE__*/ (()=>({
+            ...percent,
+            parse: (v)=>percent.parse(v) / 100
+            ,
+            transform: (v)=>percent.transform(v * 100)
+        })
+    )();
+
+    const hsla = {
+        test: /*@__PURE__*/ isColorString("hsl", "hue"),
+        parse: /*@__PURE__*/ splitColor("hue", "saturation", "lightness"),
+        transform: ({ hue , saturation , lightness , alpha: alpha$1 = 1  })=>{
+            return "hsla(" + Math.round(hue) + ", " + percent.transform(sanitize(saturation)) + ", " + percent.transform(sanitize(lightness)) + ", " + sanitize(alpha.transform(alpha$1)) + ")";
+        }
+    };
+
+    const color = {
+        test: (v)=>rgba.test(v) || hex.test(v) || hsla.test(v)
+        ,
+        parse: (v)=>{
+            if (rgba.test(v)) {
+                return rgba.parse(v);
+            } else if (hsla.test(v)) {
+                return hsla.parse(v);
+            } else {
+                return hex.parse(v);
+            }
+        },
+        transform: (v)=>{
+            return typeof v === "string" ? v : v.hasOwnProperty("red") ? rgba.transform(v) : hsla.transform(v);
+        },
+        getAnimatableNone: (v)=>{
+            const parsed = color.parse(v);
+            parsed.alpha = 0;
+            return color.transform(parsed);
+        }
+    };
+
+    const colorRegex = /(?:#[\da-f]{3,8}|(?:rgb|hsl)a?\((?:-?[\d.]+%?[,\s]+){2}-?[\d.]+%?\s*(?:[,/]\s*)?(?:\b\d+(?:\.\d+)?|\.\d+)?%?\))/giu;
+
+    function test(v) {
+        var ref, ref1;
+        return isNaN(v) && typeof v === "string" && (((ref = v.match(floatRegex)) === null || ref === void 0 ? void 0 : ref.length) || 0) + (((ref1 = v.match(colorRegex)) === null || ref1 === void 0 ? void 0 : ref1.length) || 0) > 0;
+    }
+    const NUMBER_TOKEN = "number";
+    const COLOR_TOKEN = "color";
+    const VAR_TOKEN = "var";
+    const VAR_FUNCTION_TOKEN = "var(";
+    const SPLIT_TOKEN = "${}";
+    // this regex consists of the `singleCssVariableRegex|rgbHSLValueRegex|digitRegex`
+    const complexRegex = /var\s*\(\s*--(?:[\w-]+\s*|[\w-]+\s*,(?:\s*[^)(\s]|\s*\((?:[^)(]|\([^)(]*\))*\))+\s*)\)|#[\da-f]{3,8}|(?:rgb|hsl)a?\((?:-?[\d.]+%?[,\s]+){2}-?[\d.]+%?\s*(?:[,/]\s*)?(?:\b\d+(?:\.\d+)?|\.\d+)?%?\)|-?(?:\d+(?:\.\d+)?|\.\d+)/giu;
+    function analyseComplexValue(value) {
+        const originalValue = value.toString();
+        const values = [];
+        const indexes = {
+            color: [],
+            number: [],
+            var: []
+        };
+        const types = [];
+        let i = 0;
+        const tokenised = originalValue.replace(complexRegex, (parsedValue)=>{
+            if (color.test(parsedValue)) {
+                indexes.color.push(i);
+                types.push(COLOR_TOKEN);
+                values.push(color.parse(parsedValue));
+            } else if (parsedValue.startsWith(VAR_FUNCTION_TOKEN)) {
+                indexes.var.push(i);
+                types.push(VAR_TOKEN);
+                values.push(parsedValue);
+            } else {
+                indexes.number.push(i);
+                types.push(NUMBER_TOKEN);
+                values.push(parseFloat(parsedValue));
+            }
+            ++i;
+            return SPLIT_TOKEN;
+        });
+        const split = tokenised.split(SPLIT_TOKEN);
+        return {
+            values,
+            split,
+            indexes,
+            types
+        };
+    }
+    function parseComplexValue(v) {
+        return analyseComplexValue(v).values;
+    }
+    function createTransformer(source) {
+        const { split , types  } = analyseComplexValue(source);
+        const numSections = split.length;
+        return (v)=>{
+            let output = "";
+            for(let i = 0; i < numSections; i++){
+                output += split[i];
+                if (v[i] !== undefined) {
+                    const type = types[i];
+                    if (type === NUMBER_TOKEN) {
+                        output += sanitize(v[i]);
+                    } else if (type === COLOR_TOKEN) {
+                        output += color.transform(v[i]);
+                    } else {
+                        output += v[i];
+                    }
+                }
+            }
+            return output;
+        };
+    }
+    const convertNumbersToZero = (v)=>typeof v === "number" ? 0 : color.test(v) ? color.getAnimatableNone(v) : v
+    ;
+    function getAnimatableNone$1(v) {
+        const parsed = parseComplexValue(v);
+        const transformer = createTransformer(v);
+        return transformer(parsed.map(convertNumbersToZero));
+    }
+    const complex = {
+        test,
+        parse: parseComplexValue,
+        createTransformer,
+        getAnimatableNone: getAnimatableNone$1
+    };
+
+    // Adapted from https://gist.github.com/mjackson/5311256
+    function hueToRgb(p, q, t) {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+    }
+    function hslaToRgba({ hue , saturation , lightness , alpha  }) {
+        hue /= 360;
+        saturation /= 100;
+        lightness /= 100;
+        let red = 0;
+        let green = 0;
+        let blue = 0;
+        if (!saturation) {
+            red = green = blue = lightness;
+        } else {
+            const q = lightness < 0.5 ? lightness * (1 + saturation) : lightness + saturation - lightness * saturation;
+            const p = 2 * lightness - q;
+            red = hueToRgb(p, q, hue + 1 / 3);
+            green = hueToRgb(p, q, hue);
+            blue = hueToRgb(p, q, hue - 1 / 3);
+        }
+        return {
+            red: Math.round(red * 255),
+            green: Math.round(green * 255),
+            blue: Math.round(blue * 255),
+            alpha
+        };
+    }
+
+    function mixImmediate(a, b) {
+        return (p)=>p > 0 ? b : a
+        ;
+    }
+
+    /*
+      Value in range from progress
+
+      Given a lower limit and an upper limit, we return the value within
+      that range as expressed by progress (usually a number from 0 to 1)
+
+      So progress = 0.5 would change
+
+      from -------- to
+
+      to
+
+      from ---- to
+
+      E.g. from = 10, to = 20, progress = 0.5 => 15
+
+      @param [number]: Lower limit of range
+      @param [number]: Upper limit of range
+      @param [number]: The progress between lower and upper limits expressed 0-1
+      @return [number]: Value as calculated from progress within range (not limited within range)
+    */ const mixNumber$1 = (from, to, progress)=>{
+        return from + (to - from) * progress;
+    };
+
+    // Linear color space blending
+    // Explained https://www.youtube.com/watch?v=LKnqECcg6Gw
+    // Demonstrated http://codepen.io/osublake/pen/xGVVaN
+    const mixLinearColor = (from, to, v)=>{
+        const fromExpo = from * from;
+        const expo = v * (to * to - fromExpo) + fromExpo;
+        return expo < 0 ? 0 : Math.sqrt(expo);
+    };
+    const colorTypes = [
+        hex,
+        rgba,
+        hsla
+    ];
+    const getColorType = (v)=>colorTypes.find((type)=>type.test(v)
+        )
+    ;
+    function asRGBA(color) {
+        const type = getColorType(color);
+        warning(Boolean(type), `'${color}' is not an animatable color. Use the equivalent color code instead.`, "color-not-animatable");
+        if (!Boolean(type)) return false;
+        let model = type.parse(color);
+        if (type === hsla) {
+            // TODO Remove this cast - needed since Motion's stricter typing
+            model = hslaToRgba(model);
+        }
+        return model;
+    }
+    const mixColor = (from, to)=>{
+        const fromRGBA = asRGBA(from);
+        const toRGBA = asRGBA(to);
+        if (!fromRGBA || !toRGBA) {
+            return mixImmediate(from, to);
+        }
+        const blended = {
+            ...fromRGBA
+        };
+        return (v)=>{
+            blended.red = mixLinearColor(fromRGBA.red, toRGBA.red, v);
+            blended.green = mixLinearColor(fromRGBA.green, toRGBA.green, v);
+            blended.blue = mixLinearColor(fromRGBA.blue, toRGBA.blue, v);
+            blended.alpha = mixNumber$1(fromRGBA.alpha, toRGBA.alpha, v);
+            return rgba.transform(blended);
+        };
+    };
+
+    const invisibleValues = new Set([
+        "none",
+        "hidden"
+    ]);
+    /**
+     * Returns a function that, when provided a progress value between 0 and 1,
+     * will return the "none" or "hidden" string only when the progress is that of
+     * the origin or target.
+     */ function mixVisibility(origin, target) {
+        if (invisibleValues.has(origin)) {
+            return (p)=>p <= 0 ? origin : target
+            ;
+        } else {
+            return (p)=>p >= 1 ? target : origin
             ;
         }
-        return toUnit;
     }
 
-    function getDevToolsRecord() {
-        return window.__MOTION_DEV_TOOLS_RECORD;
+    function mixNumber(a, b) {
+        return (p)=>mixNumber$1(a, b, p)
+        ;
     }
-    function animateStyle(element, key, keyframesDefinition, options = {}, AnimationPolyfill) {
-        const record = getDevToolsRecord();
-        const isRecording = options.record !== false && record;
-        let animation;
-        let { duration =defaults$1.duration , delay =defaults$1.delay , endDelay =defaults$1.endDelay , repeat =defaults$1.repeat , easing =defaults$1.easing , persist =false , direction , offset , allowWebkitAcceleration =false ,  } = options;
-        const data = getAnimationData(element);
-        const valueIsTransform = isTransform(key);
-        let canAnimateNatively = supports.waapi();
-        /**
-         * If this is an individual transform, we need to map its
-         * key to a CSS variable and update the element's transform style
-         */ valueIsTransform && addTransformToElement(element, key);
-        const name = getStyleName(key);
-        const motionValue = getMotionValue(data.values, name);
-        /**
-         * Get definition of value, this will be used to convert numerical
-         * keyframes into the default value type.
-         */ const definition = transformDefinitions.get(name);
-        /**
-         * Stop the current animation, if any. Because this will trigger
-         * commitStyles (DOM writes) and we might later trigger DOM reads,
-         * this is fired now and we return a factory function to create
-         * the actual animation that can get called in batch,
-         */ stopAnimation(motionValue.animation, !(isEasingGenerator(easing) && motionValue.generator) && options.record !== false);
-        /**
-         * Batchable factory function containing all DOM reads.
-         */ return ()=>{
-            const readInitialValue = ()=>{
-                var _a, _b;
-                return (_b = (_a = style.get(element, name)) !== null && _a !== void 0 ? _a : definition === null || definition === void 0 ? void 0 : definition.initialValue) !== null && _b !== void 0 ? _b : 0;
-            };
-            /**
-             * Replace null values with the previous keyframe value, or read
-             * it from the DOM if it's the first keyframe.
-             */ let keyframes = hydrateKeyframes(keyframesList(keyframesDefinition), readInitialValue);
-            /**
-             * Detect unit type of keyframes.
-             */ const toUnit = getUnitConverter(keyframes, definition);
-            if (isEasingGenerator(easing)) {
-                const custom = easing.createAnimation(keyframes, key !== "opacity", readInitialValue, name, motionValue);
-                easing = custom.easing;
-                keyframes = custom.keyframes || keyframes;
-                duration = custom.duration || duration;
+    function getMixer(a) {
+        if (typeof a === "number") {
+            return mixNumber;
+        } else if (typeof a === "string") {
+            return isCSSVariableToken(a) ? mixImmediate : color.test(a) ? mixColor : mixComplex;
+        } else if (Array.isArray(a)) {
+            return mixArray;
+        } else if (typeof a === "object") {
+            return color.test(a) ? mixColor : mixObject;
+        }
+        return mixImmediate;
+    }
+    function mixArray(a, b) {
+        const output = [
+            ...a
+        ];
+        const numValues = output.length;
+        const blendValue = a.map((v, i)=>getMixer(v)(v, b[i])
+        );
+        return (p)=>{
+            for(let i = 0; i < numValues; i++){
+                output[i] = blendValue[i](p);
             }
-            /**
-             * If this is a CSS variable we need to register it with the browser
-             * before it can be animated natively. We also set it with setProperty
-             * rather than directly onto the element.style object.
-             */ if (isCssVar(name)) {
-                if (supports.cssRegisterProperty()) {
-                    registerCssVariable(name);
-                } else {
-                    canAnimateNatively = false;
-                }
-            }
-            /**
-             * If we've been passed a custom easing function, and this browser
-             * does **not** support linear() easing, and the value is a transform
-             * (and thus a pure number) we can still support the custom easing
-             * by falling back to the animation polyfill.
-             */ if (valueIsTransform && !supports.linearEasing() && (isFunction$1(easing) || isEasingList(easing) && easing.some(isFunction$1))) {
-                canAnimateNatively = false;
-            }
-            /**
-             * If we can animate this value with WAAPI, do so.
-             */ if (canAnimateNatively) {
-                /**
-                 * Convert numbers to default value types. Currently this only supports
-                 * transforms but it could also support other value types.
-                 */ if (definition) {
-                    keyframes = keyframes.map((value)=>isNumber(value) ? definition.toDefaultUnit(value) : value
-                    );
-                }
-                /**
-                 * If this browser doesn't support partial/implicit keyframes we need to
-                 * explicitly provide one.
-                 */ if (keyframes.length === 1 && (!supports.partialKeyframes() || isRecording)) {
-                    keyframes.unshift(readInitialValue());
-                }
-                const animationOptions = {
-                    delay: time.ms(delay),
-                    duration: time.ms(duration),
-                    endDelay: time.ms(endDelay),
-                    easing: !isEasingList(easing) ? convertEasing(easing, duration) : undefined,
-                    direction,
-                    iterations: repeat + 1,
-                    fill: "both"
-                };
-                animation = element.animate({
-                    [name]: keyframes,
-                    offset,
-                    easing: isEasingList(easing) ? easing.map((thisEasing)=>convertEasing(thisEasing, duration)
-                    ) : undefined
-                }, animationOptions);
-                /**
-                 * Polyfill finished Promise in browsers that don't support it
-                 */ if (!animation.finished) {
-                    animation.finished = new Promise((resolve, reject)=>{
-                        animation.onfinish = resolve;
-                        animation.oncancel = reject;
-                    });
-                }
-                const target = keyframes[keyframes.length - 1];
-                animation.finished.then(()=>{
-                    if (persist) return;
-                    // Apply styles to target
-                    style.set(element, name, target);
-                    // Ensure fill modes don't persist
-                    animation.cancel();
-                }).catch(noop);
-                /**
-                 * This forces Webkit to run animations on the main thread by exploiting
-                 * this condition:
-                 * https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/platform/graphics/ca/GraphicsLayerCA.cpp?rev=281238#L1099
-                 *
-                 * This fixes Webkit's timing bugs, like accelerated animations falling
-                 * out of sync with main thread animations and massive delays in starting
-                 * accelerated animations in WKWebView.
-                 */ if (!allowWebkitAcceleration) animation.playbackRate = 1.000001;
-            /**
-                 * If we can't animate the value natively then we can fallback to the numbers-only
-                 * polyfill for transforms.
-                 */ } else if (AnimationPolyfill && valueIsTransform) {
-                /**
-                 * If any keyframe is a string (because we measured it from the DOM), we need to convert
-                 * it into a number before passing to the Animation polyfill.
-                 */ keyframes = keyframes.map((value)=>typeof value === "string" ? parseFloat(value) : value
-                );
-                /**
-                 * If we only have a single keyframe, we need to create an initial keyframe by reading
-                 * the current value from the DOM.
-                 */ if (keyframes.length === 1) {
-                    keyframes.unshift(parseFloat(readInitialValue()));
-                }
-                animation = new AnimationPolyfill((latest)=>{
-                    style.set(element, name, toUnit ? toUnit(latest) : latest);
-                }, keyframes, Object.assign(Object.assign({}, options), {
-                    duration,
-                    easing
-                }));
-            } else {
-                const target = keyframes[keyframes.length - 1];
-                style.set(element, name, definition && isNumber(target) ? definition.toDefaultUnit(target) : target);
-            }
-            if (isRecording) {
-                record(element, key, keyframes, {
-                    duration,
-                    delay: delay,
-                    easing,
-                    repeat,
-                    offset
-                }, "motion-one");
-            }
-            motionValue.setAnimation(animation);
-            return animation;
+            return output;
         };
     }
-
-    const getOptions = (options, key)=>/**
-     * TODO: Make test for this
-     * Always return a new object otherwise delay is overwritten by results of stagger
-     * and this results in no stagger
-     */ options[key] ? Object.assign(Object.assign({}, options), options[key]) : Object.assign({}, options)
-    ;
-
-    function resolveElements(elements, selectorCache) {
-        var _a;
-        if (typeof elements === "string") {
-            if (selectorCache) {
-                (_a = selectorCache[elements]) !== null && _a !== void 0 ? _a : selectorCache[elements] = document.querySelectorAll(elements);
-                elements = selectorCache[elements];
-            } else {
-                elements = document.querySelectorAll(elements);
+    function mixObject(a, b) {
+        const output = {
+            ...a,
+            ...b
+        };
+        const blendValue = {};
+        for(const key1 in output){
+            if (a[key1] !== undefined && b[key1] !== undefined) {
+                blendValue[key1] = getMixer(a[key1])(a[key1], b[key1]);
             }
-        } else if (elements instanceof Element) {
-            elements = [
-                elements
-            ];
         }
-        /**
-         * Return an empty array
-         */ return Array.from(elements || []);
+        return (v)=>{
+            for(const key in blendValue){
+                output[key] = blendValue[key](v);
+            }
+            return output;
+        };
+    }
+    function matchOrder(origin, target) {
+        const orderedOrigin = [];
+        const pointers = {
+            color: 0,
+            var: 0,
+            number: 0
+        };
+        for(let i = 0; i < target.values.length; i++){
+            const type = target.types[i];
+            const originIndex = origin.indexes[type][pointers[type]];
+            var _originIndex;
+            const originValue = (_originIndex = origin.values[originIndex]) !== null && _originIndex !== void 0 ? _originIndex : 0;
+            orderedOrigin[i] = originValue;
+            pointers[type]++;
+        }
+        return orderedOrigin;
+    }
+    const mixComplex = (origin, target)=>{
+        const template = complex.createTransformer(target);
+        const originStats = analyseComplexValue(origin);
+        const targetStats = analyseComplexValue(target);
+        const canInterpolate = originStats.indexes.var.length === targetStats.indexes.var.length && originStats.indexes.color.length === targetStats.indexes.color.length && originStats.indexes.number.length >= targetStats.indexes.number.length;
+        if (canInterpolate) {
+            if (invisibleValues.has(origin) && !targetStats.values.length || invisibleValues.has(target) && !originStats.values.length) {
+                return mixVisibility(origin, target);
+            }
+            return pipe(mixArray(matchOrder(originStats, targetStats), targetStats.values), template);
+        } else {
+            warning(true, `Complex values '${origin}' and '${target}' too different to mix. Ensure all colors are of the same type, and that each contains the same quantity of number and color values. Falling back to instant transition.`, "complex-values-different");
+            return mixImmediate(origin, target);
+        }
+    };
+
+    function mix(from, to, p) {
+        if (typeof from === "number" && typeof to === "number" && typeof p === "number") {
+            return mixNumber$1(from, to, p);
+        }
+        const mixer = getMixer(from);
+        return mixer(from, to);
     }
 
-    const createAnimation = (factory)=>factory()
-    ;
-    const withControls = (animationFactory, options, duration = defaults$1.duration)=>{
-        return new Proxy({
-            animations: animationFactory.map(createAnimation).filter(Boolean),
-            duration,
-            options
-        }, controls);
+    const frameloopDriver = (update)=>{
+        const passTimestamp = ({ timestamp  })=>update(timestamp)
+        ;
+        return {
+            start: (keepAlive = true)=>frame.update(passTimestamp, keepAlive)
+            ,
+            stop: ()=>cancelFrame(passTimestamp)
+            ,
+            /**
+             * If we're processing this frame we can use the
+             * framelocked timestamp to keep things in sync.
+             */ now: ()=>frameData.isProcessing ? frameData.timestamp : time.now()
+        };
     };
+
+    const generateLinearEasing = (easing, duration, resolution = 10 // as milliseconds
+    )=>{
+        let points = "";
+        const numPoints = Math.max(Math.round(duration / resolution), 2);
+        for(let i = 0; i < numPoints; i++){
+            points += Math.round(easing(i / (numPoints - 1)) * 10000) / 10000 + ", ";
+        }
+        return `linear(${points.substring(0, points.length - 2)})`;
+    };
+
     /**
-     * TODO:
-     * Currently this returns the first animation, ideally it would return
-     * the first active animation.
-     */ const getActiveAnimation = (state)=>state.animations[0]
-    ;
-    const controls = {
-        get: (target, key)=>{
-            const activeAnimation = getActiveAnimation(target);
-            switch(key){
-                case "duration":
-                    return target.duration;
-                case "currentTime":
-                    return time.s((activeAnimation === null || activeAnimation === void 0 ? void 0 : activeAnimation[key]) || 0);
-                case "playbackRate":
-                case "playState":
-                    return activeAnimation === null || activeAnimation === void 0 ? void 0 : activeAnimation[key];
-                case "finished":
-                    if (!target.finished) {
-                        target.finished = Promise.all(target.animations.map(selectFinished)).catch(noop);
-                    }
-                    return target.finished;
-                case "stop":
-                    return ()=>{
-                        target.animations.forEach((animation)=>stopAnimation(animation)
-                        );
-                    };
-                case "forEachNative":
-                    /**
-                     * This is for internal use only, fire a callback for each
-                     * underlying animation.
-                     */ return (callback)=>{
-                        target.animations.forEach((animation)=>callback(animation, target)
-                        );
-                    };
-                default:
-                    return typeof (activeAnimation === null || activeAnimation === void 0 ? void 0 : activeAnimation[key]) === "undefined" ? undefined : ()=>target.animations.forEach((animation)=>animation[key]()
-                        )
-                    ;
-            }
-        },
-        set: (target, key, value)=>{
-            switch(key){
-                case "currentTime":
-                    value = time.ms(value);
-                case "currentTime":
-                case "playbackRate":
-                    for(let i = 0; i < target.animations.length; i++){
-                        target.animations[i][key] = value;
-                    }
-                    return true;
-            }
-            return false;
+     * Implement a practical max duration for keyframe generation
+     * to prevent infinite loops
+     */ const maxGeneratorDuration = 20000;
+    function calcGeneratorDuration(generator) {
+        let duration = 0;
+        const timeStep = 50;
+        let state = generator.next(duration);
+        while(!state.done && duration < maxGeneratorDuration){
+            duration += timeStep;
+            state = generator.next(duration);
         }
-    };
-    const selectFinished = (animation)=>animation.finished
-    ;
-
-    function stagger(duration = 0.1, { start =0 , from =0 , easing  } = {}) {
-        return (i, total)=>{
-            const fromIndex = isNumber(from) ? from : getFromIndex(from, total);
-            const distance = Math.abs(fromIndex - i);
-            let delay = duration * distance;
-            if (easing) {
-                const maxDelay = total * duration;
-                const easingFunction = getEasingFunction(easing);
-                delay = easingFunction(delay / maxDelay) * maxDelay;
-            }
-            return start + delay;
-        };
-    }
-    function getFromIndex(from, total) {
-        if (from === "first") {
-            return 0;
-        } else {
-            const lastIndex = total - 1;
-            return from === "last" ? lastIndex : lastIndex / 2;
-        }
-    }
-    function resolveOption(option, i, total) {
-        return isFunction$1(option) ? option(i, total) : option;
+        return duration >= maxGeneratorDuration ? Infinity : duration;
     }
 
-    function createAnimate(AnimatePolyfill) {
-        return function animate(elements, keyframes, options = {}) {
-            elements = resolveElements(elements);
-            const numElements = elements.length;
-            invariant(Boolean(numElements), "No valid element provided.");
-            invariant(Boolean(keyframes), "No keyframes defined.");
-            /**
-             * Create and start new animations
-             */ const animationFactories = [];
-            for(let i = 0; i < numElements; i++){
-                const element = elements[i];
-                for(const key in keyframes){
-                    const valueOptions = getOptions(options, key);
-                    valueOptions.delay = resolveOption(valueOptions.delay, i, numElements);
-                    const animation = animateStyle(element, key, keyframes[key], valueOptions, AnimatePolyfill);
-                    animationFactories.push(animation);
-                }
-            }
-            return withControls(animationFactories, options, /**
-             * TODO:
-             * If easing is set to spring or glide, duration will be dynamically
-             * generated. Ideally we would dynamically generate this from
-             * animation.effect.getComputedTiming().duration but this isn't
-             * supported in iOS13 or our number polyfill. Perhaps it's possible
-             * to Proxy animations returned from animateStyle that has duration
-             * as a getter.
-             */ options.duration);
-        };
-    }
-
-    const animate$1 = createAnimate(Animation);
-
-    function __rest(s, e) {
-        var t = {};
-        for(var p in s)if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
-        if (s != null && typeof Object.getOwnPropertySymbols === "function") for(var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++){
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
-        }
-        return t;
-    }
-
-    function calcNextTime(current, next, prev, labels) {
-        var _a;
-        if (isNumber(next)) {
-            return next;
-        } else if (next.startsWith("-") || next.startsWith("+")) {
-            return Math.max(0, current + parseFloat(next));
-        } else if (next === "<") {
-            return prev;
-        } else {
-            return (_a = labels.get(next)) !== null && _a !== void 0 ? _a : current;
-        }
-    }
-
-    function eraseKeyframes(sequence, startTime, endTime) {
-        for(let i = 0; i < sequence.length; i++){
-            const keyframe = sequence[i];
-            if (keyframe.at > startTime && keyframe.at < endTime) {
-                removeItem(sequence, keyframe);
-                // If we remove this item we have to push the pointer back one
-                i--;
-            }
-        }
-    }
-    function addKeyframes(sequence, keyframes, easing, offset, startTime, endTime) {
-        /**
-         * Erase every existing value between currentTime and targetTime,
-         * this will essentially splice this timeline into any currently
-         * defined ones.
-         */ eraseKeyframes(sequence, startTime, endTime);
-        for(let i = 0; i < keyframes.length; i++){
-            sequence.push({
-                value: keyframes[i],
-                at: mix(startTime, endTime, offset[i]),
-                easing: getEasingForSegment(easing, i)
-            });
-        }
-    }
-
-    function compareByTime(a, b) {
-        if (a.at === b.at) {
-            return a.value === null ? 1 : -1;
-        } else {
-            return a.at - b.at;
-        }
-    }
-
-    function timeline(definition1, options = {}) {
-        var _a;
-        const animationDefinitions = createAnimationsFromTimeline(definition1, options);
-        /**
-         * Create and start animations
-         */ const animationFactories = animationDefinitions.map((definition)=>animateStyle(...definition, Animation)
-        ).filter(Boolean);
-        return withControls(animationFactories, options, // Get the duration from the first animation definition
-        (_a = animationDefinitions[0]) === null || _a === void 0 ? void 0 : _a[3].duration);
-    }
-    function createAnimationsFromTimeline(definition, _a = {}) {
-        var { defaultOptions ={}  } = _a, timelineOptions = __rest(_a, [
-            "defaultOptions"
-        ]);
-        const animationDefinitions = [];
-        const elementSequences = new Map();
-        const elementCache = {};
-        const timeLabels = new Map();
-        let prevTime = 0;
-        let currentTime = 0;
-        let totalDuration = 0;
-        /**
-         * Build the timeline by mapping over the definition array and converting
-         * the definitions into keyframes and offsets with absolute time values.
-         * These will later get converted into relative offsets in a second pass.
-         */ for(let i1 = 0; i1 < definition.length; i1++){
-            const segment = definition[i1];
-            /**
-             * If this is a timeline label, mark it and skip the rest of this iteration.
-             */ if (isString(segment)) {
-                timeLabels.set(segment, currentTime);
-                continue;
-            } else if (!Array.isArray(segment)) {
-                timeLabels.set(segment.name, calcNextTime(currentTime, segment.at, prevTime, timeLabels));
-                continue;
-            }
-            const [elementDefinition, keyframes, options = {}] = segment;
-            /**
-             * If a relative or absolute time value has been specified we need to resolve
-             * it in relation to the currentTime.
-             */ if (options.at !== undefined) {
-                currentTime = calcNextTime(currentTime, options.at, prevTime, timeLabels);
-            }
-            /**
-             * Keep track of the maximum duration in this definition. This will be
-             * applied to currentTime once the definition has been parsed.
-             */ let maxDuration = 0;
-            /**
-             * Find all the elements specified in the definition and parse value
-             * keyframes from their timeline definitions.
-             */ const elements = resolveElements(elementDefinition, elementCache);
-            const numElements = elements.length;
-            for(let elementIndex = 0; elementIndex < numElements; elementIndex++){
-                const element = elements[elementIndex];
-                const elementSequence = getElementSequence(element, elementSequences);
-                for(const key in keyframes){
-                    const valueSequence = getValueSequence(key, elementSequence);
-                    let valueKeyframes = keyframesList(keyframes[key]);
-                    const valueOptions = getOptions(options, key);
-                    let { duration =defaultOptions.duration || defaults$1.duration , easing =defaultOptions.easing || defaults$1.easing ,  } = valueOptions;
-                    if (isEasingGenerator(easing)) {
-                        invariant(key === "opacity" || valueKeyframes.length > 1, "spring must be provided 2 keyframes within timeline()");
-                        const custom = easing.createAnimation(valueKeyframes, key !== "opacity", ()=>0
-                        , key);
-                        easing = custom.easing;
-                        valueKeyframes = custom.keyframes || valueKeyframes;
-                        duration = custom.duration || duration;
-                    }
-                    const delay = resolveOption(options.delay, elementIndex, numElements) || 0;
-                    const startTime = currentTime + delay;
-                    const targetTime = startTime + duration;
-                    /**
-                     *
-                     */ let { offset =defaultOffset$1(valueKeyframes.length)  } = valueOptions;
-                    /**
-                     * If there's only one offset of 0, fill in a second with length 1
-                     *
-                     * TODO: Ensure there's a test that covers this removal
-                     */ if (offset.length === 1 && offset[0] === 0) {
-                        offset[1] = 1;
-                    }
-                    /**
-                     * Fill out if offset if fewer offsets than keyframes
-                     */ const remainder = offset.length - valueKeyframes.length;
-                    remainder > 0 && fillOffset(offset, remainder);
-                    /**
-                     * If only one value has been set, ie [1], push a null to the start of
-                     * the keyframe array. This will let us mark a keyframe at this point
-                     * that will later be hydrated with the previous value.
-                     */ valueKeyframes.length === 1 && valueKeyframes.unshift(null);
-                    /**
-                     * Add keyframes, mapping offsets to absolute time.
-                     */ addKeyframes(valueSequence, valueKeyframes, easing, offset, startTime, targetTime);
-                    maxDuration = Math.max(delay + duration, maxDuration);
-                    totalDuration = Math.max(targetTime, totalDuration);
-                }
-            }
-            prevTime = currentTime;
-            currentTime += maxDuration;
-        }
-        /**
-         * For every element and value combination create a new animation.
-         */ elementSequences.forEach((valueSequences, element)=>{
-            for(const key in valueSequences){
-                const valueSequence = valueSequences[key];
-                /**
-                 * Arrange all the keyframes in ascending time order.
-                 */ valueSequence.sort(compareByTime);
-                const keyframes = [];
-                const valueOffset = [];
-                const valueEasing = [];
-                /**
-                 * For each keyframe, translate absolute times into
-                 * relative offsets based on the total duration of the timeline.
-                 */ for(let i = 0; i < valueSequence.length; i++){
-                    const { at , value , easing  } = valueSequence[i];
-                    keyframes.push(value);
-                    valueOffset.push(progress(0, totalDuration, at));
-                    valueEasing.push(easing || defaults$1.easing);
-                }
-                /**
-                 * If the first keyframe doesn't land on offset: 0
-                 * provide one by duplicating the initial keyframe. This ensures
-                 * it snaps to the first keyframe when the animation starts.
-                 */ if (valueOffset[0] !== 0) {
-                    valueOffset.unshift(0);
-                    keyframes.unshift(keyframes[0]);
-                    valueEasing.unshift("linear");
-                }
-                /**
-                 * If the last keyframe doesn't land on offset: 1
-                 * provide one with a null wildcard value. This will ensure it
-                 * stays static until the end of the animation.
-                 */ if (valueOffset[valueOffset.length - 1] !== 1) {
-                    valueOffset.push(1);
-                    keyframes.push(null);
-                }
-                animationDefinitions.push([
-                    element,
-                    key,
-                    keyframes,
-                    Object.assign(Object.assign(Object.assign({}, defaultOptions), {
-                        duration: totalDuration,
-                        easing: valueEasing,
-                        offset: valueOffset
-                    }), timelineOptions), 
-                ]);
-            }
+    /**
+     * Create a progress => progress easing function from a generator.
+     */ function createGeneratorEasing(options, scale = 100, createGenerator) {
+        const generator = createGenerator({
+            ...options,
+            keyframes: [
+                0,
+                scale
+            ]
         });
-        return animationDefinitions;
-    }
-    function getElementSequence(element, sequences) {
-        !sequences.has(element) && sequences.set(element, {});
-        return sequences.get(element);
-    }
-    function getValueSequence(name, sequences) {
-        if (!sequences[name]) sequences[name] = [];
-        return sequences[name];
+        const duration = Math.min(calcGeneratorDuration(generator), maxGeneratorDuration);
+        return {
+            type: "keyframes",
+            ease: (progress)=>{
+                return generator.next(duration * progress).value / scale;
+            },
+            duration: millisecondsToSeconds(duration)
+        };
     }
 
-    const sampleT = 5; // ms
+    const velocitySampleDuration = 5; // ms
     function calcGeneratorVelocity(resolveValue, t, current) {
-        const prevT = Math.max(t - sampleT, 0);
+        const prevT = Math.max(t - velocitySampleDuration, 0);
         return velocityPerSecond(current - resolveValue(prevT), t - prevT);
     }
 
-    const defaults = {
-        stiffness: 100.0,
-        damping: 10.0,
-        mass: 1.0
+    const springDefaults = {
+        // Default spring physics
+        stiffness: 100,
+        damping: 10,
+        mass: 1.0,
+        velocity: 0.0,
+        // Default duration/bounce-based options
+        duration: 800,
+        bounce: 0.3,
+        visualDuration: 0.3,
+        // Rest thresholds
+        restSpeed: {
+            granular: 0.01,
+            default: 2
+        },
+        restDelta: {
+            granular: 0.005,
+            default: 0.5
+        },
+        // Limits
+        minDuration: 0.01,
+        maxDuration: 10.0,
+        minDamping: 0.05,
+        maxDamping: 1
     };
 
-    const calcDampingRatio = (stiffness = defaults.stiffness, damping = defaults.damping, mass = defaults.mass)=>damping / (2 * Math.sqrt(stiffness * mass))
-    ;
-
-    function hasReachedTarget(origin, target, current) {
-        return origin < target && current >= target || origin > target && current <= target;
-    }
-
-    const spring$1 = ({ stiffness =defaults.stiffness , damping =defaults.damping , mass =defaults.mass , from =0 , to =1 , velocity =0.0 , restSpeed =2 , restDistance =0.5 ,  } = {})=>{
-        velocity = velocity ? time.s(velocity) : 0.0;
-        const state = {
-            done: false,
-            hasReachedTarget: false,
-            current: from,
-            target: to
-        };
-        const initialDelta = to - from;
-        const undampedAngularFreq = Math.sqrt(stiffness / mass) / 1000;
-        const dampingRatio = calcDampingRatio(stiffness, damping, mass);
-        let resolveSpring;
+    const safeMin = 0.001;
+    function findSpring({ duration =springDefaults.duration , bounce =springDefaults.bounce , velocity =springDefaults.velocity , mass =springDefaults.mass ,  }) {
+        let envelope;
+        let derivative;
+        warning(duration <= secondsToMilliseconds(springDefaults.maxDuration), "Spring duration must be 10 seconds or less", "spring-duration-limit");
+        let dampingRatio = 1 - bounce;
+        /**
+         * Restrict dampingRatio and duration to within acceptable ranges.
+         */ dampingRatio = clamp(springDefaults.minDamping, springDefaults.maxDamping, dampingRatio);
+        duration = clamp(springDefaults.minDuration, springDefaults.maxDuration, millisecondsToSeconds(duration));
         if (dampingRatio < 1) {
-            const angularFreq = undampedAngularFreq * Math.sqrt(1 - dampingRatio * dampingRatio);
-            // Underdamped spring (bouncy)
-            resolveSpring = (t)=>to - Math.exp(-dampingRatio * undampedAngularFreq * t) * ((-velocity + dampingRatio * undampedAngularFreq * initialDelta) / angularFreq * Math.sin(angularFreq * t) + initialDelta * Math.cos(angularFreq * t))
-            ;
+            /**
+             * Underdamped spring
+             */ envelope = (undampedFreq)=>{
+                const exponentialDecay = undampedFreq * dampingRatio;
+                const delta = exponentialDecay * duration;
+                const a = exponentialDecay - velocity;
+                const b = calcAngularFreq(undampedFreq, dampingRatio);
+                const c = Math.exp(-delta);
+                return safeMin - a / b * c;
+            };
+            derivative = (undampedFreq)=>{
+                const exponentialDecay = undampedFreq * dampingRatio;
+                const delta = exponentialDecay * duration;
+                const d = delta * velocity + velocity;
+                const e = Math.pow(dampingRatio, 2) * Math.pow(undampedFreq, 2) * duration;
+                const f = Math.exp(-delta);
+                const g = calcAngularFreq(Math.pow(undampedFreq, 2), dampingRatio);
+                const factor = -envelope(undampedFreq) + safeMin > 0 ? -1 : 1;
+                return factor * ((d - e) * f) / g;
+            };
         } else {
-            // Critically damped spring
-            resolveSpring = (t)=>{
-                return to - Math.exp(-undampedAngularFreq * t) * (initialDelta + (-velocity + undampedAngularFreq * initialDelta) * t);
+            /**
+             * Critically-damped spring
+             */ envelope = (undampedFreq)=>{
+                const a = Math.exp(-undampedFreq * duration);
+                const b = (undampedFreq - velocity) * duration + 1;
+                return -safeMin + a * b;
+            };
+            derivative = (undampedFreq)=>{
+                const a = Math.exp(-undampedFreq * duration);
+                const b = (velocity - undampedFreq) * (duration * duration);
+                return a * b;
             };
         }
-        return (t)=>{
-            state.current = resolveSpring(t);
-            const currentVelocity = t === 0 ? velocity : calcGeneratorVelocity(resolveSpring, t, state.current);
-            const isBelowVelocityThreshold = Math.abs(currentVelocity) <= restSpeed;
-            const isBelowDisplacementThreshold = Math.abs(to - state.current) <= restDistance;
-            state.done = isBelowVelocityThreshold && isBelowDisplacementThreshold;
-            state.hasReachedTarget = hasReachedTarget(from, to, state.current);
-            return state;
+        const initialGuess = 5 / duration;
+        const undampedFreq1 = approximateRoot(envelope, derivative, initialGuess);
+        duration = secondsToMilliseconds(duration);
+        if (isNaN(undampedFreq1)) {
+            return {
+                stiffness: springDefaults.stiffness,
+                damping: springDefaults.damping,
+                duration
+            };
+        } else {
+            const stiffness = Math.pow(undampedFreq1, 2) * mass;
+            return {
+                stiffness,
+                damping: dampingRatio * 2 * Math.sqrt(mass * stiffness),
+                duration
+            };
+        }
+    }
+    const rootIterations = 12;
+    function approximateRoot(envelope, derivative, initialGuess) {
+        let result = initialGuess;
+        for(let i = 1; i < rootIterations; i++){
+            result = result - envelope(result) / derivative(result);
+        }
+        return result;
+    }
+    function calcAngularFreq(undampedFreq, dampingRatio) {
+        return undampedFreq * Math.sqrt(1 - dampingRatio * dampingRatio);
+    }
+
+    const durationKeys = [
+        "duration",
+        "bounce"
+    ];
+    const physicsKeys = [
+        "stiffness",
+        "damping",
+        "mass"
+    ];
+    function isSpringType(options, keys) {
+        return keys.some((key)=>options[key] !== undefined
+        );
+    }
+    function getSpringOptions(options) {
+        let springOptions = {
+            velocity: springDefaults.velocity,
+            stiffness: springDefaults.stiffness,
+            damping: springDefaults.damping,
+            mass: springDefaults.mass,
+            isResolvedFromDuration: false,
+            ...options
         };
+        // stiffness/damping/mass overrides duration/bounce
+        if (!isSpringType(options, physicsKeys) && isSpringType(options, durationKeys)) {
+            if (options.visualDuration) {
+                const visualDuration = options.visualDuration;
+                const root = 2 * Math.PI / (visualDuration * 1.2);
+                const stiffness = root * root;
+                const damping = 2 * clamp(0.05, 1, 1 - (options.bounce || 0)) * Math.sqrt(stiffness);
+                springOptions = {
+                    ...springOptions,
+                    mass: springDefaults.mass,
+                    stiffness,
+                    damping
+                };
+            } else {
+                const derived = findSpring(options);
+                springOptions = {
+                    ...springOptions,
+                    ...derived,
+                    mass: springDefaults.mass
+                };
+                springOptions.isResolvedFromDuration = true;
+            }
+        }
+        return springOptions;
+    }
+    function spring(optionsOrVisualDuration = springDefaults.visualDuration, bounce = springDefaults.bounce) {
+        const options = typeof optionsOrVisualDuration !== "object" ? {
+            visualDuration: optionsOrVisualDuration,
+            keyframes: [
+                0,
+                1
+            ],
+            bounce
+        } : optionsOrVisualDuration;
+        let { restSpeed , restDelta  } = options;
+        const origin = options.keyframes[0];
+        const target = options.keyframes[options.keyframes.length - 1];
+        /**
+         * This is the Iterator-spec return value. We ensure it's mutable rather than using a generator
+         * to reduce GC during animation.
+         */ const state = {
+            done: false,
+            value: origin
+        };
+        const { stiffness , damping , mass , duration , velocity , isResolvedFromDuration ,  } = getSpringOptions({
+            ...options,
+            velocity: -millisecondsToSeconds(options.velocity || 0)
+        });
+        const initialVelocity = velocity || 0.0;
+        const dampingRatio = damping / (2 * Math.sqrt(stiffness * mass));
+        const initialDelta = target - origin;
+        const undampedAngularFreq = millisecondsToSeconds(Math.sqrt(stiffness / mass));
+        /**
+         * If we're working on a granular scale, use smaller defaults for determining
+         * when the spring is finished.
+         *
+         * These defaults have been selected emprically based on what strikes a good
+         * ratio between feeling good and finishing as soon as changes are imperceptible.
+         */ const isGranularScale = Math.abs(initialDelta) < 5;
+        restSpeed || (restSpeed = isGranularScale ? springDefaults.restSpeed.granular : springDefaults.restSpeed.default);
+        restDelta || (restDelta = isGranularScale ? springDefaults.restDelta.granular : springDefaults.restDelta.default);
+        let resolveSpring;
+        if (dampingRatio < 1) {
+            const angularFreq = calcAngularFreq(undampedAngularFreq, dampingRatio);
+            // Underdamped spring
+            resolveSpring = (t)=>{
+                const envelope = Math.exp(-dampingRatio * undampedAngularFreq * t);
+                return target - envelope * ((initialVelocity + dampingRatio * undampedAngularFreq * initialDelta) / angularFreq * Math.sin(angularFreq * t) + initialDelta * Math.cos(angularFreq * t));
+            };
+        } else if (dampingRatio === 1) {
+            // Critically damped spring
+            resolveSpring = (t)=>target - Math.exp(-undampedAngularFreq * t) * (initialDelta + (initialVelocity + undampedAngularFreq * initialDelta) * t)
+            ;
+        } else {
+            // Overdamped spring
+            const dampedAngularFreq = undampedAngularFreq * Math.sqrt(dampingRatio * dampingRatio - 1);
+            resolveSpring = (t)=>{
+                const envelope = Math.exp(-dampingRatio * undampedAngularFreq * t);
+                // When performing sinh or cosh values can hit Infinity so we cap them here
+                const freqForT = Math.min(dampedAngularFreq * t, 300);
+                return target - envelope * ((initialVelocity + dampingRatio * undampedAngularFreq * initialDelta) * Math.sinh(freqForT) + dampedAngularFreq * initialDelta * Math.cosh(freqForT)) / dampedAngularFreq;
+            };
+        }
+        const generator = {
+            calculatedDuration: isResolvedFromDuration ? duration || null : null,
+            next: (t)=>{
+                const current = resolveSpring(t);
+                if (!isResolvedFromDuration) {
+                    let currentVelocity = t === 0 ? initialVelocity : 0.0;
+                    /**
+                     * We only need to calculate velocity for under-damped springs
+                     * as over- and critically-damped springs can't overshoot, so
+                     * checking only for displacement is enough.
+                     */ if (dampingRatio < 1) {
+                        currentVelocity = t === 0 ? secondsToMilliseconds(initialVelocity) : calcGeneratorVelocity(resolveSpring, t, current);
+                    }
+                    const isBelowVelocityThreshold = Math.abs(currentVelocity) <= restSpeed;
+                    const isBelowDisplacementThreshold = Math.abs(target - current) <= restDelta;
+                    state.done = isBelowVelocityThreshold && isBelowDisplacementThreshold;
+                } else {
+                    state.done = t >= duration;
+                }
+                state.value = state.done ? target : current;
+                return state;
+            },
+            toString: ()=>{
+                const calculatedDuration = Math.min(calcGeneratorDuration(generator), maxGeneratorDuration);
+                const easing = generateLinearEasing((progress)=>generator.next(calculatedDuration * progress).value
+                , calculatedDuration, 30);
+                return calculatedDuration + "ms " + easing;
+            },
+            toTransition: ()=>{}
+        };
+        return generator;
+    }
+    spring.applyToOptions = (options)=>{
+        const generatorOptions = createGeneratorEasing(options, 100, spring);
+        options.ease = generatorOptions.ease;
+        options.duration = secondsToMilliseconds(generatorOptions.duration);
+        options.type = "keyframes";
+        return options;
     };
 
-    const glide$1 = ({ from =0 , velocity =0.0 , power =0.8 , decay =0.325 , bounceDamping , bounceStiffness , changeTarget , min , max , restDistance =0.5 , restSpeed ,  })=>{
-        decay = time.ms(decay);
+    function inertia({ keyframes , velocity =0.0 , power =0.8 , timeConstant =325 , bounceDamping =10 , bounceStiffness =500 , modifyTarget , min , max , restDelta =0.5 , restSpeed ,  }) {
+        const origin = keyframes[0];
         const state = {
-            hasReachedTarget: false,
             done: false,
-            current: from,
-            target: from
+            value: origin
         };
         const isOutOfBounds = (v)=>min !== undefined && v < min || max !== undefined && v > max
         ;
@@ -17476,22 +17694,21 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             return Math.abs(min - v) < Math.abs(max - v) ? min : max;
         };
         let amplitude = power * velocity;
-        const ideal = from + amplitude;
-        const target = changeTarget === undefined ? ideal : changeTarget(ideal);
-        state.target = target;
+        const ideal = origin + amplitude;
+        const target = modifyTarget === undefined ? ideal : modifyTarget(ideal);
         /**
          * If the target has changed we need to re-calculate the amplitude, otherwise
          * the animation will start from the wrong position.
-         */ if (target !== ideal) amplitude = target - from;
-        const calcDelta = (t)=>-amplitude * Math.exp(-t / decay)
+         */ if (target !== ideal) amplitude = target - origin;
+        const calcDelta = (t)=>-amplitude * Math.exp(-t / timeConstant)
         ;
         const calcLatest = (t)=>target + calcDelta(t)
         ;
         const applyFriction = (t)=>{
             const delta = calcDelta(t);
             const latest = calcLatest(t);
-            state.done = Math.abs(delta) <= restDistance;
-            state.current = state.done ? target : latest;
+            state.done = Math.abs(delta) <= restDelta;
+            state.value = state.done ? target : latest;
         };
         /**
          * Ideally this would resolve for t in a stateless way, we could
@@ -17499,255 +17716,2437 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
          * this will be done anyway we can assume that spring will
          * be discovered during that.
          */ let timeReachedBoundary;
-        let spring$1$1;
+        let spring$1;
         const checkCatchBoundary = (t)=>{
-            if (!isOutOfBounds(state.current)) return;
+            if (!isOutOfBounds(state.value)) return;
             timeReachedBoundary = t;
-            spring$1$1 = spring$1({
-                from: state.current,
-                to: nearestBoundary(state.current),
-                velocity: calcGeneratorVelocity(calcLatest, t, state.current),
+            spring$1 = spring({
+                keyframes: [
+                    state.value,
+                    nearestBoundary(state.value)
+                ],
+                velocity: calcGeneratorVelocity(calcLatest, t, state.value),
                 damping: bounceDamping,
                 stiffness: bounceStiffness,
-                restDistance,
+                restDelta,
                 restSpeed
             });
         };
         checkCatchBoundary(0);
-        return (t)=>{
-            /**
-             * We need to resolve the friction to figure out if we need a
-             * spring but we don't want to do this twice per frame. So here
-             * we flag if we updated for this frame and later if we did
-             * we can skip doing it again.
-             */ let hasUpdatedFrame = false;
-            if (!spring$1$1 && timeReachedBoundary === undefined) {
-                hasUpdatedFrame = true;
-                applyFriction(t);
-                checkCatchBoundary(t);
+        return {
+            calculatedDuration: null,
+            next: (t)=>{
+                /**
+                 * We need to resolve the friction to figure out if we need a
+                 * spring but we don't want to do this twice per frame. So here
+                 * we flag if we updated for this frame and later if we did
+                 * we can skip doing it again.
+                 */ let hasUpdatedFrame = false;
+                if (!spring$1 && timeReachedBoundary === undefined) {
+                    hasUpdatedFrame = true;
+                    applyFriction(t);
+                    checkCatchBoundary(t);
+                }
+                /**
+                 * If we have a spring and the provided t is beyond the moment the friction
+                 * animation crossed the min/max boundary, use the spring.
+                 */ if (timeReachedBoundary !== undefined && t >= timeReachedBoundary) {
+                    return spring$1.next(t - timeReachedBoundary);
+                } else {
+                    !hasUpdatedFrame && applyFriction(t);
+                    return state;
+                }
             }
-            /**
-             * If we have a spring and the provided t is beyond the moment the friction
-             * animation crossed the min/max boundary, use the spring.
-             */ if (timeReachedBoundary !== undefined && t > timeReachedBoundary) {
-                state.hasReachedTarget = true;
-                return spring$1$1(t - timeReachedBoundary);
-            } else {
-                state.hasReachedTarget = false;
-                !hasUpdatedFrame && applyFriction(t);
+        };
+    }
+
+    function createMixers(output, ease, customMixer) {
+        const mixers = [];
+        const mixerFactory = customMixer || MotionGlobalConfig.mix || mix;
+        const numMixers = output.length - 1;
+        for(let i = 0; i < numMixers; i++){
+            let mixer = mixerFactory(output[i], output[i + 1]);
+            if (ease) {
+                const easingFunction = Array.isArray(ease) ? ease[i] || noop : ease;
+                mixer = pipe(easingFunction, mixer);
+            }
+            mixers.push(mixer);
+        }
+        return mixers;
+    }
+    /**
+     * Create a function that maps from a numerical input array to a generic output array.
+     *
+     * Accepts:
+     *   - Numbers
+     *   - Colors (hex, hsl, hsla, rgb, rgba)
+     *   - Complex (combinations of one or more numbers or strings)
+     *
+     * ```jsx
+     * const mixColor = interpolate([0, 1], ['#fff', '#000'])
+     *
+     * mixColor(0.5) // 'rgba(128, 128, 128, 1)'
+     * ```
+     *
+     * TODO Revisit this approach once we've moved to data models for values,
+     * probably not needed to pregenerate mixer functions.
+     *
+     * @public
+     */ function interpolate(input, output, { clamp: isClamp = true , ease , mixer  } = {}) {
+        const inputLength = input.length;
+        invariant(inputLength === output.length, "Both input and output ranges must be the same length", "range-length");
+        /**
+         * If we're only provided a single input, we can just make a function
+         * that returns the output.
+         */ if (inputLength === 1) return ()=>output[0]
+        ;
+        if (inputLength === 2 && output[0] === output[1]) return ()=>output[1]
+        ;
+        const isZeroDeltaRange = input[0] === input[1];
+        // If input runs highest -> lowest, reverse both arrays
+        if (input[0] > input[inputLength - 1]) {
+            input = [
+                ...input
+            ].reverse();
+            output = [
+                ...output
+            ].reverse();
+        }
+        const mixers = createMixers(output, ease, mixer);
+        const numMixers = mixers.length;
+        const interpolator = (v)=>{
+            if (isZeroDeltaRange && v < input[0]) return output[0];
+            let i = 0;
+            if (numMixers > 1) {
+                for(; i < input.length - 2; i++){
+                    if (v < input[i + 1]) break;
+                }
+            }
+            const progressInRange = progress(input[i], input[i + 1], v);
+            return mixers[i](progressInRange);
+        };
+        return isClamp ? (v)=>interpolator(clamp(input[0], input[inputLength - 1], v))
+         : interpolator;
+    }
+
+    function fillOffset(offset, remaining) {
+        const min = offset[offset.length - 1];
+        for(let i = 1; i <= remaining; i++){
+            const offsetProgress = progress(0, remaining, i);
+            offset.push(mixNumber$1(min, 1, offsetProgress));
+        }
+    }
+
+    function defaultOffset$1(arr) {
+        const offset = [
+            0
+        ];
+        fillOffset(offset, arr.length - 1);
+        return offset;
+    }
+
+    function convertOffsetToTimes(offset, duration) {
+        return offset.map((o)=>o * duration
+        );
+    }
+
+    function defaultEasing(values, easing) {
+        return values.map(()=>easing || easeInOut
+        ).splice(0, values.length - 1);
+    }
+    function keyframes({ duration =300 , keyframes: keyframeValues , times , ease ="easeInOut" ,  }) {
+        /**
+         * Easing functions can be externally defined as strings. Here we convert them
+         * into actual functions.
+         */ const easingFunctions = isEasingArray(ease) ? ease.map(easingDefinitionToFunction) : easingDefinitionToFunction(ease);
+        /**
+         * This is the Iterator-spec return value. We ensure it's mutable rather than using a generator
+         * to reduce GC during animation.
+         */ const state = {
+            done: false,
+            value: keyframeValues[0]
+        };
+        /**
+         * Create a times array based on the provided 0-1 offsets
+         */ const absoluteTimes = convertOffsetToTimes(// Only use the provided offsets if they're the correct length
+        // TODO Maybe we should warn here if there's a length mismatch
+        times && times.length === keyframeValues.length ? times : defaultOffset$1(keyframeValues), duration);
+        const mapTimeToKeyframe = interpolate(absoluteTimes, keyframeValues, {
+            ease: Array.isArray(easingFunctions) ? easingFunctions : defaultEasing(keyframeValues, easingFunctions)
+        });
+        return {
+            calculatedDuration: duration,
+            next: (t)=>{
+                state.value = mapTimeToKeyframe(t);
+                state.done = t >= duration;
                 return state;
             }
         };
+    }
+
+    const isNotNull$1 = (value)=>value !== null
+    ;
+    function getFinalKeyframe$1(keyframes, { repeat , repeatType ="loop"  }, finalKeyframe, speed = 1) {
+        const resolvedKeyframes = keyframes.filter(isNotNull$1);
+        const useFirstKeyframe = speed < 0 || repeat && repeatType !== "loop" && repeat % 2 === 1;
+        const index = useFirstKeyframe ? 0 : resolvedKeyframes.length - 1;
+        return !index || finalKeyframe === undefined ? resolvedKeyframes[index] : finalKeyframe;
+    }
+
+    const transitionTypeMap = {
+        decay: inertia,
+        inertia,
+        tween: keyframes,
+        keyframes: keyframes,
+        spring
+    };
+    function replaceTransitionType(transition) {
+        if (typeof transition.type === "string") {
+            transition.type = transitionTypeMap[transition.type];
+        }
+    }
+
+    let WithPromise = class WithPromise {
+        get finished() {
+            return this._finished;
+        }
+        updateFinished() {
+            this._finished = new Promise((resolve)=>{
+                this.resolve = resolve;
+            });
+        }
+        notifyFinished() {
+            this.resolve();
+        }
+        /**
+         * Allows the animation to be awaited.
+         *
+         * @deprecated Use `finished` instead.
+         */ then(onResolve, onReject) {
+            return this.finished.then(onResolve, onReject);
+        }
+        constructor(){
+            this.updateFinished();
+        }
     };
 
-    const timeStep = 10;
-    const maxDuration = 10000;
-    function pregenerateKeyframes(generator, toUnit = noopReturn) {
-        let overshootDuration = undefined;
-        let timestamp = timeStep;
-        let state = generator(0);
-        const keyframes = [
-            toUnit(state.current)
-        ];
-        while(!state.done && timestamp < maxDuration){
-            state = generator(timestamp);
-            keyframes.push(toUnit(state.done ? state.target : state.current));
-            if (overshootDuration === undefined && state.hasReachedTarget) {
-                overshootDuration = timestamp;
+    const percentToProgress = (percent)=>percent / 100
+    ;
+    let JSAnimation = class JSAnimation extends WithPromise {
+        initAnimation() {
+            const { options  } = this;
+            replaceTransitionType(options);
+            const { type =keyframes , repeat =0 , repeatDelay =0 , repeatType , velocity =0 ,  } = options;
+            let { keyframes: keyframes$1  } = options;
+            const generatorFactory = type || keyframes;
+            if (process.env.NODE_ENV !== "production" && generatorFactory !== keyframes) {
+                invariant(keyframes$1.length <= 2, `Only two keyframes currently supported with spring and inertia animations. Trying to animate ${keyframes$1}`, "spring-two-frames");
             }
-            timestamp += timeStep;
+            if (generatorFactory !== keyframes && typeof keyframes$1[0] !== "number") {
+                this.mixKeyframes = pipe(percentToProgress, mix(keyframes$1[0], keyframes$1[1]));
+                keyframes$1 = [
+                    0,
+                    100
+                ];
+            }
+            const generator = generatorFactory({
+                ...options,
+                keyframes: keyframes$1
+            });
+            /**
+             * If we have a mirror repeat type we need to create a second generator that outputs the
+             * mirrored (not reversed) animation and later ping pong between the two generators.
+             */ if (repeatType === "mirror") {
+                this.mirroredGenerator = generatorFactory({
+                    ...options,
+                    keyframes: [
+                        ...keyframes$1
+                    ].reverse(),
+                    velocity: -velocity
+                });
+            }
+            /**
+             * If duration is undefined and we have repeat options,
+             * we need to calculate a duration from the generator.
+             *
+             * We set it to the generator itself to cache the duration.
+             * Any timeline resolver will need to have already precalculated
+             * the duration by this step.
+             */ if (generator.calculatedDuration === null) {
+                generator.calculatedDuration = calcGeneratorDuration(generator);
+            }
+            const { calculatedDuration  } = generator;
+            this.calculatedDuration = calculatedDuration;
+            this.resolvedDuration = calculatedDuration + repeatDelay;
+            this.totalDuration = this.resolvedDuration * (repeat + 1) - repeatDelay;
+            this.generator = generator;
         }
-        const duration = timestamp - timeStep;
-        /**
-         * If generating an animation that didn't actually move,
-         * generate a second keyframe so we have an origin and target.
-         */ if (keyframes.length === 1) keyframes.push(state.current);
-        return {
-            keyframes,
-            duration: duration / 1000,
-            overshootDuration: (overshootDuration !== null && overshootDuration !== void 0 ? overshootDuration : duration) / 1000
-        };
-    }
-
-    function canGenerate(value) {
-        return isNumber(value) && !isNaN(value);
-    }
-    function getAsNumber(value) {
-        return isString(value) ? parseFloat(value) : value;
-    }
-    function createGeneratorEasing(createGenerator) {
-        const keyframesCache = new WeakMap();
-        return (options = {})=>{
-            const generatorCache = new Map();
-            const getGenerator = (from = 0, to = 100, velocity = 0, isScale = false)=>{
-                const key = `${from}-${to}-${velocity}-${isScale}`;
-                if (!generatorCache.has(key)) {
-                    generatorCache.set(key, createGenerator(Object.assign({
-                        from,
-                        to,
-                        velocity,
-                        restSpeed: isScale ? 0.05 : 2,
-                        restDistance: isScale ? 0.01 : 0.5
-                    }, options)));
-                }
-                return generatorCache.get(key);
-            };
-            const getKeyframes = (generator, toUnit)=>{
-                if (!keyframesCache.has(generator)) {
-                    keyframesCache.set(generator, pregenerateKeyframes(generator, toUnit));
-                }
-                return keyframesCache.get(generator);
-            };
-            return {
-                createAnimation: (keyframes, shouldGenerate = true, getOrigin, name, motionValue)=>{
-                    let settings;
-                    let origin;
-                    let target;
-                    let velocity = 0;
-                    let toUnit = noopReturn;
-                    const numKeyframes = keyframes.length;
-                    /**
-                     * If we should generate an animation for this value, run some preperation
-                     * like resolving target/origin, finding a unit (if any) and determine if
-                     * it is actually possible to generate.
-                     */ if (shouldGenerate) {
-                        toUnit = getUnitConverter(keyframes, name ? transformDefinitions.get(getStyleName(name)) : undefined);
-                        const targetDefinition = keyframes[numKeyframes - 1];
-                        target = getAsNumber(targetDefinition);
-                        if (numKeyframes > 1 && keyframes[0] !== null) {
-                            /**
-                             * If we have multiple keyframes, take the initial keyframe as the origin.
-                             */ origin = getAsNumber(keyframes[0]);
-                        } else {
-                            const prevGenerator = motionValue === null || motionValue === void 0 ? void 0 : motionValue.generator;
-                            /**
-                             * If we have an existing generator for this value we can use it to resolve
-                             * the animation's current value and velocity.
-                             */ if (prevGenerator) {
-                                /**
-                                 * If we have a generator for this value we can use it to resolve
-                                 * the animations's current value and velocity.
-                                 */ const { animation , generatorStartTime  } = motionValue;
-                                const startTime = (animation === null || animation === void 0 ? void 0 : animation.startTime) || generatorStartTime || 0;
-                                const currentTime = (animation === null || animation === void 0 ? void 0 : animation.currentTime) || performance.now() - startTime;
-                                const prevGeneratorCurrent = prevGenerator(currentTime).current;
-                                origin = prevGeneratorCurrent;
-                                velocity = calcGeneratorVelocity((t)=>prevGenerator(t).current
-                                , currentTime, prevGeneratorCurrent);
-                            } else if (getOrigin) {
-                                /**
-                                 * As a last resort, read the origin from the DOM.
-                                 */ origin = getAsNumber(getOrigin());
-                            }
-                        }
-                    }
-                    /**
-                     * If we've determined it is possible to generate an animation, do so.
-                     */ if (canGenerate(origin) && canGenerate(target)) {
-                        const generator = getGenerator(origin, target, velocity, name === null || name === void 0 ? void 0 : name.includes("scale"));
-                        settings = Object.assign(Object.assign({}, getKeyframes(generator, toUnit)), {
-                            easing: "linear"
-                        });
-                        // TODO Add test for this
-                        if (motionValue) {
-                            motionValue.generator = generator;
-                            motionValue.generatorStartTime = performance.now();
-                        }
-                    }
-                    /**
-                     * If by now we haven't generated a set of keyframes, create a generic generator
-                     * based on the provided props that animates from 0-100 to fetch a rough
-                     * "overshootDuration" - the moment when the generator first hits the animation target.
-                     * Then return animation settings that will run a normal animation for that duration.
-                     */ if (!settings) {
-                        const keyframesMetadata = getKeyframes(getGenerator(0, 100));
-                        settings = {
-                            easing: "ease",
-                            duration: keyframesMetadata.overshootDuration
-                        };
-                    }
-                    return settings;
-                }
-            };
-        };
-    }
-
-    const spring = createGeneratorEasing(spring$1);
-
-    const glide = createGeneratorEasing(glide$1);
-
-    const thresholds = {
-        any: 0,
-        all: 1
-    };
-    function inView(elementOrSelector, onStart, { root , margin: rootMargin , amount ="any"  } = {}) {
-        /**
-         * If this browser doesn't support IntersectionObserver, return a dummy stop function.
-         * Default triggering of onStart is tricky - it could be used for starting/stopping
-         * videos, lazy loading content etc. We could provide an option to enable a fallback, or
-         * provide a fallback callback option.
-         */ if (typeof IntersectionObserver === "undefined") {
-            return ()=>{};
+        updateTime(timestamp) {
+            const animationTime = Math.round(timestamp - this.startTime) * this.playbackSpeed;
+            // Update currentTime
+            if (this.holdTime !== null) {
+                this.currentTime = this.holdTime;
+            } else {
+                // Rounding the time because floating point arithmetic is not always accurate, e.g. 3000.367 - 1000.367 =
+                // 2000.0000000000002. This is a problem when we are comparing the currentTime with the duration, for
+                // example.
+                this.currentTime = animationTime;
+            }
         }
-        const elements = resolveElements(elementOrSelector);
-        const activeIntersections = new WeakMap();
-        const onIntersectionChange = (entries)=>{
-            entries.forEach((entry)=>{
-                const onEnd = activeIntersections.get(entry.target);
+        tick(timestamp, sample = false) {
+            const { generator , totalDuration , mixKeyframes , mirroredGenerator , resolvedDuration , calculatedDuration ,  } = this;
+            if (this.startTime === null) return generator.next(0);
+            const { delay =0 , keyframes: keyframes1 , repeat , repeatType , repeatDelay , type , onUpdate , finalKeyframe ,  } = this.options;
+            /**
+             * requestAnimationFrame timestamps can come through as lower than
+             * the startTime as set by performance.now(). Here we prevent this,
+             * though in the future it could be possible to make setting startTime
+             * a pending operation that gets resolved here.
+             */ if (this.speed > 0) {
+                this.startTime = Math.min(this.startTime, timestamp);
+            } else if (this.speed < 0) {
+                this.startTime = Math.min(timestamp - totalDuration / this.speed, this.startTime);
+            }
+            if (sample) {
+                this.currentTime = timestamp;
+            } else {
+                this.updateTime(timestamp);
+            }
+            // Rebase on delay
+            const timeWithoutDelay = this.currentTime - delay * (this.playbackSpeed >= 0 ? 1 : -1);
+            const isInDelayPhase = this.playbackSpeed >= 0 ? timeWithoutDelay < 0 : timeWithoutDelay > totalDuration;
+            this.currentTime = Math.max(timeWithoutDelay, 0);
+            // If this animation has finished, set the current time  to the total duration.
+            if (this.state === "finished" && this.holdTime === null) {
+                this.currentTime = totalDuration;
+            }
+            let elapsed = this.currentTime;
+            let frameGenerator = generator;
+            if (repeat) {
                 /**
-                 * If there's no change to the intersection, we don't need to
-                 * do anything here.
-                 */ if (entry.isIntersecting === Boolean(onEnd)) return;
-                if (entry.isIntersecting) {
-                    const newOnEnd = onStart(entry);
-                    if (isFunction$1(newOnEnd)) {
-                        activeIntersections.set(entry.target, newOnEnd);
-                    } else {
-                        observer.unobserve(entry.target);
+                 * Get the current progress (0-1) of the animation. If t is >
+                 * than duration we'll get values like 2.5 (midway through the
+                 * third iteration)
+                 */ const progress = Math.min(this.currentTime, totalDuration) / resolvedDuration;
+                /**
+                 * Get the current iteration (0 indexed). For instance the floor of
+                 * 2.5 is 2.
+                 */ let currentIteration = Math.floor(progress);
+                /**
+                 * Get the current progress of the iteration by taking the remainder
+                 * so 2.5 is 0.5 through iteration 2
+                 */ let iterationProgress = progress % 1.0;
+                /**
+                 * If iteration progress is 1 we count that as the end
+                 * of the previous iteration.
+                 */ if (!iterationProgress && progress >= 1) {
+                    iterationProgress = 1;
+                }
+                iterationProgress === 1 && currentIteration--;
+                currentIteration = Math.min(currentIteration, repeat + 1);
+                /**
+                 * Reverse progress if we're not running in "normal" direction
+                 */ const isOddIteration = Boolean(currentIteration % 2);
+                if (isOddIteration) {
+                    if (repeatType === "reverse") {
+                        iterationProgress = 1 - iterationProgress;
+                        if (repeatDelay) {
+                            iterationProgress -= repeatDelay / resolvedDuration;
+                        }
+                    } else if (repeatType === "mirror") {
+                        frameGenerator = mirroredGenerator;
                     }
-                } else if (onEnd) {
-                    onEnd(entry);
-                    activeIntersections.delete(entry.target);
+                }
+                elapsed = clamp(0, 1, iterationProgress) * resolvedDuration;
+            }
+            /**
+             * If we're in negative time, set state as the initial keyframe.
+             * This prevents delay: x, duration: 0 animations from finishing
+             * instantly.
+             */ const state = isInDelayPhase ? {
+                done: false,
+                value: keyframes1[0]
+            } : frameGenerator.next(elapsed);
+            if (mixKeyframes) {
+                state.value = mixKeyframes(state.value);
+            }
+            let { done  } = state;
+            if (!isInDelayPhase && calculatedDuration !== null) {
+                done = this.playbackSpeed >= 0 ? this.currentTime >= totalDuration : this.currentTime <= 0;
+            }
+            const isAnimationFinished = this.holdTime === null && (this.state === "finished" || this.state === "running" && done);
+            // TODO: The exception for inertia could be cleaner here
+            if (isAnimationFinished && type !== inertia) {
+                state.value = getFinalKeyframe$1(keyframes1, this.options, finalKeyframe, this.speed);
+            }
+            if (onUpdate) {
+                onUpdate(state.value);
+            }
+            if (isAnimationFinished) {
+                this.finish();
+            }
+            return state;
+        }
+        /**
+         * Allows the returned animation to be awaited or promise-chained. Currently
+         * resolves when the animation finishes at all but in a future update could/should
+         * reject if its cancels.
+         */ then(resolve, reject) {
+            return this.finished.then(resolve, reject);
+        }
+        get duration() {
+            return millisecondsToSeconds(this.calculatedDuration);
+        }
+        get time() {
+            return millisecondsToSeconds(this.currentTime);
+        }
+        set time(newTime) {
+            var ref;
+            newTime = secondsToMilliseconds(newTime);
+            this.currentTime = newTime;
+            if (this.startTime === null || this.holdTime !== null || this.playbackSpeed === 0) {
+                this.holdTime = newTime;
+            } else if (this.driver) {
+                this.startTime = this.driver.now() - newTime / this.playbackSpeed;
+            }
+            (ref = this.driver) === null || ref === void 0 ? void 0 : ref.start(false);
+        }
+        get speed() {
+            return this.playbackSpeed;
+        }
+        set speed(newSpeed) {
+            this.updateTime(time.now());
+            const hasChanged = this.playbackSpeed !== newSpeed;
+            this.playbackSpeed = newSpeed;
+            if (hasChanged) {
+                this.time = millisecondsToSeconds(this.currentTime);
+            }
+        }
+        play() {
+            var _options, ref;
+            if (this.isStopped) return;
+            const { driver =frameloopDriver , startTime  } = this.options;
+            if (!this.driver) {
+                this.driver = driver((timestamp)=>this.tick(timestamp)
+                );
+            }
+            (ref = (_options = this.options).onPlay) === null || ref === void 0 ? void 0 : ref.call(_options);
+            const now = this.driver.now();
+            if (this.state === "finished") {
+                this.updateFinished();
+                this.startTime = now;
+            } else if (this.holdTime !== null) {
+                this.startTime = now - this.holdTime;
+            } else if (!this.startTime) {
+                this.startTime = startTime !== null && startTime !== void 0 ? startTime : now;
+            }
+            if (this.state === "finished" && this.speed < 0) {
+                this.startTime += this.calculatedDuration;
+            }
+            this.holdTime = null;
+            /**
+             * Set playState to running only after we've used it in
+             * the previous logic.
+             */ this.state = "running";
+            this.driver.start();
+        }
+        pause() {
+            this.state = "paused";
+            this.updateTime(time.now());
+            this.holdTime = this.currentTime;
+        }
+        complete() {
+            if (this.state !== "running") {
+                this.play();
+            }
+            this.state = "finished";
+            this.holdTime = null;
+        }
+        finish() {
+            var _options, ref;
+            this.notifyFinished();
+            this.teardown();
+            this.state = "finished";
+            (ref = (_options = this.options).onComplete) === null || ref === void 0 ? void 0 : ref.call(_options);
+        }
+        cancel() {
+            var _options, ref;
+            this.holdTime = null;
+            this.startTime = 0;
+            this.tick(0);
+            this.teardown();
+            (ref = (_options = this.options).onCancel) === null || ref === void 0 ? void 0 : ref.call(_options);
+        }
+        teardown() {
+            this.state = "idle";
+            this.stopDriver();
+            this.startTime = this.holdTime = null;
+        }
+        stopDriver() {
+            if (!this.driver) return;
+            this.driver.stop();
+            this.driver = undefined;
+        }
+        sample(sampleTime) {
+            this.startTime = 0;
+            return this.tick(sampleTime, true);
+        }
+        attachTimeline(timeline) {
+            var ref;
+            if (this.options.allowFlatten) {
+                this.options.type = "keyframes";
+                this.options.ease = "linear";
+                this.initAnimation();
+            }
+            (ref = this.driver) === null || ref === void 0 ? void 0 : ref.stop();
+            return timeline.observe(this);
+        }
+        constructor(options){
+            super();
+            this.state = "idle";
+            this.startTime = null;
+            this.isStopped = false;
+            /**
+             * The current time of the animation.
+             */ this.currentTime = 0;
+            /**
+             * The time at which the animation was paused.
+             */ this.holdTime = null;
+            /**
+             * Playback speed as a factor. 0 would be stopped, -1 reverse and 2 double speed.
+             */ this.playbackSpeed = 1;
+            /**
+             * This method is bound to the instance to fix a pattern where
+             * animation.stop is returned as a reference from a useEffect.
+             */ this.stop = ()=>{
+                var _options, ref;
+                const { motionValue  } = this.options;
+                if (motionValue && motionValue.updatedAt !== time.now()) {
+                    this.tick(time.now());
+                }
+                this.isStopped = true;
+                if (this.state === "idle") return;
+                this.teardown();
+                (ref = (_options = this.options).onStop) === null || ref === void 0 ? void 0 : ref.call(_options);
+            };
+            this.options = options;
+            this.initAnimation();
+            this.play();
+            if (options.autoplay === false) this.pause();
+        }
+    };
+
+    function fillWildcards(keyframes) {
+        for(let i = 1; i < keyframes.length; i++){
+            var _i;
+            (_i = keyframes[i]) !== null && _i !== void 0 ? _i : keyframes[i] = keyframes[i - 1];
+        }
+    }
+
+    const radToDeg = (rad)=>rad * 180 / Math.PI
+    ;
+    const rotate = (v)=>{
+        const angle = radToDeg(Math.atan2(v[1], v[0]));
+        return rebaseAngle(angle);
+    };
+    const matrix2dParsers = {
+        x: 4,
+        y: 5,
+        translateX: 4,
+        translateY: 5,
+        scaleX: 0,
+        scaleY: 3,
+        scale: (v)=>(Math.abs(v[0]) + Math.abs(v[3])) / 2
+        ,
+        rotate,
+        rotateZ: rotate,
+        skewX: (v)=>radToDeg(Math.atan(v[1]))
+        ,
+        skewY: (v)=>radToDeg(Math.atan(v[2]))
+        ,
+        skew: (v)=>(Math.abs(v[1]) + Math.abs(v[2])) / 2
+    };
+    const rebaseAngle = (angle)=>{
+        angle = angle % 360;
+        if (angle < 0) angle += 360;
+        return angle;
+    };
+    const rotateZ = rotate;
+    const scaleX = (v)=>Math.sqrt(v[0] * v[0] + v[1] * v[1])
+    ;
+    const scaleY = (v)=>Math.sqrt(v[4] * v[4] + v[5] * v[5])
+    ;
+    const matrix3dParsers = {
+        x: 12,
+        y: 13,
+        z: 14,
+        translateX: 12,
+        translateY: 13,
+        translateZ: 14,
+        scaleX,
+        scaleY,
+        scale: (v)=>(scaleX(v) + scaleY(v)) / 2
+        ,
+        rotateX: (v)=>rebaseAngle(radToDeg(Math.atan2(v[6], v[5])))
+        ,
+        rotateY: (v)=>rebaseAngle(radToDeg(Math.atan2(-v[2], v[0])))
+        ,
+        rotateZ,
+        rotate: rotateZ,
+        skewX: (v)=>radToDeg(Math.atan(v[4]))
+        ,
+        skewY: (v)=>radToDeg(Math.atan(v[1]))
+        ,
+        skew: (v)=>(Math.abs(v[1]) + Math.abs(v[4])) / 2
+    };
+    function defaultTransformValue(name) {
+        return name.includes("scale") ? 1 : 0;
+    }
+    function parseValueFromTransform(transform, name) {
+        if (!transform || transform === "none") {
+            return defaultTransformValue(name);
+        }
+        const matrix3dMatch = transform.match(/^matrix3d\(([-\d.e\s,]+)\)$/u);
+        let parsers;
+        let match;
+        if (matrix3dMatch) {
+            parsers = matrix3dParsers;
+            match = matrix3dMatch;
+        } else {
+            const matrix2dMatch = transform.match(/^matrix\(([-\d.e\s,]+)\)$/u);
+            parsers = matrix2dParsers;
+            match = matrix2dMatch;
+        }
+        if (!match) {
+            return defaultTransformValue(name);
+        }
+        const valueParser = parsers[name];
+        const values = match[1].split(",").map(convertTransformToNumber);
+        return typeof valueParser === "function" ? valueParser(values) : values[valueParser];
+    }
+    const readTransformValue = (instance, name)=>{
+        const { transform ="none"  } = getComputedStyle(instance);
+        return parseValueFromTransform(transform, name);
+    };
+    function convertTransformToNumber(value) {
+        return parseFloat(value.trim());
+    }
+
+    /**
+     * Generate a list of every possible transform key.
+     */ const transformPropOrder = [
+        "transformPerspective",
+        "x",
+        "y",
+        "z",
+        "translateX",
+        "translateY",
+        "translateZ",
+        "scale",
+        "scaleX",
+        "scaleY",
+        "rotate",
+        "rotateX",
+        "rotateY",
+        "rotateZ",
+        "skew",
+        "skewX",
+        "skewY", 
+    ];
+    /**
+     * A quick lookup for transform props.
+     */ const transformProps = /*@__PURE__*/ (()=>new Set(transformPropOrder)
+    )();
+
+    const isNumOrPxType = (v)=>v === number || v === px
+    ;
+    const transformKeys = new Set([
+        "x",
+        "y",
+        "z"
+    ]);
+    const nonTranslationalTransformKeys = transformPropOrder.filter((key)=>!transformKeys.has(key)
+    );
+    function removeNonTranslationalTransform(visualElement) {
+        const removedTransforms = [];
+        nonTranslationalTransformKeys.forEach((key)=>{
+            const value = visualElement.getValue(key);
+            if (value !== undefined) {
+                removedTransforms.push([
+                    key,
+                    value.get()
+                ]);
+                value.set(key.startsWith("scale") ? 1 : 0);
+            }
+        });
+        return removedTransforms;
+    }
+    const positionalValues = {
+        // Dimensions
+        width: ({ x  }, { paddingLeft ="0" , paddingRight ="0"  })=>x.max - x.min - parseFloat(paddingLeft) - parseFloat(paddingRight)
+        ,
+        height: ({ y  }, { paddingTop ="0" , paddingBottom ="0"  })=>y.max - y.min - parseFloat(paddingTop) - parseFloat(paddingBottom)
+        ,
+        top: (_bbox, { top  })=>parseFloat(top)
+        ,
+        left: (_bbox, { left  })=>parseFloat(left)
+        ,
+        bottom: ({ y  }, { top  })=>parseFloat(top) + (y.max - y.min)
+        ,
+        right: ({ x  }, { left  })=>parseFloat(left) + (x.max - x.min)
+        ,
+        // Transform
+        x: (_bbox, { transform  })=>parseValueFromTransform(transform, "x")
+        ,
+        y: (_bbox, { transform  })=>parseValueFromTransform(transform, "y")
+    };
+    // Alias translate longform names
+    positionalValues.translateX = positionalValues.x;
+    positionalValues.translateY = positionalValues.y;
+
+    const toResolve = new Set();
+    let isScheduled = false;
+    let anyNeedsMeasurement = false;
+    let isForced = false;
+    function measureAllKeyframes() {
+        if (anyNeedsMeasurement) {
+            const resolversToMeasure = Array.from(toResolve).filter((resolver)=>resolver.needsMeasurement
+            );
+            const elementsToMeasure = new Set(resolversToMeasure.map((resolver)=>resolver.element
+            ));
+            const transformsToRestore = new Map();
+            /**
+             * Write pass
+             * If we're measuring elements we want to remove bounding box-changing transforms.
+             */ elementsToMeasure.forEach((element)=>{
+                const removedTransforms = removeNonTranslationalTransform(element);
+                if (!removedTransforms.length) return;
+                transformsToRestore.set(element, removedTransforms);
+                element.render();
+            });
+            // Read
+            resolversToMeasure.forEach((resolver)=>resolver.measureInitialState()
+            );
+            // Write
+            elementsToMeasure.forEach((element)=>{
+                element.render();
+                const restore = transformsToRestore.get(element);
+                if (restore) {
+                    restore.forEach(([key, value])=>{
+                        var ref;
+                        (ref = element.getValue(key)) === null || ref === void 0 ? void 0 : ref.set(value);
+                    });
                 }
             });
-        };
-        const observer = new IntersectionObserver(onIntersectionChange, {
-            root,
-            rootMargin,
-            threshold: typeof amount === "number" ? amount : thresholds[amount]
-        });
-        elements.forEach((element)=>observer.observe(element)
+            // Read
+            resolversToMeasure.forEach((resolver)=>resolver.measureEndState()
+            );
+            // Write
+            resolversToMeasure.forEach((resolver)=>{
+                if (resolver.suspendedScrollY !== undefined) {
+                    window.scrollTo(0, resolver.suspendedScrollY);
+                }
+            });
+        }
+        anyNeedsMeasurement = false;
+        isScheduled = false;
+        toResolve.forEach((resolver)=>resolver.complete(isForced)
         );
-        return ()=>observer.disconnect()
+        toResolve.clear();
+    }
+    function readAllKeyframes() {
+        toResolve.forEach((resolver)=>{
+            resolver.readKeyframes();
+            if (resolver.needsMeasurement) {
+                anyNeedsMeasurement = true;
+            }
+        });
+    }
+    function flushKeyframeResolvers() {
+        isForced = true;
+        readAllKeyframes();
+        measureAllKeyframes();
+        isForced = false;
+    }
+    let KeyframeResolver = class KeyframeResolver {
+        scheduleResolve() {
+            this.state = "scheduled";
+            if (this.isAsync) {
+                toResolve.add(this);
+                if (!isScheduled) {
+                    isScheduled = true;
+                    frame.read(readAllKeyframes);
+                    frame.resolveKeyframes(measureAllKeyframes);
+                }
+            } else {
+                this.readKeyframes();
+                this.complete();
+            }
+        }
+        readKeyframes() {
+            const { unresolvedKeyframes , name , element , motionValue  } = this;
+            // If initial keyframe is null we need to read it from the DOM
+            if (unresolvedKeyframes[0] === null) {
+                const currentValue = motionValue === null || motionValue === void 0 ? void 0 : motionValue.get();
+                // TODO: This doesn't work if the final keyframe is a wildcard
+                const finalKeyframe = unresolvedKeyframes[unresolvedKeyframes.length - 1];
+                if (currentValue !== undefined) {
+                    unresolvedKeyframes[0] = currentValue;
+                } else if (element && name) {
+                    const valueAsRead = element.readValue(name, finalKeyframe);
+                    if (valueAsRead !== undefined && valueAsRead !== null) {
+                        unresolvedKeyframes[0] = valueAsRead;
+                    }
+                }
+                if (unresolvedKeyframes[0] === undefined) {
+                    unresolvedKeyframes[0] = finalKeyframe;
+                }
+                if (motionValue && currentValue === undefined) {
+                    motionValue.set(unresolvedKeyframes[0]);
+                }
+            }
+            fillWildcards(unresolvedKeyframes);
+        }
+        setFinalKeyframe() {}
+        measureInitialState() {}
+        renderEndStyles() {}
+        measureEndState() {}
+        complete(isForcedComplete = false) {
+            this.state = "complete";
+            this.onComplete(this.unresolvedKeyframes, this.finalKeyframe, isForcedComplete);
+            toResolve.delete(this);
+        }
+        cancel() {
+            if (this.state === "scheduled") {
+                toResolve.delete(this);
+                this.state = "pending";
+            }
+        }
+        resume() {
+            if (this.state === "pending") this.scheduleResolve();
+        }
+        constructor(unresolvedKeyframes, onComplete, name, motionValue, element, isAsync = false){
+            this.state = "pending";
+            /**
+             * Track whether this resolver is async. If it is, it'll be added to the
+             * resolver queue and flushed in the next frame. Resolvers that aren't going
+             * to trigger read/write thrashing don't need to be async.
+             */ this.isAsync = false;
+            /**
+             * Track whether this resolver needs to perform a measurement
+             * to resolve its keyframes.
+             */ this.needsMeasurement = false;
+            this.unresolvedKeyframes = [
+                ...unresolvedKeyframes
+            ];
+            this.onComplete = onComplete;
+            this.name = name;
+            this.motionValue = motionValue;
+            this.element = element;
+            this.isAsync = isAsync;
+        }
+    };
+
+    const isCSSVar = (name)=>name.startsWith("--")
+    ;
+
+    function setStyle(element, name, value) {
+        isCSSVar(name) ? element.style.setProperty(name, value) : element.style[name] = value;
+    }
+
+    const supportsScrollTimeline = /* @__PURE__ */ memo(()=>window.ScrollTimeline !== undefined
+    );
+
+    /**
+     * Add the ability for test suites to manually set support flags
+     * to better test more environments.
+     */ const supportsFlags = {};
+
+    function memoSupports(callback, supportsFlag) {
+        const memoized = memo(callback);
+        var _supportsFlag;
+        return ()=>(_supportsFlag = supportsFlags[supportsFlag]) !== null && _supportsFlag !== void 0 ? _supportsFlag : memoized()
         ;
+    }
+
+    const supportsLinearEasing = /*@__PURE__*/ memoSupports(()=>{
+        try {
+            document.createElement("div").animate({
+                opacity: 0
+            }, {
+                easing: "linear(0, 1)"
+            });
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }, "linearEasing");
+
+    const cubicBezierAsString = ([a, b, c, d])=>`cubic-bezier(${a}, ${b}, ${c}, ${d})`
+    ;
+
+    const supportedWaapiEasing = {
+        linear: "linear",
+        ease: "ease",
+        easeIn: "ease-in",
+        easeOut: "ease-out",
+        easeInOut: "ease-in-out",
+        circIn: /*@__PURE__*/ cubicBezierAsString([
+            0,
+            0.65,
+            0.55,
+            1
+        ]),
+        circOut: /*@__PURE__*/ cubicBezierAsString([
+            0.55,
+            0,
+            1,
+            0.45
+        ]),
+        backIn: /*@__PURE__*/ cubicBezierAsString([
+            0.31,
+            0.01,
+            0.66,
+            -0.59
+        ]),
+        backOut: /*@__PURE__*/ cubicBezierAsString([
+            0.33,
+            1.53,
+            0.69,
+            0.99
+        ])
+    };
+
+    function mapEasingToNativeEasing(easing, duration) {
+        if (!easing) {
+            return undefined;
+        } else if (typeof easing === "function") {
+            return supportsLinearEasing() ? generateLinearEasing(easing, duration) : "ease-out";
+        } else if (isBezierDefinition(easing)) {
+            return cubicBezierAsString(easing);
+        } else if (Array.isArray(easing)) {
+            return easing.map((segmentEasing)=>mapEasingToNativeEasing(segmentEasing, duration) || supportedWaapiEasing.easeOut
+            );
+        } else {
+            return supportedWaapiEasing[easing];
+        }
+    }
+
+    function startWaapiAnimation(element, valueName, keyframes, { delay =0 , duration =300 , repeat =0 , repeatType ="loop" , ease ="easeOut" , times ,  } = {}, pseudoElement = undefined) {
+        const keyframeOptions = {
+            [valueName]: keyframes
+        };
+        if (times) keyframeOptions.offset = times;
+        const easing = mapEasingToNativeEasing(ease, duration);
+        /**
+         * If this is an easing array, apply to keyframes, not animation as a whole
+         */ if (Array.isArray(easing)) keyframeOptions.easing = easing;
+        const options = {
+            delay,
+            duration,
+            easing: !Array.isArray(easing) ? easing : "linear",
+            fill: "both",
+            iterations: repeat + 1,
+            direction: repeatType === "reverse" ? "alternate" : "normal"
+        };
+        if (pseudoElement) options.pseudoElement = pseudoElement;
+        const animation = element.animate(keyframeOptions, options);
+        return animation;
+    }
+
+    function isGenerator(type) {
+        return typeof type === "function" && "applyToOptions" in type;
+    }
+
+    function applyGeneratorOptions({ type , ...options }) {
+        if (isGenerator(type) && supportsLinearEasing()) {
+            return type.applyToOptions(options);
+        } else {
+            var _duration;
+            (_duration = options.duration) !== null && _duration !== void 0 ? _duration : options.duration = 300;
+            var _ease;
+            (_ease = options.ease) !== null && _ease !== void 0 ? _ease : options.ease = "easeOut";
+        }
+        return options;
+    }
+
+    /**
+     * NativeAnimation implements AnimationPlaybackControls for the browser's Web Animations API.
+     */ let NativeAnimation = class NativeAnimation extends WithPromise {
+        play() {
+            if (this.isStopped) return;
+            this.animation.play();
+            if (this.state === "finished") {
+                this.updateFinished();
+            }
+        }
+        pause() {
+            this.animation.pause();
+        }
+        complete() {
+            var _animation, ref;
+            (ref = (_animation = this.animation).finish) === null || ref === void 0 ? void 0 : ref.call(_animation);
+        }
+        cancel() {
+            try {
+                this.animation.cancel();
+            } catch (e) {}
+        }
+        stop() {
+            if (this.isStopped) return;
+            this.isStopped = true;
+            const { state  } = this;
+            if (state === "idle" || state === "finished") {
+                return;
+            }
+            if (this.updateMotionValue) {
+                this.updateMotionValue();
+            } else {
+                this.commitStyles();
+            }
+            if (!this.isPseudoElement) this.cancel();
+        }
+        /**
+         * WAAPI doesn't natively have any interruption capabilities.
+         *
+         * In this method, we commit styles back to the DOM before cancelling
+         * the animation.
+         *
+         * This is designed to be overridden by NativeAnimationExtended, which
+         * will create a renderless JS animation and sample it twice to calculate
+         * its current value, "previous" value, and therefore allow
+         * Motion to also correctly calculate velocity for any subsequent animation
+         * while deferring the commit until the next animation frame.
+         */ commitStyles() {
+            if (!this.isPseudoElement) {
+                var _animation, ref;
+                (ref = (_animation = this.animation).commitStyles) === null || ref === void 0 ? void 0 : ref.call(_animation);
+            }
+        }
+        get duration() {
+            var ref, ref1;
+            const duration = ((ref = this.animation.effect) === null || ref === void 0 ? void 0 : (ref1 = ref.getComputedTiming) === null || ref1 === void 0 ? void 0 : ref1.call(ref).duration) || 0;
+            return millisecondsToSeconds(Number(duration));
+        }
+        get time() {
+            return millisecondsToSeconds(Number(this.animation.currentTime) || 0);
+        }
+        set time(newTime) {
+            this.finishedTime = null;
+            this.animation.currentTime = secondsToMilliseconds(newTime);
+        }
+        /**
+         * The playback speed of the animation.
+         * 1 = normal speed, 2 = double speed, 0.5 = half speed.
+         */ get speed() {
+            return this.animation.playbackRate;
+        }
+        set speed(newSpeed) {
+            // Allow backwards playback after finishing
+            if (newSpeed < 0) this.finishedTime = null;
+            this.animation.playbackRate = newSpeed;
+        }
+        get state() {
+            return this.finishedTime !== null ? "finished" : this.animation.playState;
+        }
+        get startTime() {
+            return Number(this.animation.startTime);
+        }
+        set startTime(newStartTime) {
+            this.animation.startTime = newStartTime;
+        }
+        /**
+         * Attaches a timeline to the animation, for instance the `ScrollTimeline`.
+         */ attachTimeline({ timeline , observe  }) {
+            if (this.allowFlatten) {
+                var ref;
+                (ref = this.animation.effect) === null || ref === void 0 ? void 0 : ref.updateTiming({
+                    easing: "linear"
+                });
+            }
+            this.animation.onfinish = null;
+            if (timeline && supportsScrollTimeline()) {
+                this.animation.timeline = timeline;
+                return noop;
+            } else {
+                return observe(this);
+            }
+        }
+        constructor(options){
+            super();
+            this.finishedTime = null;
+            this.isStopped = false;
+            if (!options) return;
+            const { element , name , keyframes , pseudoElement , allowFlatten =false , finalKeyframe , onComplete ,  } = options;
+            this.isPseudoElement = Boolean(pseudoElement);
+            this.allowFlatten = allowFlatten;
+            this.options = options;
+            invariant(typeof options.type !== "string", `Mini animate() doesn't support "type" as a string.`, "mini-spring");
+            const transition = applyGeneratorOptions(options);
+            this.animation = startWaapiAnimation(element, name, keyframes, transition, pseudoElement);
+            if (transition.autoplay === false) {
+                this.animation.pause();
+            }
+            this.animation.onfinish = ()=>{
+                this.finishedTime = this.time;
+                if (!pseudoElement) {
+                    const keyframe = getFinalKeyframe$1(keyframes, this.options, finalKeyframe, this.speed);
+                    if (this.updateMotionValue) {
+                        this.updateMotionValue(keyframe);
+                    } else {
+                        /**
+                         * If we can, we want to commit the final style as set by the user,
+                         * rather than the computed keyframe value supplied by the animation.
+                         */ setStyle(element, name, keyframe);
+                    }
+                    this.animation.cancel();
+                }
+                onComplete === null || onComplete === void 0 ? void 0 : onComplete();
+                this.notifyFinished();
+            };
+        }
+    };
+
+    const unsupportedEasingFunctions = {
+        anticipate,
+        backInOut,
+        circInOut
+    };
+    function isUnsupportedEase(key) {
+        return key in unsupportedEasingFunctions;
+    }
+    function replaceStringEasing(transition) {
+        if (typeof transition.ease === "string" && isUnsupportedEase(transition.ease)) {
+            transition.ease = unsupportedEasingFunctions[transition.ease];
+        }
+    }
+
+    /**
+     * 10ms is chosen here as it strikes a balance between smooth
+     * results (more than one keyframe per frame at 60fps) and
+     * keyframe quantity.
+     */ const sampleDelta = 10; //ms
+    let NativeAnimationExtended = class NativeAnimationExtended extends NativeAnimation {
+        /**
+         * WAAPI doesn't natively have any interruption capabilities.
+         *
+         * Rather than read commited styles back out of the DOM, we can
+         * create a renderless JS animation and sample it twice to calculate
+         * its current value, "previous" value, and therefore allow
+         * Motion to calculate velocity for any subsequent animation.
+         */ updateMotionValue(value) {
+            const { motionValue , onUpdate , onComplete , element , ...options } = this.options;
+            if (!motionValue) return;
+            if (value !== undefined) {
+                motionValue.set(value);
+                return;
+            }
+            const sampleAnimation = new JSAnimation({
+                ...options,
+                autoplay: false
+            });
+            var _finishedTime;
+            const sampleTime = secondsToMilliseconds((_finishedTime = this.finishedTime) !== null && _finishedTime !== void 0 ? _finishedTime : this.time);
+            motionValue.setWithVelocity(sampleAnimation.sample(sampleTime - sampleDelta).value, sampleAnimation.sample(sampleTime).value, sampleDelta);
+            sampleAnimation.stop();
+        }
+        constructor(options){
+            /**
+             * The base NativeAnimation function only supports a subset
+             * of Motion easings, and WAAPI also only supports some
+             * easing functions via string/cubic-bezier definitions.
+             *
+             * This function replaces those unsupported easing functions
+             * with a JS easing function. This will later get compiled
+             * to a linear() easing function.
+             */ replaceStringEasing(options);
+            /**
+             * Ensure we replace the transition type with a generator function
+             * before passing to WAAPI.
+             *
+             * TODO: Does this have a better home? It could be shared with
+             * JSAnimation.
+             */ replaceTransitionType(options);
+            super(options);
+            if (options.startTime) {
+                this.startTime = options.startTime;
+            }
+            this.options = options;
+        }
+    };
+
+    /**
+     * Check if a value is animatable. Examples:
+     *
+     * ✅: 100, "100px", "#fff"
+     * ❌: "block", "url(2.jpg)"
+     * @param value
+     *
+     * @internal
+     */ const isAnimatable = (value, name)=>{
+        // If the list of keys that might be non-animatable grows, replace with Set
+        if (name === "zIndex") return false;
+        // If it's a number or a keyframes array, we can animate it. We might at some point
+        // need to do a deep isAnimatable check of keyframes, or let Popmotion handle this,
+        // but for now lets leave it like this for performance reasons
+        if (typeof value === "number" || Array.isArray(value)) return true;
+        if (typeof value === "string" && (complex.test(value) || value === "0") && !value.startsWith("url(") // Unless it starts with "url("
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    function hasKeyframesChanged(keyframes) {
+        const current = keyframes[0];
+        if (keyframes.length === 1) return true;
+        for(let i = 0; i < keyframes.length; i++){
+            if (keyframes[i] !== current) return true;
+        }
+    }
+    function canAnimate(keyframes, name, type, velocity) {
+        /**
+         * Check if we're able to animate between the start and end keyframes,
+         * and throw a warning if we're attempting to animate between one that's
+         * animatable and another that isn't.
+         */ const originKeyframe = keyframes[0];
+        if (originKeyframe === null) return false;
+        /**
+         * These aren't traditionally animatable but we do support them.
+         * In future we could look into making this more generic or replacing
+         * this function with mix() === mixImmediate
+         */ if (name === "display" || name === "visibility") return true;
+        const targetKeyframe = keyframes[keyframes.length - 1];
+        const isOriginAnimatable = isAnimatable(originKeyframe, name);
+        const isTargetAnimatable = isAnimatable(targetKeyframe, name);
+        warning(isOriginAnimatable === isTargetAnimatable, `You are trying to animate ${name} from "${originKeyframe}" to "${targetKeyframe}". "${isOriginAnimatable ? targetKeyframe : originKeyframe}" is not an animatable value.`, "value-not-animatable");
+        // Always skip if any of these are true
+        if (!isOriginAnimatable || !isTargetAnimatable) {
+            return false;
+        }
+        return hasKeyframesChanged(keyframes) || (type === "spring" || isGenerator(type)) && velocity;
+    }
+
+    function makeAnimationInstant(options) {
+        options.duration = 0;
+        options.type === "keyframes";
+    }
+
+    /**
+     * A list of values that can be hardware-accelerated.
+     */ const acceleratedValues = new Set([
+        "opacity",
+        "clipPath",
+        "filter",
+        "transform"
+    ]);
+    const supportsWaapi = /*@__PURE__*/ memo(()=>Object.hasOwnProperty.call(Element.prototype, "animate")
+    );
+    function supportsBrowserAnimation(options) {
+        var ref;
+        const { motionValue , name , repeatDelay , repeatType , damping , type  } = options;
+        const subject = motionValue === null || motionValue === void 0 ? void 0 : (ref = motionValue.owner) === null || ref === void 0 ? void 0 : ref.current;
+        /**
+         * We use this check instead of isHTMLElement() because we explicitly
+         * **don't** want elements in different timing contexts (i.e. popups)
+         * to be accelerated, as it's not possible to sync these animations
+         * properly with those driven from the main window frameloop.
+         */ if (!(subject instanceof HTMLElement)) {
+            return false;
+        }
+        const { onUpdate , transformTemplate  } = motionValue.owner.getProps();
+        return supportsWaapi() && name && acceleratedValues.has(name) && (name !== "transform" || !transformTemplate) && /**
+             * If we're outputting values to onUpdate then we can't use WAAPI as there's
+             * no way to read the value from WAAPI every frame.
+             */ !onUpdate && !repeatDelay && repeatType !== "mirror" && damping !== 0 && type !== "inertia";
+    }
+
+    /**
+     * Maximum time allowed between an animation being created and it being
+     * resolved for us to use the latter as the start time.
+     *
+     * This is to ensure that while we prefer to "start" an animation as soon
+     * as it's triggered, we also want to avoid a visual jump if there's a big delay
+     * between these two moments.
+     */ const MAX_RESOLVE_DELAY = 40;
+    let AsyncMotionValueAnimation = class AsyncMotionValueAnimation extends WithPromise {
+        onKeyframesResolved(keyframes, finalKeyframe, options, sync) {
+            this.keyframeResolver = undefined;
+            const { name , type , velocity , delay , isHandoff , onUpdate  } = options;
+            this.resolvedAt = time.now();
+            /**
+             * If we can't animate this value with the resolved keyframes
+             * then we should complete it immediately.
+             */ if (!canAnimate(keyframes, name, type, velocity)) {
+                if (MotionGlobalConfig.instantAnimations || !delay) {
+                    onUpdate === null || onUpdate === void 0 ? void 0 : onUpdate(getFinalKeyframe$1(keyframes, options, finalKeyframe));
+                }
+                keyframes[0] = keyframes[keyframes.length - 1];
+                makeAnimationInstant(options);
+                options.repeat = 0;
+            }
+            /**
+             * Resolve startTime for the animation.
+             *
+             * This method uses the createdAt and resolvedAt to calculate the
+             * animation startTime. *Ideally*, we would use the createdAt time as t=0
+             * as the following frame would then be the first frame of the animation in
+             * progress, which would feel snappier.
+             *
+             * However, if there's a delay (main thread work) between the creation of
+             * the animation and the first commited frame, we prefer to use resolvedAt
+             * to avoid a sudden jump into the animation.
+             */ const startTime = sync ? !this.resolvedAt ? this.createdAt : this.resolvedAt - this.createdAt > MAX_RESOLVE_DELAY ? this.resolvedAt : this.createdAt : undefined;
+            const resolvedOptions = {
+                startTime,
+                finalKeyframe,
+                ...options,
+                keyframes
+            };
+            /**
+             * Animate via WAAPI if possible. If this is a handoff animation, the optimised animation will be running via
+             * WAAPI. Therefore, this animation must be JS to ensure it runs "under" the
+             * optimised animation.
+             */ const animation = !isHandoff && supportsBrowserAnimation(resolvedOptions) ? new NativeAnimationExtended({
+                ...resolvedOptions,
+                element: resolvedOptions.motionValue.owner.current
+            }) : new JSAnimation(resolvedOptions);
+            animation.finished.then(()=>this.notifyFinished()
+            ).catch(noop);
+            if (this.pendingTimeline) {
+                this.stopTimeline = animation.attachTimeline(this.pendingTimeline);
+                this.pendingTimeline = undefined;
+            }
+            this._animation = animation;
+        }
+        get finished() {
+            if (!this._animation) {
+                return this._finished;
+            } else {
+                return this.animation.finished;
+            }
+        }
+        then(onResolve, _onReject) {
+            return this.finished.finally(onResolve).then(()=>{});
+        }
+        get animation() {
+            if (!this._animation) {
+                var ref;
+                (ref = this.keyframeResolver) === null || ref === void 0 ? void 0 : ref.resume();
+                flushKeyframeResolvers();
+            }
+            return this._animation;
+        }
+        get duration() {
+            return this.animation.duration;
+        }
+        get time() {
+            return this.animation.time;
+        }
+        set time(newTime) {
+            this.animation.time = newTime;
+        }
+        get speed() {
+            return this.animation.speed;
+        }
+        get state() {
+            return this.animation.state;
+        }
+        set speed(newSpeed) {
+            this.animation.speed = newSpeed;
+        }
+        get startTime() {
+            return this.animation.startTime;
+        }
+        attachTimeline(timeline) {
+            if (this._animation) {
+                this.stopTimeline = this.animation.attachTimeline(timeline);
+            } else {
+                this.pendingTimeline = timeline;
+            }
+            return ()=>this.stop()
+            ;
+        }
+        play() {
+            this.animation.play();
+        }
+        pause() {
+            this.animation.pause();
+        }
+        complete() {
+            this.animation.complete();
+        }
+        cancel() {
+            var ref;
+            if (this._animation) {
+                this.animation.cancel();
+            }
+            (ref = this.keyframeResolver) === null || ref === void 0 ? void 0 : ref.cancel();
+        }
+        constructor({ autoplay =true , delay =0 , type ="keyframes" , repeat =0 , repeatDelay =0 , repeatType ="loop" , keyframes , name , motionValue , element , ...options }){
+            var ref2;
+            super();
+            /**
+             * Bound to support return animation.stop pattern
+             */ this.stop = ()=>{
+                var ref;
+                if (this._animation) {
+                    var _obj, ref1;
+                    this._animation.stop();
+                    (ref1 = (_obj = this).stopTimeline) === null || ref1 === void 0 ? void 0 : ref1.call(_obj);
+                }
+                (ref = this.keyframeResolver) === null || ref === void 0 ? void 0 : ref.cancel();
+            };
+            this.createdAt = time.now();
+            const optionsWithDefaults = {
+                autoplay,
+                delay,
+                type,
+                repeat,
+                repeatDelay,
+                repeatType,
+                name,
+                motionValue,
+                element,
+                ...options
+            };
+            const KeyframeResolver$1 = (element === null || element === void 0 ? void 0 : element.KeyframeResolver) || KeyframeResolver;
+            this.keyframeResolver = new KeyframeResolver$1(keyframes, (resolvedKeyframes, finalKeyframe, forced)=>this.onKeyframesResolved(resolvedKeyframes, finalKeyframe, optionsWithDefaults, !forced)
+            , name, motionValue, element);
+            (ref2 = this.keyframeResolver) === null || ref2 === void 0 ? void 0 : ref2.scheduleResolve();
+        }
+    };
+
+    let GroupAnimation = class GroupAnimation {
+        get finished() {
+            return Promise.all(this.animations.map((animation)=>animation.finished
+            ));
+        }
+        /**
+         * TODO: Filter out cancelled or stopped animations before returning
+         */ getAll(propName) {
+            return this.animations[0][propName];
+        }
+        setAll(propName, newValue) {
+            for(let i = 0; i < this.animations.length; i++){
+                this.animations[i][propName] = newValue;
+            }
+        }
+        attachTimeline(timeline) {
+            const subscriptions = this.animations.map((animation)=>animation.attachTimeline(timeline)
+            );
+            return ()=>{
+                subscriptions.forEach((cancel, i)=>{
+                    cancel && cancel();
+                    this.animations[i].stop();
+                });
+            };
+        }
+        get time() {
+            return this.getAll("time");
+        }
+        set time(time) {
+            this.setAll("time", time);
+        }
+        get speed() {
+            return this.getAll("speed");
+        }
+        set speed(speed) {
+            this.setAll("speed", speed);
+        }
+        get state() {
+            return this.getAll("state");
+        }
+        get startTime() {
+            return this.getAll("startTime");
+        }
+        get duration() {
+            let max = 0;
+            for(let i = 0; i < this.animations.length; i++){
+                max = Math.max(max, this.animations[i].duration);
+            }
+            return max;
+        }
+        runAll(methodName) {
+            this.animations.forEach((controls)=>controls[methodName]()
+            );
+        }
+        play() {
+            this.runAll("play");
+        }
+        pause() {
+            this.runAll("pause");
+        }
+        cancel() {
+            this.runAll("cancel");
+        }
+        complete() {
+            this.runAll("complete");
+        }
+        constructor(animations){
+            // Bound to accomadate common `return animation.stop` pattern
+            this.stop = ()=>this.runAll("stop")
+            ;
+            this.animations = animations.filter(Boolean);
+        }
+    };
+
+    let GroupAnimationWithThen = class GroupAnimationWithThen extends GroupAnimation {
+        then(onResolve, _onReject) {
+            return this.finished.finally(onResolve).then(()=>{});
+        }
+    };
+
+    let NativeAnimationWrapper = class NativeAnimationWrapper extends NativeAnimation {
+        constructor(animation){
+            super();
+            this.animation = animation;
+            animation.onfinish = ()=>{
+                this.finishedTime = this.time;
+                this.notifyFinished();
+            };
+        }
+    };
+
+    /**
+     * Parse Framer's special CSS variable format into a CSS token and a fallback.
+     *
+     * ```
+     * `var(--foo, #fff)` => [`--foo`, '#fff']
+     * ```
+     *
+     * @param current
+     */ const splitCSSVariableRegex = // eslint-disable-next-line redos-detector/no-unsafe-regex -- false positive, as it can match a lot of words
+    /^var\(--(?:([\w-]+)|([\w-]+), ?([a-zA-Z\d ()%#.,-]+))\)/u;
+    function parseCSSVariable(current) {
+        const match = splitCSSVariableRegex.exec(current);
+        if (!match) return [
+            , 
+        ];
+        const [, token1, token2, fallback] = match;
+        return [
+            `--${token1 !== null && token1 !== void 0 ? token1 : token2}`,
+            fallback
+        ];
+    }
+    const maxDepth = 4;
+    function getVariableValue(current, element, depth = 1) {
+        invariant(depth <= maxDepth, `Max CSS variable fallback depth detected in property "${current}". This may indicate a circular fallback dependency.`, "max-css-var-depth");
+        const [token, fallback] = parseCSSVariable(current);
+        // No CSS variable detected
+        if (!token) return;
+        // Attempt to read this CSS variable off the element
+        const resolved = window.getComputedStyle(element).getPropertyValue(token);
+        if (resolved) {
+            const trimmed = resolved.trim();
+            return isNumericalString(trimmed) ? parseFloat(trimmed) : trimmed;
+        }
+        return isCSSVariableToken(fallback) ? getVariableValue(fallback, element, depth + 1) : fallback;
+    }
+
+    function getValueTransition$1(transition, key) {
+        var ref, ref1;
+        return (ref1 = (ref = transition === null || transition === void 0 ? void 0 : transition[key]) !== null && ref !== void 0 ? ref : transition === null || transition === void 0 ? void 0 : transition["default"]) !== null && ref1 !== void 0 ? ref1 : transition;
+    }
+
+    const positionalKeys = new Set([
+        "width",
+        "height",
+        "top",
+        "left",
+        "right",
+        "bottom",
+        ...transformPropOrder, 
+    ]);
+
+    /**
+     * ValueType for "auto"
+     */ const auto = {
+        test: (v)=>v === "auto"
+        ,
+        parse: (v)=>v
+    };
+
+    /**
+     * Tests a provided value against a ValueType
+     */ const testValueType = (v)=>(type)=>type.test(v)
+    ;
+
+    /**
+     * A list of value types commonly used for dimensions
+     */ const dimensionValueTypes = [
+        number,
+        px,
+        percent,
+        degrees,
+        vw,
+        vh,
+        auto
+    ];
+    /**
+     * Tests a dimensional value against the list of dimension ValueTypes
+     */ const findDimensionValueType = (v)=>dimensionValueTypes.find(testValueType(v))
+    ;
+
+    function isNone(value) {
+        if (typeof value === "number") {
+            return value === 0;
+        } else if (value !== null) {
+            return value === "none" || value === "0" || isZeroValueString(value);
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Properties that should default to 1 or 100%
+     */ const maxDefaults = new Set([
+        "brightness",
+        "contrast",
+        "saturate",
+        "opacity"
+    ]);
+    function applyDefaultFilter(v) {
+        const [name, value] = v.slice(0, -1).split("(");
+        if (name === "drop-shadow") return v;
+        const [number] = value.match(floatRegex) || [];
+        if (!number) return v;
+        const unit = value.replace(number, "");
+        let defaultValue = maxDefaults.has(name) ? 1 : 0;
+        if (number !== value) defaultValue *= 100;
+        return name + "(" + defaultValue + unit + ")";
+    }
+    const functionRegex = /\b([a-z-]*)\(.*?\)/gu;
+    const filter = {
+        ...complex,
+        getAnimatableNone: (v)=>{
+            const functions = v.match(functionRegex);
+            return functions ? functions.map(applyDefaultFilter).join(" ") : v;
+        }
+    };
+
+    const int = {
+        ...number,
+        transform: Math.round
+    };
+
+    const transformValueTypes = {
+        rotate: degrees,
+        rotateX: degrees,
+        rotateY: degrees,
+        rotateZ: degrees,
+        scale,
+        scaleX: scale,
+        scaleY: scale,
+        scaleZ: scale,
+        skew: degrees,
+        skewX: degrees,
+        skewY: degrees,
+        distance: px,
+        translateX: px,
+        translateY: px,
+        translateZ: px,
+        x: px,
+        y: px,
+        z: px,
+        perspective: px,
+        transformPerspective: px,
+        opacity: alpha,
+        originX: progressPercentage,
+        originY: progressPercentage,
+        originZ: px
+    };
+
+    const numberValueTypes = {
+        // Border props
+        borderWidth: px,
+        borderTopWidth: px,
+        borderRightWidth: px,
+        borderBottomWidth: px,
+        borderLeftWidth: px,
+        borderRadius: px,
+        radius: px,
+        borderTopLeftRadius: px,
+        borderTopRightRadius: px,
+        borderBottomRightRadius: px,
+        borderBottomLeftRadius: px,
+        // Positioning props
+        width: px,
+        maxWidth: px,
+        height: px,
+        maxHeight: px,
+        top: px,
+        right: px,
+        bottom: px,
+        left: px,
+        // Spacing props
+        padding: px,
+        paddingTop: px,
+        paddingRight: px,
+        paddingBottom: px,
+        paddingLeft: px,
+        margin: px,
+        marginTop: px,
+        marginRight: px,
+        marginBottom: px,
+        marginLeft: px,
+        // Misc
+        backgroundPositionX: px,
+        backgroundPositionY: px,
+        ...transformValueTypes,
+        zIndex: int,
+        // SVG
+        fillOpacity: alpha,
+        strokeOpacity: alpha,
+        numOctaves: int
+    };
+
+    /**
+     * A map of default value types for common values
+     */ const defaultValueTypes = {
+        ...numberValueTypes,
+        // Color props
+        color,
+        backgroundColor: color,
+        outlineColor: color,
+        fill: color,
+        stroke: color,
+        // Border props
+        borderColor: color,
+        borderTopColor: color,
+        borderRightColor: color,
+        borderBottomColor: color,
+        borderLeftColor: color,
+        filter,
+        WebkitFilter: filter
+    };
+    /**
+     * Gets the default ValueType for the provided value key
+     */ const getDefaultValueType = (key)=>defaultValueTypes[key]
+    ;
+
+    function getAnimatableNone(key, value) {
+        let defaultValueType = getDefaultValueType(key);
+        if (defaultValueType !== filter) defaultValueType = complex;
+        // If value is not recognised as animatable, ie "none", create an animatable version origin based on the target
+        return defaultValueType.getAnimatableNone ? defaultValueType.getAnimatableNone(value) : undefined;
+    }
+
+    /**
+     * If we encounter keyframes like "none" or "0" and we also have keyframes like
+     * "#fff" or "200px 200px" we want to find a keyframe to serve as a template for
+     * the "none" keyframes. In this case "#fff" or "200px 200px" - then these get turned into
+     * zero equivalents, i.e. "#fff0" or "0px 0px".
+     */ const invalidTemplates = new Set([
+        "auto",
+        "none",
+        "0"
+    ]);
+    function makeNoneKeyframesAnimatable(unresolvedKeyframes, noneKeyframeIndexes, name) {
+        let i = 0;
+        let animatableTemplate = undefined;
+        while(i < unresolvedKeyframes.length && !animatableTemplate){
+            const keyframe = unresolvedKeyframes[i];
+            if (typeof keyframe === "string" && !invalidTemplates.has(keyframe) && analyseComplexValue(keyframe).values.length) {
+                animatableTemplate = unresolvedKeyframes[i];
+            }
+            i++;
+        }
+        if (animatableTemplate && name) {
+            for (const noneIndex of noneKeyframeIndexes){
+                unresolvedKeyframes[noneIndex] = getAnimatableNone(name, animatableTemplate);
+            }
+        }
+    }
+
+    let DOMKeyframesResolver = class DOMKeyframesResolver extends KeyframeResolver {
+        readKeyframes() {
+            const { unresolvedKeyframes , element , name  } = this;
+            if (!element || !element.current) return;
+            super.readKeyframes();
+            /**
+             * If any keyframe is a CSS variable, we need to find its value by sampling the element
+             */ for(let i = 0; i < unresolvedKeyframes.length; i++){
+                let keyframe = unresolvedKeyframes[i];
+                if (typeof keyframe === "string") {
+                    keyframe = keyframe.trim();
+                    if (isCSSVariableToken(keyframe)) {
+                        const resolved = getVariableValue(keyframe, element.current);
+                        if (resolved !== undefined) {
+                            unresolvedKeyframes[i] = resolved;
+                        }
+                        if (i === unresolvedKeyframes.length - 1) {
+                            this.finalKeyframe = keyframe;
+                        }
+                    }
+                }
+            }
+            /**
+             * Resolve "none" values. We do this potentially twice - once before and once after measuring keyframes.
+             * This could be seen as inefficient but it's a trade-off to avoid measurements in more situations, which
+             * have a far bigger performance impact.
+             */ this.resolveNoneKeyframes();
+            /**
+             * Check to see if unit type has changed. If so schedule jobs that will
+             * temporarily set styles to the destination keyframes.
+             * Skip if we have more than two keyframes or this isn't a positional value.
+             * TODO: We can throw if there are multiple keyframes and the value type changes.
+             */ if (!positionalKeys.has(name) || unresolvedKeyframes.length !== 2) {
+                return;
+            }
+            const [origin, target] = unresolvedKeyframes;
+            const originType = findDimensionValueType(origin);
+            const targetType = findDimensionValueType(target);
+            /**
+             * Either we don't recognise these value types or we can animate between them.
+             */ if (originType === targetType) return;
+            /**
+             * If both values are numbers or pixels, we can animate between them by
+             * converting them to numbers.
+             */ if (isNumOrPxType(originType) && isNumOrPxType(targetType)) {
+                for(let i = 0; i < unresolvedKeyframes.length; i++){
+                    const value = unresolvedKeyframes[i];
+                    if (typeof value === "string") {
+                        unresolvedKeyframes[i] = parseFloat(value);
+                    }
+                }
+            } else if (positionalValues[name]) {
+                /**
+                 * Else, the only way to resolve this is by measuring the element.
+                 */ this.needsMeasurement = true;
+            }
+        }
+        resolveNoneKeyframes() {
+            const { unresolvedKeyframes , name  } = this;
+            const noneKeyframeIndexes = [];
+            for(let i = 0; i < unresolvedKeyframes.length; i++){
+                if (unresolvedKeyframes[i] === null || isNone(unresolvedKeyframes[i])) {
+                    noneKeyframeIndexes.push(i);
+                }
+            }
+            if (noneKeyframeIndexes.length) {
+                makeNoneKeyframesAnimatable(unresolvedKeyframes, noneKeyframeIndexes, name);
+            }
+        }
+        measureInitialState() {
+            const { element , unresolvedKeyframes , name  } = this;
+            if (!element || !element.current) return;
+            if (name === "height") {
+                this.suspendedScrollY = window.pageYOffset;
+            }
+            this.measuredOrigin = positionalValues[name](element.measureViewportBox(), window.getComputedStyle(element.current));
+            unresolvedKeyframes[0] = this.measuredOrigin;
+            // Set final key frame to measure after next render
+            const measureKeyframe = unresolvedKeyframes[unresolvedKeyframes.length - 1];
+            if (measureKeyframe !== undefined) {
+                element.getValue(name, measureKeyframe).jump(measureKeyframe, false);
+            }
+        }
+        measureEndState() {
+            var ref;
+            const { element , name , unresolvedKeyframes  } = this;
+            if (!element || !element.current) return;
+            const value = element.getValue(name);
+            value && value.jump(this.measuredOrigin, false);
+            const finalKeyframeIndex = unresolvedKeyframes.length - 1;
+            const finalKeyframe = unresolvedKeyframes[finalKeyframeIndex];
+            unresolvedKeyframes[finalKeyframeIndex] = positionalValues[name](element.measureViewportBox(), window.getComputedStyle(element.current));
+            if (finalKeyframe !== null && this.finalKeyframe === undefined) {
+                this.finalKeyframe = finalKeyframe;
+            }
+            // If we removed transform values, reapply them before the next render
+            if ((ref = this.removedTransforms) === null || ref === void 0 ? void 0 : ref.length) {
+                this.removedTransforms.forEach(([unsetTransformName, unsetTransformValue])=>{
+                    element.getValue(unsetTransformName).set(unsetTransformValue);
+                });
+            }
+            this.resolveNoneKeyframes();
+        }
+        constructor(unresolvedKeyframes, onComplete, name, motionValue, element){
+            super(unresolvedKeyframes, onComplete, name, motionValue, element, true);
+        }
+    };
+
+    function camelToDash$1(str) {
+        return str.replace(/([A-Z])/g, (match)=>`-${match.toLowerCase()}`
+        );
+    }
+
+    function resolveElements(elementOrSelector, scope, selectorCache) {
+        if (elementOrSelector instanceof EventTarget) {
+            return [
+                elementOrSelector
+            ];
+        } else if (typeof elementOrSelector === "string") {
+            let root = document;
+            var ref;
+            const elements = (ref = selectorCache === null || selectorCache === void 0 ? void 0 : selectorCache[elementOrSelector]) !== null && ref !== void 0 ? ref : root.querySelectorAll(elementOrSelector);
+            return elements ? Array.from(elements) : [];
+        }
+        return Array.from(elementOrSelector);
+    }
+
+    function createSelectorEffect(subjectEffect) {
+        return (subject, values)=>{
+            const elements = resolveElements(subject);
+            const subscriptions = [];
+            for (const element of elements){
+                const remove = subjectEffect(element, values);
+                subscriptions.push(remove);
+            }
+            return ()=>{
+                for (const remove of subscriptions)remove();
+            };
+        };
+    }
+
+    /**
+     * Provided a value and a ValueType, returns the value as that value type.
+     */ const getValueAsType = (value, type)=>{
+        return type && typeof value === "number" ? type.transform(value) : value;
+    };
+
+    let MotionValueState = class MotionValueState {
+        set(name, value, render, computed, useDefaultValueType = true) {
+            const existingValue = this.values.get(name);
+            if (existingValue) {
+                existingValue.onRemove();
+            }
+            const onChange = ()=>{
+                const v = value.get();
+                if (useDefaultValueType) {
+                    this.latest[name] = getValueAsType(v, numberValueTypes[name]);
+                } else {
+                    this.latest[name] = v;
+                }
+                render && frame.render(render);
+            };
+            onChange();
+            const cancelOnChange = value.on("change", onChange);
+            computed && value.addDependent(computed);
+            const remove = ()=>{
+                cancelOnChange();
+                render && cancelFrame(render);
+                this.values.delete(name);
+                computed && value.removeDependent(computed);
+            };
+            this.values.set(name, {
+                value,
+                onRemove: remove
+            });
+            return remove;
+        }
+        get(name) {
+            var ref;
+            return (ref = this.values.get(name)) === null || ref === void 0 ? void 0 : ref.value;
+        }
+        destroy() {
+            for (const value of this.values.values()){
+                value.onRemove();
+            }
+        }
+        constructor(){
+            this.latest = {};
+            this.values = new Map();
+        }
+    };
+
+    function createEffect(addValue) {
+        const stateCache = new WeakMap();
+        const subscriptions = [];
+        return (subject, values)=>{
+            var ref;
+            const state = (ref = stateCache.get(subject)) !== null && ref !== void 0 ? ref : new MotionValueState();
+            stateCache.set(subject, state);
+            for(const key in values){
+                const value = values[key];
+                const remove = addValue(subject, state, key, value);
+                subscriptions.push(remove);
+            }
+            return ()=>{
+                for (const cancel of subscriptions)cancel();
+            };
+        };
+    }
+
+    function canSetAsProperty(element, name) {
+        if (!(name in element)) return false;
+        const descriptor = Object.getOwnPropertyDescriptor(Object.getPrototypeOf(element), name) || Object.getOwnPropertyDescriptor(element, name);
+        // Check if it has a setter
+        return descriptor && typeof descriptor.set === "function";
+    }
+    const addAttrValue = (element, state, key, value)=>{
+        const isProp = canSetAsProperty(element, key);
+        const name = isProp ? key : key.startsWith("data") || key.startsWith("aria") ? camelToDash$1(key) : key;
+        /**
+         * Set attribute directly via property if available
+         */ const render = isProp ? ()=>{
+            element[name] = state.latest[key];
+        } : ()=>{
+            const v = state.latest[key];
+            if (v === null || v === undefined) {
+                element.removeAttribute(name);
+            } else {
+                element.setAttribute(name, String(v));
+            }
+        };
+        return state.set(key, value, render);
+    };
+    const attrEffect = /*@__PURE__*/ createSelectorEffect(/*@__PURE__*/ createEffect(addAttrValue));
+
+    const propEffect = /*@__PURE__*/ createEffect((subject, state, key, value)=>{
+        return state.set(key, value, ()=>{
+            subject[key] = state.latest[key];
+        }, undefined, false);
+    });
+
+    /**
+     * Checks if an element is an HTML element in a way
+     * that works across iframes
+     */ function isHTMLElement(element) {
+        return isObject(element) && "offsetHeight" in element;
+    }
+
+    /**
+     * Maximum time between the value of two frames, beyond which we
+     * assume the velocity has since been 0.
+     */ const MAX_VELOCITY_DELTA = 30;
+    const isFloat = (value)=>{
+        return !isNaN(parseFloat(value));
+    };
+    const collectMotionValues = {
+        current: undefined
+    };
+    /**
+     * `MotionValue` is used to track the state and velocity of motion values.
+     *
+     * @public
+     */ let MotionValue = class MotionValue {
+        setCurrent(current) {
+            this.current = current;
+            this.updatedAt = time.now();
+            if (this.canTrackVelocity === null && current !== undefined) {
+                this.canTrackVelocity = isFloat(this.current);
+            }
+        }
+        setPrevFrameValue(prevFrameValue = this.current) {
+            this.prevFrameValue = prevFrameValue;
+            this.prevUpdatedAt = this.updatedAt;
+        }
+        /**
+         * Adds a function that will be notified when the `MotionValue` is updated.
+         *
+         * It returns a function that, when called, will cancel the subscription.
+         *
+         * When calling `onChange` inside a React component, it should be wrapped with the
+         * `useEffect` hook. As it returns an unsubscribe function, this should be returned
+         * from the `useEffect` function to ensure you don't add duplicate subscribers..
+         *
+         * ```jsx
+         * export const MyComponent = () => {
+         *   const x = useMotionValue(0)
+         *   const y = useMotionValue(0)
+         *   const opacity = useMotionValue(1)
+         *
+         *   useEffect(() => {
+         *     function updateOpacity() {
+         *       const maxXY = Math.max(x.get(), y.get())
+         *       const newOpacity = transform(maxXY, [0, 100], [1, 0])
+         *       opacity.set(newOpacity)
+         *     }
+         *
+         *     const unsubscribeX = x.on("change", updateOpacity)
+         *     const unsubscribeY = y.on("change", updateOpacity)
+         *
+         *     return () => {
+         *       unsubscribeX()
+         *       unsubscribeY()
+         *     }
+         *   }, [])
+         *
+         *   return <motion.div style={{ x }} />
+         * }
+         * ```
+         *
+         * @param subscriber - A function that receives the latest value.
+         * @returns A function that, when called, will cancel this subscription.
+         *
+         * @deprecated
+         */ onChange(subscription) {
+            if (process.env.NODE_ENV !== "production") {
+                warnOnce(false, `value.onChange(callback) is deprecated. Switch to value.on("change", callback).`);
+            }
+            return this.on("change", subscription);
+        }
+        on(eventName, callback) {
+            if (!this.events[eventName]) {
+                this.events[eventName] = new SubscriptionManager();
+            }
+            const unsubscribe = this.events[eventName].add(callback);
+            if (eventName === "change") {
+                return ()=>{
+                    unsubscribe();
+                    /**
+                     * If we have no more change listeners by the start
+                     * of the next frame, stop active animations.
+                     */ frame.read(()=>{
+                        if (!this.events.change.getSize()) {
+                            this.stop();
+                        }
+                    });
+                };
+            }
+            return unsubscribe;
+        }
+        clearListeners() {
+            for(const eventManagers in this.events){
+                this.events[eventManagers].clear();
+            }
+        }
+        /**
+         * Attaches a passive effect to the `MotionValue`.
+         */ attach(passiveEffect, stopPassiveEffect) {
+            this.passiveEffect = passiveEffect;
+            this.stopPassiveEffect = stopPassiveEffect;
+        }
+        /**
+         * Sets the state of the `MotionValue`.
+         *
+         * @remarks
+         *
+         * ```jsx
+         * const x = useMotionValue(0)
+         * x.set(10)
+         * ```
+         *
+         * @param latest - Latest value to set.
+         * @param render - Whether to notify render subscribers. Defaults to `true`
+         *
+         * @public
+         */ set(v) {
+            if (!this.passiveEffect) {
+                this.updateAndNotify(v);
+            } else {
+                this.passiveEffect(v, this.updateAndNotify);
+            }
+        }
+        setWithVelocity(prev, current, delta) {
+            this.set(current);
+            this.prev = undefined;
+            this.prevFrameValue = prev;
+            this.prevUpdatedAt = this.updatedAt - delta;
+        }
+        /**
+         * Set the state of the `MotionValue`, stopping any active animations,
+         * effects, and resets velocity to `0`.
+         */ jump(v, endAnimation = true) {
+            this.updateAndNotify(v);
+            this.prev = v;
+            this.prevUpdatedAt = this.prevFrameValue = undefined;
+            endAnimation && this.stop();
+            if (this.stopPassiveEffect) this.stopPassiveEffect();
+        }
+        dirty() {
+            var ref;
+            (ref = this.events.change) === null || ref === void 0 ? void 0 : ref.notify(this.current);
+        }
+        addDependent(dependent) {
+            if (!this.dependents) {
+                this.dependents = new Set();
+            }
+            this.dependents.add(dependent);
+        }
+        removeDependent(dependent) {
+            if (this.dependents) {
+                this.dependents.delete(dependent);
+            }
+        }
+        /**
+         * Returns the latest state of `MotionValue`
+         *
+         * @returns - The latest state of `MotionValue`
+         *
+         * @public
+         */ get() {
+            if (collectMotionValues.current) {
+                collectMotionValues.current.push(this);
+            }
+            return this.current;
+        }
+        /**
+         * @public
+         */ getPrevious() {
+            return this.prev;
+        }
+        /**
+         * Returns the latest velocity of `MotionValue`
+         *
+         * @returns - The latest velocity of `MotionValue`. Returns `0` if the state is non-numerical.
+         *
+         * @public
+         */ getVelocity() {
+            const currentTime = time.now();
+            if (!this.canTrackVelocity || this.prevFrameValue === undefined || currentTime - this.updatedAt > MAX_VELOCITY_DELTA) {
+                return 0;
+            }
+            const delta = Math.min(this.updatedAt - this.prevUpdatedAt, MAX_VELOCITY_DELTA);
+            // Casts because of parseFloat's poor typing
+            return velocityPerSecond(parseFloat(this.current) - parseFloat(this.prevFrameValue), delta);
+        }
+        /**
+         * Registers a new animation to control this `MotionValue`. Only one
+         * animation can drive a `MotionValue` at one time.
+         *
+         * ```jsx
+         * value.start()
+         * ```
+         *
+         * @param animation - A function that starts the provided animation
+         */ start(startAnimation) {
+            this.stop();
+            return new Promise((resolve)=>{
+                this.hasAnimated = true;
+                this.animation = startAnimation(resolve);
+                if (this.events.animationStart) {
+                    this.events.animationStart.notify();
+                }
+            }).then(()=>{
+                if (this.events.animationComplete) {
+                    this.events.animationComplete.notify();
+                }
+                this.clearAnimation();
+            });
+        }
+        /**
+         * Stop the currently active animation.
+         *
+         * @public
+         */ stop() {
+            if (this.animation) {
+                this.animation.stop();
+                if (this.events.animationCancel) {
+                    this.events.animationCancel.notify();
+                }
+            }
+            this.clearAnimation();
+        }
+        /**
+         * Returns `true` if this value is currently animating.
+         *
+         * @public
+         */ isAnimating() {
+            return !!this.animation;
+        }
+        clearAnimation() {
+            delete this.animation;
+        }
+        /**
+         * Destroy and clean up subscribers to this `MotionValue`.
+         *
+         * The `MotionValue` hooks like `useMotionValue` and `useTransform` automatically
+         * handle the lifecycle of the returned `MotionValue`, so this method is only necessary if you've manually
+         * created a `MotionValue` via the `motionValue` function.
+         *
+         * @public
+         */ destroy() {
+            var ref, ref1;
+            (ref = this.dependents) === null || ref === void 0 ? void 0 : ref.clear();
+            (ref1 = this.events.destroy) === null || ref1 === void 0 ? void 0 : ref1.notify();
+            this.clearListeners();
+            this.stop();
+            if (this.stopPassiveEffect) {
+                this.stopPassiveEffect();
+            }
+        }
+        /**
+         * @param init - The initiating value
+         * @param config - Optional configuration options
+         *
+         * -  `transformer`: A function to transform incoming values with.
+         */ constructor(init, options = {}){
+            /**
+             * Tracks whether this value can output a velocity. Currently this is only true
+             * if the value is numerical, but we might be able to widen the scope here and support
+             * other value types.
+             *
+             * @internal
+             */ this.canTrackVelocity = null;
+            /**
+             * An object containing a SubscriptionManager for each active event.
+             */ this.events = {};
+            this.updateAndNotify = (v)=>{
+                const currentTime = time.now();
+                /**
+                 * If we're updating the value during another frame or eventloop
+                 * than the previous frame, then the we set the previous frame value
+                 * to current.
+                 */ if (this.updatedAt !== currentTime) {
+                    this.setPrevFrameValue();
+                }
+                this.prev = this.current;
+                this.setCurrent(v);
+                // Update update subscribers
+                if (this.current !== this.prev) {
+                    var ref;
+                    (ref = this.events.change) === null || ref === void 0 ? void 0 : ref.notify(this.current);
+                    if (this.dependents) {
+                        for (const dependent of this.dependents){
+                            dependent.dirty();
+                        }
+                    }
+                }
+            };
+            this.hasAnimated = false;
+            this.setCurrent(init);
+            this.owner = options.owner;
+        }
+    };
+    function motionValue(init, options) {
+        return new MotionValue(init, options);
+    }
+
+    const translateAlias$1 = {
+        x: "translateX",
+        y: "translateY",
+        z: "translateZ",
+        transformPerspective: "perspective"
+    };
+    function buildTransform$1(state) {
+        let transform = "";
+        let transformIsDefault = true;
+        /**
+         * Loop over all possible transforms in order, adding the ones that
+         * are present to the transform string.
+         */ for(let i = 0; i < transformPropOrder.length; i++){
+            const key = transformPropOrder[i];
+            const value = state.latest[key];
+            if (value === undefined) continue;
+            let valueIsDefault = true;
+            if (typeof value === "number") {
+                valueIsDefault = value === (key.startsWith("scale") ? 1 : 0);
+            } else {
+                valueIsDefault = parseFloat(value) === 0;
+            }
+            if (!valueIsDefault) {
+                transformIsDefault = false;
+                const transformName = translateAlias$1[key] || key;
+                const valueToRender = state.latest[key];
+                transform += `${transformName}(${valueToRender}) `;
+            }
+        }
+        return transformIsDefault ? "none" : transform.trim();
+    }
+
+    const originProps = new Set([
+        "originX",
+        "originY",
+        "originZ"
+    ]);
+    const addStyleValue = (element, state, key, value)=>{
+        let render = undefined;
+        let computed = undefined;
+        if (transformProps.has(key)) {
+            if (!state.get("transform")) {
+                // If this is an HTML element, we need to set the transform-box to fill-box
+                // to normalise the transform relative to the element's bounding box
+                if (!isHTMLElement(element) && !state.get("transformBox")) {
+                    addStyleValue(element, state, "transformBox", new MotionValue("fill-box"));
+                }
+                state.set("transform", new MotionValue("none"), ()=>{
+                    element.style.transform = buildTransform$1(state);
+                });
+            }
+            computed = state.get("transform");
+        } else if (originProps.has(key)) {
+            if (!state.get("transformOrigin")) {
+                state.set("transformOrigin", new MotionValue(""), ()=>{
+                    var _originX;
+                    const originX = (_originX = state.latest.originX) !== null && _originX !== void 0 ? _originX : "50%";
+                    var _originY;
+                    const originY = (_originY = state.latest.originY) !== null && _originY !== void 0 ? _originY : "50%";
+                    var _originZ;
+                    const originZ = (_originZ = state.latest.originZ) !== null && _originZ !== void 0 ? _originZ : 0;
+                    element.style.transformOrigin = `${originX} ${originY} ${originZ}`;
+                });
+            }
+            computed = state.get("transformOrigin");
+        } else if (isCSSVar(key)) {
+            render = ()=>{
+                element.style.setProperty(key, state.latest[key]);
+            };
+        } else {
+            render = ()=>{
+                element.style[key] = state.latest[key];
+            };
+        }
+        return state.set(key, value, render, computed);
+    };
+    const styleEffect = /*@__PURE__*/ createSelectorEffect(/*@__PURE__*/ createEffect(addStyleValue));
+
+    const toPx = px.transform;
+    function addSVGPathValue(element, state, key, value) {
+        frame.render(()=>element.setAttribute("pathLength", "1")
+        );
+        if (key === "pathOffset") {
+            return state.set(key, value, ()=>element.setAttribute("stroke-dashoffset", toPx(-state.latest[key]))
+            );
+        } else {
+            if (!state.get("stroke-dasharray")) {
+                state.set("stroke-dasharray", new MotionValue("1 1"), ()=>{
+                    const { pathLength =1 , pathSpacing  } = state.latest;
+                    element.setAttribute("stroke-dasharray", `${toPx(pathLength)} ${toPx(pathSpacing !== null && pathSpacing !== void 0 ? pathSpacing : 1 - Number(pathLength))}`);
+                });
+            }
+            return state.set(key, value, undefined, state.get("stroke-dasharray"));
+        }
+    }
+    const addSVGValue = (element, state, key, value)=>{
+        if (key.startsWith("path")) {
+            return addSVGPathValue(element, state, key, value);
+        } else if (key.startsWith("attr")) {
+            return addAttrValue(element, state, convertAttrKey(key), value);
+        }
+        const handler = key in element.style ? addStyleValue : addAttrValue;
+        return handler(element, state, key, value);
+    };
+    const svgEffect = /*@__PURE__*/ createSelectorEffect(/*@__PURE__*/ createEffect(addSVGValue));
+    function convertAttrKey(key) {
+        return key.replace(/^attr([A-Z])/, (_, firstChar)=>firstChar.toLowerCase()
+        );
+    }
+
+    const { schedule: microtask , cancel: cancelMicrotask  } = /* @__PURE__ */ createRenderBatcher(queueMicrotask, false);
+
+    /**
+     * Checks if an element is an SVG element in a way
+     * that works across iframes
+     */ function isSVGElement(element) {
+        return isObject(element) && "ownerSVGElement" in element;
     }
 
     const resizeHandlers = new WeakMap();
     let observer;
-    function getElementSize(target, borderBoxSize) {
-        if (borderBoxSize) {
-            const { inlineSize , blockSize  } = borderBoxSize[0];
-            return {
-                width: inlineSize,
-                height: blockSize
-            };
-        } else if (target instanceof SVGElement && "getBBox" in target) {
-            return target.getBBox();
-        } else {
-            return {
-                width: target.offsetWidth,
-                height: target.offsetHeight
-            };
+    const getSize = (borderBoxAxis, svgAxis, htmlAxis)=>(target, borderBoxSize)=>{
+            if (borderBoxSize && borderBoxSize[0]) {
+                return borderBoxSize[0][borderBoxAxis + "Size"];
+            } else if (isSVGElement(target) && "getBBox" in target) {
+                return target.getBBox()[svgAxis];
+            } else {
+                return target[htmlAxis];
+            }
         }
-    }
-    function notifyTarget({ target , contentRect , borderBoxSize ,  }) {
-        var _a;
-        (_a = resizeHandlers.get(target)) === null || _a === void 0 ? void 0 : _a.forEach((handler)=>{
-            handler({
-                target,
-                contentSize: contentRect,
-                get size () {
-                    return getElementSize(target, borderBoxSize);
+    ;
+    const getWidth = /*@__PURE__*/ getSize("inline", "width", "offsetWidth");
+    const getHeight = /*@__PURE__*/ getSize("block", "height", "offsetHeight");
+    function notifyTarget({ target , borderBoxSize  }) {
+        var ref;
+        (ref = resizeHandlers.get(target)) === null || ref === void 0 ? void 0 : ref.forEach((handler)=>{
+            handler(target, {
+                get width () {
+                    return getWidth(target, borderBoxSize);
+                },
+                get height () {
+                    return getHeight(target, borderBoxSize);
                 }
             });
         });
@@ -17786,14 +20185,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     let windowResizeHandler;
     function createWindowResizeHandler() {
         windowResizeHandler = ()=>{
-            const size = {
-                width: window.innerWidth,
-                height: window.innerHeight
-            };
             const info = {
-                target: window,
-                size,
-                contentSize: size
+                get width () {
+                    return window.innerWidth;
+                },
+                get height () {
+                    return window.innerHeight;
+                }
             };
             windowCallbacks.forEach((callback)=>callback(info)
             );
@@ -17805,15 +20203,2308 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         if (!windowResizeHandler) createWindowResizeHandler();
         return ()=>{
             windowCallbacks.delete(callback);
-            if (!windowCallbacks.size && windowResizeHandler) {
+            if (!windowCallbacks.size && typeof windowResizeHandler === "function") {
+                window.removeEventListener("resize", windowResizeHandler);
                 windowResizeHandler = undefined;
             }
         };
     }
 
     function resize(a, b) {
-        return isFunction$1(a) ? resizeWindow(a) : resizeElement(a, b);
+        return typeof a === "function" ? resizeWindow(a) : resizeElement(a, b);
     }
+
+    function observeTimeline(update, timeline) {
+        let prevProgress;
+        const onFrame = ()=>{
+            const { currentTime  } = timeline;
+            const percentage = currentTime === null ? 0 : currentTime.value;
+            const progress = percentage / 100;
+            if (prevProgress !== progress) {
+                update(progress);
+            }
+            prevProgress = progress;
+        };
+        frame.preUpdate(onFrame, true);
+        return ()=>cancelFrame(onFrame)
+        ;
+    }
+
+    /**
+     * Checks if an element is specifically an SVGSVGElement (the root SVG element)
+     * in a way that works across iframes
+     */ function isSVGSVGElement(element) {
+        return isSVGElement(element) && element.tagName === "svg";
+    }
+
+    function getOriginIndex(from, total) {
+        if (from === "first") {
+            return 0;
+        } else {
+            const lastIndex = total - 1;
+            return from === "last" ? lastIndex : lastIndex / 2;
+        }
+    }
+    function stagger(duration = 0.1, { startDelay =0 , from =0 , ease  } = {}) {
+        return (i, total)=>{
+            const fromIndex = typeof from === "number" ? from : getOriginIndex(from, total);
+            const distance = Math.abs(fromIndex - i);
+            let delay = duration * distance;
+            if (ease) {
+                const maxDelay = total * duration;
+                const easingFunction = easingDefinitionToFunction(ease);
+                delay = easingFunction(delay / maxDelay) * maxDelay;
+            }
+            return startDelay + delay;
+        };
+    }
+
+    function transform(...args) {
+        const useImmediate = !Array.isArray(args[0]);
+        const argOffset = useImmediate ? 0 : -1;
+        const inputValue = args[0 + argOffset];
+        const inputRange = args[1 + argOffset];
+        const outputRange = args[2 + argOffset];
+        const options = args[3 + argOffset];
+        const interpolator = interpolate(inputRange, outputRange, options);
+        return useImmediate ? interpolator(inputValue) : interpolator;
+    }
+
+    function subscribeValue(inputValues, outputValue, getLatest) {
+        const update = ()=>outputValue.set(getLatest())
+        ;
+        const scheduleUpdate = ()=>frame.preRender(update, false, true)
+        ;
+        const subscriptions = inputValues.map((v)=>v.on("change", scheduleUpdate)
+        );
+        outputValue.on("destroy", ()=>{
+            subscriptions.forEach((unsubscribe)=>unsubscribe()
+            );
+            cancelFrame(update);
+        });
+    }
+
+    /**
+     * Create a `MotionValue` that transforms the output of other `MotionValue`s by
+     * passing their latest values through a transform function.
+     *
+     * Whenever a `MotionValue` referred to in the provided function is updated,
+     * it will be re-evaluated.
+     *
+     * ```jsx
+     * const x = motionValue(0)
+     * const y = transformValue(() => x.get() * 2) // double x
+     * ```
+     *
+     * @param transformer - A transform function. This function must be pure with no side-effects or conditional statements.
+     * @returns `MotionValue`
+     *
+     * @public
+     */ function transformValue(transform) {
+        const collectedValues = [];
+        /**
+         * Open session of collectMotionValues. Any MotionValue that calls get()
+         * inside transform will be saved into this array.
+         */ collectMotionValues.current = collectedValues;
+        const initialValue = transform();
+        collectMotionValues.current = undefined;
+        const value = motionValue(initialValue);
+        subscribeValue(collectedValues, value, transform);
+        return value;
+    }
+
+    /**
+     * Create a `MotionValue` that maps the output of another `MotionValue` by
+     * mapping it from one range of values into another.
+     *
+     * @remarks
+     *
+     * Given an input range of `[-200, -100, 100, 200]` and an output range of
+     * `[0, 1, 1, 0]`, the returned `MotionValue` will:
+     *
+     * - When provided a value between `-200` and `-100`, will return a value between `0` and  `1`.
+     * - When provided a value between `-100` and `100`, will return `1`.
+     * - When provided a value between `100` and `200`, will return a value between `1` and  `0`
+     *
+     * The input range must be a linear series of numbers. The output range
+     * can be any value type supported by Motion: numbers, colors, shadows, etc.
+     *
+     * Every value in the output range must be of the same type and in the same format.
+     *
+     * ```jsx
+     * const x = motionValue(0)
+     * const xRange = [-200, -100, 100, 200]
+     * const opacityRange = [0, 1, 1, 0]
+     * const opacity = mapValue(x, xRange, opacityRange)
+     * ```
+     *
+     * @param inputValue - `MotionValue`
+     * @param inputRange - A linear series of numbers (either all increasing or decreasing)
+     * @param outputRange - A series of numbers, colors or strings. Must be the same length as `inputRange`.
+     * @param options -
+     *
+     *  - clamp: boolean. Clamp values to within the given range. Defaults to `true`
+     *  - ease: EasingFunction[]. Easing functions to use on the interpolations between each value in the input and output ranges. If provided as an array, the array must be one item shorter than the input and output ranges, as the easings apply to the transition between each.
+     *
+     * @returns `MotionValue`
+     *
+     * @public
+     */ function mapValue(inputValue, inputRange, outputRange, options) {
+        const map = transform(inputRange, outputRange, options);
+        return transformValue(()=>map(inputValue.get())
+        );
+    }
+
+    const isMotionValue = (value)=>Boolean(value && value.getVelocity)
+    ;
+
+    /**
+     * Create a `MotionValue` that animates to its latest value using a spring.
+     * Can either be a value or track another `MotionValue`.
+     *
+     * ```jsx
+     * const x = motionValue(0)
+     * const y = transformValue(() => x.get() * 2) // double x
+     * ```
+     *
+     * @param transformer - A transform function. This function must be pure with no side-effects or conditional statements.
+     * @returns `MotionValue`
+     *
+     * @public
+     */ function springValue(source, options) {
+        const initialValue = isMotionValue(source) ? source.get() : source;
+        const value = motionValue(initialValue);
+        attachSpring(value, source, options);
+        return value;
+    }
+    function attachSpring(value, source, options) {
+        const initialValue = value.get();
+        let activeAnimation = null;
+        let latestValue = initialValue;
+        let latestSetter;
+        const unit = typeof initialValue === "string" ? initialValue.replace(/[\d.-]/g, "") : undefined;
+        const stopAnimation = ()=>{
+            if (activeAnimation) {
+                activeAnimation.stop();
+                activeAnimation = null;
+            }
+        };
+        const startAnimation = ()=>{
+            stopAnimation();
+            activeAnimation = new JSAnimation({
+                keyframes: [
+                    asNumber(value.get()),
+                    asNumber(latestValue)
+                ],
+                velocity: value.getVelocity(),
+                type: "spring",
+                restDelta: 0.001,
+                restSpeed: 0.01,
+                ...options,
+                onUpdate: latestSetter
+            });
+        };
+        value.attach((v, set)=>{
+            latestValue = v;
+            latestSetter = (latest)=>set(parseValue(latest, unit))
+            ;
+            frame.postRender(startAnimation);
+            return value.get();
+        }, stopAnimation);
+        if (isMotionValue(source)) {
+            const removeSourceOnChange = source.on("change", (v)=>value.set(parseValue(v, unit))
+            );
+            const removeValueOnDestroy = value.on("destroy", removeSourceOnChange);
+            return ()=>{
+                removeSourceOnChange();
+                removeValueOnDestroy();
+            };
+        }
+        return stopAnimation;
+    }
+    function parseValue(v, unit) {
+        return unit ? v + unit : v;
+    }
+    function asNumber(v) {
+        return typeof v === "number" ? v : parseFloat(v);
+    }
+
+    /**
+     * A list of all ValueTypes
+     */ const valueTypes = [
+        ...dimensionValueTypes,
+        color,
+        complex
+    ];
+    /**
+     * Tests a value against the list of ValueTypes
+     */ const findValueType = (v)=>valueTypes.find(testValueType(v))
+    ;
+
+    function chooseLayerType(valueName) {
+        if (valueName === "layout") return "group";
+        if (valueName === "enter" || valueName === "new") return "new";
+        if (valueName === "exit" || valueName === "old") return "old";
+        return "group";
+    }
+
+    let pendingRules = {};
+    let style = null;
+    const css = {
+        set: (selector, values)=>{
+            pendingRules[selector] = values;
+        },
+        commit: ()=>{
+            if (!style) {
+                style = document.createElement("style");
+                style.id = "motion-view";
+            }
+            let cssText = "";
+            for(const selector in pendingRules){
+                const rule = pendingRules[selector];
+                cssText += `${selector} {\n`;
+                for (const [property, value] of Object.entries(rule)){
+                    cssText += `  ${property}: ${value};\n`;
+                }
+                cssText += "}\n";
+            }
+            style.textContent = cssText;
+            document.head.appendChild(style);
+            pendingRules = {};
+        },
+        remove: ()=>{
+            if (style && style.parentElement) {
+                style.parentElement.removeChild(style);
+            }
+        }
+    };
+
+    function getViewAnimationLayerInfo(pseudoElement) {
+        const match = pseudoElement.match(/::view-transition-(old|new|group|image-pair)\((.*?)\)/);
+        if (!match) return null;
+        return {
+            layer: match[2],
+            type: match[1]
+        };
+    }
+
+    function filterViewAnimations(animation) {
+        var ref;
+        const { effect  } = animation;
+        if (!effect) return false;
+        return effect.target === document.documentElement && ((ref = effect.pseudoElement) === null || ref === void 0 ? void 0 : ref.startsWith("::view-transition"));
+    }
+    function getViewAnimations() {
+        return document.getAnimations().filter(filterViewAnimations);
+    }
+
+    function hasTarget(target, targets) {
+        return targets.has(target) && Object.keys(targets.get(target)).length > 0;
+    }
+
+    const definitionNames = [
+        "layout",
+        "enter",
+        "exit",
+        "new",
+        "old"
+    ];
+    function startViewAnimation(builder) {
+        const { update , targets , options: defaultOptions  } = builder;
+        if (!document.startViewTransition) {
+            return new Promise(async (resolve)=>{
+                await update();
+                resolve(new GroupAnimation([]));
+            });
+        }
+        // TODO: Go over existing targets and ensure they all have ids
+        /**
+         * If we don't have any animations defined for the root target,
+         * remove it from being captured.
+         */ if (!hasTarget("root", targets)) {
+            css.set(":root", {
+                "view-transition-name": "none"
+            });
+        }
+        /**
+         * Set the timing curve to linear for all view transition layers.
+         * This gets baked into the keyframes, which can't be changed
+         * without breaking the generated animation.
+         *
+         * This allows us to set easing via updateTiming - which can be changed.
+         */ css.set("::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*)", {
+            "animation-timing-function": "linear !important"
+        });
+        css.commit(); // Write
+        const transition = document.startViewTransition(async ()=>{
+            await update();
+        // TODO: Go over new targets and ensure they all have ids
+        });
+        transition.finished.finally(()=>{
+            css.remove(); // Write
+        });
+        return new Promise((resolve)=>{
+            transition.ready.then(()=>{
+                const generatedViewAnimations = getViewAnimations();
+                const animations = [];
+                /**
+                 * Create animations for each of our explicitly-defined subjects.
+                 */ targets.forEach((definition, target)=>{
+                    // TODO: If target is not "root", resolve elements
+                    // and iterate over each
+                    for (const key of definitionNames){
+                        if (!definition[key]) continue;
+                        const { keyframes , options  } = definition[key];
+                        for (let [valueName, valueKeyframes] of Object.entries(keyframes)){
+                            if (!valueKeyframes) continue;
+                            const valueOptions = {
+                                ...getValueTransition$1(defaultOptions, valueName),
+                                ...getValueTransition$1(options, valueName)
+                            };
+                            const type = chooseLayerType(key);
+                            /**
+                             * If this is an opacity animation, and keyframes are not an array,
+                             * we need to convert them into an array and set an initial value.
+                             */ if (valueName === "opacity" && !Array.isArray(valueKeyframes)) {
+                                const initialValue = type === "new" ? 0 : 1;
+                                valueKeyframes = [
+                                    initialValue,
+                                    valueKeyframes
+                                ];
+                            }
+                            /**
+                             * Resolve stagger function if provided.
+                             */ if (typeof valueOptions.delay === "function") {
+                                valueOptions.delay = valueOptions.delay(0, 1);
+                            }
+                            valueOptions.duration && (valueOptions.duration = secondsToMilliseconds(valueOptions.duration));
+                            valueOptions.delay && (valueOptions.delay = secondsToMilliseconds(valueOptions.delay));
+                            const animation = new NativeAnimation({
+                                ...valueOptions,
+                                element: document.documentElement,
+                                name: valueName,
+                                pseudoElement: `::view-transition-${type}(${target})`,
+                                keyframes: valueKeyframes
+                            });
+                            animations.push(animation);
+                        }
+                    }
+                });
+                /**
+                 * Handle browser generated animations
+                 */ for (const animation1 of generatedViewAnimations){
+                    if (animation1.playState === "finished") continue;
+                    const { effect  } = animation1;
+                    if (!effect || !(effect instanceof KeyframeEffect)) continue;
+                    const { pseudoElement  } = effect;
+                    if (!pseudoElement) continue;
+                    const name = getViewAnimationLayerInfo(pseudoElement);
+                    if (!name) continue;
+                    const targetDefinition = targets.get(name.layer);
+                    if (!targetDefinition) {
+                        /**
+                         * If transition name is group then update the timing of the animation
+                         * whereas if it's old or new then we could possibly replace it using
+                         * the above method.
+                         */ const transitionName = name.type === "group" ? "layout" : "";
+                        let animationTransition = {
+                            ...getValueTransition$1(defaultOptions, transitionName)
+                        };
+                        animationTransition.duration && (animationTransition.duration = secondsToMilliseconds(animationTransition.duration));
+                        animationTransition = applyGeneratorOptions(animationTransition);
+                        const easing = mapEasingToNativeEasing(animationTransition.ease, animationTransition.duration);
+                        var _delay;
+                        effect.updateTiming({
+                            delay: secondsToMilliseconds((_delay = animationTransition.delay) !== null && _delay !== void 0 ? _delay : 0),
+                            duration: animationTransition.duration,
+                            easing
+                        });
+                        animations.push(new NativeAnimationWrapper(animation1));
+                    } else if (hasOpacity(targetDefinition, "enter") && hasOpacity(targetDefinition, "exit") && effect.getKeyframes().some((keyframe)=>keyframe.mixBlendMode
+                    )) {
+                        animations.push(new NativeAnimationWrapper(animation1));
+                    } else {
+                        animation1.cancel();
+                    }
+                }
+                resolve(new GroupAnimation(animations));
+            });
+        });
+    }
+    function hasOpacity(target, key) {
+        var ref;
+        return target === null || target === void 0 ? void 0 : (ref = target[key]) === null || ref === void 0 ? void 0 : ref.keyframes.opacity;
+    }
+
+    let builders = [];
+    let current = null;
+    function next() {
+        current = null;
+        const [nextBuilder] = builders;
+        if (nextBuilder) start(nextBuilder);
+    }
+    function start(builder) {
+        removeItem(builders, builder);
+        current = builder;
+        startViewAnimation(builder).then((animation)=>{
+            builder.notifyReady(animation);
+            animation.finished.finally(next);
+        });
+    }
+    function processQueue() {
+        var ref;
+        /**
+         * Iterate backwards over the builders array. We can ignore the
+         * "wait" animations. If we have an interrupting animation in the
+         * queue then we need to batch all preceeding animations into it.
+         * Currently this only batches the update functions but will also
+         * need to batch the targets.
+         */ for(let i = builders.length - 1; i >= 0; i--){
+            const builder = builders[i];
+            const { interrupt  } = builder.options;
+            if (interrupt === "immediate") {
+                const batchedUpdates = builders.slice(0, i + 1).map((b)=>b.update
+                );
+                const remaining = builders.slice(i + 1);
+                builder.update = ()=>{
+                    batchedUpdates.forEach((update)=>update()
+                    );
+                };
+                // Put the current builder at the front, followed by any "wait" builders
+                builders = [
+                    builder,
+                    ...remaining
+                ];
+                break;
+            }
+        }
+        if (!current || ((ref = builders[0]) === null || ref === void 0 ? void 0 : ref.options.interrupt) === "immediate") {
+            next();
+        }
+    }
+    function addToQueue(builder) {
+        builders.push(builder);
+        microtask.render(processQueue);
+    }
+
+    let ViewTransitionBuilder = class ViewTransitionBuilder {
+        get(subject) {
+            this.currentSubject = subject;
+            return this;
+        }
+        layout(keyframes, options) {
+            this.updateTarget("layout", keyframes, options);
+            return this;
+        }
+        new(keyframes, options) {
+            this.updateTarget("new", keyframes, options);
+            return this;
+        }
+        old(keyframes, options) {
+            this.updateTarget("old", keyframes, options);
+            return this;
+        }
+        enter(keyframes, options) {
+            this.updateTarget("enter", keyframes, options);
+            return this;
+        }
+        exit(keyframes, options) {
+            this.updateTarget("exit", keyframes, options);
+            return this;
+        }
+        crossfade(options) {
+            this.updateTarget("enter", {
+                opacity: 1
+            }, options);
+            this.updateTarget("exit", {
+                opacity: 0
+            }, options);
+            return this;
+        }
+        updateTarget(target, keyframes, options = {}) {
+            const { currentSubject , targets  } = this;
+            if (!targets.has(currentSubject)) {
+                targets.set(currentSubject, {});
+            }
+            const targetData = targets.get(currentSubject);
+            targetData[target] = {
+                keyframes,
+                options
+            };
+        }
+        then(resolve, reject) {
+            return this.readyPromise.then(resolve, reject);
+        }
+        constructor(update, options = {}){
+            this.currentSubject = "root";
+            this.targets = new Map();
+            this.notifyReady = noop;
+            this.readyPromise = new Promise((resolve)=>{
+                this.notifyReady = resolve;
+            });
+            this.update = update;
+            this.options = {
+                interrupt: "wait",
+                ...options
+            };
+            addToQueue(this);
+        }
+    };
+    function animateView(update, defaultOptions = {}) {
+        return new ViewTransitionBuilder(update, defaultOptions);
+    }
+
+    function isDOMKeyframes(keyframes) {
+        return typeof keyframes === "object" && !Array.isArray(keyframes);
+    }
+
+    function resolveSubjects(subject, keyframes, scope, selectorCache) {
+        if (typeof subject === "string" && isDOMKeyframes(keyframes)) {
+            return resolveElements(subject, scope, selectorCache);
+        } else if (subject instanceof NodeList) {
+            return Array.from(subject);
+        } else if (Array.isArray(subject)) {
+            return subject;
+        } else {
+            return [
+                subject
+            ];
+        }
+    }
+
+    function calculateRepeatDuration(duration, repeat, _repeatDelay) {
+        return duration * (repeat + 1);
+    }
+
+    /**
+     * Given a absolute or relative time definition and current/prev time state of the sequence,
+     * calculate an absolute time for the next keyframes.
+     */ function calcNextTime(current, next, prev, labels) {
+        if (typeof next === "number") {
+            return next;
+        } else if (next.startsWith("-") || next.startsWith("+")) {
+            return Math.max(0, current + parseFloat(next));
+        } else if (next === "<") {
+            return prev;
+        } else if (next.startsWith("<")) {
+            return Math.max(0, prev + parseFloat(next.slice(1)));
+        } else {
+            var ref;
+            return (ref = labels.get(next)) !== null && ref !== void 0 ? ref : current;
+        }
+    }
+
+    function eraseKeyframes(sequence, startTime, endTime) {
+        for(let i = 0; i < sequence.length; i++){
+            const keyframe = sequence[i];
+            if (keyframe.at > startTime && keyframe.at < endTime) {
+                removeItem(sequence, keyframe);
+                // If we remove this item we have to push the pointer back one
+                i--;
+            }
+        }
+    }
+    function addKeyframes(sequence, keyframes, easing, offset, startTime, endTime) {
+        /**
+         * Erase every existing value between currentTime and targetTime,
+         * this will essentially splice this timeline into any currently
+         * defined ones.
+         */ eraseKeyframes(sequence, startTime, endTime);
+        for(let i = 0; i < keyframes.length; i++){
+            sequence.push({
+                value: keyframes[i],
+                at: mixNumber$1(startTime, endTime, offset[i]),
+                easing: getEasingForSegment(easing, i)
+            });
+        }
+    }
+
+    /**
+     * Take an array of times that represent repeated keyframes. For instance
+     * if we have original times of [0, 0.5, 1] then our repeated times will
+     * be [0, 0.5, 1, 1, 1.5, 2]. Loop over the times and scale them back
+     * down to a 0-1 scale.
+     */ function normalizeTimes(times, repeat) {
+        for(let i = 0; i < times.length; i++){
+            times[i] = times[i] / (repeat + 1);
+        }
+    }
+
+    function compareByTime(a, b) {
+        if (a.at === b.at) {
+            if (a.value === null) return 1;
+            if (b.value === null) return -1;
+            return 0;
+        } else {
+            return a.at - b.at;
+        }
+    }
+
+    const defaultSegmentEasing = "easeInOut";
+    const MAX_REPEAT = 20;
+    function createAnimationsFromSequence(sequence, { defaultTransition ={} , ...sequenceTransition } = {}, scope, generators) {
+        const defaultDuration = defaultTransition.duration || 0.3;
+        const animationDefinitions = new Map();
+        const sequences = new Map();
+        const elementCache = {};
+        const timeLabels = new Map();
+        let prevTime = 0;
+        let currentTime = 0;
+        let totalDuration = 0;
+        /**
+         * Build the timeline by mapping over the sequence array and converting
+         * the definitions into keyframes and offsets with absolute time values.
+         * These will later get converted into relative offsets in a second pass.
+         */ for(let i1 = 0; i1 < sequence.length; i1++){
+            const segment = sequence[i1];
+            /**
+             * If this is a timeline label, mark it and skip the rest of this iteration.
+             */ if (typeof segment === "string") {
+                timeLabels.set(segment, currentTime);
+                continue;
+            } else if (!Array.isArray(segment)) {
+                timeLabels.set(segment.name, calcNextTime(currentTime, segment.at, prevTime, timeLabels));
+                continue;
+            }
+            let [subject, keyframes, transition = {}] = segment;
+            /**
+             * If a relative or absolute time value has been specified we need to resolve
+             * it in relation to the currentTime.
+             */ if (transition.at !== undefined) {
+                currentTime = calcNextTime(currentTime, transition.at, prevTime, timeLabels);
+            }
+            /**
+             * Keep track of the maximum duration in this definition. This will be
+             * applied to currentTime once the definition has been parsed.
+             */ let maxDuration = 0;
+            const resolveValueSequence = (valueKeyframes, valueTransition, valueSequence, elementIndex = 0, numSubjects = 0)=>{
+                const valueKeyframesAsList = keyframesAsList(valueKeyframes);
+                const { delay =0 , times =defaultOffset$1(valueKeyframesAsList) , type ="keyframes" , repeat , repeatType , repeatDelay =0 , ...remainingTransition } = valueTransition;
+                let { ease =defaultTransition.ease || "easeOut" , duration  } = valueTransition;
+                /**
+                 * Resolve stagger() if defined.
+                 */ const calculatedDelay = typeof delay === "function" ? delay(elementIndex, numSubjects) : delay;
+                /**
+                 * If this animation should and can use a spring, generate a spring easing function.
+                 */ const numKeyframes = valueKeyframesAsList.length;
+                const createGenerator = isGenerator(type) ? type : generators === null || generators === void 0 ? void 0 : generators[type || "keyframes"];
+                if (numKeyframes <= 2 && createGenerator) {
+                    /**
+                     * As we're creating an easing function from a spring,
+                     * ideally we want to generate it using the real distance
+                     * between the two keyframes. However this isn't always
+                     * possible - in these situations we use 0-100.
+                     */ let absoluteDelta = 100;
+                    if (numKeyframes === 2 && isNumberKeyframesArray(valueKeyframesAsList)) {
+                        const delta = valueKeyframesAsList[1] - valueKeyframesAsList[0];
+                        absoluteDelta = Math.abs(delta);
+                    }
+                    const springTransition = {
+                        ...remainingTransition
+                    };
+                    if (duration !== undefined) {
+                        springTransition.duration = secondsToMilliseconds(duration);
+                    }
+                    const springEasing = createGeneratorEasing(springTransition, absoluteDelta, createGenerator);
+                    ease = springEasing.ease;
+                    duration = springEasing.duration;
+                }
+                duration !== null && duration !== void 0 ? duration : duration = defaultDuration;
+                const startTime = currentTime + calculatedDelay;
+                /**
+                 * If there's only one time offset of 0, fill in a second with length 1
+                 */ if (times.length === 1 && times[0] === 0) {
+                    times[1] = 1;
+                }
+                /**
+                 * Fill out if offset if fewer offsets than keyframes
+                 */ const remainder = times.length - valueKeyframesAsList.length;
+                remainder > 0 && fillOffset(times, remainder);
+                /**
+                 * If only one value has been set, ie [1], push a null to the start of
+                 * the keyframe array. This will let us mark a keyframe at this point
+                 * that will later be hydrated with the previous value.
+                 */ valueKeyframesAsList.length === 1 && valueKeyframesAsList.unshift(null);
+                /**
+                 * Handle repeat options
+                 */ if (repeat) {
+                    invariant(repeat < MAX_REPEAT, "Repeat count too high, must be less than 20", "repeat-count-high");
+                    duration = calculateRepeatDuration(duration, repeat);
+                    const originalKeyframes = [
+                        ...valueKeyframesAsList
+                    ];
+                    const originalTimes = [
+                        ...times
+                    ];
+                    ease = Array.isArray(ease) ? [
+                        ...ease
+                    ] : [
+                        ease
+                    ];
+                    const originalEase = [
+                        ...ease
+                    ];
+                    for(let repeatIndex = 0; repeatIndex < repeat; repeatIndex++){
+                        valueKeyframesAsList.push(...originalKeyframes);
+                        for(let keyframeIndex = 0; keyframeIndex < originalKeyframes.length; keyframeIndex++){
+                            times.push(originalTimes[keyframeIndex] + (repeatIndex + 1));
+                            ease.push(keyframeIndex === 0 ? "linear" : getEasingForSegment(originalEase, keyframeIndex - 1));
+                        }
+                    }
+                    normalizeTimes(times, repeat);
+                }
+                const targetTime = startTime + duration;
+                /**
+                 * Add keyframes, mapping offsets to absolute time.
+                 */ addKeyframes(valueSequence, valueKeyframesAsList, ease, times, startTime, targetTime);
+                maxDuration = Math.max(calculatedDelay + duration, maxDuration);
+                totalDuration = Math.max(targetTime, totalDuration);
+            };
+            if (isMotionValue(subject)) {
+                const subjectSequence = getSubjectSequence(subject, sequences);
+                resolveValueSequence(keyframes, transition, getValueSequence("default", subjectSequence));
+            } else {
+                const subjects = resolveSubjects(subject, keyframes, scope, elementCache);
+                const numSubjects = subjects.length;
+                /**
+                 * For every element in this segment, process the defined values.
+                 */ for(let subjectIndex = 0; subjectIndex < numSubjects; subjectIndex++){
+                    /**
+                     * Cast necessary, but we know these are of this type
+                     */ keyframes = keyframes;
+                    transition = transition;
+                    const thisSubject = subjects[subjectIndex];
+                    const subjectSequence = getSubjectSequence(thisSubject, sequences);
+                    for(const key in keyframes){
+                        resolveValueSequence(keyframes[key], getValueTransition(transition, key), getValueSequence(key, subjectSequence), subjectIndex, numSubjects);
+                    }
+                }
+            }
+            prevTime = currentTime;
+            currentTime += maxDuration;
+        }
+        /**
+         * For every element and value combination create a new animation.
+         */ sequences.forEach((valueSequences, element)=>{
+            for(const key in valueSequences){
+                const valueSequence = valueSequences[key];
+                /**
+                 * Arrange all the keyframes in ascending time order.
+                 */ valueSequence.sort(compareByTime);
+                const keyframes = [];
+                const valueOffset = [];
+                const valueEasing = [];
+                /**
+                 * For each keyframe, translate absolute times into
+                 * relative offsets based on the total duration of the timeline.
+                 */ for(let i = 0; i < valueSequence.length; i++){
+                    const { at , value , easing  } = valueSequence[i];
+                    keyframes.push(value);
+                    valueOffset.push(progress(0, totalDuration, at));
+                    valueEasing.push(easing || "easeOut");
+                }
+                /**
+                 * If the first keyframe doesn't land on offset: 0
+                 * provide one by duplicating the initial keyframe. This ensures
+                 * it snaps to the first keyframe when the animation starts.
+                 */ if (valueOffset[0] !== 0) {
+                    valueOffset.unshift(0);
+                    keyframes.unshift(keyframes[0]);
+                    valueEasing.unshift(defaultSegmentEasing);
+                }
+                /**
+                 * If the last keyframe doesn't land on offset: 1
+                 * provide one with a null wildcard value. This will ensure it
+                 * stays static until the end of the animation.
+                 */ if (valueOffset[valueOffset.length - 1] !== 1) {
+                    valueOffset.push(1);
+                    keyframes.push(null);
+                }
+                if (!animationDefinitions.has(element)) {
+                    animationDefinitions.set(element, {
+                        keyframes: {},
+                        transition: {}
+                    });
+                }
+                const definition = animationDefinitions.get(element);
+                definition.keyframes[key] = keyframes;
+                definition.transition[key] = {
+                    ...defaultTransition,
+                    duration: totalDuration,
+                    ease: valueEasing,
+                    times: valueOffset,
+                    ...sequenceTransition
+                };
+            }
+        });
+        return animationDefinitions;
+    }
+    function getSubjectSequence(subject, sequences) {
+        !sequences.has(subject) && sequences.set(subject, {});
+        return sequences.get(subject);
+    }
+    function getValueSequence(name, sequences) {
+        if (!sequences[name]) sequences[name] = [];
+        return sequences[name];
+    }
+    function keyframesAsList(keyframes) {
+        return Array.isArray(keyframes) ? keyframes : [
+            keyframes
+        ];
+    }
+    function getValueTransition(transition, key) {
+        return transition && transition[key] ? {
+            ...transition,
+            ...transition[key]
+        } : {
+            ...transition
+        };
+    }
+    const isNumber = (keyframe)=>typeof keyframe === "number"
+    ;
+    const isNumberKeyframesArray = (keyframes)=>keyframes.every(isNumber)
+    ;
+
+    const visualElementStore = new WeakMap();
+
+    const isKeyframesTarget = (v)=>{
+        return Array.isArray(v);
+    };
+
+    function getValueState(visualElement) {
+        const state = [
+            {},
+            {}
+        ];
+        visualElement === null || visualElement === void 0 ? void 0 : visualElement.values.forEach((value, key)=>{
+            state[0][key] = value.get();
+            state[1][key] = value.getVelocity();
+        });
+        return state;
+    }
+    function resolveVariantFromProps(props, definition, custom, visualElement) {
+        /**
+         * If the variant definition is a function, resolve.
+         */ if (typeof definition === "function") {
+            const [current, velocity] = getValueState(visualElement);
+            definition = definition(custom !== undefined ? custom : props.custom, current, velocity);
+        }
+        /**
+         * If the variant definition is a variant label, or
+         * the function returned a variant label, resolve.
+         */ if (typeof definition === "string") {
+            definition = props.variants && props.variants[definition];
+        }
+        /**
+         * At this point we've resolved both functions and variant labels,
+         * but the resolved variant label might itself have been a function.
+         * If so, resolve. This can only have returned a valid target object.
+         */ if (typeof definition === "function") {
+            const [current, velocity] = getValueState(visualElement);
+            definition = definition(custom !== undefined ? custom : props.custom, current, velocity);
+        }
+        return definition;
+    }
+
+    function resolveVariant(visualElement, definition, custom) {
+        const props = visualElement.getProps();
+        return resolveVariantFromProps(props, definition, props.custom, visualElement);
+    }
+
+    /**
+     * Set VisualElement's MotionValue, creating a new MotionValue for it if
+     * it doesn't exist.
+     */ function setMotionValue(visualElement, key, value) {
+        if (visualElement.hasValue(key)) {
+            visualElement.getValue(key).set(value);
+        } else {
+            visualElement.addValue(key, motionValue(value));
+        }
+    }
+    function resolveFinalValueInKeyframes(v) {
+        // TODO maybe throw if v.length - 1 is placeholder token?
+        return isKeyframesTarget(v) ? v[v.length - 1] || 0 : v;
+    }
+    function setTarget(visualElement, definition) {
+        const resolved = resolveVariant(visualElement, definition);
+        let { transitionEnd ={} , transition ={} , ...target } = resolved || {};
+        target = {
+            ...target,
+            ...transitionEnd
+        };
+        for(const key in target){
+            const value = resolveFinalValueInKeyframes(target[key]);
+            setMotionValue(visualElement, key, value);
+        }
+    }
+
+    function isWillChangeMotionValue(value) {
+        return Boolean(isMotionValue(value) && value.add);
+    }
+
+    function addValueToWillChange(visualElement, key) {
+        const willChange = visualElement.getValue("willChange");
+        /**
+         * It could be that a user has set willChange to a regular MotionValue,
+         * in which case we can't add the value to it.
+         */ if (isWillChangeMotionValue(willChange)) {
+            return willChange.add(key);
+        } else if (!willChange && MotionGlobalConfig.WillChange) {
+            const newWillChange = new MotionGlobalConfig.WillChange("auto");
+            visualElement.addValue("willChange", newWillChange);
+            newWillChange.add(key);
+        }
+    }
+
+    /**
+     * Convert camelCase to dash-case properties.
+     */ const camelToDash = (str)=>str.replace(/([a-z])([A-Z])/gu, "$1-$2").toLowerCase()
+    ;
+
+    const optimizedAppearDataId = "framerAppearId";
+    const optimizedAppearDataAttribute = "data-" + camelToDash(optimizedAppearDataId);
+
+    function getOptimisedAppearId(visualElement) {
+        return visualElement.props[optimizedAppearDataAttribute];
+    }
+
+    const isNotNull = (value)=>value !== null
+    ;
+    function getFinalKeyframe(keyframes, { repeat , repeatType ="loop"  }, finalKeyframe) {
+        const resolvedKeyframes = keyframes.filter(isNotNull);
+        const index = repeat && repeatType !== "loop" && repeat % 2 === 1 ? 0 : resolvedKeyframes.length - 1;
+        return !index || finalKeyframe === undefined ? resolvedKeyframes[index] : finalKeyframe;
+    }
+
+    const underDampedSpring = {
+        type: "spring",
+        stiffness: 500,
+        damping: 25,
+        restSpeed: 10
+    };
+    const criticallyDampedSpring = (target)=>({
+            type: "spring",
+            stiffness: 550,
+            damping: target === 0 ? 2 * Math.sqrt(550) : 30,
+            restSpeed: 10
+        })
+    ;
+    const keyframesTransition = {
+        type: "keyframes",
+        duration: 0.8
+    };
+    /**
+     * Default easing curve is a slightly shallower version of
+     * the default browser easing curve.
+     */ const ease = {
+        type: "keyframes",
+        ease: [
+            0.25,
+            0.1,
+            0.35,
+            1
+        ],
+        duration: 0.3
+    };
+    const getDefaultTransition = (valueKey, { keyframes  })=>{
+        if (keyframes.length > 2) {
+            return keyframesTransition;
+        } else if (transformProps.has(valueKey)) {
+            return valueKey.startsWith("scale") ? criticallyDampedSpring(keyframes[1]) : underDampedSpring;
+        }
+        return ease;
+    };
+
+    /**
+     * Decide whether a transition is defined on a given Transition.
+     * This filters out orchestration options and returns true
+     * if any options are left.
+     */ function isTransitionDefined({ when , delay: _delay , delayChildren , staggerChildren , staggerDirection , repeat , repeatType , repeatDelay , from , elapsed , ...transition }) {
+        return !!Object.keys(transition).length;
+    }
+
+    const animateMotionValue = (name, value, target, transition = {}, element, isHandoff)=>(onComplete)=>{
+            const valueTransition = getValueTransition$1(transition, name) || {};
+            /**
+         * Most transition values are currently completely overwritten by value-specific
+         * transitions. In the future it'd be nicer to blend these transitions. But for now
+         * delay actually does inherit from the root transition if not value-specific.
+         */ const delay = valueTransition.delay || transition.delay || 0;
+            /**
+         * Elapsed isn't a public transition option but can be passed through from
+         * optimized appear effects in milliseconds.
+         */ let { elapsed =0  } = transition;
+            elapsed = elapsed - secondsToMilliseconds(delay);
+            const options = {
+                keyframes: Array.isArray(target) ? target : [
+                    null,
+                    target
+                ],
+                ease: "easeOut",
+                velocity: value.getVelocity(),
+                ...valueTransition,
+                delay: -elapsed,
+                onUpdate: (v)=>{
+                    value.set(v);
+                    valueTransition.onUpdate && valueTransition.onUpdate(v);
+                },
+                onComplete: ()=>{
+                    onComplete();
+                    valueTransition.onComplete && valueTransition.onComplete();
+                },
+                name,
+                motionValue: value,
+                element: isHandoff ? undefined : element
+            };
+            /**
+         * If there's no transition defined for this value, we can generate
+         * unique transition settings for this value.
+         */ if (!isTransitionDefined(valueTransition)) {
+                Object.assign(options, getDefaultTransition(name, options));
+            }
+            /**
+         * Both WAAPI and our internal animation functions use durations
+         * as defined by milliseconds, while our external API defines them
+         * as seconds.
+         */ options.duration && (options.duration = secondsToMilliseconds(options.duration));
+            options.repeatDelay && (options.repeatDelay = secondsToMilliseconds(options.repeatDelay));
+            /**
+         * Support deprecated way to set initial value. Prefer keyframe syntax.
+         */ if (options.from !== undefined) {
+                options.keyframes[0] = options.from;
+            }
+            let shouldSkip = false;
+            if (options.type === false || options.duration === 0 && !options.repeatDelay) {
+                makeAnimationInstant(options);
+                if (options.delay === 0) {
+                    shouldSkip = true;
+                }
+            }
+            if (MotionGlobalConfig.instantAnimations || MotionGlobalConfig.skipAnimations) {
+                shouldSkip = true;
+                makeAnimationInstant(options);
+                options.delay = 0;
+            }
+            /**
+         * If the transition type or easing has been explicitly set by the user
+         * then we don't want to allow flattening the animation.
+         */ options.allowFlatten = !valueTransition.type && !valueTransition.ease;
+            /**
+         * If we can or must skip creating the animation, and apply only
+         * the final keyframe, do so. We also check once keyframes are resolved but
+         * this early check prevents the need to create an animation at all.
+         */ if (shouldSkip && !isHandoff && value.get() !== undefined) {
+                const finalKeyframe = getFinalKeyframe(options.keyframes, valueTransition);
+                if (finalKeyframe !== undefined) {
+                    frame.update(()=>{
+                        options.onUpdate(finalKeyframe);
+                        options.onComplete();
+                    });
+                    return;
+                }
+            }
+            return valueTransition.isSync ? new JSAnimation(options) : new AsyncMotionValueAnimation(options);
+        }
+    ;
+
+    /**
+     * Decide whether we should block this animation. Previously, we achieved this
+     * just by checking whether the key was listed in protectedKeys, but this
+     * posed problems if an animation was triggered by afterChildren and protectedKeys
+     * had been set to true in the meantime.
+     */ function shouldBlockAnimation({ protectedKeys , needsAnimating  }, key) {
+        const shouldBlock = protectedKeys.hasOwnProperty(key) && needsAnimating[key] !== true;
+        needsAnimating[key] = false;
+        return shouldBlock;
+    }
+    function animateTarget(visualElement, targetAndTransition, { delay =0 , transitionOverride , type  } = {}) {
+        let { transition =visualElement.getDefaultTransition() , transitionEnd , ...target } = targetAndTransition;
+        if (transitionOverride) transition = transitionOverride;
+        const animations = [];
+        const animationTypeState = type && visualElement.animationState && visualElement.animationState.getState()[type];
+        for(const key in target){
+            var _key;
+            const value = visualElement.getValue(key, (_key = visualElement.latestValues[key]) !== null && _key !== void 0 ? _key : null);
+            const valueTarget = target[key];
+            if (valueTarget === undefined || animationTypeState && shouldBlockAnimation(animationTypeState, key)) {
+                continue;
+            }
+            const valueTransition = {
+                delay,
+                ...getValueTransition$1(transition || {}, key)
+            };
+            /**
+             * If the value is already at the defined target, skip the animation.
+             */ const currentValue = value.get();
+            if (currentValue !== undefined && !value.isAnimating && !Array.isArray(valueTarget) && valueTarget === currentValue && !valueTransition.velocity) {
+                continue;
+            }
+            /**
+             * If this is the first time a value is being animated, check
+             * to see if we're handling off from an existing animation.
+             */ let isHandoff = false;
+            if (window.MotionHandoffAnimation) {
+                const appearId = getOptimisedAppearId(visualElement);
+                if (appearId) {
+                    const startTime = window.MotionHandoffAnimation(appearId, key, frame);
+                    if (startTime !== null) {
+                        valueTransition.startTime = startTime;
+                        isHandoff = true;
+                    }
+                }
+            }
+            addValueToWillChange(visualElement, key);
+            value.start(animateMotionValue(key, value, valueTarget, visualElement.shouldReduceMotion && positionalKeys.has(key) ? {
+                type: false
+            } : valueTransition, visualElement, isHandoff));
+            const animation = value.animation;
+            if (animation) {
+                animations.push(animation);
+            }
+        }
+        if (transitionEnd) {
+            Promise.all(animations).then(()=>{
+                frame.update(()=>{
+                    transitionEnd && setTarget(visualElement, transitionEnd);
+                });
+            });
+        }
+        return animations;
+    }
+
+    /**
+     * Bounding boxes tend to be defined as top, left, right, bottom. For various operations
+     * it's easier to consider each axis individually. This function returns a bounding box
+     * as a map of single-axis min/max values.
+     */ function convertBoundingBoxToBox({ top , left , right , bottom ,  }) {
+        return {
+            x: {
+                min: left,
+                max: right
+            },
+            y: {
+                min: top,
+                max: bottom
+            }
+        };
+    }
+    /**
+     * Applies a TransformPoint function to a bounding box. TransformPoint is usually a function
+     * provided by Framer to allow measured points to be corrected for device scaling. This is used
+     * when measuring DOM elements and DOM event points.
+     */ function transformBoxPoints(point, transformPoint) {
+        if (!transformPoint) return point;
+        const topLeft = transformPoint({
+            x: point.left,
+            y: point.top
+        });
+        const bottomRight = transformPoint({
+            x: point.right,
+            y: point.bottom
+        });
+        return {
+            top: topLeft.y,
+            left: topLeft.x,
+            bottom: bottomRight.y,
+            right: bottomRight.x
+        };
+    }
+
+    function measureViewportBox(instance, transformPoint) {
+        return convertBoundingBoxToBox(transformBoxPoints(instance.getBoundingClientRect(), transformPoint));
+    }
+
+    const featureProps = {
+        animation: [
+            "animate",
+            "variants",
+            "whileHover",
+            "whileTap",
+            "exit",
+            "whileInView",
+            "whileFocus",
+            "whileDrag", 
+        ],
+        exit: [
+            "exit"
+        ],
+        drag: [
+            "drag",
+            "dragControls"
+        ],
+        focus: [
+            "whileFocus"
+        ],
+        hover: [
+            "whileHover",
+            "onHoverStart",
+            "onHoverEnd"
+        ],
+        tap: [
+            "whileTap",
+            "onTap",
+            "onTapStart",
+            "onTapCancel"
+        ],
+        pan: [
+            "onPan",
+            "onPanStart",
+            "onPanSessionStart",
+            "onPanEnd"
+        ],
+        inView: [
+            "whileInView",
+            "onViewportEnter",
+            "onViewportLeave"
+        ],
+        layout: [
+            "layout",
+            "layoutId"
+        ]
+    };
+    const featureDefinitions = {};
+    for(const key in featureProps){
+        featureDefinitions[key] = {
+            isEnabled: (props)=>featureProps[key].some((name)=>!!props[name]
+                )
+        };
+    }
+
+    const createAxis = ()=>({
+            min: 0,
+            max: 0
+        })
+    ;
+    const createBox = ()=>({
+            x: createAxis(),
+            y: createAxis()
+        })
+    ;
+
+    const isBrowser = typeof window !== "undefined";
+
+    // Does this device prefer reduced motion? Returns `null` server-side.
+    const prefersReducedMotion = {
+        current: null
+    };
+    const hasReducedMotionListener = {
+        current: false
+    };
+
+    function initPrefersReducedMotion() {
+        hasReducedMotionListener.current = true;
+        if (!isBrowser) return;
+        if (window.matchMedia) {
+            const motionMediaQuery = window.matchMedia("(prefers-reduced-motion)");
+            const setReducedMotionPreferences = ()=>prefersReducedMotion.current = motionMediaQuery.matches
+            ;
+            motionMediaQuery.addEventListener("change", setReducedMotionPreferences);
+            setReducedMotionPreferences();
+        } else {
+            prefersReducedMotion.current = false;
+        }
+    }
+
+    function isAnimationControls(v) {
+        return v !== null && typeof v === "object" && typeof v.start === "function";
+    }
+
+    /**
+     * Decides if the supplied variable is variant label
+     */ function isVariantLabel(v) {
+        return typeof v === "string" || Array.isArray(v);
+    }
+
+    const variantPriorityOrder = [
+        "animate",
+        "whileInView",
+        "whileFocus",
+        "whileHover",
+        "whileTap",
+        "whileDrag",
+        "exit", 
+    ];
+    const variantProps = [
+        "initial",
+        ...variantPriorityOrder
+    ];
+
+    function isControllingVariants(props) {
+        return isAnimationControls(props.animate) || variantProps.some((name)=>isVariantLabel(props[name])
+        );
+    }
+    function isVariantNode(props) {
+        return Boolean(isControllingVariants(props) || props.variants);
+    }
+
+    function updateMotionValuesFromProps(element, next, prev) {
+        for(const key in next){
+            const nextValue = next[key];
+            const prevValue = prev[key];
+            if (isMotionValue(nextValue)) {
+                /**
+                 * If this is a motion value found in props or style, we want to add it
+                 * to our visual element's motion value map.
+                 */ element.addValue(key, nextValue);
+            } else if (isMotionValue(prevValue)) {
+                /**
+                 * If we're swapping from a motion value to a static value,
+                 * create a new motion value from that
+                 */ element.addValue(key, motionValue(nextValue, {
+                    owner: element
+                }));
+            } else if (prevValue !== nextValue) {
+                /**
+                 * If this is a flat value that has changed, update the motion value
+                 * or create one if it doesn't exist. We only want to do this if we're
+                 * not handling the value with our animation state.
+                 */ if (element.hasValue(key)) {
+                    const existingValue = element.getValue(key);
+                    if (existingValue.liveStyle === true) {
+                        existingValue.jump(nextValue);
+                    } else if (!existingValue.hasAnimated) {
+                        existingValue.set(nextValue);
+                    }
+                } else {
+                    const latestValue = element.getStaticValue(key);
+                    element.addValue(key, motionValue(latestValue !== undefined ? latestValue : nextValue, {
+                        owner: element
+                    }));
+                }
+            }
+        }
+        // Handle removed values
+        for(const key1 in prev){
+            if (next[key1] === undefined) element.removeValue(key1);
+        }
+        return next;
+    }
+
+    const propEventHandlers = [
+        "AnimationStart",
+        "AnimationComplete",
+        "Update",
+        "BeforeLayoutMeasure",
+        "LayoutMeasure",
+        "LayoutAnimationStart",
+        "LayoutAnimationComplete", 
+    ];
+    /**
+     * A VisualElement is an imperative abstraction around UI elements such as
+     * HTMLElement, SVGElement, Three.Object3D etc.
+     */ let VisualElement = class VisualElement {
+        /**
+         * This method takes React props and returns found MotionValues. For example, HTML
+         * MotionValues will be found within the style prop, whereas for Three.js within attribute arrays.
+         *
+         * This isn't an abstract method as it needs calling in the constructor, but it is
+         * intended to be one.
+         */ scrapeMotionValuesFromProps(_props, _prevProps, _visualElement) {
+            return {};
+        }
+        mount(instance) {
+            var ref;
+            this.current = instance;
+            visualElementStore.set(instance, this);
+            if (this.projection && !this.projection.instance) {
+                this.projection.mount(instance);
+            }
+            if (this.parent && this.isVariantNode && !this.isControllingVariants) {
+                this.removeFromVariantTree = this.parent.addVariantChild(this);
+            }
+            this.values.forEach((value, key)=>this.bindToMotionValue(key, value)
+            );
+            if (!hasReducedMotionListener.current) {
+                initPrefersReducedMotion();
+            }
+            this.shouldReduceMotion = this.reducedMotionConfig === "never" ? false : this.reducedMotionConfig === "always" ? true : prefersReducedMotion.current;
+            if (process.env.NODE_ENV !== "production") {
+                warnOnce(this.shouldReduceMotion !== true, "You have Reduced Motion enabled on your device. Animations may not appear as expected.", "reduced-motion-disabled");
+            }
+            (ref = this.parent) === null || ref === void 0 ? void 0 : ref.addChild(this);
+            this.update(this.props, this.presenceContext);
+        }
+        unmount() {
+            var ref;
+            this.projection && this.projection.unmount();
+            cancelFrame(this.notifyUpdate);
+            cancelFrame(this.render);
+            this.valueSubscriptions.forEach((remove)=>remove()
+            );
+            this.valueSubscriptions.clear();
+            this.removeFromVariantTree && this.removeFromVariantTree();
+            (ref = this.parent) === null || ref === void 0 ? void 0 : ref.removeChild(this);
+            for(const key in this.events){
+                this.events[key].clear();
+            }
+            for(const key1 in this.features){
+                const feature = this.features[key1];
+                if (feature) {
+                    feature.unmount();
+                    feature.isMounted = false;
+                }
+            }
+            this.current = null;
+        }
+        addChild(child) {
+            this.children.add(child);
+            var _enteringChildren;
+            (_enteringChildren = this.enteringChildren) !== null && _enteringChildren !== void 0 ? _enteringChildren : this.enteringChildren = new Set();
+            this.enteringChildren.add(child);
+        }
+        removeChild(child) {
+            this.children.delete(child);
+            this.enteringChildren && this.enteringChildren.delete(child);
+        }
+        bindToMotionValue(key, value) {
+            if (this.valueSubscriptions.has(key)) {
+                this.valueSubscriptions.get(key)();
+            }
+            const valueIsTransform = transformProps.has(key);
+            if (valueIsTransform && this.onBindTransform) {
+                this.onBindTransform();
+            }
+            const removeOnChange = value.on("change", (latestValue)=>{
+                this.latestValues[key] = latestValue;
+                this.props.onUpdate && frame.preRender(this.notifyUpdate);
+                if (valueIsTransform && this.projection) {
+                    this.projection.isTransformDirty = true;
+                }
+                this.scheduleRender();
+            });
+            let removeSyncCheck;
+            if (window.MotionCheckAppearSync) {
+                removeSyncCheck = window.MotionCheckAppearSync(this, key, value);
+            }
+            this.valueSubscriptions.set(key, ()=>{
+                removeOnChange();
+                if (removeSyncCheck) removeSyncCheck();
+                if (value.owner) value.stop();
+            });
+        }
+        sortNodePosition(other) {
+            /**
+             * If these nodes aren't even of the same type we can't compare their depth.
+             */ if (!this.current || !this.sortInstanceNodePosition || this.type !== other.type) {
+                return 0;
+            }
+            return this.sortInstanceNodePosition(this.current, other.current);
+        }
+        updateFeatures() {
+            let key = "animation";
+            for(key in featureDefinitions){
+                const featureDefinition = featureDefinitions[key];
+                if (!featureDefinition) continue;
+                const { isEnabled , Feature: FeatureConstructor  } = featureDefinition;
+                /**
+                 * If this feature is enabled but not active, make a new instance.
+                 */ if (!this.features[key] && FeatureConstructor && isEnabled(this.props)) {
+                    this.features[key] = new FeatureConstructor(this);
+                }
+                /**
+                 * If we have a feature, mount or update it.
+                 */ if (this.features[key]) {
+                    const feature = this.features[key];
+                    if (feature.isMounted) {
+                        feature.update();
+                    } else {
+                        feature.mount();
+                        feature.isMounted = true;
+                    }
+                }
+            }
+        }
+        triggerBuild() {
+            this.build(this.renderState, this.latestValues, this.props);
+        }
+        /**
+         * Measure the current viewport box with or without transforms.
+         * Only measures axis-aligned boxes, rotate and skew must be manually
+         * removed with a re-render to work.
+         */ measureViewportBox() {
+            return this.current ? this.measureInstanceViewportBox(this.current, this.props) : createBox();
+        }
+        getStaticValue(key) {
+            return this.latestValues[key];
+        }
+        setStaticValue(key, value) {
+            this.latestValues[key] = value;
+        }
+        /**
+         * Update the provided props. Ensure any newly-added motion values are
+         * added to our map, old ones removed, and listeners updated.
+         */ update(props, presenceContext) {
+            if (props.transformTemplate || this.props.transformTemplate) {
+                this.scheduleRender();
+            }
+            this.prevProps = this.props;
+            this.props = props;
+            this.prevPresenceContext = this.presenceContext;
+            this.presenceContext = presenceContext;
+            /**
+             * Update prop event handlers ie onAnimationStart, onAnimationComplete
+             */ for(let i = 0; i < propEventHandlers.length; i++){
+                const key = propEventHandlers[i];
+                if (this.propEventSubscriptions[key]) {
+                    this.propEventSubscriptions[key]();
+                    delete this.propEventSubscriptions[key];
+                }
+                const listenerName = "on" + key;
+                const listener = props[listenerName];
+                if (listener) {
+                    this.propEventSubscriptions[key] = this.on(key, listener);
+                }
+            }
+            this.prevMotionValues = updateMotionValuesFromProps(this, this.scrapeMotionValuesFromProps(props, this.prevProps, this), this.prevMotionValues);
+            if (this.handleChildMotionValue) {
+                this.handleChildMotionValue();
+            }
+        }
+        getProps() {
+            return this.props;
+        }
+        /**
+         * Returns the variant definition with a given name.
+         */ getVariant(name) {
+            return this.props.variants ? this.props.variants[name] : undefined;
+        }
+        /**
+         * Returns the defined default transition on this component.
+         */ getDefaultTransition() {
+            return this.props.transition;
+        }
+        getTransformPagePoint() {
+            return this.props.transformPagePoint;
+        }
+        getClosestVariantNode() {
+            return this.isVariantNode ? this : this.parent ? this.parent.getClosestVariantNode() : undefined;
+        }
+        /**
+         * Add a child visual element to our set of children.
+         */ addVariantChild(child) {
+            const closestVariantNode = this.getClosestVariantNode();
+            if (closestVariantNode) {
+                closestVariantNode.variantChildren && closestVariantNode.variantChildren.add(child);
+                return ()=>closestVariantNode.variantChildren.delete(child)
+                ;
+            }
+        }
+        /**
+         * Add a motion value and bind it to this visual element.
+         */ addValue(key, value) {
+            // Remove existing value if it exists
+            const existingValue = this.values.get(key);
+            if (value !== existingValue) {
+                if (existingValue) this.removeValue(key);
+                this.bindToMotionValue(key, value);
+                this.values.set(key, value);
+                this.latestValues[key] = value.get();
+            }
+        }
+        /**
+         * Remove a motion value and unbind any active subscriptions.
+         */ removeValue(key) {
+            this.values.delete(key);
+            const unsubscribe = this.valueSubscriptions.get(key);
+            if (unsubscribe) {
+                unsubscribe();
+                this.valueSubscriptions.delete(key);
+            }
+            delete this.latestValues[key];
+            this.removeValueFromRenderState(key, this.renderState);
+        }
+        /**
+         * Check whether we have a motion value for this key
+         */ hasValue(key) {
+            return this.values.has(key);
+        }
+        getValue(key, defaultValue) {
+            if (this.props.values && this.props.values[key]) {
+                return this.props.values[key];
+            }
+            let value = this.values.get(key);
+            if (value === undefined && defaultValue !== undefined) {
+                value = motionValue(defaultValue === null ? undefined : defaultValue, {
+                    owner: this
+                });
+                this.addValue(key, value);
+            }
+            return value;
+        }
+        /**
+         * If we're trying to animate to a previously unencountered value,
+         * we need to check for it in our state and as a last resort read it
+         * directly from the instance (which might have performance implications).
+         */ readValue(key, target) {
+            var ref;
+            let value = this.latestValues[key] !== undefined || !this.current ? this.latestValues[key] : (ref = this.getBaseTargetFromProps(this.props, key)) !== null && ref !== void 0 ? ref : this.readValueFromInstance(this.current, key, this.options);
+            if (value !== undefined && value !== null) {
+                if (typeof value === "string" && (isNumericalString(value) || isZeroValueString(value))) {
+                    // If this is a number read as a string, ie "0" or "200", convert it to a number
+                    value = parseFloat(value);
+                } else if (!findValueType(value) && complex.test(target)) {
+                    value = getAnimatableNone(key, target);
+                }
+                this.setBaseTarget(key, isMotionValue(value) ? value.get() : value);
+            }
+            return isMotionValue(value) ? value.get() : value;
+        }
+        /**
+         * Set the base target to later animate back to. This is currently
+         * only hydrated on creation and when we first read a value.
+         */ setBaseTarget(key, value) {
+            this.baseTarget[key] = value;
+        }
+        /**
+         * Find the base target for a value thats been removed from all animation
+         * props.
+         */ getBaseTarget(key) {
+            const { initial  } = this.props;
+            let valueFromInitial;
+            if (typeof initial === "string" || typeof initial === "object") {
+                var ref;
+                const variant = resolveVariantFromProps(this.props, initial, (ref = this.presenceContext) === null || ref === void 0 ? void 0 : ref.custom);
+                if (variant) {
+                    valueFromInitial = variant[key];
+                }
+            }
+            /**
+             * If this value still exists in the current initial variant, read that.
+             */ if (initial && valueFromInitial !== undefined) {
+                return valueFromInitial;
+            }
+            /**
+             * Alternatively, if this VisualElement config has defined a getBaseTarget
+             * so we can read the value from an alternative source, try that.
+             */ const target = this.getBaseTargetFromProps(this.props, key);
+            if (target !== undefined && !isMotionValue(target)) return target;
+            /**
+             * If the value was initially defined on initial, but it doesn't any more,
+             * return undefined. Otherwise return the value as initially read from the DOM.
+             */ return this.initialValues[key] !== undefined && valueFromInitial === undefined ? undefined : this.baseTarget[key];
+        }
+        on(eventName, callback) {
+            if (!this.events[eventName]) {
+                this.events[eventName] = new SubscriptionManager();
+            }
+            return this.events[eventName].add(callback);
+        }
+        notify(eventName, ...args) {
+            if (this.events[eventName]) {
+                this.events[eventName].notify(...args);
+            }
+        }
+        scheduleRenderMicrotask() {
+            microtask.render(this.render);
+        }
+        constructor({ parent , props , presenceContext , reducedMotionConfig , blockInitialAnimation , visualState ,  }, options = {}){
+            /**
+             * A reference to the current underlying Instance, e.g. a HTMLElement
+             * or Three.Mesh etc.
+             */ this.current = null;
+            /**
+             * A set containing references to this VisualElement's children.
+             */ this.children = new Set();
+            /**
+             * Determine what role this visual element should take in the variant tree.
+             */ this.isVariantNode = false;
+            this.isControllingVariants = false;
+            /**
+             * Decides whether this VisualElement should animate in reduced motion
+             * mode.
+             *
+             * TODO: This is currently set on every individual VisualElement but feels
+             * like it could be set globally.
+             */ this.shouldReduceMotion = null;
+            /**
+             * A map of all motion values attached to this visual element. Motion
+             * values are source of truth for any given animated value. A motion
+             * value might be provided externally by the component via props.
+             */ this.values = new Map();
+            this.KeyframeResolver = KeyframeResolver;
+            /**
+             * Cleanup functions for active features (hover/tap/exit etc)
+             */ this.features = {};
+            /**
+             * A map of every subscription that binds the provided or generated
+             * motion values onChange listeners to this visual element.
+             */ this.valueSubscriptions = new Map();
+            /**
+             * A reference to the previously-provided motion values as returned
+             * from scrapeMotionValuesFromProps. We use the keys in here to determine
+             * if any motion values need to be removed after props are updated.
+             */ this.prevMotionValues = {};
+            /**
+             * An object containing a SubscriptionManager for each active event.
+             */ this.events = {};
+            /**
+             * An object containing an unsubscribe function for each prop event subscription.
+             * For example, every "Update" event can have multiple subscribers via
+             * VisualElement.on(), but only one of those can be defined via the onUpdate prop.
+             */ this.propEventSubscriptions = {};
+            this.notifyUpdate = ()=>this.notify("Update", this.latestValues)
+            ;
+            this.render = ()=>{
+                if (!this.current) return;
+                this.triggerBuild();
+                this.renderInstance(this.current, this.renderState, this.props.style, this.projection);
+            };
+            this.renderScheduledAt = 0.0;
+            this.scheduleRender = ()=>{
+                const now = time.now();
+                if (this.renderScheduledAt < now) {
+                    this.renderScheduledAt = now;
+                    frame.render(this.render, false, true);
+                }
+            };
+            const { latestValues , renderState  } = visualState;
+            this.latestValues = latestValues;
+            this.baseTarget = {
+                ...latestValues
+            };
+            this.initialValues = props.initial ? {
+                ...latestValues
+            } : {};
+            this.renderState = renderState;
+            this.parent = parent;
+            this.props = props;
+            this.presenceContext = presenceContext;
+            this.depth = parent ? parent.depth + 1 : 0;
+            this.reducedMotionConfig = reducedMotionConfig;
+            this.options = options;
+            this.blockInitialAnimation = Boolean(blockInitialAnimation);
+            this.isControllingVariants = isControllingVariants(props);
+            this.isVariantNode = isVariantNode(props);
+            if (this.isVariantNode) {
+                this.variantChildren = new Set();
+            }
+            this.manuallyAnimateOnMount = Boolean(parent && parent.current);
+            /**
+             * Any motion values that are provided to the element when created
+             * aren't yet bound to the element, as this would technically be impure.
+             * However, we iterate through the motion values and set them to the
+             * initial values for this component.
+             *
+             * TODO: This is impure and we should look at changing this to run on mount.
+             * Doing so will break some tests but this isn't necessarily a breaking change,
+             * more a reflection of the test.
+             */ const { willChange , ...initialMotionValues } = this.scrapeMotionValuesFromProps(props, {}, this);
+            for(const key in initialMotionValues){
+                const value = initialMotionValues[key];
+                if (latestValues[key] !== undefined && isMotionValue(value)) {
+                    value.set(latestValues[key]);
+                }
+            }
+        }
+    };
+
+    let DOMVisualElement = class DOMVisualElement extends VisualElement {
+        sortInstanceNodePosition(a, b) {
+            /**
+             * compareDocumentPosition returns a bitmask, by using the bitwise &
+             * we're returning true if 2 in that bitmask is set to true. 2 is set
+             * to true if b preceeds a.
+             */ return a.compareDocumentPosition(b) & 2 ? 1 : -1;
+        }
+        getBaseTargetFromProps(props, key) {
+            return props.style ? props.style[key] : undefined;
+        }
+        removeValueFromRenderState(key, { vars , style  }) {
+            delete vars[key];
+            delete style[key];
+        }
+        handleChildMotionValue() {
+            if (this.childSubscription) {
+                this.childSubscription();
+                delete this.childSubscription;
+            }
+            const { children  } = this.props;
+            if (isMotionValue(children)) {
+                this.childSubscription = children.on("change", (latest)=>{
+                    if (this.current) {
+                        this.current.textContent = `${latest}`;
+                    }
+                });
+            }
+        }
+        constructor(){
+            super(...arguments);
+            this.KeyframeResolver = DOMKeyframesResolver;
+        }
+    };
+
+    const translateAlias = {
+        x: "translateX",
+        y: "translateY",
+        z: "translateZ",
+        transformPerspective: "perspective"
+    };
+    const numTransforms = transformPropOrder.length;
+    /**
+     * Build a CSS transform style from individual x/y/scale etc properties.
+     *
+     * This outputs with a default order of transforms/scales/rotations, this can be customised by
+     * providing a transformTemplate function.
+     */ function buildTransform(latestValues, transform, transformTemplate) {
+        // The transform string we're going to build into.
+        let transformString = "";
+        let transformIsDefault = true;
+        /**
+         * Loop over all possible transforms in order, adding the ones that
+         * are present to the transform string.
+         */ for(let i = 0; i < numTransforms; i++){
+            const key = transformPropOrder[i];
+            const value = latestValues[key];
+            if (value === undefined) continue;
+            let valueIsDefault = true;
+            if (typeof value === "number") {
+                valueIsDefault = value === (key.startsWith("scale") ? 1 : 0);
+            } else {
+                valueIsDefault = parseFloat(value) === 0;
+            }
+            if (!valueIsDefault || transformTemplate) {
+                const valueAsType = getValueAsType(value, numberValueTypes[key]);
+                if (!valueIsDefault) {
+                    transformIsDefault = false;
+                    const transformName = translateAlias[key] || key;
+                    transformString += `${transformName}(${valueAsType}) `;
+                }
+                if (transformTemplate) {
+                    transform[key] = valueAsType;
+                }
+            }
+        }
+        transformString = transformString.trim();
+        // If we have a custom `transform` template, pass our transform values and
+        // generated transformString to that before returning
+        if (transformTemplate) {
+            transformString = transformTemplate(transform, transformIsDefault ? "" : transformString);
+        } else if (transformIsDefault) {
+            transformString = "none";
+        }
+        return transformString;
+    }
+
+    function buildHTMLStyles(state, latestValues, transformTemplate) {
+        const { style , vars , transformOrigin  } = state;
+        // Track whether we encounter any transform or transformOrigin values.
+        let hasTransform = false;
+        let hasTransformOrigin = false;
+        /**
+         * Loop over all our latest animated values and decide whether to handle them
+         * as a style or CSS variable.
+         *
+         * Transforms and transform origins are kept separately for further processing.
+         */ for(const key in latestValues){
+            const value = latestValues[key];
+            if (transformProps.has(key)) {
+                // If this is a transform, flag to enable further transform processing
+                hasTransform = true;
+                continue;
+            } else if (isCSSVariableName(key)) {
+                vars[key] = value;
+                continue;
+            } else {
+                // Convert the value to its default value type, ie 0 -> "0px"
+                const valueAsType = getValueAsType(value, numberValueTypes[key]);
+                if (key.startsWith("origin")) {
+                    // If this is a transform origin, flag and enable further transform-origin processing
+                    hasTransformOrigin = true;
+                    transformOrigin[key] = valueAsType;
+                } else {
+                    style[key] = valueAsType;
+                }
+            }
+        }
+        if (!latestValues.transform) {
+            if (hasTransform || transformTemplate) {
+                style.transform = buildTransform(latestValues, state.transform, transformTemplate);
+            } else if (style.transform) {
+                /**
+                 * If we have previously created a transform but currently don't have any,
+                 * reset transform style to none.
+                 */ style.transform = "none";
+            }
+        }
+        /**
+         * Build a transformOrigin style. Uses the same defaults as the browser for
+         * undefined origins.
+         */ if (hasTransformOrigin) {
+            const { originX ="50%" , originY ="50%" , originZ =0 ,  } = transformOrigin;
+            style.transformOrigin = `${originX} ${originY} ${originZ}`;
+        }
+    }
+
+    function renderHTML(element, { style , vars  }, styleProp, projection) {
+        const elementStyle = element.style;
+        let key;
+        for(key in style){
+            // CSSStyleDeclaration has [index: number]: string; in the types, so we use that as key type.
+            elementStyle[key] = style[key];
+        }
+        // Write projection styles directly to element style
+        projection === null || projection === void 0 ? void 0 : projection.applyProjectionStyles(elementStyle, styleProp);
+        for(key in vars){
+            // Loop over any CSS variables and assign those.
+            // They can only be assigned using `setProperty`.
+            elementStyle.setProperty(key, vars[key]);
+        }
+    }
+
+    const scaleCorrectors = {};
+
+    function isForcedMotionValue(key, { layout , layoutId  }) {
+        return transformProps.has(key) || key.startsWith("origin") || (layout || layoutId !== undefined) && (!!scaleCorrectors[key] || key === "opacity");
+    }
+
+    function scrapeMotionValuesFromProps$1(props, prevProps, visualElement) {
+        const { style  } = props;
+        const newValues = {};
+        for(const key in style){
+            var ref;
+            if (isMotionValue(style[key]) || prevProps.style && isMotionValue(prevProps.style[key]) || isForcedMotionValue(key, props) || ((ref = visualElement === null || visualElement === void 0 ? void 0 : visualElement.getValue(key)) === null || ref === void 0 ? void 0 : ref.liveStyle) !== undefined) {
+                newValues[key] = style[key];
+            }
+        }
+        return newValues;
+    }
+
+    function getComputedStyle$1(element) {
+        return window.getComputedStyle(element);
+    }
+    let HTMLVisualElement = class HTMLVisualElement extends DOMVisualElement {
+        readValueFromInstance(instance, key) {
+            if (transformProps.has(key)) {
+                var ref;
+                return ((ref = this.projection) === null || ref === void 0 ? void 0 : ref.isProjecting) ? defaultTransformValue(key) : readTransformValue(instance, key);
+            } else {
+                const computedStyle = getComputedStyle$1(instance);
+                const value = (isCSSVariableName(key) ? computedStyle.getPropertyValue(key) : computedStyle[key]) || 0;
+                return typeof value === "string" ? value.trim() : value;
+            }
+        }
+        measureInstanceViewportBox(instance, { transformPagePoint  }) {
+            return measureViewportBox(instance, transformPagePoint);
+        }
+        build(renderState, latestValues, props) {
+            buildHTMLStyles(renderState, latestValues, props.transformTemplate);
+        }
+        scrapeMotionValuesFromProps(props, prevProps, visualElement) {
+            return scrapeMotionValuesFromProps$1(props, prevProps, visualElement);
+        }
+        constructor(){
+            super(...arguments);
+            this.type = "html";
+            this.renderInstance = renderHTML;
+        }
+    };
+
+    function isObjectKey(key, object) {
+        return key in object;
+    }
+    let ObjectVisualElement = class ObjectVisualElement extends VisualElement {
+        readValueFromInstance(instance, key) {
+            if (isObjectKey(key, instance)) {
+                const value = instance[key];
+                if (typeof value === "string" || typeof value === "number") {
+                    return value;
+                }
+            }
+            return undefined;
+        }
+        getBaseTargetFromProps() {
+            return undefined;
+        }
+        removeValueFromRenderState(key, renderState) {
+            delete renderState.output[key];
+        }
+        measureInstanceViewportBox() {
+            return createBox();
+        }
+        build(renderState, latestValues) {
+            Object.assign(renderState.output, latestValues);
+        }
+        renderInstance(instance, { output  }) {
+            Object.assign(instance, output);
+        }
+        sortInstanceNodePosition() {
+            return 0;
+        }
+        constructor(){
+            super(...arguments);
+            this.type = "object";
+        }
+    };
+
+    const dashKeys = {
+        offset: "stroke-dashoffset",
+        array: "stroke-dasharray"
+    };
+    const camelKeys = {
+        offset: "strokeDashoffset",
+        array: "strokeDasharray"
+    };
+    /**
+     * Build SVG path properties. Uses the path's measured length to convert
+     * our custom pathLength, pathSpacing and pathOffset into stroke-dashoffset
+     * and stroke-dasharray attributes.
+     *
+     * This function is mutative to reduce per-frame GC.
+     */ function buildSVGPath(attrs, length, spacing = 1, offset = 0, useDashCase = true) {
+        // Normalise path length by setting SVG attribute pathLength to 1
+        attrs.pathLength = 1;
+        // We use dash case when setting attributes directly to the DOM node and camel case
+        // when defining props on a React component.
+        const keys = useDashCase ? dashKeys : camelKeys;
+        // Build the dash offset
+        attrs[keys.offset] = px.transform(-offset);
+        // Build the dash array
+        const pathLength = px.transform(length);
+        const pathSpacing = px.transform(spacing);
+        attrs[keys.array] = `${pathLength} ${pathSpacing}`;
+    }
+
+    /**
+     * Build SVG visual attributes, like cx and style.transform
+     */ function buildSVGAttrs(state, { attrX , attrY , attrScale , pathLength , pathSpacing =1 , pathOffset =0 , // This is object creation, which we try to avoid per-frame.
+    ...latest }, isSVGTag, transformTemplate, styleProp) {
+        buildHTMLStyles(state, latest, transformTemplate);
+        /**
+         * For svg tags we just want to make sure viewBox is animatable and treat all the styles
+         * as normal HTML tags.
+         */ if (isSVGTag) {
+            if (state.style.viewBox) {
+                state.attrs.viewBox = state.style.viewBox;
+            }
+            return;
+        }
+        state.attrs = state.style;
+        state.style = {};
+        const { attrs , style  } = state;
+        /**
+         * However, we apply transforms as CSS transforms.
+         * So if we detect a transform, transformOrigin we take it from attrs and copy it into style.
+         */ if (attrs.transform) {
+            style.transform = attrs.transform;
+            delete attrs.transform;
+        }
+        if (style.transform || attrs.transformOrigin) {
+            var _transformOrigin;
+            style.transformOrigin = (_transformOrigin = attrs.transformOrigin) !== null && _transformOrigin !== void 0 ? _transformOrigin : "50% 50%";
+            delete attrs.transformOrigin;
+        }
+        if (style.transform) {
+            var ref;
+            /**
+             * SVG's element transform-origin uses its own median as a reference.
+             * Therefore, transformBox becomes a fill-box
+             */ style.transformBox = (ref = styleProp === null || styleProp === void 0 ? void 0 : styleProp.transformBox) !== null && ref !== void 0 ? ref : "fill-box";
+            delete attrs.transformBox;
+        }
+        // Render attrX/attrY/attrScale as attributes
+        if (attrX !== undefined) attrs.x = attrX;
+        if (attrY !== undefined) attrs.y = attrY;
+        if (attrScale !== undefined) attrs.scale = attrScale;
+        // Build SVG path if one has been defined
+        if (pathLength !== undefined) {
+            buildSVGPath(attrs, pathLength, pathSpacing, pathOffset, false);
+        }
+    }
+
+    /**
+     * A set of attribute names that are always read/written as camel case.
+     */ const camelCaseAttributes = new Set([
+        "baseFrequency",
+        "diffuseConstant",
+        "kernelMatrix",
+        "kernelUnitLength",
+        "keySplines",
+        "keyTimes",
+        "limitingConeAngle",
+        "markerHeight",
+        "markerWidth",
+        "numOctaves",
+        "targetX",
+        "targetY",
+        "surfaceScale",
+        "specularConstant",
+        "specularExponent",
+        "stdDeviation",
+        "tableValues",
+        "viewBox",
+        "gradientTransform",
+        "pathLength",
+        "startOffset",
+        "textLength",
+        "lengthAdjust", 
+    ]);
+
+    const isSVGTag = (tag)=>typeof tag === "string" && tag.toLowerCase() === "svg"
+    ;
+
+    function renderSVG(element, renderState, _styleProp, projection) {
+        renderHTML(element, renderState, undefined, projection);
+        for(const key in renderState.attrs){
+            element.setAttribute(!camelCaseAttributes.has(key) ? camelToDash(key) : key, renderState.attrs[key]);
+        }
+    }
+
+    function scrapeMotionValuesFromProps(props, prevProps, visualElement) {
+        const newValues = scrapeMotionValuesFromProps$1(props, prevProps, visualElement);
+        for(const key in props){
+            if (isMotionValue(props[key]) || isMotionValue(prevProps[key])) {
+                const targetKey = transformPropOrder.indexOf(key) !== -1 ? "attr" + key.charAt(0).toUpperCase() + key.substring(1) : key;
+                newValues[targetKey] = props[key];
+            }
+        }
+        return newValues;
+    }
+
+    let SVGVisualElement = class SVGVisualElement extends DOMVisualElement {
+        getBaseTargetFromProps(props, key) {
+            return props[key];
+        }
+        readValueFromInstance(instance, key) {
+            if (transformProps.has(key)) {
+                const defaultType = getDefaultValueType(key);
+                return defaultType ? defaultType.default || 0 : 0;
+            }
+            key = !camelCaseAttributes.has(key) ? camelToDash(key) : key;
+            return instance.getAttribute(key);
+        }
+        scrapeMotionValuesFromProps(props, prevProps, visualElement) {
+            return scrapeMotionValuesFromProps(props, prevProps, visualElement);
+        }
+        build(renderState, latestValues, props) {
+            buildSVGAttrs(renderState, latestValues, this.isSVGTag, props.transformTemplate, props.style);
+        }
+        renderInstance(instance, renderState, styleProp, projection) {
+            renderSVG(instance, renderState, styleProp, projection);
+        }
+        mount(instance) {
+            this.isSVGTag = isSVGTag(instance.tagName);
+            super.mount(instance);
+        }
+        constructor(){
+            super(...arguments);
+            this.type = "svg";
+            this.isSVGTag = false;
+            this.measureInstanceViewportBox = createBox;
+        }
+    };
+
+    function createDOMVisualElement(element) {
+        const options = {
+            presenceContext: null,
+            props: {},
+            visualState: {
+                renderState: {
+                    transform: {},
+                    transformOrigin: {},
+                    style: {},
+                    vars: {},
+                    attrs: {}
+                },
+                latestValues: {}
+            }
+        };
+        const node = isSVGElement(element) && !isSVGSVGElement(element) ? new SVGVisualElement(options) : new HTMLVisualElement(options);
+        node.mount(element);
+        visualElementStore.set(element, node);
+    }
+    function createObjectVisualElement(subject) {
+        const options = {
+            presenceContext: null,
+            props: {},
+            visualState: {
+                renderState: {
+                    output: {}
+                },
+                latestValues: {}
+            }
+        };
+        const node = new ObjectVisualElement(options);
+        node.mount(subject);
+        visualElementStore.set(subject, node);
+    }
+
+    function animateSingleValue(value, keyframes, options) {
+        const motionValue$1 = isMotionValue(value) ? value : motionValue(value);
+        motionValue$1.start(animateMotionValue("", motionValue$1, keyframes, options));
+        return motionValue$1.animation;
+    }
+
+    function isSingleValue(subject, keyframes) {
+        return isMotionValue(subject) || typeof subject === "number" || typeof subject === "string" && !isDOMKeyframes(keyframes);
+    }
+    /**
+     * Implementation
+     */ function animateSubject(subject, keyframes, options, scope) {
+        const animations = [];
+        if (isSingleValue(subject, keyframes)) {
+            animations.push(animateSingleValue(subject, isDOMKeyframes(keyframes) ? keyframes.default || keyframes : keyframes, options ? options.default || options : options));
+        } else {
+            const subjects = resolveSubjects(subject, keyframes, scope);
+            const numSubjects = subjects.length;
+            invariant(Boolean(numSubjects), "No valid elements provided.", "no-valid-elements");
+            for(let i = 0; i < numSubjects; i++){
+                const thisSubject = subjects[i];
+                invariant(thisSubject !== null, "You're trying to perform an animation on null. Ensure that selectors are correctly finding elements and refs are correctly hydrated.", "animate-null");
+                const createVisualElement = thisSubject instanceof Element ? createDOMVisualElement : createObjectVisualElement;
+                if (!visualElementStore.has(thisSubject)) {
+                    createVisualElement(thisSubject);
+                }
+                const visualElement = visualElementStore.get(thisSubject);
+                const transition = {
+                    ...options
+                };
+                /**
+                 * Resolve stagger function if provided.
+                 */ if ("delay" in transition && typeof transition.delay === "function") {
+                    transition.delay = transition.delay(i, numSubjects);
+                }
+                animations.push(...animateTarget(visualElement, {
+                    ...keyframes,
+                    transition
+                }, {}));
+            }
+        }
+        return animations;
+    }
+
+    function animateSequence(sequence, options, scope) {
+        const animations = [];
+        const animationDefinitions = createAnimationsFromSequence(sequence, options, scope, {
+            spring
+        });
+        animationDefinitions.forEach(({ keyframes , transition  }, subject)=>{
+            animations.push(...animateSubject(subject, keyframes, transition));
+        });
+        return animations;
+    }
+
+    function isSequence(value) {
+        return Array.isArray(value) && value.some(Array.isArray);
+    }
+    /**
+     * Creates an animation function that is optionally scoped
+     * to a specific element.
+     */ function createScopedAnimate(scope) {
+        /**
+         * Implementation
+         */ function scopedAnimate(subjectOrSequence, optionsOrKeyframes, options) {
+            let animations = [];
+            if (isSequence(subjectOrSequence)) {
+                animations = animateSequence(subjectOrSequence, optionsOrKeyframes, scope);
+            } else {
+                animations = animateSubject(subjectOrSequence, optionsOrKeyframes, options, scope);
+            }
+            const animation = new GroupAnimationWithThen(animations);
+            return animation;
+        }
+        return scopedAnimate;
+    }
+    const animate = createScopedAnimate();
 
     /**
      * A time in milliseconds, beyond which we consider the scroll velocity to be 0.
@@ -17850,8 +22541,8 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         const { length , position  } = keys[axisName];
         const prev = axis.current;
         const prevTime = info.time;
-        axis.current = element["scroll" + position];
-        axis.scrollLength = element["scroll" + length] - element["client" + length];
+        axis.current = element[`scroll${position}`];
+        axis.scrollLength = element[`scroll${length}`] - element[`client${length}`];
         axis.offset.length = 0;
         axis.offset[0] = 0;
         axis.offset[1] = axis.scrollLength;
@@ -17866,28 +22557,120 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
 
     function calcInset(element, container) {
-        let inset = {
+        const inset = {
             x: 0,
             y: 0
         };
         let current = element;
         while(current && current !== container){
-            if (current instanceof HTMLElement) {
+            if (isHTMLElement(current)) {
                 inset.x += current.offsetLeft;
                 inset.y += current.offsetTop;
                 current = current.offsetParent;
-            } else if (current instanceof SVGGraphicsElement && "getBBox" in current) {
-                const { top , left  } = current.getBBox();
-                inset.x += left;
-                inset.y += top;
+            } else if (current.tagName === "svg") {
                 /**
-                 * Assign the next parent element as the <svg /> tag.
-                 */ while(current && current.tagName !== "svg"){
-                    current = current.parentNode;
+                 * This isn't an ideal approach to measuring the offset of <svg /> tags.
+                 * It would be preferable, given they behave like HTMLElements in most ways
+                 * to use offsetLeft/Top. But these don't exist on <svg />. Likewise we
+                 * can't use .getBBox() like most SVG elements as these provide the offset
+                 * relative to the SVG itself, which for <svg /> is usually 0x0.
+                 */ const svgBoundingBox = current.getBoundingClientRect();
+                current = current.parentElement;
+                const parentBoundingBox = current.getBoundingClientRect();
+                inset.x += svgBoundingBox.left - parentBoundingBox.left;
+                inset.y += svgBoundingBox.top - parentBoundingBox.top;
+            } else if (current instanceof SVGGraphicsElement) {
+                const { x , y  } = current.getBBox();
+                inset.x += x;
+                inset.y += y;
+                let svg = null;
+                let parent = current.parentNode;
+                while(!svg){
+                    if (parent.tagName === "svg") {
+                        svg = parent;
+                    }
+                    parent = current.parentNode;
                 }
+                current = svg;
+            } else {
+                break;
             }
         }
         return inset;
+    }
+
+    const namedEdges = {
+        start: 0,
+        center: 0.5,
+        end: 1
+    };
+    function resolveEdge(edge, length, inset = 0) {
+        let delta = 0;
+        /**
+         * If we have this edge defined as a preset, replace the definition
+         * with the numerical value.
+         */ if (edge in namedEdges) {
+            edge = namedEdges[edge];
+        }
+        /**
+         * Handle unit values
+         */ if (typeof edge === "string") {
+            const asNumber = parseFloat(edge);
+            if (edge.endsWith("px")) {
+                delta = asNumber;
+            } else if (edge.endsWith("%")) {
+                edge = asNumber / 100;
+            } else if (edge.endsWith("vw")) {
+                delta = asNumber / 100 * document.documentElement.clientWidth;
+            } else if (edge.endsWith("vh")) {
+                delta = asNumber / 100 * document.documentElement.clientHeight;
+            } else {
+                edge = asNumber;
+            }
+        }
+        /**
+         * If the edge is defined as a number, handle as a progress value.
+         */ if (typeof edge === "number") {
+            delta = length * edge;
+        }
+        return inset + delta;
+    }
+
+    const defaultOffset = [
+        0,
+        0
+    ];
+    function resolveOffset(offset, containerLength, targetLength, targetInset) {
+        let offsetDefinition = Array.isArray(offset) ? offset : defaultOffset;
+        let targetPoint = 0;
+        let containerPoint = 0;
+        if (typeof offset === "number") {
+            /**
+             * If we're provided offset: [0, 0.5, 1] then each number x should become
+             * [x, x], so we default to the behaviour of mapping 0 => 0 of both target
+             * and container etc.
+             */ offsetDefinition = [
+                offset,
+                offset
+            ];
+        } else if (typeof offset === "string") {
+            offset = offset.trim();
+            if (offset.includes(" ")) {
+                offsetDefinition = offset.split(" ");
+            } else {
+                /**
+                 * If we're provided a definition like "100px" then we want to apply
+                 * that only to the top of the target point, leaving the container at 0.
+                 * Whereas a named offset like "end" should be applied to both.
+                 */ offsetDefinition = [
+                    offset,
+                    namedEdges[offset] ? offset : `0`
+                ];
+            }
+        }
+        targetPoint = resolveEdge(offsetDefinition[0], targetLength, targetInset);
+        containerPoint = resolveEdge(offsetDefinition[1], containerLength);
+        return targetPoint - containerPoint;
     }
 
     const ScrollOffset = {
@@ -17933,86 +22716,18 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         ]
     };
 
-    const namedEdges = {
-        start: 0,
-        center: 0.5,
-        end: 1
-    };
-    function resolveEdge(edge, length, inset = 0) {
-        let delta = 0;
-        /**
-         * If we have this edge defined as a preset, replace the definition
-         * with the numerical value.
-         */ if (namedEdges[edge] !== undefined) {
-            edge = namedEdges[edge];
-        }
-        /**
-         * Handle unit values
-         */ if (isString(edge)) {
-            const asNumber = parseFloat(edge);
-            if (edge.endsWith("px")) {
-                delta = asNumber;
-            } else if (edge.endsWith("%")) {
-                edge = asNumber / 100;
-            } else if (edge.endsWith("vw")) {
-                delta = asNumber / 100 * document.documentElement.clientWidth;
-            } else if (edge.endsWith("vh")) {
-                delta = asNumber / 100 * document.documentElement.clientHeight;
-            } else {
-                edge = asNumber;
-            }
-        }
-        /**
-         * If the edge is defined as a number, handle as a progress value.
-         */ if (isNumber(edge)) {
-            delta = length * edge;
-        }
-        return inset + delta;
-    }
-
-    const defaultOffset = [
-        0,
-        0
-    ];
-    function resolveOffset(offset, containerLength, targetLength, targetInset) {
-        let offsetDefinition = Array.isArray(offset) ? offset : defaultOffset;
-        let targetPoint = 0;
-        let containerPoint = 0;
-        if (isNumber(offset)) {
-            /**
-             * If we're provided offset: [0, 0.5, 1] then each number x should become
-             * [x, x], so we default to the behaviour of mapping 0 => 0 of both target
-             * and container etc.
-             */ offsetDefinition = [
-                offset,
-                offset
-            ];
-        } else if (isString(offset)) {
-            offset = offset.trim();
-            if (offset.includes(" ")) {
-                offsetDefinition = offset.split(" ");
-            } else {
-                /**
-                 * If we're provided a definition like "100px" then we want to apply
-                 * that only to the top of the target point, leaving the container at 0.
-                 * Whereas a named offset like "end" should be applied to both.
-                 */ offsetDefinition = [
-                    offset,
-                    namedEdges[offset] ? offset : `0`
-                ];
-            }
-        }
-        targetPoint = resolveEdge(offsetDefinition[0], targetLength, targetInset);
-        containerPoint = resolveEdge(offsetDefinition[1], containerLength);
-        return targetPoint - containerPoint;
-    }
-
     const point = {
         x: 0,
         y: 0
     };
+    function getTargetSize(target) {
+        return "getBBox" in target && target.tagName !== "svg" ? target.getBBox() : {
+            width: target.clientWidth,
+            height: target.clientHeight
+        };
+    }
     function resolveOffsets(container, info, options) {
-        let { offset: offsetDefinition = ScrollOffset.All  } = options;
+        const { offset: offsetDefinition = ScrollOffset.All  } = options;
         const { target =container , axis ="y"  } = options;
         const lengthLabel = axis === "y" ? "height" : "width";
         const inset = target !== container ? calcInset(target, container) : point;
@@ -18023,10 +22738,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
          */ const targetSize = target === container ? {
             width: container.scrollWidth,
             height: container.scrollHeight
-        } : {
-            width: target.clientWidth,
-            height: target.clientHeight
-        };
+        } : getTargetSize(target);
         const containerSize = {
             width: container.clientWidth,
             height: container.clientHeight
@@ -18051,12 +22763,14 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
          * If the pixel scroll offsets have changed, create a new interpolator function
          * to map scroll value into a progress.
          */ if (hasChanged) {
-            info[axis].interpolate = interpolate(defaultOffset$1(numOffsets), info[axis].offset);
+            info[axis].interpolate = interpolate(info[axis].offset, defaultOffset$1(offsetDefinition), {
+                clamp: false
+            });
             info[axis].interpolatorOffsets = [
                 ...info[axis].offset
             ];
         }
-        info[axis].progress = info[axis].interpolate(info[axis].current);
+        info[axis].progress = clamp(0, 1, info[axis].interpolate(info[axis].current));
     }
 
     function measure(container, target = container, info) {
@@ -18066,7 +22780,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         info.y.targetOffset = 0;
         if (target !== container) {
             let node = target;
-            while(node && node != container){
+            while(node && node !== container){
                 info.x.targetOffset += node.offsetLeft;
                 info.y.targetOffset += node.offsetTop;
                 node = node.offsetParent;
@@ -18076,74 +22790,65 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         info.y.targetLength = target === container ? target.scrollHeight : target.clientHeight;
         info.x.containerLength = container.clientWidth;
         info.y.containerLength = container.clientHeight;
+        /**
+         * In development mode ensure scroll containers aren't position: static as this makes
+         * it difficult to measure their relative positions.
+         */ if (process.env.NODE_ENV !== "production") {
+            if (container && target && target !== container) {
+                warnOnce(getComputedStyle(container).position !== "static", "Please ensure that the container has a non-static position, like 'relative', 'fixed', or 'absolute' to ensure scroll offset is calculated correctly.");
+            }
+        }
     }
     function createOnScrollHandler(element, onScroll, info, options = {}) {
-        const axis = options.axis || "y";
         return {
-            measure: ()=>measure(element, options.target, info)
-            ,
-            update: (time)=>{
+            measure: (time)=>{
+                measure(element, options.target, info);
                 updateScrollInfo(element, info, time);
                 if (options.offset || options.target) {
                     resolveOffsets(element, info, options);
                 }
             },
-            notify: isFunction$1(onScroll) ? ()=>onScroll(info)
-             : scrubAnimation(onScroll, info[axis])
-        };
-    }
-    function scrubAnimation(controls, axisInfo) {
-        controls.pause();
-        controls.forEachNative((animation, { easing  })=>{
-            var _a, _b;
-            if (animation.updateDuration) {
-                if (!easing) animation.easing = noopReturn;
-                animation.updateDuration(1);
-            } else {
-                const timingOptions = {
-                    duration: 1000
-                };
-                if (!easing) timingOptions.easing = "linear";
-                (_b = (_a = animation.effect) === null || _a === void 0 ? void 0 : _a.updateTiming) === null || _b === void 0 ? void 0 : _b.call(_a, timingOptions);
-            }
-        });
-        return ()=>{
-            controls.currentTime = axisInfo.progress;
+            notify: ()=>onScroll(info)
         };
     }
 
     const scrollListeners = new WeakMap();
     const resizeListeners = new WeakMap();
     const onScrollHandlers = new WeakMap();
-    const getEventTarget = (element)=>element === document.documentElement ? window : element
+    const getEventTarget = (element)=>element === document.scrollingElement ? window : element
     ;
-    function scroll(onScroll, _a1 = {}) {
-        var { container =document.documentElement  } = _a1, options = __rest(_a1, [
-            "container"
-        ]);
-        let containerHandlers1 = onScrollHandlers.get(container);
+    function scrollInfo(onScroll, { container =document.scrollingElement , ...options } = {}) {
+        if (!container) return noop;
+        let containerHandlers = onScrollHandlers.get(container);
         /**
          * Get the onScroll handlers for this container.
          * If one isn't found, create a new one.
-         */ if (!containerHandlers1) {
-            containerHandlers1 = new Set();
-            onScrollHandlers.set(container, containerHandlers1);
+         */ if (!containerHandlers) {
+            containerHandlers = new Set();
+            onScrollHandlers.set(container, containerHandlers);
         }
         /**
          * Create a new onScroll handler for the provided callback.
          */ const info = createScrollInfo();
         const containerHandler = createOnScrollHandler(container, onScroll, info, options);
-        containerHandlers1.add(containerHandler);
+        containerHandlers.add(containerHandler);
         /**
          * Check if there's a scroll event listener for this container.
          * If not, create one.
          */ if (!scrollListeners.has(container)) {
-            const listener = ()=>{
-                const time = performance.now();
-                for (const handler of containerHandlers1)handler.measure();
-                for (const handler1 of containerHandlers1)handler1.update(time);
-                for (const handler2 of containerHandlers1)handler2.notify();
+            const measureAll = ()=>{
+                for (const handler of containerHandlers){
+                    handler.measure(frameData.timestamp);
+                }
+                frame.preUpdate(notifyAll);
             };
+            const notifyAll = ()=>{
+                for (const handler of containerHandlers){
+                    handler.notify();
+                }
+            };
+            const listener = ()=>frame.read(measureAll)
+            ;
             scrollListeners.set(container, listener);
             const target = getEventTarget(container);
             window.addEventListener("resize", listener, {
@@ -18155,69 +22860,2136 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             target.addEventListener("scroll", listener, {
                 passive: true
             });
+            listener();
         }
-        const listener1 = scrollListeners.get(container);
-        const onLoadProcesss = requestAnimationFrame(listener1);
+        const listener = scrollListeners.get(container);
+        frame.read(listener, false, true);
         return ()=>{
-            var _a;
-            if (typeof onScroll !== "function") onScroll.stop();
-            cancelAnimationFrame(onLoadProcesss);
+            cancelFrame(listener);
             /**
              * Check if we even have any handlers for this container.
-             */ const containerHandlers = onScrollHandlers.get(container);
-            if (!containerHandlers) return;
-            containerHandlers.delete(containerHandler);
-            if (containerHandlers.size) return;
+             */ const currentHandlers = onScrollHandlers.get(container);
+            if (!currentHandlers) return;
+            currentHandlers.delete(containerHandler);
+            if (currentHandlers.size) return;
             /**
              * If no more handlers, remove the scroll listener too.
-             */ const listener = scrollListeners.get(container);
+             */ const scrollListener = scrollListeners.get(container);
             scrollListeners.delete(container);
-            if (listener) {
-                getEventTarget(container).removeEventListener("scroll", listener);
-                (_a = resizeListeners.get(container)) === null || _a === void 0 ? void 0 : _a();
-                window.removeEventListener("resize", listener);
+            if (scrollListener) {
+                var ref;
+                getEventTarget(container).removeEventListener("scroll", scrollListener);
+                (ref = resizeListeners.get(container)) === null || ref === void 0 ? void 0 : ref();
+                window.removeEventListener("resize", scrollListener);
             }
         };
     }
 
-    function animateProgress(target, options = {}) {
-        return withControls([
-            ()=>{
-                const animation = new Animation(target, [
-                    0,
-                    1
-                ], options);
-                animation.finished.catch(()=>{});
-                return animation;
-            }, 
-        ], options, options.duration);
+    const timelineCache = new Map();
+    function scrollTimelineFallback(options) {
+        const currentTime = {
+            value: 0
+        };
+        const cancel = scrollInfo((info)=>{
+            currentTime.value = info[options.axis].progress * 100;
+        }, options);
+        return {
+            currentTime,
+            cancel
+        };
     }
-    function animate(target, keyframesOrOptions, options) {
-        const factory = isFunction$1(target) ? animateProgress : animate$1;
-        return factory(target, keyframesOrOptions, options);
+    function getTimeline({ source , container , ...options }) {
+        const { axis  } = options;
+        if (source) container = source;
+        var ref;
+        const containerCache = (ref = timelineCache.get(container)) !== null && ref !== void 0 ? ref : new Map();
+        timelineCache.set(container, containerCache);
+        var _target;
+        const targetKey = (_target = options.target) !== null && _target !== void 0 ? _target : "self";
+        var ref1;
+        const targetCache = (ref1 = containerCache.get(targetKey)) !== null && ref1 !== void 0 ? ref1 : {};
+        var _offset;
+        const axisKey = axis + ((_offset = options.offset) !== null && _offset !== void 0 ? _offset : []).join(",");
+        if (!targetCache[axisKey]) {
+            targetCache[axisKey] = !options.target && supportsScrollTimeline() ? new ScrollTimeline({
+                source: container,
+                axis
+            }) : scrollTimelineFallback({
+                container,
+                ...options
+            });
+        }
+        return targetCache[axisKey];
     }
 
-    var ThemeEvent;
-    (function(ThemeEvent1) {
-        ThemeEvent1["CART_ITEM_ADD"] = "theme:cart-item:add";
-        ThemeEvent1["CART_ITEM_UPDATE"] = "theme:cart-item:update";
-        ThemeEvent1["ERROR"] = "theme:error";
-    })(ThemeEvent || (ThemeEvent = {}));
+    function attachToAnimation(animation, options) {
+        const timeline = getTimeline(options);
+        return animation.attachTimeline({
+            timeline: options.target ? undefined : timeline,
+            observe: (valueAnimation)=>{
+                valueAnimation.pause();
+                return observeTimeline((progress)=>{
+                    valueAnimation.time = valueAnimation.duration * progress;
+                }, timeline);
+            }
+        });
+    }
 
-    var ThemeEditorEvent;
-    (function(ThemeEditorEvent1) {
-        ThemeEditorEvent1["INSPECTOR_ACTIVATED"] = "shopify:inspector:activate";
-        ThemeEditorEvent1["INSPECTOR_DEACTIVATED"] = "shopify:inspector:deactivate";
-        ThemeEditorEvent1["SECTION_LOAD"] = "shopify:section:load";
-        ThemeEditorEvent1["SECTION_UNLOAD"] = "shopify:section:unload";
-        ThemeEditorEvent1["SECTION_SELECT"] = "shopify:section:select";
-        ThemeEditorEvent1["SECTION_DESELECT"] = "shopify:section:deselect";
-        ThemeEditorEvent1["SECTION_REORDER"] = "shopify:section:reorder";
-        ThemeEditorEvent1["BLOCK_SELECT"] = "shopify:block:select";
-        ThemeEditorEvent1["BLOCK_DESELECT"] = "shopify:block:deselect";
-    })(ThemeEditorEvent || (ThemeEditorEvent = {}));
+    /**
+     * If the onScroll function has two arguments, it's expecting
+     * more specific information about the scroll from scrollInfo.
+     */ function isOnScrollWithInfo(onScroll) {
+        return onScroll.length === 2;
+    }
+    function attachToFunction(onScroll, options) {
+        if (isOnScrollWithInfo(onScroll)) {
+            return scrollInfo((info)=>{
+                onScroll(info[options.axis].progress, info);
+            }, options);
+        } else {
+            return observeTimeline(onScroll, getTimeline(options));
+        }
+    }
 
-    undefined && undefined.__rest || function(s, e) {
+    function scroll(onScroll, { axis ="y" , container =document.scrollingElement , ...options } = {}) {
+        if (!container) return noop;
+        const optionsWithDefaults = {
+            axis,
+            container,
+            ...options
+        };
+        return typeof onScroll === "function" ? attachToFunction(onScroll, optionsWithDefaults) : attachToAnimation(onScroll, optionsWithDefaults);
+    }
+
+    const thresholds = {
+        some: 0,
+        all: 1
+    };
+    function inView(elementOrSelector, onStart, { root , margin: rootMargin , amount ="some"  } = {}) {
+        const elements = resolveElements(elementOrSelector);
+        const activeIntersections = new WeakMap();
+        const onIntersectionChange = (entries)=>{
+            entries.forEach((entry)=>{
+                const onEnd = activeIntersections.get(entry.target);
+                /**
+                 * If there's no change to the intersection, we don't need to
+                 * do anything here.
+                 */ if (entry.isIntersecting === Boolean(onEnd)) return;
+                if (entry.isIntersecting) {
+                    const newOnEnd = onStart(entry.target, entry);
+                    if (typeof newOnEnd === "function") {
+                        activeIntersections.set(entry.target, newOnEnd);
+                    } else {
+                        observer.unobserve(entry.target);
+                    }
+                } else if (typeof onEnd === "function") {
+                    onEnd(entry);
+                    activeIntersections.delete(entry.target);
+                }
+            });
+        };
+        const observer = new IntersectionObserver(onIntersectionChange, {
+            root,
+            rootMargin,
+            threshold: typeof amount === "number" ? amount : thresholds[amount]
+        });
+        elements.forEach((element)=>observer.observe(element)
+        );
+        return ()=>observer.disconnect()
+        ;
+    }
+
+    /**
+     * Enables the creation of disclosure components, commonly known as accordions or collapsible sections.
+     * A disclosure component typically consists of a button that controls the visibility of an
+     * associated content area.
+     *
+     * Note: requires method-ui 'animations' plugin
+     *
+     * See https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/ for more information about disclosures
+     *
+     * Usage:
+     * - x-disclosure - Applied to the root element of a disclosure component. It can optionally accept an expression that
+     *   2-way binds to the internal isExpanded state of the disclosure e.g. `x-disclosure="isExpanded"`. If no expression is provided, the disclosure is closed by default
+     *   If your disclosure is _not_ animated, use the .noanimate modifier to prevent the disclosure from waiting for animations to complete before transitioning to expanded and vice versa.
+     * - x-disclosure:button - Marks an element as the button that toggles the visibility of the
+     *   disclosure content. This element is typically a button or a similar interactive element.
+     * - `data-skip-animation-wait` - Add this attribute to elements when you don't want to wait for their animations to complete before state transitions.
+     *
+     * @example
+     *
+     * <div x-disclosure>
+     *   <button x-disclosure:button>Open SESAME</button>
+     *   <div x-disclosure:panel>
+     *     <p>Hello world</p>
+     *   </div>
+     * </div>
+     *
+     * @example Initially expanded
+     *
+     * <div x-disclosure="true">
+     *   <button x-disclosure:button>Open SESAME</button>
+     *   <div x-disclosure:panel>
+     *     <p>Hello world</p>
+     *   </div>
+     * </div>
+     *
+     * or
+     *
+     * <div x-disclosure="{ isExpanded: true }">
+     *   <button x-disclosure:button>Open SESAME</button>
+     *   <div x-disclosure:panel>
+     *     <p>Hello world</p>
+     *   </div>
+     * </div>
+     *
+     * @example Bound to external state
+     *
+     * <div x-data="{isExpandedExternal: true}">
+     *   <div x-show="isExpandedExternal">Im open!</div>
+     *
+     *   <div x-disclosure="{
+     *     get isExpanded() {
+     *       return this.isExpandedExternal
+     *     },
+     *     set isExpanded(value) {
+     *       this.isExpandedExternal = value
+     *     }
+     *   }">
+     *     <button x-disclosure:button>Open SESAME</button>
+     *     <div x-disclosure:panel>
+     *       <p>Hello world</p>
+     *     </div>
+     *   </div>
+     * </div>
+     *
+     * The '$disclosure' magic property provides an API for managing the state of the disclosure
+     * component, including checking its open/closed status and programmatically toggling its state.
+     *
+     * ## Disclosure Groups
+     *
+     * Disclosure groups are a collection of disclosures that are managed as a single accordion.
+     * This is useful for creating multi-step forms or other UI elements that require the disclosure
+     * of multiple sections.
+     *
+     * @example
+     *
+     * <div x-disclosure-group>
+     *   <div x-disclosure
+     *     <button x-disclosure:button>Open SESAME 1</button>
+     *     <div x-disclosure:panel>
+     *       <p>Hello world 1</p>
+     *     </div>
+     *   </div>
+     *  <div x-disclosure>
+     *     <button x-disclosure:button>Open SESAME 2</button>
+     *     <div x-disclosure:panel>
+     *       <p>Hello world 2</p>
+     *     </div>
+     *   </div>
+     * </div>
+     *
+     * The '$disclosureGroup' magic property provides an API for managing the state of the disclosure group,
+     * including checking the expanded index and programmatically toggling the state of the disclosures.
+     *
+     */ function disclosure(Alpine) {
+        Alpine.directive('disclosure', ($el, data, utilities)=>{
+            if (data.value === 'panel') {
+                handlePanel($el, Alpine);
+            } else if (data.value === 'button') {
+                handleButton($el, Alpine);
+            } else if (data.value === null) {
+                handleRoot$4($el, Alpine, data, utilities);
+            } else {
+                throw new Error(`Unknown directive: x-disclosure:${data.value}`);
+            }
+        }).before('bind');
+        Alpine.directive('disclosure-group', ($el, data, utilities)=>{
+            if (data.value === null) {
+                handleDisclosureGroup($el, Alpine, data, utilities);
+            } else {
+                throw new Error(`Unknown directive: x-disclosure-group:${data.value}`);
+            }
+        }).before('bind');
+        Alpine.magic('disclosure', handleDisclosureMagic(Alpine));
+        Alpine.magic('disclosureGroup', handleDisclosureGroupMagic(Alpine));
+    }function handleDisclosureMagic(Alpine) {
+        return function($el) {
+            const $data = Alpine.$data($el);
+            return {
+                get isExpanded () {
+                    var _a;
+                    return (_a = $data.__disclosure_state) === null || _a === void 0 ? void 0 : _a.isExpanded;
+                },
+                set isExpanded (value){
+                    if (!$data.__disclosure_state) return;
+                    $data.__disclosure_state.isExpanded = value;
+                },
+                get isCollapsed () {
+                    var _a1;
+                    return (_a1 = $data.__disclosure_state) === null || _a1 === void 0 ? void 0 : _a1.isCollapsed;
+                },
+                get isInGroup () {
+                    return $data.__disclosure_isInGroup;
+                },
+                get groupIndex () {
+                    return $data.__disclosure_groupIndex;
+                },
+                toggle () {
+                    var _a;
+                    (_a = $data.__disclosure_state) === null || _a === void 0 ? void 0 : _a.toggle();
+                },
+                expand () {
+                    var _a;
+                    (_a = $data.__disclosure_state) === null || _a === void 0 ? void 0 : _a.expand();
+                },
+                collapse () {
+                    var _a;
+                    (_a = $data.__disclosure_state) === null || _a === void 0 ? void 0 : _a.collapse();
+                },
+                waitForAnimations () {
+                    return $data.__disclosure_waitForAnimations();
+                }
+            };
+        };
+    }
+    function handleDisclosureGroupMagic(Alpine) {
+        return function($el) {
+            const $data = Alpine.$data($el);
+            return $data.__disclosure_group_state || {};
+        };
+    }
+    function handlePanel($el, Alpine) {
+        if (!$el._x_doShow) {
+            $el._x_doShow = ()=>{};
+        }
+        if (!$el._x_doHide) {
+            $el._x_doHide = ()=>{};
+        }
+        Alpine.bind($el, {
+            ':id': `$el.id || $id('disclosure-panel')`,
+            role: 'group',
+            'x-show': '$disclosure.isExpanded',
+            'x-init' () {
+                this.__disclosure_contentEl = this.$el;
+                // TODO investigate hooking into Alpine's el._x_doShow / el._x_doHide hooks instead of this
+                const addHidden = ()=>{
+                    Alpine.mutateDom(()=>{
+                        // TODO add support for `hidden="until-found"`
+                        this.$el.setAttribute('hidden', '');
+                        this.$el.style.setProperty('display', 'none');
+                    });
+                };
+                const removeHidden = ()=>{
+                    Alpine.mutateDom(()=>{
+                        this.$el.removeAttribute('hidden');
+                        this.$el.style.removeProperty('display');
+                    });
+                };
+                // Set initial hidden state
+                if (this.__disclosure_state.isExpanded) {
+                    removeHidden();
+                } else {
+                    addHidden();
+                }
+                this.$watch('__disclosure_state.isExpanded', async (isExpanded)=>{
+                    if (isExpanded) {
+                        removeHidden();
+                    } else {
+                        if (this.__disclosure_animated) {
+                            await this.__disclosure_waitForAnimations();
+                            // If the disclosure re-expanded before the animation completed, don't hide it
+                            if (this.__disclosure_state.isExpanded) return;
+                            addHidden();
+                        } else {
+                            addHidden();
+                        }
+                    }
+                });
+            },
+            ':aria-labelledby': '__disclosure_buttonEl?.id',
+            'data-morph-children-only': ''
+        });
+    }
+    function handleButton($el, Alpine) {
+        Alpine.bind($el, {
+            role: 'button',
+            ':id': `$el.id || $id('disclosure-button')`,
+            'x-init': '__disclosure_buttonEl = $el',
+            '@click.stop.prevent': '$disclosure.toggle()',
+            ':aria-controls': '__disclosure_contentEl?.id',
+            ':aria-expanded': '$disclosure.isExpanded'
+        });
+    }
+    function handleDisclosureGroup($el, Alpine, { expression , modifiers  }, { evaluate  }) {
+        let options = evaluate(expression === '' ? '{}' : expression);
+        if (options !== undefined && options !== null && !isPlainObject(options)) {
+            throw new Error(`options must be an object, but got ${options}`);
+        }
+        let state;
+        if (options.multiple || modifiers.includes('multiple')) {
+            state = buildMultiSelectDisclosureGroupState(options);
+        } else {
+            state = buildSingleSelectDisclosureGroupState(options);
+        }
+        Alpine.bind($el, {
+            ['x-data'] () {
+                return {
+                    __disclosure_group_state: state
+                };
+            }
+        });
+    }
+    function handleRoot$4($el, Alpine, { modifiers , expression  }, { evaluate  }) {
+        const $data = Alpine.$data($el);
+        const isInDisclosureGroup = !!$data.__disclosure_group_state;
+        // Track the depth of the disclosure group so that we can exclude the children of a grouped disclosure from also having their state controlled by the group state
+        let groupDepth = $data.__disclosure_groupDepth;
+        if (isInDisclosureGroup) {
+            if (groupDepth === undefined || groupDepth === null) {
+                groupDepth = 0;
+            }
+            groupDepth++;
+        }
+        const isDirectChildOfDisclosureGroup = isInDisclosureGroup && groupDepth === 1;
+        const animated = !modifiers.includes('noanimate');
+        const expand = modifiers.includes('expand');
+        let options = {};
+        // Evaluate the x-disclosure expression to get the initial expanded state of the disclosure (e.g. true or false)
+        if (expression) {
+            let evalutatedExpression = evaluate(expression === '' ? '{}' : expression);
+            if (evalutatedExpression === true || evalutatedExpression === false) {
+                options.isExpanded = evalutatedExpression;
+            } else if (isPlainObject(evalutatedExpression)) {
+                options = evalutatedExpression;
+            }
+        } else {
+            // If there's no expression, but the .expand modifier is used, the disclosure is expanded by default
+            if (expand) {
+                options.isExpanded = true;
+            }
+        }
+        let state = buildDisclosureState(options);
+        // If a x-disclosure is the child of a x-disclosure-group its 'isExpanded' state is derived from the group's expanded state instead of having its own state
+        // This allows us to close disclosure when another one in the group is opened
+        // For clarity: the groupDepth check here ensures that e.g. if you have a popup inside of a tab
+        // that opening or closing the popup doesn't affect the state of the tabs (i.e the disclosure group)
+        if (isDirectChildOfDisclosureGroup) {
+            state = buildDisclosureState({
+                get isExpanded () {
+                    var _a, _b;
+                    const index = (_b = (_a = $data.__disclosure_group_state).indexOf) === null || _b === void 0 ? void 0 : _b.call(_a, $el);
+                    const isExpanded = $data.__disclosure_group_state.isExpanded(index);
+                    return isExpanded;
+                },
+                set isExpanded (value){
+                    var _a2, _b1;
+                    const index = (_b1 = (_a2 = $data.__disclosure_group_state).indexOf) === null || _b1 === void 0 ? void 0 : _b1.call(_a2, $el);
+                    if (value) {
+                        $data.__disclosure_group_state.expand(index);
+                    } else {
+                        $data.__disclosure_group_state.collapse(index);
+                    }
+                }
+            });
+        }
+        Alpine.bind($el, {
+            ':id': `$el.id || $id('disclosure')`,
+            ['x-data'] () {
+                return {
+                    __disclosure_buttonEl: null,
+                    __disclosure_contentEl: null,
+                    __disclosure_state: state,
+                    __disclosure_animated: animated,
+                    __disclosure_groupDepth: groupDepth,
+                    init () {
+                        this.$watch('__disclosure_state.isExpanded', (isExpanded)=>{
+                            this.$dispatch(isExpanded ? 'expand' : 'collapse');
+                        });
+                        if (isDirectChildOfDisclosureGroup) {
+                            // Register this element with the disclosure group so we can keep track of it's index
+                            this.$data.__disclosure_group_state.register(this.$el);
+                            if (options.isExpanded) {
+                                this.__disclosure_state.expand();
+                            }
+                        }
+                    },
+                    destroy () {
+                        if (isDirectChildOfDisclosureGroup) {
+                            this.$data.__disclosure_group_state.unregister(this.$el);
+                        }
+                    },
+                    async __disclosure_waitForAnimations () {
+                        return await this.$waitForAnimations({
+                            subtree: true,
+                            target: this.__disclosure_contentEl
+                        });
+                    },
+                    get __disclosure_isInGroup () {
+                        return isInDisclosureGroup;
+                    },
+                    get __disclosure_groupIndex () {
+                        var _a, _b;
+                        if (!this.__disclosure_isInGroup) return null;
+                        return (_b = (_a = $data.__disclosure_group_state).indexOf) === null || _b === void 0 ? void 0 : _b.call(_a, this.$el);
+                    }
+                };
+            },
+            ['x-id']: "['disclosure', 'disclosure-panel', 'disclosure-button']"
+        });
+    }
+    function buildDisclosureState(options) {
+        var _a;
+        let state = {
+            isExpanded: (_a = options === null || options === void 0 ? void 0 : options.isExpanded) !== null && _a !== void 0 ? _a : false,
+            expand () {
+                this.isExpanded = true;
+            },
+            collapse () {
+                this.isExpanded = false;
+            },
+            toggle () {
+                this.isExpanded = !this.isExpanded;
+            },
+            get isCollapsed () {
+                return !this.isExpanded;
+            }
+        };
+        if ((options === null || options === void 0 ? void 0 : options.isExpanded) !== undefined) {
+            const isExpandedDescriptor = Object.getOwnPropertyDescriptor(options, 'isExpanded');
+            Object.defineProperty(state, 'isExpanded', isExpandedDescriptor);
+        }
+        return state;
+    }
+    function buildSingleSelectDisclosureGroupState(options) {
+        var _a;
+        let state = {
+            expandedIndex: (_a = options === null || options === void 0 ? void 0 : options.initiallyExpandedIndex) !== null && _a !== void 0 ? _a : null,
+            items: new Set(),
+            isExpanded (index) {
+                return this.expandedIndex === index;
+            },
+            register (el) {
+                this.items.add(el);
+            },
+            unregister (el) {
+                this.items.delete(el);
+            },
+            indexOf (el) {
+                return Array.from(this.items).indexOf(el);
+            },
+            toggle (index) {
+                this.expandedIndex === index ? this.collapse(index) : this.expand(index);
+            },
+            expand (index) {
+                this.expandedIndex = index;
+            },
+            collapse (index) {
+                if (this.expandedIndex === index) {
+                    this.expandedIndex = null;
+                }
+            }
+        };
+        if (options && 'expandedIndex' in options) {
+            copyProperty(options, state, 'expandedIndex');
+        }
+        return state;
+    }
+    function buildMultiSelectDisclosureGroupState(options) {
+        var _a;
+        let state = {
+            expandedIndices: (_a = options === null || options === void 0 ? void 0 : options.initiallyExpandedIndices) !== null && _a !== void 0 ? _a : new Set(),
+            items: new Set(),
+            isExpanded (index) {
+                return this.expandedIndices.has(index);
+            },
+            register (el) {
+                this.items.add(el);
+            },
+            unregister (el) {
+                this.items.delete(el);
+            },
+            indexOf (el) {
+                return Array.from(this.items).indexOf(el);
+            },
+            toggle (index) {
+                this.expandedIndices.has(index) ? this.collapse(index) : this.expand(index);
+            },
+            expand (index) {
+                const expanded = this.expandedIndices;
+                expanded.add(index);
+                // Copy to a new set so that reactivity works
+                this.expandedIndices = new Set(Array.from(expanded));
+            },
+            collapse (index) {
+                const expanded = this.expandedIndices;
+                expanded.delete(index);
+                // Copy to a new set so that reactivity works
+                this.expandedIndices = new Set(Array.from(expanded));
+            }
+        };
+        if (options && 'expandedIndices' in options) {
+            copyProperty(options, state, 'expandedIndices');
+        }
+        return state;
+    }
+
+    function section(Alpine) {
+        Alpine.store('sectionData', {});
+        /**
+         * Get and set data for the closest ancestor section in a global Alpien store keyed by section id
+         * This is most useful for the theme editor when you want to maintain state between section content updates
+         */ Alpine.magic('sectionData', ($el)=>{
+            var _a;
+            const sectionId = (_a = closestSectionEl($el)) === null || _a === void 0 ? void 0 : _a.id;
+            return new Proxy({}, {
+                get (_target, prop) {
+                    if (!sectionId) return null;
+                    if (!(sectionId in Alpine.store('sectionData'))) return null;
+                    return Alpine.store('sectionData')[sectionId][prop];
+                },
+                set (_target, prop, value) {
+                    if (!sectionId) return false;
+                    if (!(sectionId in Alpine.store('sectionData'))) {
+                        Alpine.store('sectionData')[sectionId] = {};
+                    }
+                    Alpine.store('sectionData')[sectionId][prop] = value;
+                    return true;
+                }
+            });
+        });
+        Alpine.magic('sectionEl', ($el)=>{
+            return closestSectionEl($el);
+        });
+        Alpine.magic('sectionId', ($el)=>{
+            var _a;
+            return (_a = closestSectionEl($el)) === null || _a === void 0 ? void 0 : _a.id;
+        });
+    }
+
+    const DATA_EXCLUDE_SUBTREE_ATTRIBUTE = 'data-skip-animation-wait';
+    const DEFAULT_EXCLUDE_SUBTREE_FILTER = (element)=>element.hasAttribute(DATA_EXCLUDE_SUBTREE_ATTRIBUTE)
+    ;
+    const ANIMATION_START_TIMEOUT = 50; // ms
+    const ANIMATION_COMPLETION_TIMEOUT = 2000; // ms
+    function animationUtils(Alpine) {
+        Alpine.magic('waitForAnimations', function($el) {
+            return async function(options) {
+                var _a;
+                const parentEl = (_a = options === null || options === void 0 ? void 0 : options.target) !== null && _a !== void 0 ? _a : $el;
+                const animations = await getPendingAnimations(parentEl, options);
+                return getCompletedAnimations(parentEl, animations, options === null || options === void 0 ? void 0 : options.subtree, options === null || options === void 0 ? void 0 : options.excludeSubtree);
+            };
+        });
+    }/**
+     * Returns a promise that resolves when all animations on the element have started. Waits for a short period of time, and if no animations have started it will reject with an error
+     *
+     * @param $el Element to check for animations
+     * @returns
+     */ async function getPendingAnimations($el, options = {}) {
+        return new Promise((resolve, reject)=>{
+            let startTimeout = ANIMATION_START_TIMEOUT;
+            if ((options === null || options === void 0 ? void 0 : options.startTimeout) !== undefined) {
+                if (options.startTimeout === false) {
+                    startTimeout = 0;
+                } else {
+                    startTimeout = options.startTimeout;
+                }
+            }
+            // Wait for a short period of time, and if no animations have started output an error
+            setTimeout(()=>{
+                let animations = $el.getAnimations(options);
+                if (options.excludeSubtree) {
+                    animations = filterSubtreeAnimations($el, animations, options.excludeSubtree);
+                }
+                if (animations.length === 0) {
+                    warnForNoAnimationsStarted($el, options === null || options === void 0 ? void 0 : options.subtree);
+                    resolve([]);
+                } else {
+                    resolve(animations);
+                }
+            }, startTimeout);
+        });
+    }
+    /**
+     * Returns a promise that resolves when all animations on the element have finished, or rejects if any animations don't finish within a timeout
+     * @param $el Element animations are occuring on
+     * @param animations Animations to wait for
+     * @param subtree Whether to include animations in subtree
+     * @param excludeSubtree Optional filter to exclude certain animations in subtree
+     */ async function getCompletedAnimations($el, animations, subtree = false, excludeSubtree = DEFAULT_EXCLUDE_SUBTREE_FILTER) {
+        let timedOutAnimations = [];
+        let filteredAnimations = filterSubtreeAnimations($el, animations, excludeSubtree);
+        const animationPromises = filteredAnimations.map((animation)=>animation.finished
+        );
+        await promiseAllSettledWithTimeout(animationPromises, ANIMATION_COMPLETION_TIMEOUT).then((results)=>{
+            results.forEach((result, i)=>{
+                if (result.status === 'rejected' && result.reason === 'timeout') {
+                    timedOutAnimations = [
+                        ...timedOutAnimations,
+                        filteredAnimations[i]
+                    ];
+                }
+            });
+        });
+        if (timedOutAnimations.length > 0) {
+            warnForNoAnimationsFinished($el, filteredAnimations, timedOutAnimations, subtree);
+            return [];
+        }
+        return filteredAnimations;
+    }
+    function warnForNoAnimationsStarted($el, subtree = false) {
+        if (process.env.NODE_ENV !== 'development') return;
+        if (subtree) {
+            console.warn(`Expected animations or transitions to start on element or its descendants, but none did after waiting ${ANIMATION_START_TIMEOUT}ms`, $el);
+        } else {
+            console.warn(`Expected animations or transitions to start on element, but none did after waiting ${ANIMATION_START_TIMEOUT}ms`, $el);
+        }
+    }
+    function warnForNoAnimationsFinished($el, started, unfinished, subtree = false) {
+        if (process.env.NODE_ENV !== 'development') return;
+        if (subtree) {
+            console.warn(`Expected all animations or transitions on element and its descendants to finish within ${ANIMATION_COMPLETION_TIMEOUT}ms, but ${unfinished.length} of ${started.length} did not`, $el, unfinished);
+        } else {
+            console.warn(`Expected all animations or transitions on element to finish within ${ANIMATION_COMPLETION_TIMEOUT}ms, but ${unfinished.length} of ${started.length} did not`, $el, unfinished);
+        }
+    }
+    function promiseAllSettledWithTimeout(promises, timeoutMs) {
+        return Promise.allSettled(promises.map((promise)=>withTimeout(promise, timeoutMs)
+        ));
+    }
+    async function withTimeout(promise, timeoutMs) {
+        let timeoutHandle;
+        const timeoutPromise = new Promise((_resolve, reject)=>{
+            timeoutHandle = setTimeout(()=>{
+                reject('timeout');
+            }, timeoutMs);
+        });
+        return Promise.race([
+            promise,
+            timeoutPromise
+        ]).then((result)=>{
+            clearTimeout(timeoutHandle);
+            return result;
+        }).catch((error)=>{
+            clearTimeout(timeoutHandle);
+            throw error;
+        });
+    }
+    function isKeyframeEffect(effect) {
+        return effect instanceof KeyframeEffect;
+    }
+    /**
+     * Filters out any animations who's target element matches the filter or any of its ancestors
+     * @param animations
+     * @param filter
+     */ function filterSubtreeAnimations(rootEl, animations, filter) {
+        // Traverse up the tree from the animated element to the root element, and check if any of the ancestors are excluded by the filter
+        const hasExcludedAncestor = (animatedElement)=>{
+            let parent = animatedElement.parentElement;
+            if (animatedElement === rootEl) {
+                return false;
+            }
+            if (parent === rootEl) {
+                return false;
+            }
+            while(parent){
+                if (filter(parent)) return true;
+                parent = parent.parentElement;
+            }
+            return false;
+        };
+        // Only return animations that are not excluded by the filter
+        return animations.filter((animation)=>{
+            if (isKeyframeEffect(animation.effect)) {
+                const target = animation.effect.target;
+                if (!target) {
+                    return true;
+                }
+                if (filter(target)) {
+                    return false;
+                }
+                return !hasExcludedAncestor(target);
+            } else {
+                return true;
+            }
+        });
+    }
+
+    /**
+     * Enable the creation and management of asynchronous forms which provide an interface for handling form submissions
+     * with various states such as idle, pending, success, and error as well as serializing form data
+     *
+     * Notes:
+     * - Requires method-ui 'fetch' plugin
+     *
+     * Usage:
+     * - x-async-form - Applied to the form element, initializing the async form functionality and adding a data context for child directives
+     * - x-async-form:context - Defines the context for the async form, allowing sharing of form state with other elements.
+     * - x-async-form:form - Binds to the form element to handle form submissions.
+     *
+     * The '$asyncForm' magic property provides a comprehensive API for managing the form state, including form data, response, parsed body, and error messages.
+     *
+     * Usage with form elements:
+     * x-async-form may be used in conjunction with HTML form elements to handle asynchronous form submissions.
+     *
+     * e.g.
+     *
+     * <form x-async-form='({ action, method, formData  }) => yourFunction(action)' action="/some/url">
+     *   <div x-text="`state: ${$asyncForm.state}`"></div>
+     *   <div x-text="`error: ${$asyncForm.errorMessage}`"></div>
+     *   <input type="text" name="testField1" value="">
+     *   <input type="checkbox" name="testField2" value="true">
+     *   <button type="submit">Submit</button>
+     * </form>
+     *
+     * This will initialize the async form functionality, handle form submissions, and update the form state accordingly.
+     *
+     * Note: Consider using 'x-fetch-form' for a more streamlined experience. It wraps this plugin and automatically calls fetch, saving you a step.
+     *
+     */ function asyncForm(Alpine) {
+        Alpine.directive('async-form', ($el, data, utilities)=>{
+            if (data.value == 'form') {
+                handleForm$1($el, Alpine, data, utilities);
+            } else if (data.value == 'context') {
+                handleContext($el, Alpine, data, utilities);
+            } else {
+                if (!data.expression) {
+                    throw new Error('x-async-form directive requires a an async callback function');
+                }
+                if (!isFormElement($el)) {
+                    throw new Error('x-async-form directive can only be used on form elements');
+                }
+                Alpine.bind($el, {
+                    [`x-async-form:context.${data.modifiers.join('.')}`]: data.expression,
+                    [`x-async-form:form.${data.modifiers.join('.')}`]: ''
+                });
+            }
+        }).before('bind');
+        Alpine.magic('asyncForm', handleAsyncFormMagic(Alpine));
+    }function handleAsyncFormMagic(Alpine) {
+        return function($el) {
+            const $data = Alpine.$data($el);
+            return {
+                get formData () {
+                    return $data.__asyncForm_formData;
+                },
+                get state () {
+                    return $data.__asyncForm_state;
+                },
+                get response () {
+                    return $data.__asyncForm_response;
+                },
+                get parsedBody () {
+                    return $data.__asyncForm_parsedBody;
+                },
+                get reset () {
+                    return $data.__asyncForm_reset();
+                },
+                get errorMessage () {
+                    return $data.__asyncForm_errorMessage;
+                },
+                get errorDescription () {
+                    return $data.__asyncForm_errorDescription;
+                }
+            };
+        };
+    }
+    function handleContext($el, Alpine, { expression , modifiers  }, { evaluateLater  }) {
+        if (!expression) {
+            throw new Error('x-async-form:context directive requires a fetch promise or callback function that returns a fetch promise');
+        }
+        let getCallbackFn = evaluateLater(expression);
+        const errorTimeout = getErrorTimeoutModifier(modifiers) || false;
+        const successTimeout = getSuccessTimeoutModifier(modifiers) || 1000;
+        Alpine.bind($el, {
+            'x-data' () {
+                return {
+                    __asyncForm_formEl: null,
+                    __asyncForm_stateMachine: new StateMachine('idle', [
+                        'idle',
+                        'pending',
+                        'success',
+                        'error'
+                    ], {
+                        idle: [
+                            'pending'
+                        ],
+                        pending: [
+                            'success',
+                            'error',
+                            'pending'
+                        ],
+                        success: [
+                            'idle',
+                            'pending'
+                        ],
+                        error: [
+                            'idle',
+                            'pending'
+                        ]
+                    }),
+                    __asyncForm_callback: null,
+                    __asyncForm_formData: null,
+                    __asyncForm_response: null,
+                    __asyncForm_parsedBody: null,
+                    __asyncForm_errorMessage: null,
+                    __asyncForm_errorDescription: null,
+                    __asyncForm_successTimeout: successTimeout || false,
+                    __asyncForm_errorTimeout: errorTimeout || false,
+                    init () {
+                        this.$watch('__asyncForm_state', (state, prevState)=>{
+                            if ((prevState == 'success' || prevState == 'error') && state == 'idle') {
+                                // Wipe form data after a successful or failed submission
+                                this.__asyncForm_formData = null;
+                            }
+                            if (prevState == 'success' && state == 'idle') {
+                                // Clear error message after a successful submission
+                                this.__asyncForm_errorMessage = null;
+                                this.__asyncForm_errorDescription = null;
+                            }
+                        });
+                        Alpine.effect(()=>{
+                            // Create a function which wraps the passed in callback function / expression and allows us to call it when the user clicks the link
+                            this.__asyncForm_callback = async (info)=>{
+                                let resultPromise;
+                                Alpine.dontAutoEvaluateFunctions(()=>{
+                                    getCallbackFn(async (result)=>{
+                                        if (typeof result === 'function') {
+                                            resultPromise = result.bind(this)(info);
+                                        } else {
+                                            throw new Error(`x-async-link expects an async function as its expression`);
+                                        }
+                                    });
+                                });
+                                return resultPromise;
+                            };
+                        });
+                    },
+                    get __asyncForm_state () {
+                        return this.__asyncForm_stateMachine.state;
+                    },
+                    set __asyncForm_state (state){
+                        this.__asyncForm_stateMachine.state = state;
+                    },
+                    get __asyncForm_form () {
+                        var _a;
+                        let form = null;
+                        if (this.$el.tagName === 'FORM') {
+                            form = this.$el;
+                        }
+                        if (this.__asyncForm_formEl && ((_a = this.__asyncForm_formEl) === null || _a === void 0 ? void 0 : _a.tagName) === 'FORM') {
+                            form = this.__asyncForm_formEl;
+                        }
+                        return form;
+                    },
+                    async __asyncForm_submit (info) {
+                        this.__asyncForm_state = 'pending';
+                        this.$dispatch('async-form:pending');
+                        try {
+                            // Run provided callback function
+                            const response = await this.__asyncForm_callback.bind(this)(info);
+                            return await this.__asyncForm_handleResponse(response);
+                        } catch (e) {
+                            if (e.name == 'AbortError') {
+                                this.__asyncForm_reset();
+                                return false;
+                            } else {
+                                this.__asyncForm_handleError(String((e === null || e === void 0 ? void 0 : e.message) || e));
+                                throw e;
+                            }
+                        }
+                    },
+                    async __asyncForm_handleResponse (response) {
+                        this.__asyncForm_response = response;
+                        this.__asyncForm_parsedBody = await parseResponseBody(response);
+                        if (!response || (response === null || response === void 0 ? void 0 : response.status) == undefined) {
+                            // Handle the response object not being a fetch request
+                            this.__asyncForm_handleSuccess();
+                            return response;
+                        } else if (response.status === 200) {
+                            this.__asyncForm_handleSuccess();
+                            return response;
+                        } else {
+                            let message = getErrorMessage(response, this.__asyncForm_parsedBody);
+                            let description = getErrorDescription(response, this.__asyncForm_parsedBody);
+                            this.__asyncForm_handleError(message, description);
+                            return response;
+                        }
+                    },
+                    async __asyncForm_handleSuccess () {
+                        this.$dispatch('async-form:success', this.__asyncForm_formData);
+                        if (successTimeout) {
+                            // Transition to success state then back to initial state after a timeout
+                            this.__asyncForm_stateMachine.setTransientState('success', 'idle', successTimeout);
+                        } else {
+                            this.__asyncForm_state = 'success';
+                        }
+                    },
+                    async __asyncForm_handleError (message, description) {
+                        this.$dispatch(`async-form:error`, {
+                            message: this.__asyncForm_errorMessage,
+                            description: this.__asyncForm_errorDescription
+                        });
+                        if (errorTimeout) {
+                            // Transition to error state then back to initial state after a timeout
+                            this.__asyncForm_stateMachine.setTransientState('error', 'idle', errorTimeout);
+                        } else {
+                            this.__asyncForm_state = 'error';
+                        }
+                        this.__asyncForm_errorMessage = message;
+                        this.__asyncForm_errorDescription = description;
+                    },
+                    __asyncForm_reset () {
+                        this.__asyncForm_state == 'idle';
+                        this.__asyncForm_response == null;
+                        this.__asyncForm_parsedBody == null;
+                        this.__asyncForm_errorMessage == null;
+                        this.__asyncForm_errorDescription == null;
+                        this.__asyncForm_formData == null;
+                    }
+                };
+            }
+        });
+    }
+    function handleForm$1($el, Alpine, { expression  }, {}) {
+        if (!isFormElement($el)) {
+            throw new Error('x-async-form:form directive can only be used on form elements');
+        }
+        Alpine.bind($el, {
+            'x-data' () {
+                return {
+                    __asyncForm_form_onSubmit (e) {
+                        var _a;
+                        // Prevent default form submission behaviour so we dont get a full page reload
+                        e.preventDefault();
+                        let { action: formAction , method , formData  } = getFormSubmissionInfo($el, e.submitter);
+                        let action = ((_a = this.__asyncForm_formEl) === null || _a === void 0 ? void 0 : _a.dataset.asyncAction) || formAction;
+                        this.__asyncForm_formData = formData || null;
+                        this.__asyncForm_submit({
+                            action,
+                            method,
+                            formData
+                        });
+                    },
+                    init () {
+                        if (this.__asyncForm_submit == undefined) {
+                            throw new Error('x-async-form:form directive must be used within an x-async-form:context directive');
+                        }
+                    }
+                };
+            },
+            'x-init': '__asyncForm_formEl = $el',
+            '@submit': '__asyncForm_form_onSubmit'
+        });
+    }
+    function getErrorTimeoutModifier(modifiers) {
+        let errorTimeout = false;
+        if (modifiers.includes('wait-error')) {
+            const rawValue = modifiers[modifiers.indexOf('wait-error') + 1];
+            let match = rawValue.match(/([0-9]+)ms/);
+            if (match) errorTimeout = Number(match[1]);
+        }
+        return errorTimeout;
+    }
+    function getSuccessTimeoutModifier(modifiers) {
+        let successTimeout = false;
+        if (modifiers.includes('wait-success')) {
+            const rawValue = modifiers[modifiers.indexOf('wait-success') + 1];
+            let match = rawValue.match(/([0-9]+)ms/);
+            if (match) successTimeout = Number(match[1]);
+        }
+        return successTimeout;
+    }
+    async function parseResponseBody(response) {
+        var _a;
+        if (!response) return null;
+        // Bail out if the response is not similar to a standard fetch Response object
+        if (!isPlainObject(response) || !('json' in response)) {
+            return null;
+        }
+        // Note: we clone the response here in case the body has already been read
+        if ((_a = response.headers.get('Content-Type')) === null || _a === void 0 ? void 0 : _a.includes('text/html')) {
+            return await response.clone().text();
+        } else {
+            // Try to parse the body as json, if it fails, return the original response
+            try {
+                return await response.clone().json();
+            } catch (e) {
+                return await response.clone().text();
+            }
+        }
+    }
+    function getErrorMessage(response, parsedBody) {
+        if (isPlainObject(parsedBody) && parsedBody.message) {
+            return parsedBody.message;
+        }
+        return response.statusText;
+    }
+    function getErrorDescription(response, parsedBody) {
+        if (isPlainObject(parsedBody)) {
+            if (parsedBody.description) {
+                return parsedBody.description;
+            }
+            if (parsedBody.error) {
+                return parsedBody.error;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * A plugin that makes it easy to progressively enhance links so that they can be
+     * call endpoints via the fetch API and display pending states
+     * while the request is in progress
+     *
+     * The x-async-link expects a either a promise or a function that returns a promise.
+     *
+     * @example
+     *
+     * <a
+     *   href="/some-page"
+     *   x-async-link="fetchSomeData"
+     *   :class="{ 'opacity-50': $asyncLink.state == 'pending' }"
+     * >Click Me</a>
+     *
+     * @example
+     *
+     * <div x-async-link:context="fetch(`${$url}.js`)">
+     *   <div x-show="$asyncLink.state == 'pending'">Loading!</div>
+     *   <a href="/some-page" x-async-link:link >Click Me</a>
+     * </div>
+     *
+     * TODO:
+     * - Document events
+     */ function asyncLink(Alpine) {
+        Alpine.directive('async-link', ($el, data, { evaluateLater  })=>{
+            if (data.value == 'link') {
+                if (!isAnchorElement($el)) {
+                    throw new Error('x-async-link:link directive can only be used on anchor elements');
+                }
+                Alpine.bind($el, {
+                    'x-data' () {
+                        return {
+                            __asyncLink_onClick (e) {
+                                if (!shouldProcessLinkClick(e, $el.target)) return;
+                                // If some other function has already prevented the default action, do nothing
+                                if (e.defaultPrevented) return;
+                                // If the link is not an anchor tag, do nothing
+                                if (!this.$el.href) return;
+                                e.preventDefault();
+                                this.__asyncLink_load(this.$el.href);
+                            },
+                            init () {
+                                if (this.__asyncLink_state == undefined) {
+                                    throw new Error('x-async-link:link directive must be used within an x-async-link:context directive');
+                                }
+                            }
+                        };
+                    },
+                    '@click': '__asyncLink_onClick'
+                });
+            } else if (data.value == 'context') {
+                if (!data.expression) {
+                    throw new Error('x-async-link:context directive requires a an async callback function');
+                }
+                let getCallbackFn = evaluateLater(data.expression);
+                Alpine.bind($el, {
+                    'x-data' () {
+                        return {
+                            __asyncLink_pendingHref: null,
+                            __asyncLink_stateMachine: new StateMachine('idle', [
+                                'idle',
+                                'pending'
+                            ], {
+                                idle: [
+                                    'pending'
+                                ],
+                                pending: [
+                                    'pending',
+                                    'idle'
+                                ]
+                            }),
+                            __asyncLink_callback: null,
+                            __asyncLink_errorMessage: null,
+                            __asyncLink_errorDescription: null,
+                            init () {
+                                this.$watch('__asyncLink_state', (state)=>{
+                                    this.$dispatch(`async-link:${state}`);
+                                });
+                                Alpine.effect(()=>{
+                                    // Create a function which wraps the passed in callback function / expression and allows us to call it when the user clicks the link
+                                    this.__asyncLink_callback = async (href)=>{
+                                        let resultPromise;
+                                        Alpine.dontAutoEvaluateFunctions(()=>{
+                                            getCallbackFn(async (result)=>{
+                                                if (typeof result === 'function') {
+                                                    resultPromise = result.bind(this)(href);
+                                                } else {
+                                                    throw new Error(`x-async-link expects an async function as its expression`);
+                                                }
+                                            }, {
+                                                params: [
+                                                    href
+                                                ],
+                                                scope: {
+                                                    $href: href
+                                                }
+                                            });
+                                        });
+                                        return resultPromise;
+                                    };
+                                });
+                            },
+                            get __asyncLink_state () {
+                                return this.__asyncLink_stateMachine.state;
+                            },
+                            get __asyncLink_prevState () {
+                                return this.__asyncLink_stateMachine.prevState;
+                            },
+                            set __asyncLink_state (state){
+                                this.__asyncLink_stateMachine.state = state;
+                            },
+                            async __asyncLink_load (href) {
+                                this.__asyncLink_state = 'pending';
+                                this.__asyncLink_pendingHref = href;
+                                try {
+                                    // Run provided callback function
+                                    const response = await this.__asyncLink_callback.bind(this)(href);
+                                    if (!response || (response === null || response === void 0 ? void 0 : response.status) == undefined) {
+                                        // Handle the response object not being a fetch request
+                                        this.__asyncLink_handleSuccess();
+                                        return response;
+                                    } else if (response.status === 200) {
+                                        this.__asyncLink_handleSuccess();
+                                        return response;
+                                    } else if (response.status === 422) {
+                                        const body = await response.json();
+                                        this.__asyncLink_handleError(body.message, body.description);
+                                        return response;
+                                    } else {
+                                        this.__asyncLink_handleError(response.statusText);
+                                        return response;
+                                    }
+                                } catch (e) {
+                                    if (e.name == 'AbortError') {
+                                        this.__asyncLink_pendingHref = null;
+                                        this.__asyncLink_state = 'idle';
+                                        return false;
+                                    } else {
+                                        this.__asyncLink_handleError(String((e === null || e === void 0 ? void 0 : e.message) || e));
+                                        throw e;
+                                    }
+                                }
+                            },
+                            async __asyncLink_handleSuccess () {
+                                this.$dispatch('async-link:loaded', this.__asyncLink_pendingHref);
+                                this.__asyncLink_state = 'idle';
+                                this.__asyncLink_pendingHref = null;
+                            },
+                            async __asyncLink_handleError (message, description) {
+                                this.__asyncLink_state = 'idle';
+                                this.__asyncLink_errorMessage = message;
+                                this.__asyncLink_errorDescription = description;
+                                this.__asyncLink_pendingHref = null;
+                            },
+                            __asyncLink_reset () {
+                                this.__asyncLink_state = 'idle';
+                                this.__asyncLink_errorMessage = null;
+                                this.__asyncLink_errorDescription = null;
+                                this.__asyncLink_pendingHref = null;
+                            }
+                        };
+                    }
+                });
+            } else {
+                if (!data.expression) {
+                    throw new Error('x-async-link directive requires a an async callback function');
+                }
+                if (!isAnchorElement($el)) {
+                    throw new Error('x-async-link directive can only be used on anchor elements');
+                }
+                Alpine.bind($el, {
+                    'x-async-link:context': data.expression,
+                    [`x-async-link:link.${data.modifiers.join('.')}`]: ''
+                });
+            }
+        }).before('bind');
+        Alpine.magic('asyncLink', ($el)=>{
+            const $data = Alpine.$data($el);
+            return {
+                get pendingHref () {
+                    return $data.__asyncLink_pendingHref;
+                },
+                get state () {
+                    return $data.__asyncLink_state;
+                },
+                get reset () {
+                    return $data.__asyncLink_reset();
+                },
+                get errorMessage () {
+                    return $data.__asyncLink_errorMessage;
+                },
+                get errorDescription () {
+                    return $data.__asyncLink_errorDescription;
+                }
+            };
+        });
+    }
+
+    /**
+     * This Alpine.js plugin provides a directive for handling navigation via links and forms,
+     * allowing for asynchronous navigation without a full page reload. This is particularly useful
+     * for creating single-page applications or enhancing user experience with faster navigation.
+     *
+     * The core functionality of this plugin is to interrupt the default page reloading behavior
+     * of links and forms, and instead call a custom navigation callback function. This function
+     * is responsible for re-rendering the page content dynamically.
+     *
+     * ## Custom Navigation Callback
+     *
+     * The `x-router` directive requires an async callback function that returns a fetch promise.
+     * This function is crucial as it defines how the page content should be re-rendered when
+     * navigation occurs. You can specify this callback using the `x-router` directive with an expression:
+     *
+     * ```html
+     * <div x-router="customNavigate">
+     *   <!-- Custom navigation logic here -->
+     * </div>
+     * ```
+     *
+     * The expression should be an async function that handles the fetch request and updates the view accordingly.
+     *
+     * ## Usage
+     *
+     * ### Link Navigation
+     *
+     * To use the `x-router` directive for link navigation, add the `x-router:link` directive to an anchor element:
+     *
+     * ```html
+     * <a x-router:link href="/new-page">Go to New Page</a>
+     * ```
+     *
+     * When the link is clicked, the plugin will handle the navigation asynchronously using the custom callback.
+     *
+     * ### Form Navigation
+     *
+     * To use the `x-router` directive for form navigation, add the `x-router:form` directive to a form element:
+     *
+     * ```html
+     * <form x-router:form action="/submit-form" method="POST">
+     *   <input type="text" name="example" />
+     *   <button type="submit">Submit</button>
+     * </form>
+     * ```
+     *
+     * When the form is submitted, the plugin will handle the navigation asynchronously using the custom callback.
+     *
+     * ## History Management
+     *
+     * The plugin also manages browser history to ensure that back/forward navigation works as expected.
+     *
+     * When the user navigates back or forward, the plugin will reload the page to reflect the correct state.
+     *
+     * ## Example
+     *
+     * ```html
+     * <a x-router:link href="/new-page">Go to New Page</a>
+     *
+     * <form x-router:form action="/submit-form" method="POST">
+     *   <input type="text" name="example" />
+     *   <button type="submit">Submit</button>
+     * </form>
+     *
+     * <div x-router="customNavigate">
+     *   <!-- Custom navigation logic here -->
+     * </div>
+     * ```
+     */ function router(Alpine) {
+        Alpine.directive('router', ($el, data, { evaluateLater  })=>{
+            const historyMode1 = getHistoryModeModifier(data.modifiers);
+            if (data.value == 'link') {
+                Alpine.bind($el, {
+                    [`x-async-link`] () {
+                        return async (href)=>{
+                            const url = getNavigationUrl({
+                                action: href
+                            }).toString();
+                            return this.__router_navigate(url, historyMode1);
+                        };
+                    }
+                });
+            } else if (data.value == 'form') {
+                Alpine.bind($el, {
+                    [`x-async-form`] () {
+                        return async (info)=>{
+                            const url = getNavigationUrl(info).toString();
+                            return this.__router_navigate(url, historyMode1);
+                        };
+                    }
+                });
+            } else {
+                if (!data.expression) {
+                    throw new Error('x-router directive requires an async callback function that returns a fetch promise');
+                }
+                let getCallbackFn = evaluateLater(data.expression);
+                if (!window._x_router_initialized) {
+                    // Add initial state to the history object so that popstate event is fired when the user navigates back/forward
+                    window.history.replaceState({
+                        fromRouter: true,
+                        url: document.location.href
+                    }, '', document.location.href);
+                    // Reload the page when the user navigates back/forward since our usage of pushState/replaceState would cause the browser not to trigger a page reload
+                    window.addEventListener('popstate', (event)=>{
+                        var _a;
+                        if ((_a = event.state) === null || _a === void 0 ? void 0 : _a.fromRouter) {
+                            // NOTE this is a quick fix in order to get back/forward buttons working as expected with the router,
+                            // however a better solution for things like the collection view would probably be to call the callback function
+                            // with the correct href and then update the view accordingly without a page reload i.e. when using $sectionApi.
+                            // We'll revisit that when we have time
+                            window.location.reload();
+                        }
+                    });
+                    window._x_router_initialized = true;
+                }
+                Alpine.bind($el, {
+                    'x-data' () {
+                        return {
+                            __router_callback: null,
+                            init () {
+                                Alpine.effect(()=>{
+                                    // Create a function which wraps the passed in callback function / expression and allows us to call it when the user clicks the link
+                                    this.__router_callback = async (href)=>{
+                                        let resultPromise;
+                                        Alpine.dontAutoEvaluateFunctions(()=>{
+                                            getCallbackFn(async (result)=>{
+                                                if (typeof result === 'function') {
+                                                    resultPromise = result.bind(this)(href);
+                                                } else {
+                                                    throw new Error(`x-async-link expects an async function as its expression`);
+                                                }
+                                            });
+                                        });
+                                        return resultPromise;
+                                    };
+                                });
+                            },
+                            async __router_navigate (urlOrHref, historyMode) {
+                                const url = new URL(urlOrHref);
+                                if (historyMode == 'replace') {
+                                    window.history.replaceState({
+                                        fromRouter: true,
+                                        url: url.toString()
+                                    }, '', url.toString());
+                                } else if (historyMode == 'push') {
+                                    window.history.pushState({
+                                        fromRouter: true,
+                                        url: url.toString()
+                                    }, '', url.toString());
+                                }
+                                const promise = this.__router_callback(url);
+                                return promise;
+                            }
+                        };
+                    }
+                });
+            }
+        }).before('bind');
+        Alpine.magic('router', ($el)=>{
+            const $data = Alpine.$data($el);
+            return {
+                navigate (url, historyMode) {
+                    return $data.__router_navigate(url, historyMode);
+                }
+            };
+        });
+    }function getHistoryModeModifier(modifiers, defaultMode = 'push') {
+        if (modifiers.includes('replace')) {
+            return 'replace';
+        } else if (modifiers.includes('push')) {
+            return 'push';
+        } else if (modifiers.includes('nopush')) {
+            return 'none';
+        } else {
+            return defaultMode;
+        }
+    }
+    function getNavigationUrl(navigationInfo) {
+        let url = new URL(navigationInfo.action);
+        if ((navigationInfo === null || navigationInfo === void 0 ? void 0 : navigationInfo.formData) && (navigationInfo === null || navigationInfo === void 0 ? void 0 : navigationInfo.method) === 'GET') {
+            let formData = navigationInfo.formData;
+            let searchParams = new URLSearchParams(formData);
+            url.search = searchParams.toString();
+        }
+        return url;
+    }
+
+    const DEFAULT_SLIDE_DURATION = 1000;
+    /**
+     * TODO document me
+     */ function slideshow(Alpine) {
+        Alpine.directive('slideshow', ($el, data, utilities)=>{
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            if (data.value === 'slide') {
+                handleSlide($el, Alpine);
+            } else if (data.value === 'control') {
+                handleControl($el, Alpine);
+            } else if (data.value === 'play') {
+                handlePlayButton($el, Alpine);
+            } else if (data.value === 'pause') {
+                handlePauseButton($el, Alpine);
+            } else if (data.value === 'next') {
+                handleNextButton($el, Alpine);
+            } else if (data.value === 'prev') {
+                handlePrevButton($el, Alpine);
+            } else if (data.value === 'toggle') {
+                handleToggleButton($el, Alpine);
+            } else if (data.value === 'viewport') {
+                handleViewport($el, Alpine);
+            } else if (data.value === null) {
+                handleRoot$3($el, Alpine, data, utilities);
+            } else {
+                throw new Error(`Unknown directive: x-slideshow:${data.value}`);
+            }
+        }).before('bind');
+        Alpine.magic('slideshow', function($el) {
+            const $data = Alpine.$data($el);
+            // Could probably just rename __slideshow_state to $slideshow and get rid of this magic
+            // but I want to think through the implications of that before establishing a precedent
+            return $data.__slideshow_state || {};
+        });
+        Alpine.magic('slide', function($el) {
+            const $data = Alpine.$data($el);
+            return {
+                get slideIndex () {
+                    return $data.__slideshowSlide_slideIndex;
+                },
+                get isCurrentSlide () {
+                    return $data.__slideshowSlide_isCurrentSlide;
+                },
+                get wasLastSlide () {
+                    return $data.__slideshowSlide_wasLastSlide;
+                }
+            };
+        });
+    }function handleControl($el, Alpine) {
+        Alpine.bind($el, {
+            ':aria-controls': '$id("slideshow")'
+        });
+    }
+    function handlePlayButton($el, Alpine) {
+        Alpine.bind($el, {
+            '@click': '$slideshow.play()',
+            'x-slideshow:control': ''
+        });
+    }
+    function handlePauseButton($el, Alpine) {
+        Alpine.bind($el, {
+            '@click': '$slideshow.pause()',
+            'x-slideshow:control': ''
+        });
+    }
+    function handleNextButton($el, Alpine) {
+        Alpine.bind($el, {
+            '@click': '$slideshow.pause(); $slideshow.next()',
+            'x-slideshow:control': ''
+        });
+    }
+    function handlePrevButton($el, Alpine) {
+        Alpine.bind($el, {
+            '@click': '$slideshow.pause(); $slideshow.prev()',
+            'x-slideshow:control': ''
+        });
+    }
+    function handleToggleButton($el, Alpine) {
+        Alpine.bind($el, {
+            '@click': '$slideshow.toggle()',
+            'x-slideshow:control': ''
+        });
+    }
+    function handleSlide($el, Alpine) {
+        Alpine.bind($el, {
+            ['x-data'] () {
+                return {
+                    init () {
+                        this.__slideshow_state.register(this.$el);
+                    },
+                    destroy () {
+                        this.__slideshow_state.unregister(this.$el);
+                    },
+                    get __slideshowSlide_slideIndex () {
+                        return Array.from(this.__slideshow_state.slides).indexOf(this.$el);
+                    },
+                    get __slideshowSlide_isCurrentSlide () {
+                        return this.__slideshow_state.currentSlideIndex === this.__slideshowSlide_slideIndex;
+                    },
+                    get __slideshowSlide_wasLastSlide () {
+                        return this.__slideshow_state.lastSlideIndex === this.__slideshowSlide_slideIndex;
+                    }
+                };
+            },
+            role: 'group',
+            'aria-roledescription': 'slide'
+        });
+    }
+    function handleViewport($el, Alpine) {
+        Alpine.bind($el, {
+            ':id': `$id('slideshow')`,
+            role: 'region',
+            'aria-roledescription': 'carousel',
+            ':aria-live': '$slideshow.state == "playing" ? "off" : "polite"',
+            '@keydown.left.stop.prevent': '$slideshow.prev()',
+            '@keydown.right.stop.prevent': '$slideshow.next()',
+            '@focus': '$slideshow.pause()'
+        });
+    }
+    function handleRoot$3($el, Alpine, data, { evaluate  }) {
+        let slideDuration = DEFAULT_SLIDE_DURATION;
+        const autoplay = data.modifiers.includes('autoplay');
+        if (data.modifiers.includes('duration')) {
+            const rawValue = data.modifiers[data.modifiers.indexOf('duration') + 1];
+            // Support x-slideshow.duration.500ms which will wait 500ms before transitioning to next slide
+            let match = rawValue.match(/([0-9]+)ms/);
+            if (match) slideDuration = Number(match[1]);
+        }
+        let expression = data.expression === '' ? '{}' : data.expression;
+        let options = evaluate(expression);
+        options.slideDuration = slideDuration;
+        options.autoplay = autoplay;
+        if (options !== undefined && options !== null && !isPlainObject(options)) {
+            throw new Error(`options must be an object, but got ${options}`);
+        }
+        let state = buildSlideshowState(options);
+        Alpine.bind($el, {
+            ['x-data'] () {
+                return {
+                    __slideshow_autoplayTimeoutId: undefined,
+                    __slideshow_animationFrameId: undefined,
+                    __slideshow_state: state,
+                    init () {
+                        let lastTimestamp;
+                        const updateProgress = (timestamp)=>{
+                            if (lastTimestamp === undefined) lastTimestamp = timestamp;
+                            const deltaTime = timestamp - lastTimestamp;
+                            lastTimestamp = timestamp;
+                            // Update the elapsed time
+                            this.__slideshow_state.currentSlideElapsedTime = Math.round(this.__slideshow_state.currentSlideElapsedTime + deltaTime);
+                            // Request the next frame if playing
+                            if (this.__slideshow_state.state === 'playing') {
+                                this.__slideshow_animationFrameId = requestAnimationFrame(updateProgress);
+                            }
+                        };
+                        const startProgressUpdates = ()=>{
+                            // Cancel any existing animation frame
+                            if (this.__slideshow_animationFrameId !== undefined) {
+                                cancelAnimationFrame(this.__slideshow_animationFrameId);
+                            }
+                            // Start updating progress
+                            lastTimestamp = undefined;
+                            this.__slideshow_animationFrameId = requestAnimationFrame(updateProgress);
+                        };
+                        const stopProgressUpdates = ()=>{
+                            if (this.__slideshow_animationFrameId !== undefined) {
+                                cancelAnimationFrame(this.__slideshow_animationFrameId);
+                                this.__slideshow_animationFrameId = undefined;
+                            }
+                        };
+                        const scheduleNextSlide = ()=>{
+                            // Clear any existing timeout
+                            if (this.__slideshow_autoplayTimeoutId !== undefined) {
+                                clearTimeout(this.__slideshow_autoplayTimeoutId);
+                                this.__slideshow_autoplayTimeoutId = undefined;
+                            }
+                            if (this.__slideshow_state.state === 'playing') {
+                                // Start progress updates
+                                startProgressUpdates();
+                                // Schedule the next slide
+                                const remainingTime = this.__slideshow_state.slideDuration - this.__slideshow_state.currentSlideElapsedTime;
+                                this.__slideshow_autoplayTimeoutId = window.setTimeout(()=>{
+                                    // Move to the next slide
+                                    this.__slideshow_state.next();
+                                    // Reset elapsed time
+                                    this.__slideshow_state.currentSlideElapsedTime = 0;
+                                    // Schedule next slide
+                                    scheduleNextSlide();
+                                }, remainingTime);
+                            } else {
+                                // Slideshow is paused, stop progress updates
+                                stopProgressUpdates();
+                            }
+                        };
+                        // Watch for changes in play state
+                        this.$watch('__slideshow_state.state', ()=>{
+                            scheduleNextSlide();
+                        });
+                        // Watch for slide changes (e.g., manual navigation)
+                        this.$watch('__slideshow_state.currentSlideIndex', (_nextIndex, prevIndex)=>{
+                            // Reset elapsed time and schedule next slide
+                            this.__slideshow_state.currentSlideElapsedTime = 0;
+                            scheduleNextSlide();
+                        });
+                        // Initial scheduling
+                        scheduleNextSlide();
+                    },
+                    destroy () {
+                        if (this.__slideshow_autoplayTimeoutId !== undefined) {
+                            clearTimeout(this.__slideshow_autoplayTimeoutId);
+                        }
+                        if (this.__slideshow_animationFrameId !== undefined) {
+                            cancelAnimationFrame(this.__slideshow_animationFrameId);
+                        }
+                    }
+                };
+            },
+            'x-id': "['slideshow']"
+        });
+    }
+    function buildSlideshowState(options = {}) {
+        let state = {
+            state: options.autoplay ? 'playing' : 'paused',
+            slideDuration: options.slideDuration || 1000,
+            currentSlideIndex: options.initialSlideIndex || 0,
+            currentSlideElapsedTime: 0,
+            slides: new Set(),
+            lastSlideIndex: null,
+            get totalSlides () {
+                return this.slides.size;
+            },
+            get nextSlideIndex () {
+                return mod(this.currentSlideIndex + 1, this.totalSlides);
+            },
+            get prevSlideIndex () {
+                return mod(this.currentSlideIndex - 1, this.totalSlides);
+            },
+            register (el) {
+                this.slides.add(el);
+            },
+            unregister (el) {
+                this.slides.delete(el);
+            },
+            next () {
+                this.currentSlideIndex = this.nextSlideIndex;
+            },
+            prev () {
+                this.currentSlideIndex = this.prevSlideIndex;
+            },
+            play () {
+                if (this.state === 'playing') return;
+                this.state = 'playing';
+            },
+            pause () {
+                if (this.state === 'paused') return;
+                this.state = 'paused';
+            },
+            toggle () {
+                if (this.state === 'playing') {
+                    this.pause();
+                } else {
+                    this.play();
+                }
+            }
+        };
+        state = trackProperty(state, 'currentSlideIndex', 'lastSlideIndex');
+        if ((options === null || options === void 0 ? void 0 : options.state) !== undefined) {
+            copyProperty(options, state, 'state');
+        }
+        if ((options === null || options === void 0 ? void 0 : options.currentSlideIndex) !== undefined) {
+            copyProperty(options, state, 'currentSlideIndex');
+        }
+        return state;
+    }
+
+    /**
+     * Plugin to make it easy to integrate with the theme editor
+     *
+     * TODO: more docs!
+     *
+     * @example
+     *
+     * <div>
+     *   <div
+     *     x-disclosure
+     *     {% if request.design_mode %}
+     *       @shopify:section:select.window="
+     *         if($isSelectedSection) {
+     *           $disclosure.expand()
+     *         }
+     *       "
+     *       @shopify:section:deselect.window="
+     *         if($wasSelectedSection) {
+     *           $disclosure.collapse()
+     *         }
+     *       "
+     *     {% endif %}
+     *   >
+     *     <button x-disclosure:button>Toggle</button>
+     *     <div x-disclosure:panel>My content</div>
+     *   </div>
+     * </div>
+     */ function themeEditor(Alpine) {
+        Alpine.magic('isSelectedSection', handleIsSelectedSectionMagic(Alpine));
+        Alpine.magic('isSelectedBlock', handleIsSelectedBlockMagic(Alpine));
+        Alpine.magic('isInSelectedBlockTree', handleIsInSelectedBlockTreeMagic(Alpine));
+        Alpine.magic('containsSelectedBlock', handleContainsSelectedBlockMagic(Alpine));
+        Alpine.magic('wasSelectedSection', handleWasSelectedSectionMagic(Alpine));
+        Alpine.magic('wasInSelectedBlockTree', handleWasInSelectedBlockTreeMagic(Alpine));
+        Alpine.magic('wasSelectedBlock', handleWasSelectedBlockMagic(Alpine));
+        Alpine.magic('selectedSection', handleSelectedSectionMagic(Alpine));
+        Alpine.magic('selectedBlock', handleSelectedBlockMagic(Alpine));
+        Alpine.magic('prevSelectedSection', handlePrevSelectedSectionMagic(Alpine));
+        Alpine.magic('prevSelectedBlock', handlePrevSelectedBlockMagic(Alpine));
+        Alpine.store('themeEditor', themeEditorStore);
+    }/**
+     * Returns the  selected section in the theme editor
+     */ function handleSelectedSectionMagic(Alpine) {
+        return function(_$el) {
+            var _a;
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return null;
+            const selectedSection = Alpine.store('themeEditor').selectedSection;
+            return selectedSection;
+        };
+    }
+    /**
+     * Returns the previously selected section in the theme editor
+     */ function handlePrevSelectedSectionMagic(Alpine) {
+        return function(_$el) {
+            var _a;
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return null;
+            const selectedSection = Alpine.store('themeEditor').prevSelectedSection;
+            return selectedSection;
+        };
+    }
+    /**
+     * Returns the previously selected block in the theme editor
+     */ function handlePrevSelectedBlockMagic(Alpine) {
+        return function(_$el) {
+            var _a;
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return null;
+            const selectedBlock = Alpine.store('themeEditor').prevSelectedBlock;
+            return selectedBlock;
+        };
+    }
+    /**
+     * Returns the selected block in the theme editor
+     */ function handleSelectedBlockMagic(Alpine) {
+        return function(_$el) {
+            var _a;
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return null;
+            const selectedBlock = Alpine.store('themeEditor').selectedBlock;
+            return selectedBlock;
+        };
+    }
+    /**
+     * Returns whether the current element is the selected section in the theme editor or a descendant of it
+     */ function handleIsSelectedSectionMagic(Alpine) {
+        return function($el) {
+            var _a;
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            if (!isHtmlElement) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            const el = closestSectionEl($el);
+            const selectedSection = Alpine.store('themeEditor').selectedSection;
+            if (!el) return false;
+            if (!selectedSection) return false;
+            return el.id == selectedSection.id;
+        };
+    }
+    /**
+     * Returns whether the current element is the previously selected section in the theme editor or a descendant of it
+     */ function handleWasSelectedSectionMagic(Alpine) {
+        return function($el) {
+            var _a;
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            if (!isHtmlElement) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            const el = closestSectionEl($el);
+            const prevSelectedSection = Alpine.store('themeEditor').prevSelectedSection;
+            if (!el) return false;
+            if (!prevSelectedSection) return false;
+            return el.id == prevSelectedSection.id;
+        };
+    }
+    /**
+     * Returns whether the current element is the selected block in the theme editor
+     */ function handleIsSelectedBlockMagic(Alpine) {
+        return function($el) {
+            var _a;
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            const el = $el.closest('[data-shopify-editor-block]');
+            const selectedBlock = Alpine.store('themeEditor').selectedBlock;
+            if (!el) return false;
+            if (!selectedBlock) return false;
+            return el === selectedBlock;
+        };
+    }
+    /**
+     * Returns whether the current element is the selected block, a descendant of it, or a parent of it
+     */ function handleIsInSelectedBlockTreeMagic(Alpine) {
+        return function($el) {
+            var _a;
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            const el = $el.closest('[data-shopify-editor-block]');
+            const selectedBlock = Alpine.store('themeEditor').selectedBlock;
+            if (!el) return false;
+            if (!selectedBlock) return false;
+            return el.contains(selectedBlock) || el === selectedBlock || selectedBlock.contains(el);
+        };
+    }
+    /**
+     * Returns whether the current element is or contains the selected block in the theme editor
+     */ function handleContainsSelectedBlockMagic(Alpine) {
+        return function($el) {
+            var _a;
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            const el = $el.closest('[data-shopify-editor-block]');
+            const selectedBlock = Alpine.store('themeEditor').selectedBlock;
+            if (!el) return false;
+            if (!selectedBlock) return false;
+            return el.contains(selectedBlock) || el === selectedBlock;
+        };
+    }
+    /**
+     * Returns whether the current element is the selected block in the theme editor
+     */ function handleWasSelectedBlockMagic(Alpine) {
+        return function($el) {
+            var _a;
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            const el = $el.closest('[data-shopify-editor-block]');
+            const selectedBlock = Alpine.store('themeEditor').prevSelectedBlock;
+            if (!el) return false;
+            if (!selectedBlock) return false;
+            return el == selectedBlock;
+        };
+    }
+    /**
+     * Returns whether the current element was the selected block, a descendant of it, or an ancestor of it
+     */ function handleWasInSelectedBlockTreeMagic(Alpine) {
+        return function($el) {
+            var _a;
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            const el = $el.closest('[data-shopify-editor-block]');
+            const selectedBlock = Alpine.store('themeEditor').prevSelectedBlock;
+            if (!el) return false;
+            if (!selectedBlock) return false;
+            return el.contains(selectedBlock) || el === selectedBlock || selectedBlock.contains(el);
+        };
+    }
+    const themeEditorStore = {
+        isInspectorActive: false,
+        selectedSectionId: null,
+        prevSelectedSectionId: null,
+        selectedBlock: null,
+        prevSelectedBlock: null,
+        get selectedSection () {
+            if (!this.selectedSectionId) return null;
+            return document.getElementById(`shopify-section-${this.selectedSectionId}`);
+        },
+        get prevSelectedSection () {
+            if (!this.prevSelectedSectionId) return null;
+            return document.getElementById(`shopify-section-${this.prevSelectedSectionId}`);
+        },
+        init () {
+            window.addEventListener(ThemeEditorEvent.INSPECTOR_ACTIVATED, ()=>{
+                var _a;
+                if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+                this.isInspectorActive = true;
+            });
+            window.addEventListener(ThemeEditorEvent.INSPECTOR_DEACTIVATED, ()=>{
+                var _a;
+                if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+                this.isInspectorActive = false;
+            });
+            window.addEventListener(ThemeEditorEvent.SECTION_SELECT, (e)=>{
+                var _a;
+                if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+                const sectionSelectEvent = e;
+                if (this.selectedSectionId !== null) {
+                    this.prevSelectedSectionId = this.selectedSectionId;
+                }
+                this.selectedSectionId = sectionSelectEvent.detail.sectionId;
+            });
+            window.addEventListener(ThemeEditorEvent.SECTION_DESELECT, (e)=>{
+                var _a;
+                if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+                this.prevSelectedSectionId = this.selectedSectionId;
+                this.selectedSectionId = null;
+            });
+            window.addEventListener(ThemeEditorEvent.BLOCK_SELECT, (e)=>{
+                var _a;
+                if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+                const blockSelectEvent = e;
+                this.prevSelectedBlock = this.selectedBlock;
+                this.selectedBlock = blockSelectEvent.target;
+            });
+            window.addEventListener(ThemeEditorEvent.BLOCK_DESELECT, (e)=>{
+                var _a;
+                if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+                this.prevSelectedBlock = this.selectedBlock;
+                this.selectedBlock = null;
+            });
+            window.addEventListener(ThemeEditorEvent.SECTION_LOAD, (e)=>{
+                var _a;
+                if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            // NOOP for now
+            });
+            window.addEventListener(ThemeEditorEvent.SECTION_UNLOAD, (e)=>{
+                var _a;
+                if (!((_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.designMode)) return false;
+            // NOOP for now
+            });
+        }
+    };
+
+    function prettyPrintError(err) {
+        let output = '';
+        if (typeof err === 'string') {
+            output = err;
+        } else if (err instanceof Error) {
+            output = err.message;
+        } else if (err && typeof err.toString === 'function') {
+            output = err.toString();
+        } else if (err && typeof err.message === 'string') {
+            output = err.message;
+        } else {
+            output = 'An unknown error occurred.';
+        }
+        return output;
+    }
+
+    /**
+     * Function that combines some default morph behavior with custom behavior
+     * @param options - The custom behavior to combine with the default behavior
+     * @returns The combined morph behavior
+     */ function buildMorphConfig(options) {
+        return Object.assign(Object.assign({}, options), {
+            updating (el, toEl, childrenOnly, skip) {
+                var _a;
+                // Allow elements to opt-out of resetting their alpine state by adding the data-morph-children-only attribute
+                if (el.hasAttribute && el.hasAttribute('data-morph-children-only')) {
+                    childrenOnly();
+                }
+                // Allow elements to opt-out of morphing altogether with data-morph-skip
+                if (el.hasAttribute && el.hasAttribute('data-morph-skip')) {
+                    skip();
+                }
+                (_a = options === null || options === void 0 ? void 0 : options.updating) === null || _a === void 0 ? void 0 : _a.call(options, el, toEl, childrenOnly, skip);
+            },
+            removing (el, skip) {
+                var _a;
+                // Allow elements to opt-out of morphing altogether with data-morph-skip
+                if (el.hasAttribute && el.hasAttribute('data-morph-skip')) {
+                    skip();
+                }
+                (_a = options === null || options === void 0 ? void 0 : options.removing) === null || _a === void 0 ? void 0 : _a.call(options, el, skip);
+            }
+        });
+    }
+
+    let FetchBatcher = class FetchBatcher {
+        // Main method to handle incoming requests
+        request(url) {
+            return new Promise((resolve, reject)=>{
+                const baseUrl = this.getBaseUrl(url);
+                const queryParams = this.getQueryParams(url);
+                const sectionsParam = queryParams.getAll('sections').concat(queryParams.getAll('section_id')).concat(queryParams.getAll('sections[]'));
+                if (!this.batchMap.has(baseUrl)) {
+                    this.batchMap.set(baseUrl, new Set());
+                }
+                const sectionsSet = this.batchMap.get(baseUrl);
+                if (sectionsSet) {
+                    sectionsParam.forEach((section)=>sectionsSet.add(section)
+                    );
+                }
+                if (!this.requestPromises.has(baseUrl)) {
+                    this.requestPromises.set(baseUrl, []);
+                }
+                const promisesList = this.requestPromises.get(baseUrl);
+                if (promisesList) {
+                    promisesList.push({
+                        resolve,
+                        reject
+                    });
+                }
+                // Set a timeout to batch requests
+                if (!this.timeoutMap.has(baseUrl)) {
+                    const timeoutId = setTimeout(()=>{
+                        this.fetchBatch(baseUrl);
+                    }, this.timeoutDuration);
+                    this.timeoutMap.set(baseUrl, timeoutId);
+                }
+            });
+        }
+        // Extract base URL from full URL
+        getBaseUrl(url) {
+            const [baseUrl, _queryParams] = url.split('?');
+            return baseUrl;
+        }
+        // Extract query parameters from full URL
+        getQueryParams(url) {
+            const [_baseUrl, queryParams] = url.split('?');
+            return new URLSearchParams(queryParams);
+        }
+        // Construct the batched URL with all sections
+        buildBatchUrl(baseUrl, sections) {
+            return `${baseUrl}?sections=${Array.from(sections).join(',')}`;
+        }
+        // Fetch batched request
+        async fetchBatch(baseUrl) {
+            const sections = this.batchMap.get(baseUrl);
+            if (!sections) return;
+            const batchUrl = this.buildBatchUrl(baseUrl, sections);
+            this.batchMap.delete(baseUrl);
+            this.timeoutMap.delete(baseUrl);
+            try {
+                const response = await fetch(batchUrl);
+                if (response.ok) {
+                    const data = await response.json();
+                    const requestPromises = this.requestPromises.get(baseUrl);
+                    if (requestPromises) {
+                        requestPromises.forEach(({ resolve  })=>resolve(data)
+                        );
+                        this.requestPromises.delete(baseUrl);
+                    }
+                } else {
+                    throw response.statusText;
+                }
+            } catch (error) {
+                const requestPromises = this.requestPromises.get(baseUrl);
+                if (requestPromises) {
+                    requestPromises.forEach(({ reject  })=>reject(error)
+                    );
+                    this.requestPromises.delete(baseUrl);
+                }
+            }
+        }
+        constructor(timeoutDuration = 100){
+            this.batchMap = new Map();
+            this.timeoutMap = new Map();
+            this.timeoutDuration = timeoutDuration;
+            this.requestPromises = new Map();
+        }
+    };
+
+    var __rest$1 = undefined && undefined.__rest || function(s, e) {
         var t = {};
         for(var p in s)if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
         if (s != null && typeof Object.getOwnPropertySymbols === "function") for(var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++){
@@ -18225,15 +24997,491 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         }
         return t;
     };
+    const THEME_SECTION_CONTEXT_KEY = Symbol('THEME_SECTION_CONTEXT_KEY');
+    const THEME_SECTION_FRAME_CONTEXT_KEY = Symbol('THEME_SECTION_FRAME_CONTEXT_KEY');
+    const fetchBatcher = new FetchBatcher();
+    const DEFAULT_MORPH_CONFIG = {
+        updating (el, _toEl, _childrenOnly, skip) {
+            // Skip any built-in shopify elements
+            if (el.hasAttribute && el.hasAttribute('data-shopify')) {
+                skip();
+            }
+        },
+        removing (el, skip) {
+            // Skip any built-in shopify elements
+            if (el.hasAttribute && el.hasAttribute('data-shopify')) {
+                skip();
+            }
+        }
+    };
+    var sectionApi = ((options)=>{
+        let morphConfig = (options === null || options === void 0 ? void 0 : options.morphConfig) || DEFAULT_MORPH_CONFIG;
+        return function(Alpine) {
+            if ('morph' in Alpine === false) {
+                throw new Error('The x-section-api directive requires the @alpinejs/morph plugin');
+            }
+            if (!Alpine.store('cache')) {
+                throw new Error('The x-section-api directive requires the method-ui cache plugin');
+            }
+            if (!Alpine.store('cache').resources.sectionHtml) {
+                Alpine.store('cache').addResource('sectionHtml');
+            }
+            Alpine.directive('section-api', ($el, data, utilities)=>{
+                if (!isHtmlElement($el)) {
+                    throw new Error(`Expected HTMLElement but got ${$el}`);
+                }
+                if (data.value === 'frame') {
+                    handleFrame($el, data, utilities, Alpine, morphConfig);
+                } else if (data.value === 'form') {
+                    handleForm($el, data, utilities, Alpine);
+                } else if (data.value === 'link') {
+                    handleLink($el, data, utilities, Alpine);
+                } else if (data.value === null) {
+                    handleRoot$2($el, data, utilities, Alpine, morphConfig);
+                } else {
+                    throw new Error(`Unknown directive: x-section-api:${data.value}`);
+                }
+            }).before('bind');
+            Alpine.magic('sectionApi', handleSectionMagic(Alpine));
+            Alpine.magic('sectionApiFrame', handleFrameMagic(Alpine));
+            Alpine.magic('sectionApiCache', handleSectionCacheMagic(Alpine));
+            bindAllThemeSections(Alpine, (el)=>{
+                // Add x-section-api directive to all sections making it possible to reload them via section rendering API with $sectionApi.load(...)
+                const sectionIdForSectionRenderingApi = el.id.split('shopify-section-')[1]; // e.g. section-featured-product from shopify-section-section-featured-product
+                Alpine.bind(el, {
+                    ['x-section-api']: sectionIdForSectionRenderingApi
+                });
+            });
+        };
+    });
+    function handleSectionMagic(Alpine) {
+        return function($el) {
+            const context = Alpine.$data($el)[THEME_SECTION_CONTEXT_KEY];
+            return {
+                get morphConfig () {
+                    return context === null || context === void 0 ? void 0 : context.morphConfig;
+                },
+                set morphConfig (value){
+                    context.morphConfig = value;
+                },
+                get sectionId () {
+                    return context === null || context === void 0 ? void 0 : context.sectionId;
+                },
+                get state () {
+                    return context === null || context === void 0 ? void 0 : context.state;
+                },
+                get error () {
+                    return context === null || context === void 0 ? void 0 : context.error;
+                },
+                update (options) {
+                    return context === null || context === void 0 ? void 0 : context.update(options);
+                },
+                load (options) {
+                    return context === null || context === void 0 ? void 0 : context.load(options);
+                },
+                navigate (url, historyMode) {
+                    return context === null || context === void 0 ? void 0 : context.navigate(url, historyMode);
+                }
+            };
+        };
+    }
+    function handleFrameMagic(Alpine) {
+        return function($el) {
+            const context = Alpine.$data($el)[THEME_SECTION_FRAME_CONTEXT_KEY];
+            return {
+                get morphConfig () {
+                    return context === null || context === void 0 ? void 0 : context.morphConfig;
+                },
+                set morphConfig (value){
+                    context.morphConfig = value;
+                },
+                get el () {
+                    return context === null || context === void 0 ? void 0 : context.rootEl;
+                },
+                get state () {
+                    return context === null || context === void 0 ? void 0 : context.state;
+                },
+                get error () {
+                    return context === null || context === void 0 ? void 0 : context.error;
+                },
+                update (options) {
+                    return context === null || context === void 0 ? void 0 : context.update(options);
+                },
+                load (options) {
+                    return context === null || context === void 0 ? void 0 : context.load(options);
+                }
+            };
+        };
+    }
+    function handleSectionCacheMagic(Alpine) {
+        return function() {
+            return {
+                set (sectionId, html, options) {
+                    const url = buildSectionUrl(sectionId, options);
+                    Alpine.store('cache').resources.sectionHtml.set(url, html);
+                },
+                get (sectionId, options) {
+                    const url = buildSectionUrl(sectionId, options);
+                    return Alpine.store('cache').resources.sectionHtml.get(url);
+                }
+            };
+        };
+    }
+    // TODO refactor this to use Alpine.morphBetween: https://github.com/alpinejs/alpine/blob/df63fe2f6eb416bb7f46c449f2ee6aaf3c0b304e/packages/morph/src/morph.js#L33
+    function handleFrame($el, data, { cleanup  }, Alpine, morphConfig) {
+        const rootContext = Alpine.$data($el)[THEME_SECTION_CONTEXT_KEY];
+        if (!rootContext) return;
+        const sectionId = rootContext.sectionId;
+        const frameContext = buildContext(Alpine, $el, sectionId, {
+            targetId: $el.id,
+            rootEl: rootContext.rootEl,
+            morphConfig
+        });
+        if (!$el.hasAttribute('id')) {
+            throw new Error(`Elements using x-section-api:frame must have a unique id property`);
+        }
+        Alpine.addScopeToNode($el, {
+            [THEME_SECTION_FRAME_CONTEXT_KEY]: frameContext
+        });
+        $el._x_sectionApi_isFrame = true;
+        $el._x_sectionApi_isIsolatedFrame = data.modifiers.includes('isolate');
+        cleanup(()=>{
+            var _a;
+            // Abort any pending fetches when element is removed from DOM
+            (_a = frameContext.abortController) === null || _a === void 0 ? void 0 : _a.abort();
+            // Delete custom properties from element
+            delete $el._x_sectionApi_isFrame;
+            delete $el._x_sectionApi_isIsolatedFrame;
+        });
+    }
+    function handleForm($el, data, _utilities, Alpine) {
+        if (!isFormElement($el)) {
+            throw new Error('x-section-api:form directive can only be used on form elements');
+        }
+        if ($el.method.toLowerCase() == 'post') {
+            throw new Error('x-section-api:form directive does not support POST requests');
+        }
+        Alpine.bind($el, {
+            [`x-router:form.${data.modifiers}`]: ''
+        });
+    }
+    function handleLink($el, data, _utilities, Alpine) {
+        if (!isAnchorElement($el)) {
+            throw new Error('x-section-api:link directive can only be used on anchor elements');
+        }
+        Alpine.bind($el, {
+            [`x-router:link.${data.modifiers}`]: ''
+        });
+    }
+    function handleRoot$2($el, data, { cleanup  }, Alpine, morphConfig) {
+        // Grab section id from directive expression
+        const sectionId = data.expression;
+        const context = buildContext(Alpine, $el, sectionId, {
+            morphConfig
+        });
+        // Section will update automatically when the section HTML is updated
+        // const subscribe = data.modifiers.includes('subscribe');
+        Alpine.addScopeToNode($el, {
+            [THEME_SECTION_CONTEXT_KEY]: context
+        });
+        // if (subscribe) {
+        //   context.subscribe();
+        // }
+        Alpine.bind($el, {
+            'aria-atomic': 'true',
+            [':aria-busy'] () {
+                return context.state == 'loading';
+            },
+            [`x-router`] () {
+                return async (url)=>{
+                    const baseUrl = `${url.pathname}${url.search}`;
+                    window.dispatchEvent(new CustomEvent('theme:section:navigate', {
+                        detail: {
+                            sectionId,
+                            url: baseUrl
+                        }
+                    }));
+                    return context.update({
+                        baseUrl
+                    });
+                };
+            }
+        });
+        cleanup(()=>{
+            var _a;
+            // Abort any pending fetches when element is removed from DOM
+            (_a = context.abortController) === null || _a === void 0 ? void 0 : _a.abort();
+        // context.unsubscribe();
+        });
+    }
+    function buildContext(Alpine, $el, sectionId1, options1) {
+        return Alpine.reactive({
+            rootEl: (options1 === null || options1 === void 0 ? void 0 : options1.rootEl) || $el,
+            state: 'initial',
+            error: null,
+            targetId: (options1 === null || options1 === void 0 ? void 0 : options1.targetId) || null,
+            sectionId: sectionId1,
+            pendingUrl: null,
+            abortController: null,
+            subscription: null,
+            morphConfig: (options1 === null || options1 === void 0 ? void 0 : options1.morphConfig) || DEFAULT_MORPH_CONFIG,
+            buildUrl (options) {
+                var _a;
+                return buildSectionUrl((_a = options === null || options === void 0 ? void 0 : options.sectionId) !== null && _a !== void 0 ? _a : this.sectionId, Object.assign(Object.assign({}, options), {
+                    targetId: this.targetId
+                }));
+            },
+            update: async function(options) {
+                const _update = async ()=>{
+                    var _a;
+                    const cachePolicy = (_a = options === null || options === void 0 ? void 0 : options.cachePolicy) !== null && _a !== void 0 ? _a : 'cache-and-network';
+                    if (cachePolicy == 'cache-only') {
+                        const cachedHtml = Alpine.store('cache').resources.sectionHtml.get(this.buildUrl(options));
+                        if (cachedHtml) {
+                            this.updateHtml(cachedHtml, {
+                                mode: options === null || options === void 0 ? void 0 : options.htmlMode,
+                                morphConfig: options === null || options === void 0 ? void 0 : options.morphConfig
+                            });
+                        }
+                        return cachedHtml;
+                    } else if (cachePolicy == 'network-only') {
+                        const updatedHtml = await this.load(options);
+                        if (updatedHtml) {
+                            this.updateHtml(updatedHtml, {
+                                mode: options === null || options === void 0 ? void 0 : options.htmlMode,
+                                morphConfig: options === null || options === void 0 ? void 0 : options.morphConfig
+                            });
+                        }
+                        return updatedHtml;
+                    } else if (cachePolicy == 'cache-first') {
+                        const cachedHtml = Alpine.store('cache').resources.sectionHtml.get(this.buildUrl(options));
+                        if (cachedHtml) {
+                            this.updateHtml(cachedHtml, {
+                                mode: options === null || options === void 0 ? void 0 : options.htmlMode,
+                                morphConfig: options === null || options === void 0 ? void 0 : options.morphConfig
+                            });
+                            return cachedHtml;
+                        } else {
+                            const updatedHtml = await this.load(options);
+                            if (updatedHtml) {
+                                this.updateHtml(updatedHtml, {
+                                    mode: options === null || options === void 0 ? void 0 : options.htmlMode,
+                                    morphConfig: options === null || options === void 0 ? void 0 : options.morphConfig
+                                });
+                            }
+                            return updatedHtml;
+                        }
+                    } else if (cachePolicy == 'cache-and-network') {
+                        const cachedHtml = Alpine.store('cache').resources.sectionHtml.get(this.buildUrl(options));
+                        if (cachedHtml) {
+                            this.updateHtml(cachedHtml, {
+                                mode: options === null || options === void 0 ? void 0 : options.htmlMode,
+                                morphConfig: options === null || options === void 0 ? void 0 : options.morphConfig
+                            });
+                        }
+                        const updatedHtml = await this.load(options);
+                        if (updatedHtml) {
+                            this.updateHtml(updatedHtml, {
+                                mode: options === null || options === void 0 ? void 0 : options.htmlMode,
+                                morphConfig: options === null || options === void 0 ? void 0 : options.morphConfig
+                            });
+                        }
+                        return updatedHtml;
+                    } else {
+                        throw new Error(`Unknown cache policy: ${cachePolicy}`);
+                    }
+                };
+                if (options === null || options === void 0 ? void 0 : options.waitForIdle) {
+                    return new Promise(async (resolve)=>{
+                        window.requestIdleCallback(async ()=>{
+                            const result = await _update();
+                            resolve(result);
+                        });
+                    });
+                } else {
+                    return _update();
+                }
+            },
+            load: async function(options) {
+                var _a;
+                try {
+                    const _b = options || {}, { url , baseUrl , sectionId , batch  } = _b, fetchOptions = __rest$1(_b, [
+                        "url",
+                        "baseUrl",
+                        "sectionId",
+                        "batch"
+                    ]);
+                    // Allow overriding the section rendering API for a single request
+                    const requestUrl = url !== null && url !== void 0 ? url : this.buildUrl({
+                        baseUrl,
+                        sectionId
+                    });
+                    this.state = 'loading';
+                    window.dispatchEvent(new CustomEvent('theme:section:load', {
+                        detail: {
+                            sectionId: this.sectionId
+                        }
+                    }));
+                    this.pendingUrl = requestUrl;
+                    if (batch) {
+                        const result = await fetchBatcher.request(requestUrl);
+                        // Grab the HTML for this section from the batch result
+                        const html = result[this.sectionId];
+                        // Store that HTML in the cache
+                        Alpine.store('cache').resources.sectionHtml.set(this.buildUrl({
+                            baseUrl,
+                            sectionId
+                        }), html);
+                        this.state = 'loaded';
+                        return html;
+                    } else {
+                        if ((options === null || options === void 0 ? void 0 : options.abortPending) != false) {
+                            (_a = this.abortController) === null || _a === void 0 ? void 0 : _a.abort();
+                        }
+                        this.abortController = new AbortController();
+                        const result = await fetch(requestUrl, Object.assign({
+                            signal: this.abortController.signal
+                        }, fetchOptions));
+                        // TODO figure out what to do in error cases, right now we just throw an error...
+                        if (!result.ok) {
+                            throw new Error(result.statusText);
+                        }
+                        const responseHtml = await result.text();
+                        Alpine.store('cache').resources.sectionHtml.set(this.buildUrl({
+                            baseUrl,
+                            sectionId
+                        }), responseHtml);
+                        this.state = 'loaded';
+                        return responseHtml;
+                    }
+                } catch (e) {
+                    if (e.name == 'AbortError') ; else {
+                        // Update state so UI can display error
+                        this.state = 'error';
+                        this.error = prettyPrintError(e);
+                        throw e;
+                    }
+                } finally{
+                    this.pendingUrl = null;
+                }
+            },
+            navigate: async function(url, historyMode) {
+                const $data = Alpine.$data($el);
+                return $data.$router.navigate(url, historyMode);
+            },
+            // TODO implement subscriptions, and ensure they can't cause infinite loops
+            // subscribe(options) {
+            //   this.subscription = Alpine.effect(() => {
+            //     const subscriptionUrl = this.buildUrl(options);
+            //     const html = Alpine.store('cache').resources.sectionHtml.get(subscriptionUrl);
+            //     if (typeof html == 'string') {
+            //       this.updateHtml(html, {mode: options?.htmlMode});
+            //     }
+            //   });
+            // },
+            // unsubscribe() {
+            //   if (this.subscription) {
+            //     Alpine.release(this.subscription);
+            //     this.subscription = null;
+            //   }
+            // },
+            updateHtml (html, options) {
+                var _a1;
+                // Shopify inserts an extra comment when using section rendering API in the theme editor which
+                // breaks the morphing process. This removes it.
+                const sanitizedHtml = html.replace(/<!--shopify:rendered_by_section_api-->/g, '');
+                const morphConfig = (_a1 = options === null || options === void 0 ? void 0 : options.morphConfig) !== null && _a1 !== void 0 ? _a1 : this.morphConfig;
+                if ((options === null || options === void 0 ? void 0 : options.mode) == 'replace') {
+                    Alpine.mutateDom(()=>{
+                        this.rootEl.innerHTML = sanitizedHtml;
+                        // Re-initialize alpine on cloned node
+                        Alpine.skipDuringClone(()=>Alpine.initTree(this.rootEl)
+                        )();
+                    });
+                } else {
+                    Alpine.morph(this.rootEl, sanitizedHtml, buildMorphConfig({
+                        updating: (fromEl, toEl, childrenOnly, skip)=>{
+                            var _a;
+                            if (isHtmlElement(fromEl) && isHtmlElement(toEl)) {
+                                if (fromEl == this.rootEl) {
+                                    // Skip morphing the root section el itself, only morph children
+                                    childrenOnly();
+                                } else {
+                                    // Check if the directive element is a frame or a section
+                                    if ($el._x_sectionApi_isFrame) {
+                                        if (fromEl._x_sectionApi_isFrame) {
+                                            if (this.targetId == fromEl.id) {
+                                                // Skip morphing the frame section el itself, only morph children
+                                                childrenOnly();
+                                            } else {
+                                                // Skip updating other frames
+                                                skip();
+                                            }
+                                        } else if (!fromEl.contains($el) && !$el.contains(fromEl)) {
+                                            // Skip any element which is not part of the frame's tree
+                                            skip();
+                                        }
+                                    } else {
+                                        // Skip updating isolated frames inside of sections
+                                        if (fromEl._x_sectionApi_isFrame && fromEl._x_sectionApi_isIsolatedFrame) {
+                                            skip();
+                                        }
+                                    }
+                                }
+                                (_a = morphConfig === null || morphConfig === void 0 ? void 0 : morphConfig.updating) === null || _a === void 0 ? void 0 : _a.call(morphConfig, fromEl, toEl, childrenOnly, skip);
+                            }
+                        },
+                        updated: morphConfig === null || morphConfig === void 0 ? void 0 : morphConfig.updated,
+                        removing: morphConfig === null || morphConfig === void 0 ? void 0 : morphConfig.removing,
+                        removed: morphConfig === null || morphConfig === void 0 ? void 0 : morphConfig.removed,
+                        adding: morphConfig === null || morphConfig === void 0 ? void 0 : morphConfig.adding,
+                        added: morphConfig === null || morphConfig === void 0 ? void 0 : morphConfig.added
+                    }));
+                }
+                window.dispatchEvent(new CustomEvent('theme:section:update', {
+                    detail: {
+                        sectionId: this.sectionId
+                    }
+                }));
+            }
+        });
+    }
+    function buildSectionUrl(sectionId, options) {
+        var _a, _b, _c;
+        const DEFAULT_BASE_URL = ((_b = (_a = window.theme) === null || _a === void 0 ? void 0 : _a.routes) === null || _b === void 0 ? void 0 : _b.root) || '/';
+        // This is such an ugly hack but unfortunately necessary until this is fixed: https://github.com/whatwg/url/issues/531
+        const FAKE_HOST = 'https://fake-host';
+        const fullUrl = new URL((_c = options === null || options === void 0 ? void 0 : options.baseUrl) !== null && _c !== void 0 ? _c : DEFAULT_BASE_URL, FAKE_HOST);
+        let sanitizedSectionId;
+        // Handle case of section ID from section DOM element being passed in (i.e. prepended with 'shopify-section-')
+        if (sectionId.startsWith('shopify-section-')) {
+            sanitizedSectionId = sectionId.split('shopify-section-')[1];
+        } else {
+            sanitizedSectionId = sectionId;
+        }
+        if (options === null || options === void 0 ? void 0 : options.targetId) {
+            fullUrl.hash = options.targetId;
+        }
+        fullUrl.searchParams.append('section_id', sanitizedSectionId);
+        return fullUrl.toString().replace(FAKE_HOST, '');
+    }
 
+    var __rest = undefined && undefined.__rest || function(s, e) {
+        var t = {};
+        for(var p in s)if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0) t[p] = s[p];
+        if (s != null && typeof Object.getOwnPropertySymbols === "function") for(var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++){
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i])) t[p[i]] = s[p[i]];
+        }
+        return t;
+    };
     const ANIMATE_CONTEXT_KEY = Symbol('ANIMATE_CONTEXT_KEY');
-    function motionone(Alpine) {
-        Alpine.directive('animate', ($el, { expression , modifiers  }, { evaluateLater , effect , cleanup  })=>{
+    function motion(Alpine) {
+        Alpine.directive('animate', ($el, { expression , modifiers  }, { evaluateLater , effect  })=>{
             if (!isHtmlElement($el)) {
                 throw new Error(`Expected HTMLElement but got ${$el}`);
             }
             if (!expression) {
-                throw new Error('Expected x-animate to be passed a motionone keyframes object but was passed nothing. See https://motion.dev/dom/animate#keyframes');
+                throw new Error('Expected x-animate to be passed a motion keyframes object but was passed nothing. See https://motion.dev/dom/animate#keyframes');
             }
             const keyframesFn = evaluateLater(expression);
             const context = Alpine.reactive({
@@ -18244,7 +25492,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             effect(()=>{
                 keyframesFn((keyframes)=>{
                     if (!isPlainObject(keyframes)) {
-                        throw new Error(String.raw`Expected x-animate to be passed a motionone keyframes object but got '${String(keyframes)}'. See https://motion.dev/dom/animate#keyframes`);
+                        throw new Error(String.raw`Expected x-animate to be passed a motion keyframes object but got '${String(keyframes)}'. See https://motion.dev/dom/animate#keyframes`);
                     }
                     context.controls = animate($el, keyframes, {
                         autoplay
@@ -18256,30 +25504,1086 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 });
             });
         });
-        Alpine.magic('m1', ()=>({
-                animate,
-                timeline,
-                stagger,
-                spring,
-                glide,
-                scroll,
-                inView
-            })
-        );
+        Alpine.directive('animate-scroll', ($el, { expression  }, { evaluate  })=>{
+            if (!isHtmlElement($el)) {
+                throw new Error(`Expected HTMLElement but got ${$el}`);
+            }
+            if (!expression) {
+                throw new Error('Expected x-animate to be passed a motion keyframes object but was passed nothing. See https://motion.dev/dom/animate#keyframes');
+            }
+            const keyframes = evaluate(expression);
+            Alpine.bind($el, {
+                'x-data' () {
+                    return {
+                        __animateScroll_isVisible: false,
+                        __animateScroll_animation: null,
+                        __animateScroll_cancelScrollAnimation: null,
+                        init () {
+                            this.__animateScroll_animation = animate($el, keyframes);
+                            this.$watch('__animateScroll_isVisible', (isVisible)=>{
+                                var _a, _b;
+                                if (isVisible) {
+                                    (_a = this.__animateScroll_cancelScrollAnimation) === null || _a === void 0 ? void 0 : _a.call(this);
+                                    this.__animateScroll_cancelScrollAnimation = scroll(this.__animateScroll_animation, {
+                                        target: $el,
+                                        offset: [
+                                            '0% 100%',
+                                            '100% 0%'
+                                        ]
+                                    });
+                                } else {
+                                    (_b = this.__animateScroll_cancelScrollAnimation) === null || _b === void 0 ? void 0 : _b.call(this);
+                                }
+                            });
+                        },
+                        destroy () {
+                            var _a;
+                            (_a = this.__animateScroll_cancelScrollAnimation) === null || _a === void 0 ? void 0 : _a.call(this);
+                        }
+                    };
+                },
+                'x-intersect:enter': '__animateScroll_isVisible = true',
+                'x-intersect:leave': '__animateScroll_isVisible = false'
+            });
+        });
+        Alpine.directive('animate-scroll-stagger', ($el, { expression , value  }, { evaluate  })=>{
+            if (value == 'enter') {
+                const keyframes = evaluate(expression);
+                Alpine.bind($el, {
+                    'x-init' () {
+                        this.$data.__animateScrollStagger_enterKeyframes = keyframes;
+                    }
+                });
+            } else if (value == 'leave') {
+                const keyframes = evaluate(expression);
+                Alpine.bind($el, {
+                    'x-init' () {
+                        this.$data.__animateScrollStagger_leaveKeyframes = keyframes;
+                    }
+                });
+            } else {
+                const _a1 = expression ? evaluate(expression) : {}, { selector: optionalSelector , stagger: optionalStagger , scrollOffset: optionalScrollOffset  } = _a1, visibleKeyframes1 = __rest(_a1, [
+                    "selector",
+                    "stagger",
+                    "scrollOffset"
+                ]);
+                const selector = optionalSelector || '[data-animate-stagger-item]';
+                let stagger1 = optionalStagger || 0.2;
+                let scrollOffset = optionalScrollOffset || [
+                    '25% 100%',
+                    '0% 50%',
+                    '0% 0%',
+                    '75% 0%'
+                ];
+                Alpine.bind($el, {
+                    'x-data' () {
+                        return {
+                            __animateScrollStagger_cancelScroll: null,
+                            __animateScrollStagger_fitsInViewport: null,
+                            __animateScrollStagger_didBeginFullyVisible: false,
+                            __animateScrollStagger_wasFullyVisible: null,
+                            __animateScrollStagger_isFullyVisible: null,
+                            __animateScrollStagger_wasPartiallyVisible: null,
+                            __animateScrollStagger_isPartiallyVisible: null,
+                            __animateScrollStagger_enterKeyframes: {},
+                            __animateScrollStagger_visibleKeyframes: visibleKeyframes1,
+                            __animateScrollStagger_leaveKeyframes: {},
+                            get __animateScrollStagger_items () {
+                                return Array.from($el.querySelectorAll(selector));
+                            },
+                            init () {
+                                this.$watch('__animateScrollStagger_wasFullyVisible', (isFullyVisible)=>{
+                                    this.__animateScrollStagger_wasFullyVisible = isFullyVisible;
+                                });
+                                this.$watch('__animateScrollStagger_wasPartiallyVisible', (isPartiallyVisible)=>{
+                                    this.__animateScrollStagger_wasPartiallyVisible = isPartiallyVisible;
+                                });
+                            },
+                            destroy () {
+                                this.__animateScrollStagger_cancelScrollAnimation();
+                            },
+                            __animateScrollStagger_startScrollAnimation () {
+                                if (this.__animateScrollStagger_cancelScroll !== null) return;
+                                // Duration of the staggerItem animation. Doesn't have any effect when using the scroll animation
+                                const staggerItemDuration = 1.0;
+                                // The offset (in terms of % of staggerItem duration) that each staggerItem should be offset from the previous staggerItem
+                                const staggerItemOffset = stagger1 || 0.2;
+                                // When each staggerItem animation should start in relation to the previous staggerItem
+                                const at = `-${staggerItemDuration * (1 - staggerItemOffset)}`;
+                                // staggerItem animation sequence when element enters the viewport
+                                const entrySequence = this.__animateScrollStagger_items.map((staggerEl)=>[
+                                        staggerEl,
+                                        this.__animateScrollStagger_enterKeyframes,
+                                        {
+                                            duration: staggerItemDuration,
+                                            at: at
+                                        }, 
+                                    ]
+                                );
+                                const visibleKeyframes = this.__animateScrollStagger_visibleKeyframes !== null && Object.keys(this.__animateScrollStagger_visibleKeyframes).length > 0 ? this.__animateScrollStagger_visibleKeyframes : buildStaticKeyframes(this.__animateScrollStagger_enterKeyframes);
+                                // Sequence to run when the element is fully visible where no animation occurs
+                                const visibleSequence = this.__animateScrollStagger_items.map((staggerEl)=>[
+                                        staggerEl,
+                                        visibleKeyframes,
+                                        {
+                                            duration: staggerItemDuration,
+                                            at: at
+                                        }, 
+                                    ]
+                                );
+                                // staggerItem animation sequence when element exits the viewport
+                                const exitSequence = this.__animateScrollStagger_items.map((staggerEl)=>[
+                                        staggerEl,
+                                        this.__animateScrollStagger_leaveKeyframes,
+                                        {
+                                            duration: staggerItemDuration,
+                                            at: at
+                                        }, 
+                                    ]
+                                );
+                                if (this.__animateScrollStagger_fitsInViewport == false) {
+                                    // If the element doesn't fit in the viewport height wise we only use the entry sequence
+                                    // and run it the whole time the element is in the viewport
+                                    this.__animateScrollStagger_cancelScroll = scroll(animate(entrySequence), {
+                                        target: $el,
+                                        offset: [
+                                            '0% 100%',
+                                            '100% 0%'
+                                        ]
+                                    });
+                                } else {
+                                    this.__animateScrollStagger_cancelScroll = scroll(animate([
+                                        ...entrySequence,
+                                        ...visibleSequence,
+                                        ...exitSequence
+                                    ]), {
+                                        target: $el,
+                                        offset: scrollOffset
+                                    });
+                                }
+                            },
+                            __animateScrollStagger_cancelScrollAnimation () {
+                                var _a;
+                                (_a = this.__animateScrollStagger_cancelScroll) === null || _a === void 0 ? void 0 : _a.call(this);
+                                this.__animateScrollStagger_cancelScroll = null;
+                            }
+                        };
+                    },
+                    'x-intersect:enter.threshold.0': '__animateScrollStagger_isPartiallyVisible = true',
+                    'x-intersect:leave.threshold.0': '__animateScrollStagger_isPartiallyVisible = false',
+                    'x-intersect:enter.full': '__animateScrollStagger_isFullyVisible = true',
+                    'x-intersect:leave.full': '__animateScrollStagger_isFullyVisible = false',
+                    async 'x-effect' () {
+                        if (this.__animateScrollStagger_wasFullyVisible == null && this.__animateScrollStagger_isFullyVisible) {
+                            // Whenever the element is fully visible, play the in view animation then start the scroll animation once it's done
+                            this.__animateScrollStagger_startScrollAnimation();
+                        } else if (this.__animateScrollStagger_isFullyVisible == false) {
+                            if (this.__animateScrollStagger_isPartiallyVisible == true) {
+                                // Whenever the element is partially visible, start the scroll animation
+                                this.__animateScrollStagger_startScrollAnimation();
+                            } else if (this.__animateScrollStagger_wasPartiallyVisible == true && this.__animateScrollStagger_isPartiallyVisible == false) {
+                                // Stop the scroll animation when element has fully exited the viewport
+                                this.__animateScrollStagger_cancelScrollAnimation();
+                            }
+                        }
+                    },
+                    'x-resize' () {
+                        this.__animateScrollStagger_fitsInViewport = this.$height <= window.innerHeight;
+                    }
+                });
+            }
+        });
+        Alpine.magic('m', handleMotionMagic());
         Alpine.magic('animation', ($el)=>{
             const context = Alpine.$data($el)[ANIMATE_CONTEXT_KEY];
             if (!context) throw new Error('$animation needs to be used on or inside an element with x-animate directive');
             return context.controls;
         });
+    }// TODO Test me
+    /**
+     * Creates a reactive motion value that updates Alpine state when the motion value changes.
+     *
+     * @param Alpine
+     * @param initialMotionValue
+     * @returns MotionValue<T>
+     */ function reactiveMotionValue(_Alpine, initialMotionValue) {
+        const value = motionValue(initialMotionValue);
+        const reactiveValue = _Alpine.reactive({
+            value: value.get()
+        });
+        value.on('change', (newValue)=>{
+            reactiveValue.value = newValue;
+        });
+        return new Proxy(value, {
+            get (target, prop, receiver) {
+                if (prop === 'get') {
+                    // Calling this here is a bit of a hack to make vue/reactivity pick up changes to the motion value
+                    reactiveValue.value;
+                }
+                return Reflect.get(target, prop, receiver);
+            }
+        });
+    }
+    function handleMotionMagic(_Alpine) {
+        return function(_$el) {
+            return {
+                animate,
+                stagger,
+                spring,
+                scroll,
+                inView,
+                motionValue,
+                mapValue,
+                transformValue,
+                springValue,
+                attrEffect,
+                svgEffect,
+                propEffect,
+                styleEffect,
+                animateView,
+                transform
+            };
+        };
+    }
+    /**
+     * Builds a keyframes object that has the last value of each keyframe
+     *
+     * @param enterKeyframes
+     * @returns ObjectTarget<{}>
+     */ function buildStaticKeyframes(enterKeyframes) {
+        return Object.entries(enterKeyframes).reduce((keyframes, [key, value])=>{
+            return Object.assign(Object.assign({}, keyframes), {
+                [key]: Array.isArray(value) ? value.length > 1 ? [
+                    value[1],
+                    value[1]
+                ] : value[0] : [
+                    value,
+                    value
+                ]
+            });
+        }, {});
     }
 
-    const selectors$3 = {
+    /**
+     * Enables the creation of stepper components.
+     * The 'x-stepper' directive provide functionality for managing stepper input fields.
+     *
+     * x-stepper -  The root element of the stepper, initializing the stepper functionality and adding a data context for child directives. Use the 'modal' modifier (x-dialog.modal) to make the dialog modal.
+     * x-stepper:input - The input element
+     * x-stepper:minus - The minus button
+     * x-stepper:plus - The plus button
+     *
+     * @example
+     *
+      <div x-stepper>
+        <button type="button" x-stepper:minus>−</button>
+        <input type="number" name="stepper" min="1" max="10" value="1" x-stepper:input>
+        <button type="button" x-stepper:plus>+</button>
+      </div>
+
+     */ function stepper(Alpine) {
+        Alpine.directive('stepper', ($el, data)=>{
+            if (data.value == 'input') {
+                handleInput($el, Alpine);
+            } else if (data.value == 'minus') {
+                handleButtonMinus($el, Alpine);
+            } else if (data.value == 'plus') {
+                handleButtonPlus($el, Alpine);
+            } else if (data.value == null) {
+                handleRoot$1($el, Alpine);
+            } else {
+                throw new Error(`Unknown directive: x-stepper:${data.value}`);
+            }
+        }).before('bind');
+        Alpine.magic('stepper', ($el)=>{
+            const $data = Alpine.$data($el);
+            return {
+                value: $data.__stepper_value
+            };
+        });
+    }function handleInput($el, Alpine) {
+        if (isInputNumberElement($el)) {
+            const $data = Alpine.$data($el);
+            $data.__stepper_min = Number($el.min);
+            $data.__stepper_max = $el.max ? Number($el.max) : null;
+            Alpine.bind($el, {
+                'x-init': '__stepper_input = $el',
+                'x-model.fill.number': '__stepper_value'
+            });
+        } else {
+            throw new Error(`Expected <input type="number"> tag for x-stepper:input but got ${$el}`);
+        }
+    }
+    function handleButtonMinus($el, Alpine) {
+        if (isButtonElement($el)) {
+            Alpine.bind($el, {
+                '@click.prevent' () {
+                    this.__stepper_decrement();
+                },
+                ':disabled': '__stepper_isAtMin'
+            });
+        } else {
+            throw new Error(`Expected <button> tag for x-stepper:minus but got ${$el}`);
+        }
+    }
+    function handleButtonPlus($el, Alpine) {
+        if (isButtonElement($el)) {
+            Alpine.bind($el, {
+                '@click.prevent' () {
+                    this.__stepper_increment();
+                },
+                ':disabled': '__stepper_isAtMax'
+            });
+        } else {
+            throw new Error(`Expected <button> tag for x-stepper:plus but got ${$el}`);
+        }
+    }
+    function handleRoot$1($el, Alpine) {
+        Alpine.bind($el, {
+            ['x-data'] () {
+                return stepper$1();
+            },
+            'x-modelable': '__stepper_value',
+            '@click.self' () {
+                var _a;
+                (_a = this.__stepper_input) === null || _a === void 0 ? void 0 : _a.focus();
+            }
+        });
+    }
+    function stepper$1() {
+        return {
+            __stepper_input: null,
+            __stepper_min: 0,
+            __stepper_max: null,
+            __stepper_value: null,
+            get __stepper_isAtMin () {
+                return this.__stepper_min === this.__stepper_value;
+            },
+            get __stepper_isAtMax () {
+                return this.__stepper_max === this.__stepper_value;
+            },
+            __stepper_decrement () {
+                var _a, _b;
+                if ((_a = this.__stepper_input) === null || _a === void 0 ? void 0 : _a.disabled) return;
+                (_b = this.__stepper_input) === null || _b === void 0 ? void 0 : _b.stepDown();
+                this.__stepper_updateValue();
+                this.$dispatch('decrement', this.__stepper_value);
+            },
+            __stepper_increment () {
+                var _a, _b;
+                if ((_a = this.__stepper_input) === null || _a === void 0 ? void 0 : _a.disabled) return;
+                (_b = this.__stepper_input) === null || _b === void 0 ? void 0 : _b.stepUp();
+                this.__stepper_updateValue();
+                this.$dispatch('increment', this.__stepper_value);
+            },
+            __stepper_updateValue () {
+                var _a;
+                this.__stepper_value = Number((_a = this.__stepper_input) === null || _a === void 0 ? void 0 : _a.value) || 0;
+            }
+        };
+    }
+
+    function clone(Alpine) {
+        Alpine.directive('clone', ($targetEl, { expression  }, { effect , evaluateLater , cleanup  })=>{
+            // Function which will evaluate to the source element that will be cloned into the target element
+            const sourceElFn = evaluateLater(expression);
+            if (!isHtmlElement($targetEl)) {
+                throw new Error(`Expected HTMLElement but got ${$targetEl}`);
+            }
+            $targetEl._x_insertClone = (sourceEl)=>{
+                var _a;
+                if (!isHtmlElement(sourceEl)) return;
+                if (!isTemplateElement($targetEl)) {
+                    throw new Error(`x-clone can only be used on a <template> tag`);
+                }
+                if ($targetEl._x_clonedElement) {
+                    (_a = $targetEl._x_undoClone) === null || _a === void 0 ? void 0 : _a.call($targetEl);
+                }
+                let clone = isTemplateElement(sourceEl) ? sourceEl.content.cloneNode(true).firstElementChild : sourceEl.cloneNode(true);
+                if (!clone) return;
+                // Add new parent element's scope to cloned element
+                Alpine.addScopeToNode(clone, {}, $targetEl);
+                Alpine.mutateDom(()=>{
+                    // Insert cloned node after element with x-clone attribute
+                    $targetEl.after(clone);
+                    // Re-initialize alpine on cloned node
+                    Alpine.skipDuringClone(()=>Alpine.initTree(clone)
+                    )();
+                });
+                $targetEl._x_clonedElement = clone;
+                $targetEl._x_undoClone = ()=>{
+                    Alpine.destroyTree(clone);
+                    clone.remove();
+                    delete $targetEl._x_clonedElement;
+                };
+            };
+            effect(()=>{
+                sourceElFn(($sourceEl)=>{
+                    $targetEl._x_insertClone($sourceEl);
+                });
+            });
+            cleanup(()=>$targetEl._x_undoClone && $targetEl._x_undoClone()
+            );
+        }).before('bind');
+        Alpine.magic('clone', ($el)=>{
+            return $el._x_insertClone;
+        });
+    }
+
+    /**
+     * Formats a number as currency based on locale and currency settings.
+     * Supports displaying currency symbol, code, or name. Allows optional rounding and customization of display.
+     * Utilizes the Intl.NumberFormat API to manage currency formatting complexities, providing better consistency
+     * across different markets, locales, and currencies, in contrast to Shopify's Liquid limitations.
+     *
+     * Expects the following code in theme.liquid:
+     *  window.theme.currency: {
+     *    currencyCode: '{{ cart.currency.iso_code }}',
+     *    locale:  '{{ request.locale.iso_code }}'
+     *  };
+     *  window.theme.translations: {
+     *    other: {
+     *      free: {{ 'other.free' | t | json }},
+     *    }
+     *  };
+     *
+     *
+     * Using money_with_trailing_zeros with CurrencyFormat={rounded: true | false | undefined}
+     * - true matches `money | rounded`
+     * - undefined matches `money_without_trailing_zeros`
+     * - false matches `money`
+     *
+     * References:
+     * - ISO 4217 currency codes via Unicode CLDR for currency translation.
+     * - Uses browser’s Intl.NumberFormat for better handling across locales, removing Liquid inconsistencies.
+     */ function formatCurrency(amount, format = {}) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+        // Set up defaults
+        let defaultCurrency = 'USD'; // Fallback if nothing is available
+        let defaultLocale = 'en-US'; // Fallback if locale isn't provided
+        let defaultFreeTranslation;
+        // Retrieve defaults from theme/Shopify if present
+        if (typeof window !== 'undefined') {
+            defaultCurrency = ((_b = (_a = window.theme) === null || _a === void 0 ? void 0 : _a.currency) === null || _b === void 0 ? void 0 : _b.currencyCode) || ((_d = (_c = window.Shopify) === null || _c === void 0 ? void 0 : _c.currency) === null || _d === void 0 ? void 0 : _d.active) || defaultCurrency;
+            defaultLocale = ((_f = (_e = window.theme) === null || _e === void 0 ? void 0 : _e.currency) === null || _f === void 0 ? void 0 : _f.locale) || ((_g = window.Shopify) === null || _g === void 0 ? void 0 : _g.locale) || defaultLocale;
+            defaultFreeTranslation = (_k = (_j = (_h = window.theme) === null || _h === void 0 ? void 0 : _h.translations) === null || _j === void 0 ? void 0 : _j.other) === null || _k === void 0 ? void 0 : _k.free;
+        }
+        // Destructure format options, applying defaults
+        const { form ='short' , rounded , currency =defaultCurrency , locale =defaultLocale , legacyFormat  } = format;
+        // Handle null, undefined, or NaN amount
+        if (amount == null || isNaN(amount)) {
+            return 'x.xx'; // Fallback to generic price with no language context
+        }
+        // Handle 'Free' case or zero
+        if (amount === 0 && form === 'short' && rounded === true && defaultFreeTranslation) {
+            return defaultFreeTranslation;
+        }
+        // Liquid returns cents for all currencies including YEN
+        const amountInDollars = amount / 100;
+        // Use legacy formatting if specified
+        let amountWithSymbol;
+        if (legacyFormat) {
+            amountWithSymbol = formatCurrencyLegacy(amountInDollars, {
+                currency,
+                legacyFormat,
+                rounded: format.rounded
+            });
+        } else {
+            amountWithSymbol = formatCurrencyNew(amountInDollars, {
+                currency,
+                locale,
+                rounded: format.rounded
+            });
+        }
+        // Append currency code if explicit form is specified
+        const codeString = form === 'explicit' ? ` ${currency}` : '';
+        return `${amountWithSymbol}${codeString}`;
+    }
+    function formatCurrencyNew(amount, format) {
+        // Configure Intl.NumberFormat options
+        const options = {
+            style: 'currency',
+            currency: format.currency,
+            currencyDisplay: 'symbol'
+        };
+        // Adjust fraction digits based on the amount and rounding option
+        if (format.rounded) {
+            options.maximumFractionDigits = 0;
+        }
+        // Use Intl.NumberFormat to format the currency
+        let price = new Intl.NumberFormat(format.locale, options).format(amount);
+        // Remove decimals if they are zeros and rounding is not specified
+        if (typeof format.rounded === 'undefined') {
+            // ([.,]00) – matches “.00” or “,00”
+            // (?=\D*$) – ensures that only non-digits follow the decimals”
+            price = price.replace(/([.,]00)(?=\D*$)/g, '');
+        }
+        return price;
+    }
+    /**
+     * Deprecated liquid Currency Helpers
+     * -----------------------------------------------------------------------------
+     * Based on @shopify/theme-currency but updated with new liquid currency options.
+     * This function should be phased out in favor of the new `formatCurrency`.
+     */ function formatCurrencyLegacy(amount, format) {
+        var _a;
+        // Destructure format options, applying defaults
+        const legacyFormat = (_a = format.legacyFormat) !== null && _a !== void 0 ? _a : '${{amount}}';
+        let precision1 = 2;
+        if (format.rounded) precision1 = 0;
+        // Helper to format numbers with thousands and decimal separators
+        const formatWithDelimiters = (number, precision = 2, thousands = ',', decimal = '.')=>{
+            if (isNaN(number) || number == null) {
+                return '0';
+            }
+            number = parseFloat(number.toFixed(precision));
+            const parts = number.toFixed(precision).split('.');
+            const dollarsAmount = parts[0].replace(/(\d)(?=(\d{3})+(?!\d))/g, `$1${thousands}`); // regex adds a ',' for thousands(every 3 digits - 1,234,567)
+            const centsAmount = parts[1] ? decimal + parts[1] : '';
+            return dollarsAmount + centsAmount;
+        };
+        // Regex for extracting liquid format placeholder - {{ something }}
+        const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+        const match = legacyFormat.match(placeholderRegex);
+        let formattedValue = '';
+        if (match) {
+            // Handle different liquid-like formats
+            switch(match[1]){
+                case 'amount':
+                    formattedValue = formatWithDelimiters(amount, precision1);
+                    break;
+                case 'amount_no_decimals':
+                    formattedValue = formatWithDelimiters(amount, precision1);
+                    break;
+                case 'amount_with_comma_separator':
+                    formattedValue = formatWithDelimiters(amount, precision1, '.', ',');
+                    break;
+                case 'amount_no_decimals_with_comma_separator':
+                    formattedValue = formatWithDelimiters(amount, precision1, '.', ',');
+                    break;
+                case 'amount_with_apostrophe_separator':
+                    formattedValue = formatWithDelimiters(amount, precision1, "'", '.');
+                    break;
+                case 'amount_no_decimals_with_space_separator':
+                    formattedValue = formatWithDelimiters(amount, precision1, ' ');
+                    break;
+                case 'amount_with_space_separator':
+                    formattedValue = formatWithDelimiters(amount, precision1, ' ', ',');
+                    break;
+                case 'amount_with_period_and_space_separator':
+                    formattedValue = formatWithDelimiters(amount, precision1, ' ', '.');
+                    break;
+                default:
+                    throw new Error(`Unknown format type: ${match[1]}`);
+            }
+            // Replace the placeholder in format string with the formatted value
+            formattedValue = legacyFormat.replace(placeholderRegex, formattedValue);
+            // Remove decimals if they are zeros and rounding is not specified
+            if (typeof format.rounded === 'undefined' && legacyFormat.includes('no_decimals')) {
+                // ([.,]00) – matches “.00” or “,00”
+                // (?=\D*$) – ensures that only non-digits follow the decimals”
+                formattedValue = formattedValue.replace(/([.,]00)(?=\D*$)/g, '');
+            }
+        }
+        // Append currency if provided
+        return formattedValue;
+    }
+    /**
+     * Calculates currency for rate
+     * -----------------------------------------------------------------------------
+     */ function convertCurrency(amount, rate) {
+        var _a, _b;
+        const currencyRate = rate || ((_b = (_a = window.Shopify) === null || _a === void 0 ? void 0 : _a.currency) === null || _b === void 0 ? void 0 : _b.rate) || 1;
+        // Handle null, undefined, or NaN amount
+        if (amount == null || isNaN(amount)) {
+            amount = 0;
+        }
+        return amount * currencyRate;
+    }
+
+    // See utils/currency.ts for details on the complexity of currency formatting
+    function currency(Alpine) {
+        Alpine.magic('formatCurrency', ()=>{
+            return formatCurrency;
+        });
+        Alpine.magic('convertCurrency', ()=>{
+            return convertCurrency;
+        });
+    }
+
+    const DEFAULT_SPEED = 60; // px/s
+    const DEFAULT_ATTRIBUTE_BLACKLIST = [
+        'id'
+    ];
+    /**
+     * This plugin provides a smoothly scrolling marquee effect by creating duplicates of items in a
+     * “source” element and placing them into a matching “target” container. As the original content
+     * scrolls away, the duplicated set seamlessly appears, forming an infinite loop that prevents any
+     * abrupt restart.
+     *
+     * Inspired by: https://ryanmulligan.dev/blog/css-marquee/
+     *
+     * Modifiers:
+     *  - speed.X: Adjusts the scrolling pace (e.g., speed.60 sets 60px per second). Negative value scrolls backwards
+     *  - fill: Ensures content is repeated and appended until the visual area is completely covered.
+     *  - pause: Begins the marquee in a paused state, requiring a play action to begin moving.
+     *
+     * General usage:
+     *  1. Mark the scrolled content with x-marquee:source.
+     *  2. Provide an empty container with x-marquee:target, to receive the duplicated set of items.
+     *  3. Attach x-marquee to a parent element with optional modifiers like speed.X, fill, or pause.
+     *
+     * Programmatic control is available through $marquee, enabling methods like play, pause, or toggle
+     * at any time.
+     *
+     * @example
+     *   <div x-data x-marquee.speed.60.fill>
+     *     <div x-marquee:source>
+     *       <span>First Item</span>
+     *       <span>Second Item</span>
+     *       <span>Third Item</span>
+     *     </div>
+     *     <div x-marquee:target aria-hidden="true"></div>
+     *   </div>
+     *
+     */ function marquee(Alpine) {
+        Alpine.directive('marquee', ($el, { value , modifiers  })=>{
+            if (value == 'source') {
+                Alpine.bind($el, {
+                    'x-init': '__marquee_sourceEl = $el'
+                });
+            } else if (value == 'target') {
+                Alpine.bind($el, {
+                    'x-init': '__marquee_targetEl = $el'
+                });
+            } else if (value == null) {
+                let speed = DEFAULT_SPEED;
+                let fill = modifiers.includes('fill');
+                let autoplay = !modifiers.includes('pause');
+                if (modifiers.includes('speed')) {
+                    speed = Number(modifiers[modifiers.indexOf('speed') + 1]);
+                }
+                Alpine.bind($el, {
+                    'x-data' () {
+                        return {
+                            __marquee_state: buildMarqueeState({
+                                isPlaying: autoplay
+                            }),
+                            __marquee_isInitialized: false,
+                            __marquee_isRendering: false,
+                            __marquee_sourceEl: null,
+                            __marquee_targetEl: null,
+                            __marquee_originalContentFragment: document.createDocumentFragment(),
+                            __marquee_originalContentWidth: 0,
+                            __marquee_sourceElWidth: 0,
+                            __marquee_viewportWidth: 0,
+                            __marquee_sourceAnimation: null,
+                            __marquee_targetAnimation: null,
+                            __marquee_sentinel: null,
+                            get __marquee_animationDuration () {
+                                return this.__marquee_sourceElWidth / Math.abs(speed) * 1000;
+                            },
+                            /**
+                             * Clones source el children until source element width is gte to viewport width
+                             */ __marquee_fillSource () {
+                                return new Promise((resolve)=>{
+                                    // When the marquee does not have width, i.e. it was initially hidden
+                                    if (this.__marquee_originalContentWidth === 0) {
+                                        // Measure the width of the original content so we know later how many times to clone it
+                                        this.__marquee_originalContentWidth = this.__marquee_sourceEl.clientWidth;
+                                        this.__marquee_sourceElWidth = this.__marquee_originalContentWidth;
+                                    }
+                                    // If we haven't yet added our sentinel, do it now:
+                                    if (!this.__marquee_sentinel) {
+                                        Alpine.mutateDom(()=>{
+                                            // Use a comment node or any other marker
+                                            this.__marquee_sentinel = document.createComment('marquee-sentinel');
+                                            this.__marquee_sourceEl.appendChild(this.__marquee_sentinel);
+                                        });
+                                    } else {
+                                        Alpine.mutateDom(()=>{
+                                            // Remove all nodes after the sentinel, so we don't stack infinite clones when re-rendering
+                                            let next = this.__marquee_sentinel.nextSibling;
+                                            while(next){
+                                                const toRemove = next;
+                                                next = next.nextSibling;
+                                                this.__marquee_sourceEl.removeChild(toRemove);
+                                            }
+                                            // Update the original content width in case screen size has changed it or something
+                                            this.__marquee_originalContentWidth = this.__marquee_sourceEl.clientWidth;
+                                            // Update the source element width to match the original content width now that we've removed clones
+                                            this.__marquee_sourceElWidth = this.__marquee_originalContentWidth;
+                                        });
+                                    }
+                                    const spaceToFill = Math.max(0, this.__marquee_viewportWidth - this.__marquee_originalContentWidth);
+                                    if (spaceToFill === 0) return resolve();
+                                    // Count how many times we need to clone the original content to fill the screen
+                                    const timesToClone = Math.ceil(spaceToFill / this.__marquee_originalContentWidth);
+                                    // Clone the original content until the animation wrapper fills the screen
+                                    const fragment = document.createDocumentFragment();
+                                    for(let i = 0; i < timesToClone; i++){
+                                        const clone = this.__marquee_originalContentFragment.cloneNode(true);
+                                        fragment.appendChild(clone);
+                                    }
+                                    Alpine.mutateDom(()=>{
+                                        // Insert the new clones after our sentinel:
+                                        this.__marquee_sentinel.after(fragment);
+                                        Alpine.skipDuringClone(()=>Alpine.initTree(this.__marquee_sourceEl)
+                                        )();
+                                        // Wait until next paint to measure the new width of the source element so we don't cause a reflow
+                                        window.requestAnimationFrame(()=>{
+                                            this.__marquee_sourceElWidth = this.__marquee_sourceEl.clientWidth;
+                                            resolve();
+                                        });
+                                    });
+                                });
+                            },
+                            __marquee_cloneSourceToTarget () {
+                                return new Promise((resolve)=>{
+                                    // If the content is smaller than the viewport, don't duplicate the content because we're not
+                                    if (this.__marquee_sourceElWidth < this.__marquee_viewportWidth) {
+                                        return resolve();
+                                    }
+                                    Alpine.mutateDom(()=>{
+                                        // Clone the nodes from the source to the target
+                                        const clone = this.__marquee_sourceEl.cloneNode(true);
+                                        this.__marquee_targetEl.replaceChildren(...clone.children);
+                                        // Re-initialize alpine on cloned nodes
+                                        Alpine.skipDuringClone(()=>Alpine.initTree(this.__marquee_targetEl)
+                                        )();
+                                        resolve();
+                                    });
+                                });
+                            },
+                            __marquee_setupAnimations () {
+                                var _a, _b;
+                                const animationDirection = speed < 0 ? 'reverse' : 'normal';
+                                const animationDurationInMs = this.__marquee_animationDuration;
+                                const keyframes = [
+                                    {
+                                        transform: `translateX(0%)`
+                                    },
+                                    {
+                                        transform: `translateX(-100%)`
+                                    }
+                                ];
+                                const animationOptions = {
+                                    duration: animationDurationInMs,
+                                    iterations: Infinity,
+                                    direction: animationDirection
+                                };
+                                if (this.__marquee_sourceAnimation == null) {
+                                    let sourceAnimation = new Animation(new KeyframeEffect(this.__marquee_sourceEl, keyframes, animationOptions));
+                                    this.__marquee_sourceAnimation = sourceAnimation;
+                                } else {
+                                    (_a = this.__marquee_sourceAnimation.effect) === null || _a === void 0 ? void 0 : _a.updateTiming({
+                                        duration: animationDurationInMs
+                                    });
+                                }
+                                if (this.__marquee_targetAnimation == null) {
+                                    let targetAnimation = new Animation(new KeyframeEffect(this.__marquee_targetEl, keyframes, animationOptions));
+                                    targetAnimation.startTime = this.__marquee_sourceAnimation.startTime;
+                                    targetAnimation.currentTime = this.__marquee_sourceAnimation.currentTime;
+                                    this.__marquee_targetAnimation = targetAnimation;
+                                } else {
+                                    (_b = this.__marquee_targetAnimation.effect) === null || _b === void 0 ? void 0 : _b.updateTiming({
+                                        duration: animationDurationInMs
+                                    });
+                                }
+                                if (this.__marquee_state.isPlaying && this.__marquee_sourceElWidth > this.__marquee_viewportWidth) {
+                                    this.__marquee_sourceAnimation.play();
+                                    this.__marquee_targetAnimation.play();
+                                }
+                            },
+                            __marquee_scrollTo (element) {
+                                var _a, _b;
+                                let offset = element.offsetLeft / this.__marquee_sourceElWidth * 100;
+                                const animationProgress = ((_b = (_a = this.__marquee_sourceAnimation) === null || _a === void 0 ? void 0 : _a.effect) === null || _b === void 0 ? void 0 : _b.getComputedTiming().progress) * 100;
+                                const buffer = 2; // To allow for the focus outline to be fully visible
+                                const targetElementPosition = -(offset - buffer - animationProgress);
+                                this.__marquee_sourceAnimation.effect.setKeyframes([
+                                    {
+                                        transform: `translateX(${targetElementPosition}%)`
+                                    },
+                                    {
+                                        transform: `translateX(${targetElementPosition - 100}%)`
+                                    }, 
+                                ]);
+                                this.__marquee_targetAnimation.effect.setKeyframes([
+                                    {
+                                        transform: `translateX(${targetElementPosition}%)`
+                                    },
+                                    {
+                                        transform: `translateX(${targetElementPosition - 100}%)`
+                                    }, 
+                                ]);
+                            },
+                            async __marquee_render () {
+                                if (this.__marquee_isRendering) return;
+                                try {
+                                    this.__marquee_isRendering = true;
+                                    if (fill) {
+                                        await this.__marquee_fillSource();
+                                    }
+                                    await this.__marquee_cloneSourceToTarget();
+                                    // Don't animate if in reduced motion mode
+                                    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                                        // Setup animations after the content has been cloned in order to measure the width of the content element without causing reflow
+                                        this.__marquee_setupAnimations();
+                                    }
+                                    this.__marquee_isInitialized = true;
+                                    window.requestAnimationFrame(()=>{
+                                        this.__marquee_isRendering = false;
+                                    });
+                                } finally{
+                                    this.__marquee_isRendering = false;
+                                }
+                            },
+                            init () {
+                                this.$nextTick(()=>{
+                                    if (this.__marquee_sourceEl == null) {
+                                        throw new Error('Source element not found, x-marquee:source must be applied to a child element of the x-marquee directive');
+                                    }
+                                    if (this.__marquee_targetEl == null) {
+                                        throw new Error('Target element not found, x-marquee:target must be applied to a child element of the x-marquee directive');
+                                    }
+                                    // Clone the contents of the animation wrapper so we can clone it until the animation wrapper fills the screen
+                                    Array.from(this.__marquee_sourceEl.children).forEach((element)=>{
+                                        const clone = element.cloneNode(true);
+                                        for (const blacklistedAttribute of DEFAULT_ATTRIBUTE_BLACKLIST){
+                                            clone.removeAttribute(blacklistedAttribute);
+                                        }
+                                        this.__marquee_originalContentFragment.append(clone);
+                                    });
+                                    // Measure the width of the original content so we know later how many times to clone it
+                                    this.__marquee_originalContentWidth = this.__marquee_sourceEl.clientWidth;
+                                    this.__marquee_sourceElWidth = this.__marquee_originalContentWidth;
+                                    this.__marquee_viewportWidth = this.$el.clientWidth;
+                                    window.requestAnimationFrame(()=>{
+                                        this.__marquee_render();
+                                    });
+                                });
+                                this.$watch('__marquee_state.isPlaying', (playing)=>{
+                                    var _a, _b, _c, _d;
+                                    if (playing) {
+                                        (_a = this.__marquee_sourceAnimation) === null || _a === void 0 ? void 0 : _a.play();
+                                        (_b = this.__marquee_targetAnimation) === null || _b === void 0 ? void 0 : _b.play();
+                                    } else {
+                                        (_c = this.__marquee_sourceAnimation) === null || _c === void 0 ? void 0 : _c.pause();
+                                        (_d = this.__marquee_targetAnimation) === null || _d === void 0 ? void 0 : _d.pause();
+                                    }
+                                });
+                            },
+                            destroy () {
+                                var _a, _b, _c, _d;
+                                (_a = this.__marquee_sourceEl) === null || _a === void 0 ? void 0 : _a.replaceChildren(this.__marquee_originalContentFragment);
+                                this.__marquee_originalContentFragment = document.createDocumentFragment();
+                                (_b = this.__marquee_sentinel) === null || _b === void 0 ? void 0 : _b.remove();
+                                (_c = this.__marquee_sourceAnimation) === null || _c === void 0 ? void 0 : _c.cancel();
+                                (_d = this.__marquee_targetAnimation) === null || _d === void 0 ? void 0 : _d.cancel();
+                                this.__marquee_sourceAnimation = null;
+                                this.__marquee_targetAnimation = null;
+                            }
+                        };
+                    },
+                    'x-resize.document' () {
+                        this.__marquee_viewportWidth = this.$el.clientWidth;
+                        this.__marquee_render();
+                    }
+                });
+            } else {
+                throw new Error(`Unknown directive: x-marquee:${value}`);
+            }
+        }).before('bind');
+        Alpine.magic('marquee', ($el)=>{
+            const $data = Alpine.$data($el);
+            return {
+                get isPlaying () {
+                    var _a;
+                    return (_a = $data.__marquee_state) === null || _a === void 0 ? void 0 : _a.isPlaying;
+                },
+                play () {
+                    var _a;
+                    (_a = $data.__marquee_state) === null || _a === void 0 ? void 0 : _a.play();
+                },
+                pause () {
+                    var _a;
+                    (_a = $data.__marquee_state) === null || _a === void 0 ? void 0 : _a.pause();
+                },
+                toggle () {
+                    var _a;
+                    (_a = $data.__marquee_state) === null || _a === void 0 ? void 0 : _a.toggle();
+                },
+                scrollTo (element) {
+                    var _a;
+                    (_a = $data.__marquee_scrollTo) === null || _a === void 0 ? void 0 : _a.call($data, element);
+                },
+                get isReady () {
+                    return $data.__marquee_isInitialized;
+                }
+            };
+        });
+    }function buildMarqueeState(options) {
+        var _a;
+        return {
+            isPlaying: (_a = options === null || options === void 0 ? void 0 : options.isPlaying) !== null && _a !== void 0 ? _a : false,
+            play () {
+                this.isPlaying = true;
+            },
+            pause () {
+                this.isPlaying = false;
+            },
+            toggle () {
+                this.isPlaying = !this.isPlaying;
+            }
+        };
+    }
+
+    // Animation helpers
+    function sliderReveal(Alpine) {
+        Alpine.directive('slider-reveal', ($el, data)=>{
+            if (data.value == 'handle') {
+                handleHandle($el, Alpine);
+            } else if (data.value == 'reveal') {
+                handleReveal($el, Alpine);
+            } else if (data.value == null) {
+                handleRoot($el, Alpine, data);
+            } else {
+                throw new Error(`Unknown directive: x-slider-reveal:${data.value}`);
+            }
+        }).before('bind');
+        Alpine.magic('sliderReveal', handleSliderRevealMagic(Alpine));
+    }function handleHandle($el, Alpine, _data) {
+        Alpine.bind($el, {
+            'x-init': '__sliderReveal_handle = $el'
+        });
+    }
+    function handleReveal($el, Alpine, _data) {
+        Alpine.bind($el, {
+            'x-init': '__sliderReveal_reveal = $el'
+        });
+    }
+    function handleRoot($el, Alpine, data) {
+        const orientation = data.modifiers.includes('vertical') ? 'vertical' : 'horizontal';
+        let initialProgress = 0;
+        if (data.modifiers.includes('initial')) {
+            initialProgress = Number(data.modifiers[data.modifiers.indexOf('initial') + 1]);
+        }
+        if (data.modifiers.includes('progress')) {
+            const rawValue = data.modifiers[data.modifiers.indexOf('progress') + 1];
+            if (!rawValue) {
+                throw new Error('x-slider-reveal.progress requires a value (e.g. x-slider-reveal.progress.50%)');
+            }
+            // Support x-slider-reveal.progress.50% which will set the initial progress to 50%
+            let match = rawValue.match(/([0-9]+)%/);
+            if (match) initialProgress = Number(match[1]);
+        }
+        const progressToPercent = transform([
+            0,
+            100
+        ], [
+            '0%',
+            '100%'
+        ]);
+        Alpine.bind($el, {
+            'x-data' () {
+                return {
+                    __sliderReveal_progressMotionValue: reactiveMotionValue(Alpine, initialProgress),
+                    __sliderReveal_handle: null,
+                    __sliderReveal_reveal: null,
+                    __sliderReveal_scrollAnimationFn: null,
+                    init () {
+                        this.$nextTick(()=>{
+                            // Update elements with initial progress
+                            this.__sliderReveal_updateElements(initialProgress);
+                            // Update elements on progress change
+                            this.__sliderReveal_progressMotionValue.on('change', this.__sliderReveal_updateElements.bind(this));
+                        });
+                    },
+                    __enableScroll () {
+                        if (this.__sliderReveal_scrollAnimationFn) return;
+                        this.__sliderReveal_scrollAnimationFn = scroll((scrollProgress)=>{
+                            const currentProgress = this.__sliderReveal_progressMotionValue.get();
+                            let lowerBound = Math.max(0, currentProgress - 15);
+                            let upperBound = Math.min(100, currentProgress + 15);
+                            const scrollToProgress = transform([
+                                0.0,
+                                1.0
+                            ], [
+                                0,
+                                100
+                            ]);
+                            const progressToBoundedProgress = transform([
+                                0,
+                                100
+                            ], [
+                                lowerBound,
+                                upperBound
+                            ]);
+                            const normalizedScrollProgress = scrollToProgress(scrollProgress);
+                            const boundedNewProgress = progressToBoundedProgress(normalizedScrollProgress);
+                            this.__sliderReveal_updateElements(boundedNewProgress);
+                        }, {
+                            target: $el,
+                            offset: [
+                                'end start',
+                                'start end'
+                            ]
+                        });
+                    },
+                    __disableScroll () {
+                        var _a;
+                        (_a = this.__sliderReveal_scrollAnimationFn) === null || _a === void 0 ? void 0 : _a.call(this);
+                        this.__sliderReveal_scrollAnimationFn = null;
+                    },
+                    __sliderReveal_updateElements (progress) {
+                        const percentProgress = progressToPercent(progress);
+                        if (orientation === 'vertical') {
+                            if (this.__sliderReveal_handle) {
+                                this.__sliderReveal_handle.style.transform = `translateY(${percentProgress})`;
+                                this.__sliderReveal_reveal.style.clipPath = `inset(${percentProgress} 0% 0% 0%)`;
+                            }
+                        } else {
+                            if (this.__sliderReveal_handle) {
+                                this.__sliderReveal_handle.style.transform = `translateX(${percentProgress})`;
+                                this.__sliderReveal_reveal.style.clipPath = `inset(0% 0% 0% ${percentProgress})`;
+                            }
+                        }
+                    }
+                };
+            }
+        });
+    }
+    function handleSliderRevealMagic(Alpine) {
+        return function($el) {
+            const $data = Alpine.$data($el);
+            return {
+                get progressMotionValue () {
+                    return $data.__sliderReveal_progressMotionValue;
+                },
+                get progress () {
+                    return $data.__sliderReveal_progressMotionValue.get();
+                },
+                set progress (value){
+                    $data.__sliderReveal_progressMotionValue.set(value);
+                },
+                enableScroll () {
+                    $data.__enableScroll();
+                },
+                disableScroll () {
+                    $data.__disableScroll();
+                }
+            };
+        };
+    }
+
+    const selectors$4 = {
         announcementBar: '[data-announcement-bar]',
         tickerFrame: '[data-ticker-frame]',
         tickerScale: '[data-ticker-scale]',
         tickerText: '[data-ticker-text]'
     };
-    const classes$1 = {
+    const classes = {
         isSelected: 'is-selected',
         tickerAnimated: 'ticker--animated'
     };
@@ -18289,7 +26593,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }) {
         var ref1;
         return {
-            tickerFrames: (ref1 = this.$el.closest(selectors$3.announcementBar)) === null || ref1 === void 0 ? void 0 : ref1.querySelectorAll(selectors$3.tickerFrame),
+            tickerFrames: (ref1 = this.$el.closest(selectors$4.announcementBar)) === null || ref1 === void 0 ? void 0 : ref1.querySelectorAll(selectors$4.tickerFrame),
             init () {
                 var ref;
                 if ((options === null || options === void 0 ? void 0 : options.waitForSlider) && ((ref = this.tickerFrames) === null || ref === void 0 ? void 0 : ref.length) > 1) {
@@ -18303,21 +26607,21 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 new Ticker(this.$el, options === null || options === void 0 ? void 0 : options.stopClone);
             },
             toggleTicker (event, isStopped) {
-                const tickerScale = this.$el.querySelector(selectors$3.tickerScale);
+                const tickerScale = this.$el.querySelector(selectors$4.tickerScale);
                 const element = this.$el.querySelector(`[x-ref="${event.detail.blockId}"]`);
                 if (!element || element.offsetParent === null) return; // No element or the element is hidden
                 if (isStopped) {
                     const itemsSpacing = Number(getComputedStyle(element).getPropertyValue('--items-spacing').replace('px', ''));
                     const leftPosition = -(element.offsetLeft + itemsSpacing);
                     tickerScale.setAttribute('data-stop', '');
-                    tickerScale.querySelectorAll(selectors$3.tickerText).forEach((textHolder)=>{
-                        textHolder.classList.remove(classes$1.tickerAnimated);
+                    tickerScale.querySelectorAll(selectors$4.tickerText).forEach((textHolder)=>{
+                        textHolder.classList.remove(classes.tickerAnimated);
                         textHolder.style.transform = `translate3d(${leftPosition}px, 0, 0)`;
                     });
                 }
                 if (!isStopped) {
-                    tickerScale.querySelectorAll(selectors$3.tickerText).forEach((textHolder)=>{
-                        textHolder.classList.add(classes$1.tickerAnimated);
+                    tickerScale.querySelectorAll(selectors$4.tickerText).forEach((textHolder)=>{
+                        textHolder.classList.add(classes.tickerAnimated);
                         textHolder.removeAttribute('style');
                     });
                     tickerScale.removeAttribute('data-stop');
@@ -18369,7 +26673,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                     if (this.$el.children.length < 2) return;
                     this.flkty = new Flickity(this.$el, this.options);
                     this.removeDeviceSpecificSlides();
-                    resolution$1.onChange(()=>{
+                    resolution.onChange(()=>{
                         this.updateDeviceSpecificSlides();
                     });
                     this.scrollEvent = ()=>this.scrollEvents()
@@ -18383,13 +26687,13 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             removeDeviceSpecificSlides () {
                 const slides = this.flkty.getCellElements();
                 slides.forEach((slide, index)=>{
-                    slide.classList.remove(classes$1.isSelected);
+                    slide.classList.remove(classes.isSelected);
                     if (slide.dataset.device == 'desktop') {
                         this.desktopSlides.push([
                             slide,
                             index
                         ]);
-                        if (resolution$1.isMobile()) {
+                        if (resolution.isMobile()) {
                             this.flkty.remove(slide);
                         }
                     }
@@ -18398,7 +26702,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                             slide,
                             index
                         ]);
-                        if (resolution$1.isDesktop() || resolution$1.isTablet()) {
+                        if (resolution.isDesktop() || resolution.isTablet()) {
                             this.flkty.remove(slide);
                         }
                     }
@@ -18408,10 +26712,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                     this.flkty.resize();
                 }, 1000);
                 this.handleSliderAutoplay();
-                this.isMobileSliderInitialized = resolution$1.isMobile();
+                this.isMobileSliderInitialized = resolution.isMobile();
             },
             updateDeviceSpecificSlides () {
-                if (resolution$1.isDesktop() || resolution$1.isTablet()) {
+                if (resolution.isDesktop() || resolution.isTablet()) {
                     if (this.isMobileSliderInitialized) {
                         // Insert desktop-only slides
                         this.desktopSlides.forEach((slide)=>{
@@ -18423,7 +26727,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                         });
                     }
                 }
-                if (resolution$1.isMobile()) {
+                if (resolution.isMobile()) {
                     if (!this.isMobileSliderInitialized) {
                         // Insert mobile-only slides
                         this.mobileSlides.forEach((slide)=>{
@@ -18440,7 +26744,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                     this.flkty.resize();
                 }, 1000);
                 this.handleSliderAutoplay();
-                this.isMobileSliderInitialized = resolution$1.isMobile();
+                this.isMobileSliderInitialized = resolution.isMobile();
             },
             handleSliderAutoplay () {
                 var ref;
@@ -18486,6 +26790,289 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     }
     function announcement() {
         new CartShippingMessage(this.$el);
+    }
+
+    const STATES$2 = {
+        INITIAL: 0,
+        LOADING: 1,
+        SUCCESS: 2,
+        ERROR: 3
+    };
+    const selectors$3 = {
+        popdown: '[data-product-add-popdown-wrapper]',
+        errors: '[data-add-action-errors]',
+        errorBoundary: '[data-error-boundary]',
+        errorDisplay: '[data-error-display]',
+        quickviewModal: '[data-quickview-modal]',
+        sectionTypeCart: '[data-section-type="cart"]',
+        sectionTypeProduct: '[data-section-type="product"]',
+        ajaxDisable: '[data-ajax-disable="true"]',
+        productSlideshowDesktop: '[data-slideshow-desktop-style="slideshow"]',
+        productSlideshowMobile: '[data-slideshow-mobile-style]',
+        productMediaDesktop: '[data-product-slideshow]'
+    };
+    const defaultTimes$1 = {
+        durationAddButtonDisable: 3500,
+        hideErrorTime: 5000
+    };
+    /*
+    NOTE this is an initial crack at migrating existing product instant add logic
+    from WebComponents / direct DOM manipulation style to using Alpine. As such, it is
+    fairly rough and not at all (yet) idiomatic Alpine.
+    */ function productForm(options = {}) {
+        const times = {
+            ...defaultTimes$1,
+            ...options.times
+        };
+        return {
+            state: STATES$2.INITIAL,
+            error: '',
+            quantity: 1,
+            variantId: null,
+            // For Quickview only:
+            showForm: true,
+            // Selectors
+            get form () {
+                return this.$root.querySelector('form');
+            },
+            get popdown () {
+                return document.querySelector(selectors$3.popdown);
+            },
+            get errorDisplay () {
+                let errorsEl = this.$root.querySelector(selectors$3.errors);
+                if (!errorsEl) {
+                    const ancestorErrorBoundary = this.$root.closest(selectors$3.errorBoundary);
+                    if (ancestorErrorBoundary) {
+                        errorsEl = ancestorErrorBoundary.querySelector(selectors$3.errorDisplay);
+                    }
+                }
+                if (!errorsEl) {
+                    errorsEl = this.$root.querySelector(selectors$3.errorDisplay);
+                }
+                return errorsEl;
+            },
+            get quickViewModal () {
+                return this.$root.closest(selectors$3.quickviewModal);
+            },
+            // Getters
+            get isInitial () {
+                return this.state === STATES$2.INITIAL;
+            },
+            get isLoading () {
+                return this.state === STATES$2.LOADING;
+            },
+            get isSuccess () {
+                return this.state === STATES$2.SUCCESS;
+            },
+            get isError () {
+                return this.state === STATES$2.ERROR;
+            },
+            get isDisabled () {
+                return this.isLoading;
+            },
+            get isAjaxDisabled () {
+                return !!this.$root.closest(selectors$3.ajaxDisable);
+            },
+            // Bleh, this kind of sucks but neccesary evil for now
+            get isInsideQuickViewModal () {
+                return Boolean(this.quickViewModal);
+            },
+            // Handlers
+            handleSubmit (e) {
+                e.preventDefault();
+                this.state = STATES$2.LOADING;
+                const formData = new FormData(this.form);
+                this.addToCart(formData).then(this.handleSuccess.bind(this)).catch(this.handleError.bind(this));
+            },
+            handleSuccess (response) {
+                const variant = response.data;
+                this.state = STATES$2.SUCCESS;
+                this.updateHeaderTotal();
+                // Reset the state back to initial after a duration
+                setTimeout(()=>{
+                    this.state = STATES$2.INITIAL;
+                }, times.durationAddButtonDisable);
+                // If we're inside of a quick view, close the quick view.
+                if (this.isInsideQuickViewModal) {
+                    this.closeQuickView();
+                }
+                // If we're inside of a quick view, triggered by a cart add-on, reload the cart instead of opening a popdown.
+                if (window.theme.state.cartOpen) {
+                    this.reloadCart();
+                } else {
+                    this.openPopdown(variant);
+                }
+            },
+            handleError (error) {
+                if (error === null || error === void 0 ? void 0 : error.data) {
+                    this.state = STATES$2.ERROR;
+                    if (error.data.description && typeof error.data.description === 'string') {
+                        // Standard stockout error
+                        this.error = error.data.description;
+                    } else if (error.data.message && typeof error.data.message === 'string') {
+                        // Standard giftcard validation error
+                        this.error = error.data.message;
+                    } else if (error.data.description && typeof error.data.description === 'object') {
+                        // Error is custom object, print keys and values into message to avoid [Object object]
+                        this.error = Object.keys(error.data.description).map((key)=>{
+                            return `${key}: ${error.data.description[key]}`;
+                        }).join('<br>');
+                    } else {
+                        // Fallback
+                        this.error = 'Network error: please try again';
+                    }
+                    if (this.errorDisplay) {
+                        const errorsHTML = `<div class="errors">${this.error}</div>`;
+                        this.errorDisplay.innerHTML = errorsHTML;
+                        slideDown(this.errorDisplay);
+                        setTimeout(()=>{
+                            slideUp(this.errorDisplay);
+                        }, times.hideErrorTime);
+                    }
+                } else {
+                    throw error;
+                }
+            },
+            // Actions
+            addToCart (formData) {
+                const url = `${window.theme.routes.cart}/add.js`;
+                const formPayload = new URLSearchParams(formData).toString();
+                return axios.post(url, formPayload, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+            },
+            updateHeaderTotal () {
+                return axios.get(`${window.theme.routes.cart}.js`).then((response)=>{
+                    document.dispatchEvent(new CustomEvent('theme:cart:change', {
+                        detail: {
+                            cart: response.data
+                        },
+                        bubbles: true
+                    }));
+                }).catch((e)=>{
+                    console.error(e);
+                });
+            },
+            closeQuickView () {
+                this.quickViewModal.dispatchEvent(new CustomEvent('theme:quickview:close'));
+            },
+            reloadCart () {
+                document.dispatchEvent(new CustomEvent('theme:cart:reload', {
+                    bubbles: true
+                }));
+            },
+            openPopdown (variant) {
+                this.popdown.dispatchEvent(new CustomEvent('theme:cart:popdown', {
+                    detail: {
+                        variant: variant
+                    },
+                    bubbles: true
+                }));
+            },
+            async changeVariant (variantUrl, newVariantId, variantMediaId) {
+                var ref;
+                if (newVariantId !== null && newVariantId !== undefined) {
+                    this.variantId = newVariantId;
+                }
+                if (((ref = this.$root.closest('[data-enable-history-state]')) === null || ref === void 0 ? void 0 : ref.dataset.enableHistoryState) == 'false') {
+                    await this.$sectionApi.navigate(variantUrl, 'none');
+                } else {
+                    await this.$sectionApi.navigate(variantUrl, 'replace');
+                }
+                this.updateProductImage(variantMediaId);
+            },
+            updateProductImage (variantMediaId) {
+                const desktopOrTablet = resolution.isDesktop() || resolution.isTablet();
+                const mobile = resolution.isMobile();
+                if (desktopOrTablet && this.hasDesktopSlideshow || mobile && this.hasMobileSlideshow) {
+                    if (variantMediaId) {
+                        this.onSlideshowReady(()=>{
+                            this.slideshow.dispatchEvent(new CustomEvent('theme:image:change', {
+                                detail: {
+                                    id: variantMediaId
+                                }
+                            }));
+                        });
+                    }
+                } else if (this.productMedia) {
+                    if (desktopOrTablet && this.productMedia.hasAttribute('data-vertical-images')) {
+                        const selectedImage = this.productMedia.querySelector(`[data-media-id="${variantMediaId}"]`);
+                        selectedImage === null || selectedImage === void 0 ? void 0 : selectedImage.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'nearest'
+                        });
+                    }
+                }
+            },
+            async preloadVariant (variantUrl) {
+                // cache-first policy prevents preloading multiple times when the same variant is added to the cart multiple times
+                // abortPending prevents aborting other preload requests when one is already pending
+                window.requestIdleCallback(()=>{
+                    return this.$sectionApi.load({
+                        baseUrl: variantUrl,
+                        cachePolicy: 'cache-first',
+                        abortPending: false
+                    });
+                });
+            },
+            get hasDesktopSlideshow () {
+                return Boolean(this.$root.querySelector(selectors$3.productSlideshowDesktop));
+            },
+            get hasMobileSlideshow () {
+                return Boolean(this.$root.querySelector(selectors$3.productSlideshowMobile));
+            },
+            get slideshow () {
+                return this.$root.querySelector(selectors$3.productSlideshowDesktop) || this.$root.querySelector(selectors$3.productSlideshowMobile);
+            },
+            get hasProductMedia () {
+                return Boolean(this.productMedia);
+            },
+            get productMedia () {
+                return this.$root.querySelector(selectors$3.productMediaDesktop);
+            },
+            onSlideshowReady (callback) {
+                if (this.slideshow.classList.contains('flickity-enabled')) {
+                    callback();
+                } else {
+                    const mutationObserver = new MutationObserver((mutationList)=>{
+                        for (const item of mutationList){
+                            if (item.attributeName === 'class') {
+                                if (this.slideshow.classList.contains('flickity-enabled')) {
+                                    mutationObserver.disconnect();
+                                    callback();
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                    mutationObserver.observe(this.slideshow, {
+                        attributes: true
+                    });
+                }
+            },
+            // Initialization
+            init () {
+                this.form.addEventListener('submit', this.handleSubmit.bind(this));
+                const section = this.$root.closest('[data-section-type]');
+                const desktopOrTablet = resolution.isDesktop() || resolution.isTablet();
+                const mobile = resolution.isMobile();
+                // We only update the image if we have a slideshow on the desktop or mobile, not if it's a stack
+                if (desktopOrTablet && this.hasDesktopSlideshow || mobile && this.hasMobileSlideshow) {
+                    const initialVariantMediaId = section === null || section === void 0 ? void 0 : section.dataset.initialVariantMediaId;
+                    if (initialVariantMediaId !== null) this.updateProductImage(initialVariantMediaId);
+                }
+                if (mobile) {
+                    this.showForm = false;
+                }
+                const handle = section === null || section === void 0 ? void 0 : section.dataset.productHandle;
+                if (handle) {
+                    new RecordRecentlyViewed(handle);
+                }
+            }
+        };
     }
 
     const STATES$1 = {
@@ -18697,6 +27284,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         LOADING: 1
     };
     const selectors$1 = {
+        shopifySection: '.shopify-section',
         quickviewHolder: 'data-quickview-holder',
         addButtonWrapper: '[data-add-action-wrapper]',
         modalContent: '[data-product-quickview-ajax]',
@@ -18710,16 +27298,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         mediaId: '[data-media-id]',
         focusable: 'button, [href], select, textarea, [tabindex]:not([tabindex="-1"])'
     };
-    const classes = {
-        hide: 'hide',
-        active: 'is-active',
-        expanded: 'is-expanded',
-        loading: 'loading'
-    };
-    const visibleParts = {
-        minPart: 250,
-        mediumPart: 400
-    };
     /*
     NOTE this is an initial crack at migrating existing product quick view modal logic
     from WebComponents / direct DOM manipulation style to using Alpine. As such, it is
@@ -18729,7 +27307,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
             state: STATES.INITIAL,
             // Selectors
             get quickviewHolder () {
-                return this.$el.querySelector(`[${selectors$1.quickviewHolder}]`);
+                return this.$root.querySelector(`[${selectors$1.quickviewHolder}]`);
             },
             // Getters
             get isInitial () {
@@ -18757,10 +27335,10 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                 window.fetch(`${window.theme.routes.root_url}products/${handle}?section_id=api-product-quickview`).then(this.handleErrors).then((response)=>{
                     return response.text();
                 }).then((response)=>{
-                    const fresh = document.createElement('div');
-                    fresh.innerHTML = response;
+                    var ref;
+                    const quickviewHTML = (ref = new DOMParser().parseFromString(response, 'text/html').querySelector(selectors$1.shopifySection)) === null || ref === void 0 ? void 0 : ref.innerHTML;
                     this.modalContent = this.modal.querySelector(selectors$1.modalContent);
-                    this.modalContent.innerHTML = fresh.querySelector('[data-api-content]').innerHTML;
+                    this.modalContent.innerHTML = quickviewHTML;
                     this.modalScroll = this.modal.querySelector(selectors$1.quickviewModalScrolls);
                     const images = this.modalContent.querySelector(selectors$1.mediaId);
                     if (images) {
@@ -18786,12 +27364,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                     onShow: (modal, el, event)=>{
                         this.quickviewHead = modal.querySelector(selectors$1.quickviewHead);
                         this.quickviewFormArea = modal.querySelector(selectors$1.quickviewFormArea);
-                        this.toggleButton = modal.querySelector(selectors$1.toggleButton);
-                        this.toggleForm('loading');
-                        document.addEventListener('theme:resize', throttle$1(()=>{
-                            this.toggleForm('resize');
-                        }, 500));
-                        this.clickEventToggleForm();
                         const firstFocus = modal.querySelector(selectors$1.focusable);
                         trapFocus(modal, {
                             elementToFocus: firstFocus
@@ -18804,6 +27376,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                         new ImageCaption(this.modal);
                     },
                     onClose: (modal, el, event)=>{
+                        if (event) event.preventDefault();
                         this.media.destroy();
                         const allMedia = modal.querySelectorAll(selectors$1.media);
                         allMedia.forEach((media)=>{
@@ -18837,52 +27410,6 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
                     });
                 }
                 return response;
-            },
-            toggleForm (event) {
-                if (this.windowH === window.innerHeight && event === 'resize') {
-                    return;
-                }
-                if (!this.toggleButton.classList.contains(classes.hide)) {
-                    this.toggleButton.classList.add(classes.hide);
-                }
-                if (!this.quickviewFormArea.classList.contains(classes.expanded)) {
-                    this.quickviewFormArea.classList.add(classes.expanded);
-                }
-                if (event === 'resize') {
-                    this.quickviewFormArea.classList.add(classes.expanded);
-                    this.toggleButton.classList.add(classes.hide);
-                    this.windowH = window.innerHeight;
-                }
-                setTimeout(()=>{
-                    const imagesVisiblePartOfImages = window.innerHeight - this.quickviewHead.offsetHeight - this.quickviewFormArea.offsetHeight;
-                    const hasMediumVisiblePart = imagesVisiblePartOfImages < visibleParts.mediumPart && imagesVisiblePartOfImages > visibleParts.minPart;
-                    const missingVisiblePart = imagesVisiblePartOfImages < visibleParts.minPart;
-                    if (hasMediumVisiblePart || missingVisiblePart) {
-                        this.toggleButton.classList.remove(classes.hide);
-                        this.toggleButton.classList.add(classes.active);
-                    } else {
-                        this.toggleButton.classList.add(classes.hide);
-                    }
-                    if (missingVisiblePart) {
-                        if (event === 'loading') {
-                            this.quickviewFormArea.classList.add(classes.loading);
-                            setTimeout(()=>{
-                                this.quickviewFormArea.classList.remove(classes.loading);
-                            }, 50);
-                        }
-                        this.quickviewFormArea.classList.remove(classes.expanded);
-                        this.toggleButton.classList.remove(classes.active);
-                    } else {
-                        this.quickviewFormArea.classList.add(classes.expanded);
-                    }
-                }, 200);
-            },
-            clickEventToggleForm () {
-                if (!this.toggleButton) return;
-                this.toggleButton.addEventListener('click', ()=>{
-                    this.toggleButton.classList.toggle(classes.active);
-                    this.quickviewFormArea.classList.toggle(classes.expanded);
-                });
             },
             // Initialization
             init () {
@@ -19131,37 +27658,70 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
         };
     }
 
-    /**
-     * Directive to allow repeatedly triggering an action while the mouse is held down or while element is being touched
-     *
-     * e.g.
-     *
-     * <button x-hold.250ms="console.log('clicked')">Hold me down</button>
-     */ var hold = (($el, { modifiers , expression  }, { cleanup , evaluate  })=>{
-        let intervalId = null;
-        let firstModifier = modifiers[0] || '';
-        let time = Number.isInteger(firstModifier.split('ms')[0]) ? Number(firstModifier.split('ms')[0]) : 25;
-        const startAction = ()=>{
-            intervalId = setInterval(()=>{
-                evaluate(expression);
-            }, time);
-        };
-        const stopAction = ()=>{
-            clearInterval(intervalId);
-        };
-        $el.addEventListener('mousedown', startAction);
-        $el.addEventListener('mouseup', stopAction);
-        $el.addEventListener('mouseleave', stopAction);
-        $el.addEventListener('touchstart', startAction);
-        $el.addEventListener('touchend', stopAction);
-        cleanup(()=>{
-            $el.removeEventListener('mousedown', startAction);
-            $el.removeEventListener('mouseup', stopAction);
-            $el.removeEventListener('mouseleave', stopAction);
-            $el.removeEventListener('touchstart', startAction);
-            $el.removeEventListener('touchend', stopAction);
+    function flickity(Alpine) {
+        Alpine.directive('flickity', ($el, { value , modifiers  })=>{
+            switch(value){
+                case 'slider':
+                    Alpine.bind($el, {
+                        'x-init': '__flickity_sliderEl = $el'
+                    });
+                    break;
+                case null:
+                    Alpine.bind($el, {
+                        'x-data' () {
+                            return {
+                                __flickity_sliderEl: null,
+                                __flickity_isReady: false,
+                                __flickity_instance: null,
+                                __flickity_mutationObserver: null,
+                                init () {
+                                    // This is a bit of a hack to get the flickity instance.
+                                    // We need to wait for the flickity-enabled class to be added to the element to
+                                    // know if Flickity has been initialized. Not a great solution, but it works for now.
+                                    this.$nextTick(()=>{
+                                        if (this.__flickity_sliderEl.classList.contains('flickity-enabled')) {
+                                            this.__flickity_instance = Flickity.data(this.__flickity_sliderEl);
+                                            this.__flickity_isReady = true;
+                                        } else {
+                                            this.__flickity_mutationObserver = new MutationObserver((mutationList)=>{
+                                                mutationList.forEach((mutation)=>{
+                                                    if (mutation.type === "attributes" && mutation.attributeName === "class") {
+                                                        if (mutation.target.classList.contains('flickity-enabled')) {
+                                                            this.__flickity_instance = Flickity.data(this.__flickity_sliderEl);
+                                                            this.__flickity_isReady = true;
+                                                        }
+                                                    }
+                                                });
+                                            });
+                                            this.__flickity_mutationObserver.observe(this.__flickity_sliderEl, {
+                                                attributes: true
+                                            });
+                                        }
+                                    });
+                                },
+                                destroy () {
+                                    this.__flickity_mutationObserver.disconnect();
+                                }
+                            };
+                        }
+                    });
+                    break;
+                default:
+                    throw new Error(`Invalid flickity directive: ${value}`);
+            }
+        }).before('bind');
+        Alpine.magic('flickity', ($el)=>{
+            const $data = Alpine.$data($el);
+            return {
+                get instance () {
+                    return $data.__flickity_instance;
+                },
+                get isReady () {
+                    return $data.__flickity_isReady;
+                }
+            };
         });
-    });
+    }
 
     /**
      * Directive to remove an element based on the previously loaded page
@@ -19175,43 +27735,263 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     });
 
     /**
-     * Magic to nudge the scroll position of an element by a certain amount
+     * Ensemble brings together multiple elements and binds them to the same data
      *
-     * @example
-     *
-     * <button x-on:click="$nudge($refs.someElement, 10)">Nudge!</button>
-     */ // TODO test me
-    function nudge(_$el) {
-        return (target, { left , top , ...options })=>{
-            target.scrollTo({
-                ...left && {
-                    left: Math.max(Math.min(target.scrollLeft + left, target.scrollWidth), 0)
-                },
-                ...top && {
-                    left: Math.max(Math.min(target.scrollTop + top, target.scrollHeight), 0)
-                },
-                ...options
-            });
-        };
+     * e.g.
+     * <div x-ensemble>
+     *   <div x-ensemble:slideshow.duration.{{ section.settings.duration | times: 1000 }}ms>...</div>
+     *   <div x-ensemble:accordion>...</div>
+     * </div>
+     */ function ensemble(Alpine) {
+        Alpine.directive('ensemble', ($el, { value: value1 , modifiers  })=>{
+            const { $ensemble  } = Alpine.$data($el);
+            switch(value1){
+                case 'slideshow':
+                    Alpine.bind($el, {
+                        [`x-slideshow.${modifiers.join('.')}`] () {
+                            return {
+                                get currentSlideIndex () {
+                                    if ($ensemble.selectedIndex === null) {
+                                        return 0;
+                                    }
+                                    // If this is the last slide of this particular ensemble members slideshow but there are more slides in the ensemble
+                                    // then just show the last slide of the ensemble
+                                    if ($ensemble.selectedIndex >= this.totalSlides) {
+                                        return this.totalSlides - 1;
+                                    }
+                                    return $ensemble.selectedIndex;
+                                },
+                                set currentSlideIndex (value){
+                                    $ensemble.selectedIndex = value;
+                                },
+                                get state () {
+                                    // If this particular ensemble member's slideshow has less slides than the ensemble itself (i.e. there are other slideshows in the ensemble)
+                                    // then pause _this_ slideshow and let the other slideshows take over
+                                    if (this.totalSlides < $ensemble.totalSlides) {
+                                        return 'paused';
+                                    }
+                                    return $ensemble.isPlaying ? 'playing' : 'paused';
+                                },
+                                set state (value){
+                                    $ensemble.isPlaying = value === 'playing';
+                                }
+                            };
+                        },
+                        'x-effect' () {
+                            if (this.$slideshow.totalSlides > this.$ensemble.totalSlides) {
+                                this.$ensemble.totalSlides = this.$slideshow.totalSlides;
+                            }
+                        }
+                    });
+                    break;
+                case 'disclosure-group':
+                    Alpine.bind($el, {
+                        ['x-disclosure-group'] () {
+                            return {
+                                get expandedIndex () {
+                                    // If there is no selectedIndex for some reason, show the first disclosure
+                                    if ($ensemble.selectedIndex === null) return 0;
+                                    // If the selectedIndex doesn't match any disclosures, show the last disclosure
+                                    const lastDisclosureIndex = Array.from(this.items).length - 1;
+                                    if ($ensemble.selectedIndex > lastDisclosureIndex) return lastDisclosureIndex;
+                                    return $ensemble.selectedIndex;
+                                },
+                                set expandedIndex (value){
+                                    // Only allow opening new accordion items, not closing them
+                                    if (value === null) return;
+                                    // Pause the slideshow when a disclosure is manually opened
+                                    $ensemble.isPlaying = false;
+                                    $ensemble.selectedIndex = value;
+                                }
+                            };
+                        }
+                    });
+                    break;
+                case 'slider':
+                    Alpine.bind($el, {
+                        'x-flickity': '',
+                        ['x-list-state'] () {
+                            return {
+                                scope: 'sliderItems',
+                                get selectedIndex () {
+                                    if ($ensemble.selectedIndex === null) {
+                                        return null;
+                                    }
+                                    return $ensemble.selectedIndex;
+                                },
+                                set selectedIndex (value){
+                                    $ensemble.selectedIndex = value;
+                                }
+                            };
+                        },
+                        'x-init' () {
+                            // Update the slider when clicking the hotspots
+                            this.$watch('$sliderItems.selectedIndex', (selectedIndex, prevSelectedIndex)=>{
+                                // Manaully scroll to the target slide if we're on mobile
+                                if (window.innerWidth < 768) {
+                                    const targetSlide = Array.from(this.$sliderItems.items)[selectedIndex];
+                                    if (targetSlide) {
+                                        targetSlide.scrollIntoView({
+                                            behavior: 'smooth',
+                                            block: 'nearest',
+                                            inline: 'center'
+                                        });
+                                    }
+                                } else {
+                                    // Use Flickity to select the target slide for desktop
+                                    if (selectedIndex !== this.$flickity.instance.selectedIndex) {
+                                        this.$flickity.instance.select(selectedIndex);
+                                    }
+                                }
+                            });
+                            this.$watch('$flickity.isReady', (isReady)=>{
+                                this.$flickity.instance.options.fade = true;
+                                this.$flickity.instance.options.freeScroll = false;
+                                this.$flickity.instance.resize();
+                                if (isReady) {
+                                    // Update the hotposts when the slide changes
+                                    this.$flickity.instance.on('select', (index)=>{
+                                        if (index !== this.$sliderItems.selectedIndex) {
+                                            this.$sliderItems.selectedIndex = index;
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                    break;
+                case 'hotspots':
+                    Alpine.bind($el, {
+                        ['x-list-state'] () {
+                            return {
+                                scope: 'hotspots',
+                                get selectedIndex () {
+                                    if ($ensemble.selectedIndex === null) {
+                                        return null;
+                                    }
+                                    return $ensemble.selectedIndex;
+                                },
+                                set selectedIndex (value){
+                                    $ensemble.isPlaying = false;
+                                    $ensemble.selectedIndex = value;
+                                }
+                            };
+                        }
+                    });
+                    break;
+                case null:
+                    Alpine.bind($el, {
+                        'x-intersect:enter': '$ensemble.isPlaying = true',
+                        'x-intersect:leave': '$ensemble.isPlaying = false',
+                        '@focusin': '$ensemble.isPlaying = false',
+                        ['x-data'] () {
+                            return {
+                                $ensemble: {
+                                    titleEl: null,
+                                    selectedIndex: 0,
+                                    totalSlides: 0,
+                                    isPlaying: false,
+                                    members: {},
+                                    registerMember (id, el) {
+                                        this.members[id] = el;
+                                    },
+                                    getPeerIds (id) {
+                                        return Object.keys(this.members).filter((memberId)=>memberId !== id
+                                        );
+                                    }
+                                }
+                            };
+                        },
+                        ':aria-labelledby': '$ensemble.titleEl?.id'
+                    });
+                    break;
+                default:
+                    throw new Error(`Invalid ensemble directive: ${value1}`);
+            }
+        }).before('bind');
     }
 
-    module_default.plugin(motionone);
     /* Data */ module_default.data('announcement', announcement);
     module_default.data('announcementSlider', announcementSlider);
     module_default.data('announcementTicker', announcementTicker);
+    module_default.data('productForm', productForm);
     module_default.data('productAddButtonForm', productAddButtonForm);
     module_default.data('productQuickViewButton', productQuickViewButton);
     module_default.data('productGridItemQuickAddMenu', productGridItemQuickAddMenu);
     module_default.data('toggle', toggle);
     module_default.data('tabs', tabs);
     module_default.data('overflow', overflow);
-    /* Magics */ module_default.magic('nudge', nudge);
-    /* Directives */ module_default.directive('hold', hold);
-    module_default.directive('target-referrer', targetReferrer);
-    /* Plugins */ module_default.plugin(module_default$2);
+    /* Directives */ module_default.directive('target-referrer', targetReferrer);
+    /* Plugins */ module_default.plugin(module_default$4);
+    module_default.plugin(module_default$3);
+    module_default.plugin(module_default$2);
     module_default.plugin(module_default$1);
+    module_default.plugin(currency);
+    module_default.plugin(stepper);
+    module_default.plugin(cache);
+    module_default.plugin(router);
+    module_default.plugin(asyncLink);
+    module_default.plugin(asyncForm);
+    module_default.plugin(clone);
+    module_default.plugin(sliderReveal);
+    module_default.plugin(slideshow);
+    module_default.plugin(listState);
+    module_default.plugin(motion);
+    module_default.plugin(animationUtils);
+    module_default.plugin(disclosure);
+    module_default.plugin(themeEditor);
+    module_default.plugin(marquee);
+    module_default.plugin(hold);
+    module_default.plugin(ensemble);
+    module_default.plugin(flickity);
+    module_default.plugin(section);
+    function isInProductForm(el) {
+        return el.hasAttribute && el.closest('.shopify-product-form');
+    }
+    function isSellingPlanHiddenInput(el) {
+        return el.tagName === 'INPUT' && el.type === 'hidden' && el.name === 'selling_plan';
+    }
+    // function isVariantIdHiddenInput(el) {
+    //   return el.tagName === 'INPUT' && el.type === 'hidden' && el.name === 'id';
+    // }
+    module_default.plugin(sectionApi({
+        morphConfig: {
+            // Customize theme-wide section morphing behaviour here
+            updating (el, toEl, childrenOnly, skip) {
+                // Call `skip()` to prevent an element from being removed
+                // Call `childrenOnly()` to prevent an element from being updated but allow it's children to be updated
+                // Skip any built-in shopify elements
+                if (el.hasAttribute && el.hasAttribute('data-shopify')) {
+                    skip();
+                }
+                // Skip updating selling_plan hidden input in product form to prevent breaking apps like Recharge. You may want to update or remove this logic depending on your theme's needs
+                if (isInProductForm(el) && isSellingPlanHiddenInput(el)) {
+                    skip();
+                }
+            // Uncomment to skip updating variant id hidden input in product form. Most themes will not need this, but if you do, you can uncomment this line.
+            // if (isInProductForm(el) && isVariantIdHiddenInput(el)) {
+            //   skip();
+            // }
+            },
+            // updated(el) {
+            //   // Do something after an element was updated
+            // },
+            removing (el, skip) {
+                // Call `skip()` to prevent an element from being removed
+                // Skip any built-in shopify elements
+                if (el.hasAttribute && el.hasAttribute('data-shopify')) {
+                    debugger;
+                    skip();
+                }
+                // Skip removing selling_plan hidden input in product form to prevent breaking apps like Recharge. You may want to update or remove this logic depending on your theme's needs
+                if (isInProductForm(el) && isSellingPlanHiddenInput(el)) {
+                    skip();
+                }
+            }
+        }
+    }));
     /* Initialization */ module_default.start();
     // Mainly for Alpine.js devtools to work
     window.Alpine = module_default;
 
-})(themeVendor.AOS, themeVendor.FlickityFade, themeVendor.ScrollLock, themeVendor.Flickity, themeVendor.Sqrl, themeVendor.MicroModal, themeVendor.Rellax, themeVendor.themeCurrency, themeVendor.axios, themeVendor.FlickitySync, themeVendor.themeAddresses);
+})(themeVendor.AOS, themeVendor.FlickityFade, themeVendor.ScrollLock, themeVendor.Flickity, themeVendor.MicroModal, themeVendor.Rellax, themeVendor.themeCurrency, themeVendor.axios, themeVendor.themeAddresses, themeVendor.Sqrl);

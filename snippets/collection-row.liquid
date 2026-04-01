@@ -15,12 +15,14 @@
       collection_title_override: block.settings.title,
       link_text: block.settings.link_text,
       enable_item: block.settings.enable_item,
+      item_height: block.settings.item_height,
       item_background: block.settings.item_background,
       item_text: block.settings.item_link_text,
       item_text_size: block.settings.item_link_size,
       item_text_color: block.settings.item_link_color %}
 {% endcomment %}
 {%- assign enable_item = enable_item | default: false -%}
+{%- assign item_height = item_height | default: 'image' -%}
 {%- assign product_limit = product_limit | default: 3 -%}
 {%- assign grid = grid | default: 3 -%}
 {%- assign is_empty_collection = false -%}
@@ -35,10 +37,16 @@
 {%- if enable_item -%}
   {%- assign product_limit = product_limit | minus: 1 -%}
 
+  {% if item_height == 'full' %}
+    {% assign grid_item_class = 'h-full *:h-full' %}
+  {% else %}
+    {% capture item_aspect_ratio_style %}
+      aspect-ratio: {{ settings.product_card_wh_ratio }};
+    {% endcapture %}
+  {% endif %}
+
   {% comment %} Item Block HTML {% endcomment %}
   {%- capture item_html -%}
-    {%- assign image_ratio = settings.product_card_wh_ratio | times: 100 -%}
-
     {%- if item_text == blank -%}
       {%- capture item_text -%}{{ 'collections.general.shop_all' | t: name: collection_title }}{%- endcapture -%}
     {%- endif -%}
@@ -47,8 +55,15 @@
       <div class="collection-list__product">
     {%- endif -%}
 
-      <div class="product-grid-item section--image {{ item_text_color }}">
-        <a href="{{ collection.url }}" class="product-grid-item__link" aria-label="{{ collection_title | strip_html | escape }}" style="padding-top:{{ image_ratio }}%; background-color: {{ item_background | default: '#fcfaf7' }};">
+      <div class="product-grid-item section--image {{ item_text_color }} {{ grid_item_class }}">
+        <a
+          href="{{ collection.url }}"
+          class="product-grid-item__link"
+          aria-label="{{ collection_title | strip_html | escape }}"
+          style="
+            {{ item_aspect_ratio_style }}
+            background-color: {{ item_background | default: '#fcfaf7' }};"
+        >
           <div
             class="hero__content__wrapper align--bottom-center"
             aria-label="{{ collection_title | escape }}">

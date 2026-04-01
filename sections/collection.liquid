@@ -115,18 +115,6 @@
               <!-- /snippets/product-grid-item.liquid -->
 
               {% for product in collection.products %}
-                <!-- Green Envee update START: skip hidden-tagged products in collection listings (downcase-safe) -->
-                {% assign hidden = false %}
-                {% for tag in product.tags %}
-                  {% assign current_tag = tag | downcase %}
-                  {% if current_tag == 'hidden' %}
-                    {% assign hidden = true %}
-                    {% break %}
-                  {% endif %}
-                {% endfor %}
-                {% unless hidden %}
-                <!-- Green Envee update END -->
-
                 <div>
                   {%- liquid
                     assign preload = false
@@ -142,10 +130,6 @@
                   -%}
                   {% render 'product-grid-item', product: product, preload: preload, eagerload: eagerload %}
                 </div>
-
-                <!-- Green Envee update START: close hidden skip -->
-                {% endunless %}
-                <!-- Green Envee update END -->
               {% else %}
                 {% if collection.handle == 'all' and collection.current_tags == '' %}
                   {% render 'onboarding-empty-collection' %}
@@ -170,177 +154,200 @@
 
 {% schema %}
 {
-  "name": "Collection product grid",
-  "settings": [
-    {
-      "type": "header",
-      "content": "Layout"
-    },
-    {
-      "type":    "range",
-      "id":      "product_limit",
-      "min":     1,
-      "max":     50,
-      "step":    1,
-      "label":   "Products per page",
-      "default": 36
-    },
-    {
-      "type":    "range",
-      "id":      "grid_large",
-      "min":     1,
-      "max":     4,
-      "step":    1,
-      "label":   "Desktop: products per row",
-      "default": 3
-    },
-    {
-      "type": "select",
-      "id": "grid_mobile",
-      "label": "Mobile: products per row",
-      "options": [
-        {
-          "value": "1",
-          "label": "One"
-        },
-        {
-          "value": "2",
-          "label": "Two"
-        }
-      ],
-      "default": "2"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_layout_toggle",
-      "label": "Show product layout buttons",
-      "default": true
-    },
-    {
-      "type": "select",
-      "id": "color_bg",
-      "label": "Background color",
-      "default": "palette--light bg--neutral",
-      "options": [
-        { "value": "palette--light bg--neutral", "label": "Default"},
-        { "value": "palette--light bg--accent", "label": "Light"},
-        { "value": "palette--dark bg--invert", "label": "Dark"},
-        { "value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-        { "value": "palette--bright bg--bright", "label": "Bright"},
-        { "value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-      ]
-    },
-    {
-      "type": "header",
-      "content": "Collection sorting"
-    },
-    {
-      "type": "checkbox",
-      "id": "collection_sorting",
-      "label": "Show collection sorting",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Collection filter sidebar"
-    },
-    {
-      "type": "checkbox",
-      "id": "hide_sidebar",
-      "label": "Hide filter sidebar by default",
-      "info": "Customers will have the option to show them"
-    },
-    {
-      "type": "checkbox",
-      "id": "collapse_filters",
-      "label": "Collapse filter accordions",
-      "info": "Active filters will remain open",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "show_products_count",
-      "label": "Show products count",
-      "info": "Product count will be shown when filters are active",
-      "default": true
-    },
-    {
-      "type": "header",
-      "content": "Section spacing"
-    },
-    {
-      "type": "select",
-      "id": "width",
-      "label": "Width",
-      "default": "wrapper",
-      "options": [
-        { "value": "wrapper--full", "label": "Full width padded" },
-        { "value": "wrapper", "label": "Page width" }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 20
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 64
-    }
-    ],
-    "blocks": [
-    {
-      "type": "filters",
-      "name": "Filters",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Create filters in the [navigation](/admin/menus) section of your online store setings."
-        }
-      ]
-    },
-    {
-      "type": "collections",
-      "name": "All Collections",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "paragraph",
-          "content": "Show a list of all the collections in your store."
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "All collections"
-        }
-      ]
-    },
-    {
-      "type": "nav_links",
-      "name": "Navigation links",
-      "settings": [
-        {
-          "type": "link_list",
-          "id": "collection_linklist",
-          "label": "Sidebar navigation",
-          "info": "Create a list of [navigation links](/admin/menus) to show specific collections in the sidebar."
-        }
-      ]
-    }
-  ]
+	"name": "Collection product grid",
+	"settings": [
+		{
+			"type": "header",
+			"content": "Layout"
+		},
+		{
+			"type": "range",
+			"id": "product_limit",
+			"min": 1,
+			"max": 50,
+			"step": 1,
+			"label": "Products per page",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "grid_large",
+			"min": 1,
+			"max": 4,
+			"step": 1,
+			"label": "Desktop: products per row",
+			"default": 3
+		},
+		{
+			"type": "select",
+			"id": "grid_mobile",
+			"label": "Mobile: products per row",
+			"options": [
+				{
+					"value": "1",
+					"label": "One"
+				},
+				{
+					"value": "2",
+					"label": "Two"
+				}
+			],
+			"default": "2"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_layout_toggle",
+			"label": "Show product layout buttons",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "color_bg",
+			"label": "Background color",
+			"default": "palette--light bg--neutral",
+			"options": [
+				{
+					"value": "palette--light bg--neutral",
+					"label": "Default"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Collection sorting"
+		},
+		{
+			"type": "checkbox",
+			"id": "collection_sorting",
+			"label": "Show collection sorting",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Collection filter sidebar"
+		},
+		{
+			"type": "checkbox",
+			"id": "hide_sidebar",
+			"label": "Hide filter sidebar by default",
+			"info": "Customers will have the option to show them"
+		},
+		{
+			"type": "checkbox",
+			"id": "collapse_filters",
+			"label": "Collapse filter accordions",
+			"info": "Active filters will remain open",
+			"default": false
+		},
+		{
+			"type": "checkbox",
+			"id": "show_products_count",
+			"label": "Show products count",
+			"info": "Product count will be shown when filters are active",
+			"default": true
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper",
+			"options": [
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 20
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 64
+		}
+	],
+	"blocks": [
+		{
+			"type": "filters",
+			"name": "Filters",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "Create filters in the [navigation](/admin/menus) section of your online store setings."
+				}
+			]
+		},
+		{
+			"type": "collections",
+			"name": "All Collections",
+			"limit": 1,
+			"settings": [
+				{
+					"type": "paragraph",
+					"content": "Show a list of all the collections in your store."
+				},
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Title",
+					"default": "All collections"
+				}
+			]
+		},
+		{
+			"type": "nav_links",
+			"name": "Navigation links",
+			"settings": [
+				{
+					"type": "link_list",
+					"id": "collection_linklist",
+					"label": "Sidebar navigation",
+					"info": "Create a list of [navigation links](/admin/menus) to show specific collections in the sidebar."
+				}
+			]
+		}
+	]
 }
-
 {% endschema %}

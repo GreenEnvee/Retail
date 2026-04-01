@@ -44,7 +44,7 @@
   {% endif %}
 
   <p class="cart__message {{ class_message }} {{ font_size_class }}" data-cart-message="{% if qualified_shipping_message != blank %}true{% else %}false{% endif %}" data-limit="{{ limit }}">
-    {% comment %} TODO: add wheel setting to cart block {% endcomment %}
+
     {% if show_wheel %}
       {% assign percent = limit | minus: subtotal_without_currency | times: 100 | divided_by: limit %}
       {% assign percent = 100 | minus: percent %}

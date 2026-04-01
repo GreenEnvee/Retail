@@ -26,17 +26,15 @@
 
         {% if block.settings.image != blank %}
           {% assign has_block_with_image = true %}
-          <div class="logo-bar__image">
-            {%- assign image_width = block.settings.image.width | at_most: block.settings.width %}
-            {%- assign image_width_2x = image_width | times: 2 %}
+          {%- assign image_width = block.settings.image.width | at_most: block.settings.width %}
+          {%- assign image_width_2x = image_width | times: 2 %}
 
-            {% capture srcset %}
-              {{ block.settings.image | image_url: width: image_width_2x }} 2x,
-              {{ block.settings.image | image_url: width: image_width }}
-            {% endcapture %}
+          {% capture srcset %}
+            {{ block.settings.image | image_url: width: image_width_2x }} 2x,
+            {{ block.settings.image | image_url: width: image_width }}
+          {% endcapture %}
 
-            {% render 'image', cover: true, img_object: block.settings.image, srcset: srcset, width: image_width %}
-          </div>
+          {% render 'image', cover: false, img_object: block.settings.image, srcset: srcset, width: image_width, class: 'max-h-[--width]' %}
         {% else %}
           {{ 'logo' | placeholder_svg_tag: 'placeholder-svg' }}
         {% endif %}
@@ -91,157 +89,189 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Logo list",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Title",
-        "default": "Logo list"
-      },
-      {
-        "type": "select",
-        "id": "bg",
-        "label": "Background color",
-        "default": "palette--light bg--neutral",
-        "options": [
-          { "value": "palette--light bg--neutral", "label": "Default"},
-          { "value": "palette--light bg--accent", "label": "Light"},
-          { "value": "palette--dark bg--invert", "label": "Dark"},
-          { "value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-          { "value": "palette--bright bg--bright", "label": "Bright"},
-          { "value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Marquee"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_marquee",
-        "label": "Enable animated marquee",
-        "default": true
-      },
-      {
-        "type": "range",
-        "id": "marquee_speed",
-        "label": "Marquee animation speed",
-        "unit": "s",
-        "min": 2,
-        "max": 60,
-        "step": 1,
-        "default": 30
-      },
-      {
-        "type": "header",
-        "content": "Section spacing"
-      },
-      {
-        "type": "select",
-        "id": "width",
-        "label": "Width",
-        "default": "wrapper--none",
-        "options": [
-          { "value": "wrapper--none", "label": "Full width" },
-          { "value": "wrapper--full", "label": "Full width padded" },
-          { "value": "wrapper", "label": "Page width" },
-          { "value": "wrapper--narrow", "label": "Page width narrow" }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "padding_top",
-        "min": 0,
-        "max": 180,
-        "step": 2,
-        "unit": "px",
-        "label": "Padding top",
-        "default": 36
-      },
-      {
-        "type": "range",
-        "id": "padding_bottom",
-        "min": 0,
-        "max": 180,
-        "step": 2,
-        "unit": "px",
-        "label": "Padding bottom",
-        "default": 36
-      }
-    ],
-    "blocks": [
-      {
-        "type": "logo_image",
-        "name": "Logo",
-        "settings": [
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Image",
-            "info": "640 x 640px .png recommended"
-          },
-          {
-            "type": "url",
-            "id": "link",
-            "label": "Link",
-            "info": "Optional"
-          },
-          {
-            "type": "checkbox",
-            "id": "new_tab",
-            "label": "Open in new window",
-            "default": true
-          },
-          {
-            "type": "range",
-            "id": "width",
-            "label": "Width",
-            "unit": "px",
-            "min": 50,
-            "max": 300,
-            "step": 5,
-            "default": 140
-          },
-          {
-            "type": "range",
-            "id": "spacing",
-            "label": "Spacing",
-            "unit": "px",
-            "min": 0,
-            "max": 100,
-            "step": 5,
-            "default": 50
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Logo list",
-        "category": "Image",
-        "blocks": [
-          {
-            "type": "logo_image"
-          },
-          {
-            "type": "logo_image"
-          },
-          {
-            "type": "logo_image"
-          },
-          {
-            "type": "logo_image"
-          },
-          {
-            "type": "logo_image"
-          }
-        ]
-      }
-    ],
-    "disabled_on": {
-      "groups": ["header","aside"]
-    }
-  }
+{
+	"name": "Logo list",
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Title",
+			"default": "Logo list"
+		},
+		{
+			"type": "select",
+			"id": "bg",
+			"label": "Background color",
+			"default": "palette--light bg--neutral",
+			"options": [
+				{
+					"value": "palette--light bg--neutral",
+					"label": "Default"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Marquee"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_marquee",
+			"label": "Enable animated marquee",
+			"default": true
+		},
+		{
+			"type": "range",
+			"id": "marquee_speed",
+			"label": "Marquee animation speed",
+			"unit": "s",
+			"min": 2,
+			"max": 60,
+			"step": 1,
+			"default": 30
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper--none",
+			"options": [
+				{
+					"value": "wrapper--none",
+					"label": "Full width"
+				},
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				},
+				{
+					"value": "wrapper--narrow",
+					"label": "Page width narrow"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 36
+		}
+	],
+	"blocks": [
+		{
+			"type": "logo_image",
+			"name": "Logo",
+			"settings": [
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Image",
+					"info": "640 x 640px .png recommended"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Link",
+					"info": "Optional"
+				},
+				{
+					"type": "checkbox",
+					"id": "new_tab",
+					"label": "Open in new window",
+					"default": true
+				},
+				{
+					"type": "range",
+					"id": "width",
+					"label": "Width",
+					"unit": "px",
+					"min": 50,
+					"max": 300,
+					"step": 5,
+					"default": 140
+				},
+				{
+					"type": "range",
+					"id": "spacing",
+					"label": "Spacing",
+					"unit": "px",
+					"min": 0,
+					"max": 100,
+					"step": 5,
+					"default": 50
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Logo list",
+			"blocks": [
+				{
+					"type": "logo_image"
+				},
+				{
+					"type": "logo_image"
+				},
+				{
+					"type": "logo_image"
+				},
+				{
+					"type": "logo_image"
+				},
+				{
+					"type": "logo_image"
+				}
+			]
+		}
+	],
+	"disabled_on": {
+		"groups": [
+			"header",
+			"aside"
+		]
+	}
+}
 {% endschema %}

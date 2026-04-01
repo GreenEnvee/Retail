@@ -33,6 +33,9 @@
           {%- if sib_product.available == false -%}
             {%- assign modifier_class = modifier_class | append: ' siblings__link--sold-out' -%}
           {%- endif -%}
+          {% if sib_product.handle == product.handle %}
+            {%- assign modifier_class = modifier_class | append: ' siblings__link--current' -%}
+          {%- endif -%}
           {%- assign title_safe = sib_product.title | strip_html | escape -%}
           {%- assign color_name = sib_product.metafields.theme.cutline.value | default: title_safe -%}
           {% capture aria_label %}

@@ -15,10 +15,8 @@
 {% endif %}
 {% assign alt_text = media.alt | strip_html %}
 {% assign alt_text_parts = alt_text | split: '#' %}
-{% assign alt_text_option = '' %}
 {% assign alt_text_ruler = alt_text %}
 {% if alt_text contains '#' and alt_text contains '_' and alt_text_parts.size == 2 %}
-  {% assign alt_text_option = alt_text_parts | last | split: ' ' | first %}
   {% assign alt_text_ruler = alt_text_parts | first %}
 {% endif %}
 {% assign has_ruler = false %}
@@ -30,11 +28,9 @@
 <div class="product__media"
   data-media-slide
   data-media-id="{{ media.id }}"
-  data-media-src-placeholder="{{ media.preview_image.src | img_url: '1x1' }}"
   data-type="{{ media.media_type }}"
   {% if media.host %} data-host="{{ media.host }}"{% endif %}
   aria-label="{{ alt_text_parts | first | escape }}"
-  data-image-filter="{{ alt_text_option }}"
   data-aspect-ratio="{% if media.aspect_ratio %}{{ media.aspect_ratio }}{% else %}{{ media.preview_image.aspect_ratio }}{% endif %}"
   {{ data_player }}>
   {% case media.media_type %}

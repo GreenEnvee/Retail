@@ -12,7 +12,9 @@
   {{ block.shopify_attributes }}
 >
   {%- unless product.has_only_default_variant -%}
-    <div class="form__selectors">
+    <div
+      class="form__selectors"
+    >
       {%- for option in product.options_with_values -%}
         {% comment %} Use select over radio for long inputs and mismatched lengths {% endcomment %}
         {%- liquid
@@ -43,48 +45,100 @@
           endif
         -%}
         {%- if settings.swatches_enable -%}
-          {%- comment -%} Determine if current option matches swatch handle translations {%- endcomment -%}
-          {%- capture swatch_translation -%}{{ 'general.swatches.color' | t }} {%- endcapture -%}
-          {%- assign translation_array = swatch_translation | append: ',' | split: "," | uniq -%}
-          {%- assign is_swatch_option = false -%}
-          {%- assign option_handle = option.name | downcase | lstrip | rstrip | escape_once -%}
-          {%- for translation in translation_array -%}
-            {%- assign translation_handle = translation | downcase | lstrip | rstrip | escape_once -%}
-            {%- if translation_handle == option_handle -%}
-              {%- assign is_swatch_option = true -%}
-              {%- break -%}
-            {%- endif -%}
-          {%- endfor -%}
+          {% assign is_swatch_option = false %}
+
+          {% if option.values.first.swatch != null %}
+            {% comment %} New swatch {% endcomment %}
+            {% assign is_swatch_option = true %}
+          {% else %}
+            {%- comment -%} Determine if current option matches swatch handle translations {%- endcomment -%}
+            {%- capture swatch_translation -%}{{ 'general.swatches.color' | t }} {%- endcapture -%}
+            {%- assign translation_array = swatch_translation | append: ',' | split: "," | uniq -%}
+            {%- assign option_handle = option.name | downcase | lstrip | rstrip | escape_once -%}
+            {%- for translation in translation_array -%}
+              {%- assign translation_handle = translation | downcase | lstrip | rstrip | escape_once -%}
+              {%- if translation_handle == option_handle -%}
+                {% comment %} Old swatch {% endcomment %}
+                {%- assign is_swatch_option = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+          {% endif %}
         {%- endif -%}
+
         <div data-swapper-wrapper data-split-select-wrapper
           class="selector-wrapper {% if is_swatch_option %}selector-wrapper--color{% endif %}{% if is_swatch_option or variant_style == 'button' %} selector-wrapper--fullwidth{% endif %} js"
           data-select-label="{{ option.name }}"
           data-option-position="{{ option.position }}"
         >
           {%- if variant_style == 'button' or is_swatch_option -%}
-            {%- assign current_value = current_variant.options[forloop.index0] -%}
             <fieldset class="radio__fieldset">
               <legend class="radio__legend" aria-label="{{ option.name | escape_once }}">
                 <span class="radio__legend__label">{{ option.name | escape_once }}</span>
-                <span data-option-value data-swapper-target>{{ current_value }}</span>
+                <span data-option-value data-swapper-target>{{ option.selected_value.name }}</span>
               </legend>
               {%- if is_swatch_option -%}
                 {%- assign lock_width_class = 'radio__inputs--swatch' -%}
               {%- endif -%}
               <div class="radio__inputs {{ lock_width_class }}">
                 {%- for value in option.values -%}
-                  {%- capture input_id -%}{{ product.id }}-{{ block.id }}-{{ option.name | escape_once }}-{{ value | escape_once | handleize }}{%- endcapture -%}
+                  {%- capture variant_url -%}
+                    {%- render 'product-form-variant-url',
+                      product: product,
+                      variant: value.variant,
+                      option_position: option.position,
+                      value_id: value.id
+                    -%}
+                  {%- endcapture -%}
+                  {%- capture input_id -%}{{ product.id }}-{{ block.id }}-{{ option.name | escape_once }}-{{ value | escape_once | handleize }}-{{ forloop.index }}{%- endcapture -%}
 
                   {%- if is_swatch_option -%}
                     <radio-swatch class="swatch__button{% if settings.swatches_squares %} swatch__button--square{% endif %}">
                       <input type="radio"
-                          data-swatch-input
-                          name="options[{{ option.name | escape_once }}]"
-                          value="{{ value | escape_once }}"
-                          id="{{ input_id }}"
-                          form="{{ uniq_id }}"
-                          {% if value == current_value -%}checked{%- endif %}>
-                      <label for="{{ input_id }}" data-swatch="{{ value | escape_once }}" data-swapper-hover="{{ value | escape_once }}">
+                        class="
+                          {% if value.variant.available == false %}
+                            sold-out
+                          {% endif %}
+                          {% if value.variant == null %}
+                            unavailable
+                          {% endif %}
+                        "
+                        name="options[{{ option.name | escape_once }}]"
+                        value="{{ value | escape_once }}"
+                        id="{{ input_id }}"
+                        form="{{ uniq_id }}"
+                        @change="
+                          {% if value.product_url %}
+                            window.location.href = '{{- value.product_url -}}';
+                          {% elsif has_alt_text_filtered_images %}
+                            {% comment %} Reload the page completely to show grouped variant images without dealing with re-initialzing product media JS {% endcomment %}
+                            window.location.href = '{{- request.origin | append: variant_url -}}';
+                          {% else %}
+                            changeVariant('{{- request.origin | append: variant_url -}}', {{- value.variant.id | json -}}, {{- value.variant.featured_media.id | json -}});
+                          {% endif %}
+                        "
+                        {% if value.selected %}
+                          checked
+                        {% endif %}
+                      >
+                      <label
+                        for="{{ input_id }}"
+                        data-swapper-hover="{{ value | escape_once }}"
+                        {% comment %} Skip morphing to prevent breaking dynamic JS swatch color logic {% endcomment %}
+                        data-morph-skip
+                        {% unless has_alt_text_filtered_images %}
+                          x-intersect.once="preloadVariant('{{- variant_url -}}')"
+                        {% endunless %}
+                        {% if value.swatch != null %}
+                          data-swatch
+                          style="--swatch: {{ value.swatch.color }}"
+                        {% else %}
+                          data-swatch="{{ value | escape_once }}"
+                        {% endif %}
+                      >
+                        {% if value.swatch.image %}
+                          {% render 'image', img_object: value.swatch.image, width: 34, wh_ratio: 1 %}
+                        {% endif %}
                         <span class="visually-hidden value">{{ value | escape_once }}</span>
                         <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
                       </label>
@@ -99,8 +153,34 @@
                         value="{{ value | escape_once }}"
                         id="{{ input_id }}"
                         form="{{ uniq_id }}"
-                        {% if value == current_value -%}checked{%- endif %}>
-                      <label for="{{ input_id }}">
+                        class="
+                          {% if value.variant.available == false %}
+                            sold-out
+                          {% endif %}
+                          {% if value.variant == null %}
+                            unavailable
+                          {% endif %}
+                        "
+                        @change="
+                          {% if value.product_url %}
+                            window.location.href = '{{- value.product_url -}}';
+                          {% elsif has_alt_text_filtered_images %}
+                            {% comment %} Reload the page completely to show grouped variant images without dealing with re-initialzing product media JS {% endcomment %}
+                            window.location.href = '{{- request.origin | append: variant_url -}}';
+                          {% else %}
+                            changeVariant('{{- request.origin | append: variant_url -}}', {{- value.variant.id | json -}}, {{- value.variant.featured_media.id | json -}});
+                          {% endif %}
+                        "
+                        {% if value.selected %}
+                          checked
+                        {% endif %}
+                      >
+                      <label
+                        for="{{ input_id }}"
+                        {% unless has_alt_text_filtered_images %}
+                          x-intersect.once="preloadVariant('{{- variant_url -}}')"
+                        {% endunless %}
+                      >
                         <span>{{ value | escape_once }}</span>
                         <span class="visually-hidden">{{ 'products.product.variant_sold_out_or_unavailable' | t }}</span>
                       </label>
@@ -113,22 +193,51 @@
             <fieldset class="select__fieldset">
               {%- capture input_id -%}{{ product.id }}-option-{{ option.position }}{%- endcapture -%}
               <legend class="radio__legend">
-                <span class="radio__legend__label" id="{{ uniq_id }}-select-{{ option.name | handle }}-label">
+                <span class="radio__legend__label" id="{{ uniq_id }}-select-{{ option.name | handle }}-label-{{ forloop.index }}">
                   {{ option.name | escape_once }}
                 </span>
               </legend>
 
               <popout-select>
                 <div class="select-popout" data-popout data-popout-prevent="true">
-                  <button type="button" class="select-popout__toggle" aria-expanded="false" aria-controls="{{ uniq_id }}-select-{{ option.name | handle }}" aria-labelledby="{{ uniq_id }}-select-{{ option.name | handle }}-label" data-popout-toggle>
+                  <button type="button" class="select-popout__toggle" aria-expanded="false" aria-controls="{{ uniq_id }}-select-{{ option.name | handle }}-{{ forloop.index }}" aria-labelledby="{{ uniq_id }}-select-{{ option.name | handle }}-label-{{ forloop.index }}" data-popout-toggle>
                     {{ option.selected_value }}
                     {%- render 'icon-core-chevron-down' -%}
                   </button>
 
-                  <ul id="{{ uniq_id }}-select-{{ option.name | handle }}" class="select-popout__list" data-popout-list data-scroll-lock-scrollable>
+                  <ul id="{{ uniq_id }}-select-{{ option.name | handle }}-{{ forloop.index }}" class="select-popout__list" data-popout-list data-scroll-lock-scrollable>
                     {%- for value in option.values -%}
+                      {%- capture variant_url -%}
+                        {%- render 'product-form-variant-url',
+                          product: product,
+                          variant: value.variant,
+                          option_position: option.position,
+                          value_id: value.id
+                        -%}
+                      {%- endcapture -%}
                       <li class="select-popout__item {% if option.selected_value == value %}select-popout__item--current{% endif %}">
-                        <a class="select-popout__option" href="#" {%- if option.selected_value == value -%}aria-current="true"{%- endif -%} data-value="{{ value | escape_once }}" data-popout-option>
+                        <a
+                          class="
+                            select-popout__option
+                            {% if value.variant.available == false %}
+                              sold-out
+                            {% endif %}
+                            {% if value.variant == null %}
+                              unavailable
+                            {% endif %}
+                          "
+                          {% if value.product_url %}
+                            href="{{ value.product_url }}"
+                          {% else %}
+                            href="{{ variant_url }}"
+                            {% unless has_alt_text_filtered_images %}
+                              @click.prevent="changeVariant('{{- request.origin | append: variant_url -}}', {{- value.variant.id | json -}}, {{- value.variant.featured_media.id | json -}});"
+                              x-intersect.once="preloadVariant('{{- variant_url -}}')"
+                            {% endunless %}
+                          {% endif %}
+                          {% if option.selected_value == value -%}aria-current="true"{%- endif -%}
+                          data-value="{{ value | escape_once }}" data-popout-option
+                        >
                           <span>
                             {{ value | escape_once }}
                           </span>
@@ -154,18 +263,5 @@
         </div>
       {%- endfor -%}
     </div>
-
-    <noscript>
-      <select name="id" class="no-js" data-product-select aria-label="{{ product.options_with_values | map: 'name' | uniq | join: ', ' | strip_html | escape }}">
-        {%- for variant in product.variants -%}
-          <option
-            {% if variant == current_variant %} selected="selected"{% endif %}
-            {% unless variant.available %} disabled="disabled"{% endunless %}
-            value="{{ variant.id }}">
-              {{ variant.title }}
-          </option>
-        {%- endfor -%}
-      </select>
-    </noscript>
   {%- endunless -%}
 </div>

@@ -40,118 +40,150 @@
 
 {% schema %}
 {
-  "name": "Product grid",
-  "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Title",
-      "default": "Featured Products"
-    },
-    {
-      "id": "collection",
-      "type": "collection",
-      "label": "Collection"
-    },
-    {
-      "type":    "range",
-      "id":      "grid",
-      "min":     1,
-      "max":     4,
-      "step":    1,
-      "label":   "Products per row (desktop)",
-      "default": 3
-    },
-    {
-      "type":    "range",
-      "id":      "rows",
-      "min":     1,
-      "max":     8,
-      "step":    1,
-      "label":   "Number of rows (desktop)",
-      "default": 1
-    },
-    {
-      "type": "select",
-      "id": "grid_mobile",
-      "label": "Mobile layout",
-      "options": [
-        {
-          "value": "1",
-          "label": "One product per row"
-        },
-        {
-          "value": "2",
-          "label": "Two products per row"
-        }
-      ],
-      "default": "2"
-    },
-    {
-      "type": "select",
-      "id": "bg",
-      "label": "Background color",
-      "default": "palette--light bg--neutral",
-      "options": [
-        { "value": "palette--light bg--neutral", "label": "Default"},
-        { "value": "palette--light bg--accent", "label": "Light"},
-        { "value": "palette--dark bg--invert", "label": "Dark"},
-        { "value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-        { "value": "palette--bright bg--bright", "label": "Bright"},
-        { "value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-      ]
-    },
-    {
-      "type": "checkbox",
-      "id": "show_view_all",
-      "label": "Show 'View all' button",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "Section spacing"
-    },
-    {
-      "type": "select",
-      "id": "width",
-      "label": "Width",
-      "default": "wrapper",
-      "options": [
-        { "value": "wrapper--full", "label": "Full width padded" },
-        { "value": "wrapper", "label": "Page width" },
-        { "value": "wrapper--narrow", "label": "Page width narrow" },
-        { "value": "wrapper--tiny", "label": "Page width extra narrow" }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 180,
-      "step": 2,
-      "unit": "px",
-      "label": "Padding bottom",
-      "default": 36
-    }
-  ],
-  "presets": [
-    {
-      "name": "Product grid",
-      "category": "Collection"
-    }
-  ],
-  "disabled_on": {
-    "groups": ["header","aside"]
-  }
+	"name": "Product grid",
+	"settings": [
+		{
+			"type": "text",
+			"id": "title",
+			"label": "Title",
+			"default": "Featured Products"
+		},
+		{
+			"id": "collection",
+			"type": "collection",
+			"label": "Collection"
+		},
+		{
+			"type": "range",
+			"id": "grid",
+			"min": 1,
+			"max": 4,
+			"step": 1,
+			"label": "Products per row (desktop)",
+			"default": 3
+		},
+		{
+			"type": "range",
+			"id": "rows",
+			"min": 1,
+			"max": 8,
+			"step": 1,
+			"label": "Number of rows (desktop)",
+			"default": 1
+		},
+		{
+			"type": "select",
+			"id": "grid_mobile",
+			"label": "Mobile layout",
+			"options": [
+				{
+					"value": "1",
+					"label": "One product per row"
+				},
+				{
+					"value": "2",
+					"label": "Two products per row"
+				}
+			],
+			"default": "2"
+		},
+		{
+			"type": "select",
+			"id": "bg",
+			"label": "Background color",
+			"default": "palette--light bg--neutral",
+			"options": [
+				{
+					"value": "palette--light bg--neutral",
+					"label": "Default"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "checkbox",
+			"id": "show_view_all",
+			"label": "Show 'View all' button",
+			"default": false
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper",
+			"options": [
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				},
+				{
+					"value": "wrapper--narrow",
+					"label": "Page width narrow"
+				},
+				{
+					"value": "wrapper--tiny",
+					"label": "Page width extra narrow"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 36
+		}
+	],
+	"presets": [
+		{
+			"name": "Product grid"
+		}
+	],
+	"disabled_on": {
+		"groups": [
+			"header",
+			"aside"
+		]
+	}
 }
 {% endschema %}

@@ -102,10 +102,13 @@
 -%}
 
 {% if image != blank %}
+  {% if loading_animation %}
+    {% capture wrapper_attributes %}
+      data-needs-loading-animation
+    {% endcapture %}
+  {% endif %}
+
   {%- liquid
-    if loading_animation
-      assign wrapper_classes = wrapper_classes | append: ' loading-shimmer'
-    endif
 
     capture image_classes
       echo 'block overflow-hidden w-full h-full'
@@ -144,7 +147,7 @@
       assign wh_ratio_mobile = wh_ratio | default: image_mobile.aspect_ratio | default: 0.5
       assign wrapper_style = wrapper_style | append: ' --ASPECT-RATIO-MOBILE: ' | append: wh_ratio_mobile | append: ';'
     -%}
-    <picture class="{{ wrapper_classes }}" style="{{ wrapper_style }}">
+    <picture class="{{ wrapper_classes }}" style="{{ wrapper_style }}" {{ wrapper_attributes }}>
       <source media="(min-width: 768px)" sizes="{{ sizes }}" srcset="{{ srcset }}" />
       <source media="(max-width: 767px)" sizes="{{ sizes }}" srcset="{{ srcset_mobile }}" />
       {{ image | image_url: width: width_default | image_tag:
@@ -154,11 +157,12 @@
         sizes: sizes,
         loading: loading,
         fetchpriority: fetchpriority,
-        style: image_style
+        style: image_style,
+        id: image_id
       }}
     </picture>
   {%- else -%}
-    <div class="{{ wrapper_classes }}" style="{{ wrapper_style }}">
+    <div class="{{ wrapper_classes }}" style="{{ wrapper_style }}" {{ wrapper_attributes }}>
       {{ image | image_url: width: width_default | image_tag:
         class: image_classes,
         alt: alt,
@@ -167,7 +171,8 @@
         sizes: sizes,
         loading: loading,
         fetchpriority: fetchpriority,
-        style: image_style
+        style: image_style,
+        id: image_id
       }}
     </div>
   {%- endif -%}
@@ -181,9 +186,8 @@
       else
         echo ' mx-auto max-h-full'
       endif
-      echo ' bg-theme-color-hairline fill-[#B4B6B9] placeholder-svg'
+      echo ' bg-[--placeholder-bg] fill-[--placeholder-fill] placeholder-svg'
     endcapture
-
   -%}
 
   <div class="{{ wrapper_classes }}" style="{{ wrapper_style }}" role='img' aria-label="{{ alt }}">
@@ -213,7 +217,7 @@
       {{ parts[0] | prepend: svg_tag_open }}
       {{ parts[1] }}
     {% else %}
-      <svg preserveAspectRatio="xMidYMid slice" class="{{ svg_classes }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 525.5 525.5">
+      <svg id="{{ image_id }}" preserveAspectRatio="xMidYMid slice" class="{{ svg_classes }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 525.5 525.5">
       </svg>
     {% endif %}
   </div>

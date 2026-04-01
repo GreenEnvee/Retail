@@ -119,7 +119,10 @@
 
 <div class="section-featured-article fade-in-child {{ section.settings.color_bg }} {{ section.settings.height }}"
   {% if section.settings.width == "wrapper--none" and section.settings.padding_top == 0 %} data-overlay-header {% endif %}
-  style="--PT: {{ section.settings.padding_top }}px; --PB: {{ section.settings.padding_bottom }}px;">
+  style="--PT: {{ section.settings.padding_top }}px; --PB: {{ section.settings.padding_bottom }}px;"
+  data-section-id="{{ section.id }}"
+  data-section-type="featured-article"
+>
   <div class="section__wrapper {{ section.settings.width }}">
     <div class="section__inner{% unless section.settings.image_full_width %} section__inner--columns{% endunless %}{% if section.settings.enable_overlay_text and section.settings.text_color_bg == 'hero__content--transparent' %} section__inner--cutted{% endif %}">
       {%- if article_image != '' or content_html == '' -%}
@@ -226,305 +229,485 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Featured article",
-    "settings": [
-      {
-        "type": "article",
-        "id": "article",
-        "label": "Article"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "checkbox",
-        "id": "image_full_width",
-        "label": "Image full width",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "height",
-        "label": "Section height",
-        "default": "use_screen_one_half",
-        "options": [
-          { "value": "use_screen_full", "label": "Full screen height"},
-          { "value": "use_screen_three_quarters", "label": "Three quarters of screen height"},
-          { "value": "use_screen_two_thirds", "label": "Two thirds of screen height"},
-          { "value": "use_screen_one_half", "label": "One half of screen height"},
-          { "value": "use_screen_one_third", "label": "One third of screen height"},
-          { "value": "use_screen_one_fifth", "label": "One fifth of screen height"},
-          { "value": "use_pixels_800", "label": "800px" },
-          { "value": "use_pixels_650", "label": "650px" },
-          { "value": "use_pixels_500", "label": "500px" },
-          { "value": "use_image", "label": "Image height"}
-        ]
-      },
-      {
-        "type":    "range",
-        "id":      "overlay_opacity",
-        "min":     0,
-        "max":     100,
-        "step":    5,
-        "label":   "Image overlay opacity",
-        "info":    "Increase contrast for legible text.",
-        "default": 15
-      },
-      {
-        "type": "color",
-        "id": "overlay_color",
-        "label": "Overlay color",
-        "default": "#000"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_overlay_text",
-        "label": "Overlay behind text only",
-        "default": false
-      },
-      {
-        "type": "select",
-        "id": "color_bg",
-        "label": "Background color",
-        "default": "",
-        "options": [
-          { "value": "", "label": "Transparent"},
-          { "value": "palette--light bg--neutral", "label": "White"},
-          { "value": "palette--light bg--accent", "label": "Light"},
-          { "value": "palette--dark bg--invert", "label": "Dark"},
-          { "value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-          { "value": "palette--bright bg--bright", "label": "Bright"},
-          { "value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Text"
-      },
-      {
-        "type": "select",
-        "id": "text_align",
-        "label": "Text placement",
-        "default": "align--bottom-center",
-        "options": [
-          { "value": "align--top-left", "label": "Top left"},
-          { "value": "align--top-center", "label": "Top center"},
-          { "value": "align--top-right", "label": "Top right"},
-          { "value": "align--middle-left", "label": "Middle left"},
-          { "value": "align--middle-center", "label": "Absolute center"},
-          { "value": "align--middle-right", "label": "Middle right"},
-          { "value": "align--bottom-left", "label": "Bottom left"},
-          { "value": "align--bottom-center", "label": "Bottom center"},
-          { "value": "align--bottom-right", "label": "Bottom right"}
-        ]
-      },
-      {
-        "type": "select",
-        "id": "text_alignment",
-        "label": "Text alignment",
-        "default": "text-center",
-        "options": [
-          { "value": "text-left", "label": "Left" },
-          { "value": "text-center", "label": "Centered" },
-          { "value": "text-right", "label": "Right" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "text_color",
-        "label": "Text color",
-        "default": "text--neutral",
-        "options": [
-          { "value": "text--neutral", "label": "Normal text"},
-          { "value": "text--white", "label": "White"},
-          { "value": "text--primary", "label": "Primary accent"},
-          { "value": "text--secondary", "label": "Secondary accent"},
-          { "value": "text--black", "label": "Black"},
-          { "value": "text--invert--primary", "label": "Primary dark accent"},
-          { "value": "text--invert--secondary", "label": "Secondary dark accent"},
-          { "value": "text--invert", "label": "Inverted text color"},
-          { "value": "text--bright--primary", "label": "Primary bright accent"},
-          { "value": "text--bright--secondary", "label": "Secondary bright accent"}
-        ]
-      },
-      {
-        "type": "select",
-        "id": "text_color_bg",
-        "label": "Text background color",
-        "default": "palette--light bg--accent",
-        "options": [
-          { "value": "hero__content--transparent", "label": "Transparent"},
-          { "value": "palette--light bg--neutral", "label": "White"},
-          { "value": "palette--light bg--accent", "label": "Light"},
-          { "value": "palette--dark bg--invert", "label": "Dark"},
-          { "value": "palette--dark bg--invert--accent", "label": "Dark accent"},
-          { "value": "palette--bright bg--bright", "label": "Bright"},
-          { "value": "palette--bright bg--bright--accent", "label": "Bright accent"}
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Section spacing"
-      },
-      {
-        "type": "select",
-        "id": "width",
-        "label": "Width",
-        "default": "wrapper",
-        "options": [
-          { "value": "wrapper--none", "label": "Full width" },
-          { "value": "wrapper--full", "label": "Full width padded" },
-          { "value": "wrapper", "label": "Page width" },
-          { "value": "wrapper--narrow", "label": "Page width narrow" }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "padding_top",
-        "min": 0,
-        "max": 180,
-        "step": 2,
-        "unit": "px",
-        "label": "Padding top",
-        "default": 36
-      },
-      {
-        "type": "range",
-        "id": "padding_bottom",
-        "min": 0,
-        "max": 180,
-        "step": 2,
-        "unit": "px",
-        "label": "Padding bottom",
-        "default": 36
-      }
-    ],
-    "blocks": [
-      {
-        "type": "kicker",
-        "name": "Kicker",
-        "settings": [
-          {
-            "type": "checkbox",
-            "id": "show_author",
-            "label": "Show author",
-            "default": true
-          },
-          {
-            "type": "checkbox",
-            "id": "show_date",
-            "label": "Show date",
-            "default": true
-          }
-        ]
-      },
-      {
-        "type": "heading",
-        "name": "Heading",
-        "settings": [
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Headline"
-          },
-          {
-            "type":  "range",
-            "id":    "text_size",
-            "label": "Text size",
-            "min":    1,
-            "max":    15,
-            "step":   1,
-            "default": 8
-          }
-        ]
-      },
-      {
-        "type": "button",
-        "name": "Button",
-        "settings": [
-          {
-            "type": "text",
-            "id": "link_text",
-            "label": "Text"
-          },
-          {
-            "type": "url",
-            "id": "link",
-            "label": "Link"
-          },
-          {
-            "type": "select",
-            "id": "button_color",
-            "label": "Button color",
-            "default": "btn--neutral",
-            "options": [
-              { "value": "btn--primary", "label": "Bright accent" },
-              { "value": "btn--secondary", "label": "Secondary accent" },
-              { "value": "btn--neutral", "label": "Text color" },
-              { "value": "btn--black", "label": "Black" },
-              { "value": "btn--white", "label": "White" }
-            ]
-          },
-          {
-            "type": "select",
-            "id": "button_style",
-            "label": "Button style",
-            "default": "btn-text-thick-line",
-            "options": [
-              { "value": "btn-text-thick-line", "label": "Capitalized text" },
-              { "value": "btn", "label": "Solid button"},
-              { "value": "btn--soft", "label": "Soft button"},
-              { "value": "btn--outline", "label": "Outlined button"}
-            ]
-          }
-        ]
-      },
-      {
-        "type": "text",
-        "name": "Text",
-        "settings": [
-          {
-            "type": "richtext",
-            "id": "richtext",
-            "label": "Text"
-          },
-          {
-            "type":  "range",
-            "id":    "text_size",
-            "label": "Text size",
-            "min":    1,
-            "max":    15,
-            "step":   1,
-            "default":5
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Featured article",
-        "category": "Text",
-        "blocks": [
-          {
-            "type": "kicker"
-          },
-          {
-            "type": "heading"
-          },
-          {
-            "type": "text"
-          },
-          {
-            "type": "button"
-          }
-        ]
-      }
-    ],
-    "disabled_on": {
-      "groups": ["header","footer","aside"]
-    }
-  }
+{
+	"name": "Featured article",
+	"settings": [
+		{
+			"type": "article",
+			"id": "article",
+			"label": "Article"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "Image"
+		},
+		{
+			"type": "checkbox",
+			"id": "image_full_width",
+			"label": "Image full width",
+			"default": true
+		},
+		{
+			"type": "select",
+			"id": "height",
+			"label": "Section height",
+			"default": "use_screen_one_half",
+			"options": [
+				{
+					"value": "use_screen_full",
+					"label": "Full screen height"
+				},
+				{
+					"value": "use_screen_three_quarters",
+					"label": "Three quarters of screen height"
+				},
+				{
+					"value": "use_screen_two_thirds",
+					"label": "Two thirds of screen height"
+				},
+				{
+					"value": "use_screen_one_half",
+					"label": "One half of screen height"
+				},
+				{
+					"value": "use_screen_one_third",
+					"label": "One third of screen height"
+				},
+				{
+					"value": "use_screen_one_fifth",
+					"label": "One fifth of screen height"
+				},
+				{
+					"value": "use_pixels_800",
+					"label": "800px"
+				},
+				{
+					"value": "use_pixels_650",
+					"label": "650px"
+				},
+				{
+					"value": "use_pixels_500",
+					"label": "500px"
+				},
+				{
+					"value": "use_image",
+					"label": "Image height"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "overlay_opacity",
+			"min": 0,
+			"max": 100,
+			"step": 5,
+			"label": "Image overlay opacity",
+			"info": "Increase contrast for legible text.",
+			"default": 15
+		},
+		{
+			"type": "color",
+			"id": "overlay_color",
+			"label": "Overlay color",
+			"default": "#000"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_overlay_text",
+			"label": "Overlay behind text only",
+			"default": false
+		},
+		{
+			"type": "select",
+			"id": "color_bg",
+			"label": "Background color",
+			"default": "",
+			"options": [
+				{
+					"value": "",
+					"label": "Transparent"
+				},
+				{
+					"value": "palette--light bg--neutral",
+					"label": "White"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Text"
+		},
+		{
+			"type": "select",
+			"id": "text_align",
+			"label": "Text placement",
+			"default": "align--bottom-center",
+			"options": [
+				{
+					"value": "align--top-left",
+					"label": "Top left"
+				},
+				{
+					"value": "align--top-center",
+					"label": "Top center"
+				},
+				{
+					"value": "align--top-right",
+					"label": "Top right"
+				},
+				{
+					"value": "align--middle-left",
+					"label": "Middle left"
+				},
+				{
+					"value": "align--middle-center",
+					"label": "Absolute center"
+				},
+				{
+					"value": "align--middle-right",
+					"label": "Middle right"
+				},
+				{
+					"value": "align--bottom-left",
+					"label": "Bottom left"
+				},
+				{
+					"value": "align--bottom-center",
+					"label": "Bottom center"
+				},
+				{
+					"value": "align--bottom-right",
+					"label": "Bottom right"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "text_alignment",
+			"label": "Text alignment",
+			"default": "text-center",
+			"options": [
+				{
+					"value": "text-left",
+					"label": "Left"
+				},
+				{
+					"value": "text-center",
+					"label": "Centered"
+				},
+				{
+					"value": "text-right",
+					"label": "Right"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "text_color",
+			"label": "Text color",
+			"default": "text--neutral",
+			"options": [
+				{
+					"value": "text--neutral",
+					"label": "Normal text"
+				},
+				{
+					"value": "text--white",
+					"label": "White"
+				},
+				{
+					"value": "text--primary",
+					"label": "Primary accent"
+				},
+				{
+					"value": "text--secondary",
+					"label": "Secondary accent"
+				},
+				{
+					"value": "text--black",
+					"label": "Black"
+				},
+				{
+					"value": "text--invert--primary",
+					"label": "Primary dark accent"
+				},
+				{
+					"value": "text--invert--secondary",
+					"label": "Secondary dark accent"
+				},
+				{
+					"value": "text--invert",
+					"label": "Inverted text color"
+				},
+				{
+					"value": "text--bright--primary",
+					"label": "Primary bright accent"
+				},
+				{
+					"value": "text--bright--secondary",
+					"label": "Secondary bright accent"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"id": "text_color_bg",
+			"label": "Text background color",
+			"default": "palette--light bg--accent",
+			"options": [
+				{
+					"value": "hero__content--transparent",
+					"label": "Transparent"
+				},
+				{
+					"value": "palette--light bg--neutral",
+					"label": "White"
+				},
+				{
+					"value": "palette--light bg--accent",
+					"label": "Light"
+				},
+				{
+					"value": "palette--dark bg--invert",
+					"label": "Dark"
+				},
+				{
+					"value": "palette--dark bg--invert--accent",
+					"label": "Dark accent"
+				},
+				{
+					"value": "palette--bright bg--bright",
+					"label": "Bright"
+				},
+				{
+					"value": "palette--bright bg--bright--accent",
+					"label": "Bright accent"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "Section spacing"
+		},
+		{
+			"type": "select",
+			"id": "width",
+			"label": "Width",
+			"default": "wrapper",
+			"options": [
+				{
+					"value": "wrapper--none",
+					"label": "Full width"
+				},
+				{
+					"value": "wrapper--full",
+					"label": "Full width padded"
+				},
+				{
+					"value": "wrapper",
+					"label": "Page width"
+				},
+				{
+					"value": "wrapper--narrow",
+					"label": "Page width narrow"
+				}
+			]
+		},
+		{
+			"type": "range",
+			"id": "padding_top",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding top",
+			"default": 36
+		},
+		{
+			"type": "range",
+			"id": "padding_bottom",
+			"min": 0,
+			"max": 180,
+			"step": 2,
+			"unit": "px",
+			"label": "Padding bottom",
+			"default": 36
+		}
+	],
+	"blocks": [
+		{
+			"type": "kicker",
+			"name": "Kicker",
+			"settings": [
+				{
+					"type": "checkbox",
+					"id": "show_author",
+					"label": "Show author",
+					"default": true
+				},
+				{
+					"type": "checkbox",
+					"id": "show_date",
+					"label": "Show date",
+					"default": true
+				}
+			]
+		},
+		{
+			"type": "heading",
+			"name": "Heading",
+			"settings": [
+				{
+					"type": "text",
+					"id": "title",
+					"label": "Headline"
+				},
+				{
+					"type": "range",
+					"id": "text_size",
+					"label": "Text size",
+					"min": 1,
+					"max": 15,
+					"step": 1,
+					"default": 8
+				}
+			]
+		},
+		{
+			"type": "button",
+			"name": "Button",
+			"settings": [
+				{
+					"type": "text",
+					"id": "link_text",
+					"label": "Text"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Link"
+				},
+				{
+					"type": "select",
+					"id": "button_color",
+					"label": "Button color",
+					"default": "btn--neutral",
+					"options": [
+						{
+							"value": "btn--primary",
+							"label": "Bright accent"
+						},
+						{
+							"value": "btn--secondary",
+							"label": "Secondary accent"
+						},
+						{
+							"value": "btn--neutral",
+							"label": "Text color"
+						},
+						{
+							"value": "btn--black",
+							"label": "Black"
+						},
+						{
+							"value": "btn--white",
+							"label": "White"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"id": "button_style",
+					"label": "Button style",
+					"default": "btn-text-thick-line",
+					"options": [
+						{
+							"value": "btn-text-thick-line",
+							"label": "Capitalized text"
+						},
+						{
+							"value": "btn",
+							"label": "Solid button"
+						},
+						{
+							"value": "btn--soft",
+							"label": "Soft button"
+						},
+						{
+							"value": "btn--outline",
+							"label": "Outlined button"
+						}
+					]
+				}
+			]
+		},
+		{
+			"type": "text",
+			"name": "Text",
+			"settings": [
+				{
+					"type": "richtext",
+					"id": "richtext",
+					"label": "Text"
+				},
+				{
+					"type": "range",
+					"id": "text_size",
+					"label": "Text size",
+					"min": 1,
+					"max": 15,
+					"step": 1,
+					"default": 5
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "Featured article",
+			"blocks": [
+				{
+					"type": "kicker"
+				},
+				{
+					"type": "heading"
+				},
+				{
+					"type": "text"
+				},
+				{
+					"type": "button"
+				}
+			]
+		}
+	],
+	"disabled_on": {
+		"groups": [
+			"header",
+			"footer",
+			"aside"
+		]
+	}
+}
 {% endschema %}

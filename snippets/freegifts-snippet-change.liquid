@@ -1,8 +1,0 @@
-<script>
-  document.addEventListener("fg-gifts:updated", async () => {
-    document.dispatchEvent(new CustomEvent('theme:cart:reload'));
-    if(!document.querySelector('.cart__drawer').classList.contains('drawer--visible')){
-      document.querySelector('.navlink--cart').click();
-    }
-  });
-</script>
