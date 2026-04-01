@@ -1,0 +1,410 @@
+<!-- /sections/predictive-search.liquid -->
+
+{%- liquid
+  comment
+    Get each resource's result count
+  endcomment
+  assign query_count = predictive_search.resources.queries.size
+  assign product_count = predictive_search.resources.products.size
+  assign collection_count = predictive_search.resources.collections.size
+  assign article_count = predictive_search.resources.articles.size
+  assign page_count = predictive_search.resources.pages.size
+  assign collection_counter = 0
+  assign total_results_counter = 0
+  assign terms = predictive_search.terms
+-%}
+
+<!-- Green Envee update START: build hidden handles list from smart collection "hidden-products" -->
+{% assign ge_hidden_handles_collection = collections['hidden-products'] | default: nil %}
+{% if ge_hidden_handles_collection %}
+  {% assign ge_hidden_handles = collections['hidden-products'].products | map: 'handle' | uniq %}
+{% else %}
+  {% assign ge_hidden_handles = '' | split: '|' %} {# empty array fallback if collection missing #}
+{% endif %}
+<!-- Green Envee update END -->
+
+<!-- Green Envee update START: compute filtered predictive product count -->
+{% assign ge_filtered_product_count = 0 %}
+{% for p in predictive_search.resources.products %}
+  {% assign ge_handle_tmp = p.url | split: '/products/' | last | split: '?' | first | split: '#' | first | downcase %}
+  {% unless ge_hidden_handles contains ge_handle_tmp %}
+    {% assign ge_filtered_product_count = ge_filtered_product_count | plus: 1 %}
+  {% endunless %}
+{% endfor %}
+<!-- Green Envee update END -->
+
+{%- if collection_count > 0 -%}
+  {%- liquid
+    assign exclude_collections_strict = settings.exclude_collections_strict | split: ','
+    assign exclude_collections_contain = settings.exclude_collections_contain | split: ','
+    assign collections_markup = ''
+  -%}
+
+  {%- for collection in predictive_search.resources.collections -%}
+    {%- liquid
+      assign skip_current_collection = false
+      for exclude_collection_strict in exclude_collections_strict
+        assign exclude_collection_strict_stripped = exclude_collection_strict | strip
+
+        if exclude_collection_strict_stripped == collection.handle
+          assign skip_current_collection = true
+          break
+        endif
+      endfor
+
+      for exclude_collection_contain in exclude_collections_contain
+        assign exclude_collection_contain_stripped = exclude_collection_contain | strip
+
+        if collection.handle contains exclude_collection_contain_stripped
+          assign skip_current_collection = true
+          break
+        endif
+      endfor
+
+      if skip_current_collection
+        continue
+      endif
+
+      assign collection_counter = collection_counter | plus: 1
+      assign collection_counter_animate = collection_counter | plus: product_count | plus: query_count
+    -%}
+
+    {%- capture collections_markup -%}
+      {{ collections_markup }}
+
+      <div class="other__inline animates" style="animation-delay: {{ collection_counter_animate | times: 90 | plus: 10 }}ms;" id="predictive-search-option-collection-{{ collection_counter }}" role="option" aria-selected="false">
+        <p class="other__inline__title">
+          <a href="{{ collection.url }}">{{ collection.title }}</a>
+        </p>
+      </div>
+    {%- endcapture -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- assign total_results = product_count | plus: query_count | plus: collection_counter | plus: page_count | plus: article_count -%}
+<!-- Green Envee update START: use filtered count in totals -->
+{% assign total_results = ge_filtered_product_count | plus: query_count | plus: collection_counter | plus: page_count | plus: article_count %}
+<!-- Green Envee update END -->
+
+{%- if predictive_search.performed -%}
+  <div class="wrapper">
+    <span class="predictive-search-status visually-hidden" data-predictive-search-live-region-count-value role="status">
+      {%- liquid
+        if total_results == 0
+          echo 'general.search.no_results' | t: terms: terms
+        else
+          echo 'general.search.results_with_count' | t: count: total_results | replace: '**', '' | append: ': '
+
+          if query_count > 0
+            assign count = query_count | plus: collection_counter
+            echo 'general.search.results_suggestions_with_count' | t: count: count | append: ', '
+          endif
+
+          if page_count > 0
+            assign count = page_count | plus: article_count
+            echo 'general.search.results_pages_with_count' | t: count: count | append: ', '
+          endif
+
+          comment
+            Green Envee update START: announce filtered product count, not raw
+          endcomment
+          if ge_filtered_product_count > 0
+            echo 'general.search.results_products_with_count' | t: count: ge_filtered_product_count
+          endif
+          comment
+            Green Envee update END
+          endcomment
+        endif
+      -%}
+    </span>
+    <div class="search__results__wrapper" id="predictive-search-results" role="listbox" aria-label="{{ 'general.search.search_for' | t: terms: terms }}">
+
+      {% assign downcased_terms = terms | downcase %}
+      {% assign metafield_searched_items = "" %}
+      {% for product in collections.ge-full-inventory.products %}
+        <!-- Green Envee update START: skip items whose handle is in the hidden-products list -->
+        {% unless ge_hidden_handles contains product.handle %}
+        <!-- Green Envee update END -->
+
+        {% assign found_items = 0 %}
+        {% assign metafields = product.metafields.custom %}
+        {% for metafield in metafields %}
+          {% for value in metafield %}
+            {% assign downcased_value = value.value | downcase %}
+            {% if downcased_value contains downcased_terms and found_items == 0 %}
+              {% assign found_items = 1 %}
+              {% assign metafield_searched_items = metafield_searched_items | append:", " | append: product.id  %}
+              <div class="search__item__generic search_metafield">
+                {% if product.image or product.featured_media.preview_image %}
+                  <div class="search__item__generic__image">
+                    <a href="{{ product.url }}" title="{{ product.title | escape }}">
+                      {% assign image = product.featured_media.preview_image | default: product.image %}
+                      {% assign image_width = 70 | at_most: image.width %}
+                      {% assign image_width_2x = image_width | times: 2 | at_most: image.width %}
+                      {% assign alt = image.alt %}
+                      {% capture srcset %}
+                        {{ image | image_url: width: image_width_2x }} 2x,
+                        {{ image | image_url: width: image_width }}
+                      {% endcapture %}
+                      {%- render 'image',
+                        img_object: image,
+                        wh_ratio: image.aspect_ratio,
+                        width: image_width,
+                        srcset: srcset,
+                        alt: alt
+                      -%}
+                    </a>
+                  </div>
+                {% endif %}
+                <div class="search__item__generic__text">
+                  <p class="product__inline__title">
+                    {{ product.title | link_to: product.url }}
+                  </p>
+                  <p class="product__inline__price">
+                    {%- assign on_sale = false -%}
+                    {%- assign sold_out = true -%}
+                    {%- assign current_variant = product.first_available_variant -%}
+
+                    {%- if product.compare_at_price > product.price -%}
+                      {%- assign on_sale = true -%}
+                    {%- endif -%}
+
+                    {%- if product.available -%}
+                      {%- assign sold_out = false -%}
+                    {%- endif -%}
+
+                    <span class="price{% if on_sale %} on-sale{% endif %}">
+                      {% if product.price_varies %}{{ 'products.general.from' | t }} {% endif %}
+                      {% if settings.currency_code_enable %}
+                        {{ product.price | money_with_currency }}
+                      {% else %}
+                        {{ product.price | money }}
+                      {% endif %}
+                    </span>
+
+                    {% if on_sale %}
+                      <span class="compare-at">
+                        {% if settings.currency_code_enable %}
+                          {{ product.compare_at_price | money_with_currency }}
+                        {% else %}
+                          {{ product.compare_at_price | money }}
+                        {% endif %}
+                      </span>
+                    {% endif %}
+
+                    {% if current_variant.unit_price %}
+                      {% capture unit_price_separator %}
+                        <span aria-hidden="true">/</span><span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
+                      {% endcapture %}
+                      {% capture unit_price_base_unit %}
+                        {% if current_variant.unit_price_measurement.reference_value != 1 %}
+                          {{ current_variant.unit_price_measurement.reference_value }}
+                        {% endif %}
+                        {{ current_variant.unit_price_measurement.reference_unit }}
+                      {% endcapture %}
+                      <br />
+                      <span class="visually-hidden">{{ 'products.product.unit_price_label' | t }}</span>
+                      <span class="price-per-unit">{{ current_variant.unit_price | money }}{{ unit_price_separator }}{{ unit_price_base_unit }}</span>
+                    {% endif %}
+
+                    {% if sold_out %}
+                      <br /><em>{{ 'products.product.sold_out' | t }}</em>
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+
+        <!-- Green Envee update START: close hidden skip -->
+        {% endunless %}
+        <!-- Green Envee update END -->
+      {% endfor %}
+
+      {%- if total_results > 0 -%}
+        <div class="search__results__outer">
+          <div class="search__results__other">
+            {%- if query_count > 0 -%}
+              <div class="search__results__other__list">
+                <div class="search__results__heading">
+                  <p class="search__results__title">{{ 'general.search.suggestions' | t }}</p>
+                  <span class="badge">{{ query_count }}</span>
+                </div>
+
+                <ul aria-label="{{ 'general.search.suggestions' | t }}" role="group">
+                  {%- for query in predictive_search.resources.queries -%}
+                    {%- assign total_results_counter = total_results_counter | plus: 1 -%}
+                    <li class="other__inline animates" id="predictive-search-option-query-{{ forloop.index }}" role="option" aria-selected="false" style="animation-delay: {{ total_results_counter | times: 90 | plus: 10 }}ms;">
+                      <p class="other__inline__title">
+                        <a href="{{ query.url }}">
+                          <span>{{ query.styled_text }}</span>
+                        </a>
+                      </p>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            {%- if product_count > 0 -%}
+              <div class="search__results__products">
+                <div class="search__results__products__title">
+                  <div id="search_product_results_heading" class="search__results__heading">
+                    <p class="search__results__title">{{ 'products.general.products' | t }}</p>
+                    <!-- Green Envee update START: show filtered product count -->
+                    <span class="badge">{{ ge_filtered_product_count }}</span>
+                    <!-- Green Envee update END -->
+                  </div>
+                </div>
+
+                <ul aria-label="{{ 'products.general.products' | t }}" class="search__results__products__list">
+                  {%- for product in predictive_search.resources.products -%}
+                    <!-- Green Envee update START: skip predictive products whose handle is in hidden-products -->
+                    {% assign ge_handle = product.url | split: '/products/' | last | split: '?' | first | split: '#' | first | downcase %}
+                    {% unless ge_hidden_handles contains ge_handle %}
+                    <!-- Green Envee update END -->
+
+                    {%- liquid
+                      assign total_results_counter = total_results_counter | plus: 1
+                      assign on_sale = false
+                      if product.compare_at_price > product.price
+                        assign on_sale = true
+                      endif
+
+                      assign sold_out = true
+                      if product.available
+                        assign sold_out = false
+                      endif
+                    -%}
+
+                    <div class="product__inline animates" style="animation-delay: {{ total_results_counter | times: 90 | plus: 10 }}ms;" role="option" aria-selected="false">
+                      <a href="{{ product.url }}" class="product__inline__link">
+                        {%- if product.featured_image != blank -%}
+                          <div role="presentation" class="product__inline__image">
+                            {% assign alt = product.title | strip_html %}
+                            {{ product.featured_image | image_url: width: product.featured_image.width | image_tag: class: 'img-aspect-ratio', alt: alt }}
+                          </div>
+                        {%- endif -%}
+
+                        <div>
+                          <p class="product__inline__title">
+                            {{ product.title | strip_html }}
+                          </p>
+                          <p class="product__inline__price">
+                            <span class="price{% if on_sale %} on-sale{% endif %}{% if sold_out %} sold-out{% endif %}">
+                              {%- if settings.currency_code_enable -%}
+                                {{ product.price | money_with_currency }}
+                              {%- else -%}
+                                {{ product.price | money }}
+                              {%- endif -%}
+                            </span>
+
+                            {%- if sold_out -%}
+                              <br>
+                              <em>{{ 'products.product.sold_out' | t }}</em>
+                            {%- endif -%}
+
+                            {% if on_sale %}
+                              <span class="compare-at">
+                                {%- if settings.currency_code_enable -%}
+                                  {{ product.compare_at_price | money_with_currency }}
+                                {%- else -%}
+                                  {{ product.compare_at_price | money }}
+                                {%- endif -%}
+                              </span>
+                            {% endif %}
+                          </p>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Green Envee update START: close hidden skip -->
+                    {% endunless %}
+                    <!-- Green Envee update END -->
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            {%- if collection_counter > 0 -%}
+              {%- assign total_results_counter = total_results_counter | plus: collection_counter -%}
+
+              <div class="search__results__other__list">
+                <div id="search_collection_results_heading" class="search__results__heading">
+                  <p class="search__results__title">{{ 'collections.sidebar.collections' | t }}</p>
+                  <span class="badge">{{ collection_counter }}</span>
+                </div>
+
+                <ul aria-label="{{ 'collections.sidebar.collections' | t }}" role="group" class="search__results__collections__list">
+                  {{ collections_markup }}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            {%- if article_count > 0 -%}
+              <div class="search__results__other__list">
+                <div id="search_article_results_heading" class="search__results__heading">
+                  <p class="search__results__title">{{ 'blogs.article.articles' | t }}</p>
+                  <span class="badge">{{ article_count }}</span>
+                </div>
+
+                <ul aria-label="{{ 'blogs.article.articles' | t }}" role="group" class="search__results__articles__list">
+                  {%- for article in predictive_search.resources.articles -%}
+                    {%- assign total_results_counter = total_results_counter | plus: 1 -%}
+                    <li class="other__inline animates" style="animation-delay: {{ total_results_counter | times: 90 | plus: 10 }}ms;" id="predictive-search-option-article-{{ forloop.index }}" role="option" aria-selected="false">
+                      <p class="other__inline__title">
+                        <a href="{{ article.url }}">{{ article.title }}</a>
+                      </p>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+
+            {%- if page_count > 0 -%}
+              <div class="search__results__other__list">
+                <div id="search_page_results_heading" class="search__results__heading">
+                  <p class="search__results__title">{{ 'general.page.pages' | t }}</p>
+                  <span class="badge">{{ page_count }}</span>
+                </div>
+
+                <ul aria-label="{{ 'general.page.pages' | t }}" role="group" class="search__results__articles__list">
+                  {%- for page in predictive_search.resources.pages -%}
+                    {%- assign total_results_counter = total_results_counter | plus: 1 -%}
+                    <li class="other__inline animates" style="animation-delay: {{ total_results_counter | times: 90 | plus: 10 }}ms;" id="predictive-search-option-page-{{ forloop.index }}" role="option" aria-selected="false">
+                      <p class="other__inline__title">
+                        <a href="{{ page.url }}">{{ page.title }}</a>
+                      </p>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="search__results__empty">
+          <div aria-live="polite">
+            <p>
+              {{ 'general.search.no_results_for' | t }}
+              <em>{{ terms }}</em>
+            </p>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="search__results__actions">
+        <button
+          class="btn btn--outline search__results__btn"
+          tabindex="-1"
+          role="option"
+          aria-selected="false"
+        >
+          <span data-predictive-search-search-for-text>{{ 'general.search.search_for' | t: terms: terms }}</span>
+          <span class="ml-r2 accent-size-5 [&>svg]:inline-block">{%- render 'icon-core-chevron-right' -%}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

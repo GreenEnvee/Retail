@@ -1,0 +1,22 @@
+{%- if settings.swatches_enable and settings.swatches_collection_enable -%}
+  <script data-swatch-template type="text/x-template">
+    <radio-swatch class="swatch__button{% if settings.swatches_squares %} swatch__button--square{% endif %}">
+      {% raw %}
+        <input type="radio"
+          name="grouped-{{ it.product_id }}"
+          value="{{ it.color }}"
+          id="{{ it.uniq }}"
+          tabindex="-1">
+        <label for="{{ it.uniq }}"
+          data-swatch="{{ it.color }}"
+          data-swatch-variant="{{ it.variant }}"
+          data-swatch-image="{{ it.image }}"
+          data-swatch-image-id="{{ it.image_id }}"
+          data-swatch-index="{{ it.index }}"
+          tabindex="0">
+          <span class="visually-hidden">{{ it.color }}</span>
+        </label>
+      {% endraw %}
+    </radio-swatch>
+  </script>
+{%- endif -%}
