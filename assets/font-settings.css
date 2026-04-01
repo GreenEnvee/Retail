@@ -2,65 +2,65 @@
 
 
 @font-face {
-  font-family: "Archivo Narrow";
-  font-weight: 500;
+  font-family: "Josefin Sans";
+  font-weight: 300;
   font-style: normal;
   font-display: swap;
-  src: url("//greenenveepro.com/cdn/fonts/archivo_narrow/archivonarrow_n5.d7d2ed7fbf03e65de95fbf4dd65b8f16594058a7.woff2") format("woff2"),
-       url("//greenenveepro.com/cdn/fonts/archivo_narrow/archivonarrow_n5.1b34a2bfca6fa7ceb43f421bf0098175c735e91b.woff") format("woff");
+  src: url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n3.374d5f789b55dc43ab676daa4d4b2e3218eb6d25.woff2") format("woff2"),
+       url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n3.96e999b56a2455ae25366c2fa92b6bd8280af01a.woff") format("woff");
 }
 
 @font-face {
-  font-family: Barlow;
+  font-family: "Josefin Sans";
   font-weight: 400;
   font-style: normal;
   font-display: swap;
-  src: url("//greenenveepro.com/cdn/fonts/barlow/barlow_n4.038c60d7ea9ddb238b2f64ba6f463ba6c0b5e5ad.woff2") format("woff2"),
-       url("//greenenveepro.com/cdn/fonts/barlow/barlow_n4.074a9f2b990b38aec7d56c68211821e455b6d075.woff") format("woff");
+  src: url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n4.70f7efd699799949e6d9f99bc20843a2c86a2e0f.woff2") format("woff2"),
+       url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n4.35d308a1bdf56e5556bc2ac79702c721e4e2e983.woff") format("woff");
 }
 
 @font-face {
-  font-family: Archivo;
+  font-family: "Josefin Sans";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n4.70f7efd699799949e6d9f99bc20843a2c86a2e0f.woff2") format("woff2"),
+       url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n4.35d308a1bdf56e5556bc2ac79702c721e4e2e983.woff") format("woff");
+}
+
+
+
+  @font-face {
+  font-family: "Josefin Sans";
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n4.70f7efd699799949e6d9f99bc20843a2c86a2e0f.woff2") format("woff2"),
+       url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n4.35d308a1bdf56e5556bc2ac79702c721e4e2e983.woff") format("woff");
+}
+
+
+
+
+  @font-face {
+  font-family: "Josefin Sans";
   font-weight: 500;
   font-style: normal;
   font-display: swap;
-  src: url("//greenenveepro.com/cdn/fonts/archivo/archivo_n5.272841b6d6b831864f7fecfa55541752bb399511.woff2") format("woff2"),
-       url("//greenenveepro.com/cdn/fonts/archivo/archivo_n5.27fb58a71a175084eb68e15500549a69fe15738e.woff") format("woff");
-}
-
-
-
-  @font-face {
-  font-family: "Archivo Narrow";
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-  src: url("//greenenveepro.com/cdn/fonts/archivo_narrow/archivonarrow_n6.39db873f9e4e9c8ab7083354b267ce7500b7ee9e.woff2") format("woff2"),
-       url("//greenenveepro.com/cdn/fonts/archivo_narrow/archivonarrow_n6.997d285d710a777a602467368cc2fbd11a20033e.woff") format("woff");
+  src: url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n5.72427d78743bbf3591b498f66ad0f8361904dc4d.woff2") format("woff2"),
+       url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n5.15e133f4dfd3ea9ee7de5283759b87e9708721ae.woff") format("woff");
 }
 
 
 
 
   @font-face {
-  font-family: Archivo;
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-  src: url("//greenenveepro.com/cdn/fonts/archivo/archivo_n6.06ce7cb3e84f9557d04c35761e39e39ea101fb19.woff2") format("woff2"),
-       url("//greenenveepro.com/cdn/fonts/archivo/archivo_n6.5dd16bc207dfc6d25ca8472d89387d828f610453.woff") format("woff");
-}
-
-
-
-
-  @font-face {
-  font-family: Barlow;
+  font-family: "Josefin Sans";
   font-weight: 500;
   font-style: normal;
   font-display: swap;
-  src: url("//greenenveepro.com/cdn/fonts/barlow/barlow_n5.a193a1990790eba0cc5cca569d23799830e90f07.woff2") format("woff2"),
-       url("//greenenveepro.com/cdn/fonts/barlow/barlow_n5.ae31c82169b1dc0715609b8cc6a610b917808358.woff") format("woff");
+  src: url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n5.72427d78743bbf3591b498f66ad0f8361904dc4d.woff2") format("woff2"),
+       url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_n5.15e133f4dfd3ea9ee7de5283759b87e9708721ae.woff") format("woff");
 }
 
 
@@ -70,23 +70,23 @@
 
 
   @font-face {
-  font-family: Barlow;
+  font-family: "Josefin Sans";
   font-weight: 400;
   font-style: italic;
   font-display: swap;
-  src: url("//greenenveepro.com/cdn/fonts/barlow/barlow_i4.8c59b6445f83f078b3520bad98b24d859431b377.woff2") format("woff2"),
-       url("//greenenveepro.com/cdn/fonts/barlow/barlow_i4.bf7e6d69237bd02188410034976892368fd014c0.woff") format("woff");
+  src: url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_i4.a2ba85bff59cf18a6ad90c24fe1808ddb8ce1343.woff2") format("woff2"),
+       url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_i4.2dba61e1d135ab449e8e134ba633cf0d31863cc4.woff") format("woff");
 }
 
 
 
   @font-face {
-  font-family: Barlow;
+  font-family: "Josefin Sans";
   font-weight: 500;
   font-style: italic;
   font-display: swap;
-  src: url("//greenenveepro.com/cdn/fonts/barlow/barlow_i5.714d58286997b65cd479af615cfa9bb0a117a573.woff2") format("woff2"),
-       url("//greenenveepro.com/cdn/fonts/barlow/barlow_i5.0120f77e6447d3b5df4bbec8ad8c2d029d87fb21.woff") format("woff");
+  src: url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_i5.24cfcbf486b16cad465e46cf4f709f8dee1c9da0.woff2") format("woff2"),
+       url("//greenenvee.com/cdn/fonts/josefin_sans/josefinsans_i5.9788b7a07516efceab3b983b467dd972211b8317.woff") format("woff");
 }
 
 

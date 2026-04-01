@@ -18,23 +18,14 @@
     <link rel="canonical" href="{{ canonical_url }}">
   {%- endif -%}
 
-  <!-- ======================= Pipeline Theme V8.1.1 ========================= -->
+  <!-- ======================= Pipeline Theme V7.4.1 ========================= -->
 
   <!-- Preloading ================================================================== -->
 
   <link rel="preconnect" href="https://fonts.shopify.com" crossorigin>
-  {%- assign font_body_family = settings.font_body_family | font_url -%}
-  {%- assign font_heading_family = settings.font_heading_family | font_url -%}
-  {%- assign font_accent_family = settings.font_accent_family | font_url -%}
-  {%- if font_body_family != blank -%}
-      <link rel="preload" href="{{ font_body_family }}" as="font" type="font/woff2" crossorigin>
-  {%- endif -%}
-  {%- if font_heading_family != blank -%}
-    <link rel="preload" href="{{ font_heading_family }}" as="font" type="font/woff2" crossorigin>
-  {%- endif -%}
-  {%- if font_accent_family != blank -%}
-      <link rel="preload" href="{{ font_accent_family }}" as="font" type="font/woff2" crossorigin>
-  {%- endif -%}
+  <link rel="preload" href="{{ settings.font_body_family | font_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ settings.font_heading_family | font_url }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ settings.font_accent_family | font_url }}" as="font" type="font/woff2" crossorigin>
 
   <!-- Title and description ================================================ -->
   {%- if settings.favicon != blank -%}
@@ -115,10 +106,7 @@
         smoothscroll: '{{ "smoothscroll.js" | asset_url }}',
         swatches: '{{ "swatches.json" | asset_url }}',
         noImage: '{{ "nil" | img_url: "master" }}',
-        {% comment %} Used to get the base path for images {% endcomment %}
-        {% # theme-check-disable MissingAsset %}
         base: '{{ "nil.jpg" | asset_url | split: "nil.jpg" | first }}'
-        {% # theme-check-enable MissingAsset %}
       },
       strings: {
         swatchesKey: {{ 'general.swatches.color' | t | json }},
@@ -158,7 +146,7 @@
       info: {
         name: 'pipeline'
       },
-      version: '8.1.1',
+      version: '7.4.1',
       moneyFormat: {{ shop.money_format | json }},
       shopCurrency: {{ shop.currency | json }},
       currencyCode: {{ cart.currency.iso_code | json }}
@@ -181,52 +169,6 @@
   <!-- Theme Javascript ============================================================== -->
   <script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
   <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
-
-  {% comment %} Critical JS {% endcomment %}
-  <script>
-    function addLoadingClassToLoadingImages(container) {
-      container.querySelectorAll('[data-needs-loading-animation] img').forEach((el) => {
-        if (!el.complete) {
-          el.parentNode.classList.add('loading-shimmer');
-        }
-      });
-    }
-
-    // Remove loading class from all already loaded images
-    function removeLoadingClassFromLoadedImages(container) {
-      container.querySelectorAll('img').forEach((el) => {
-        if (el.complete) {
-          delete el.parentNode.dataset.needsLoadingAnimation;
-          el.parentNode.classList.remove('loading-shimmer');
-        }
-      });
-    }
-
-    // Remove loading class from image on `load` event
-    function handleImageLoaded(el) {
-      if (el.tagName == 'IMG' && el.parentNode.classList.contains('loading-shimmer')) {
-        delete el.parentNode.dataset.needsLoadingAnimation;
-        el.parentNode.classList.remove('loading-shimmer');
-      }
-    }
-
-    // Watch for any load events that bubble up from child elements
-    document.addEventListener(
-      'load',
-      (e) => {
-        const el = e.target;
-
-        // Capture load events from img tags and then remove their `loading-shimmer` class
-        handleImageLoaded(el);
-      },
-      true
-    );
-
-    // Tasks to run when the DOM elements are available
-    window.addEventListener('DOMContentLoaded', () => {
-      addLoadingClassToLoadingImages(document);
-    });
-  </script>
 
   <script>
     (function () {
@@ -275,6 +217,7 @@
 
   <!-- Shopify app scripts =========================================================== -->
   {{ content_for_header }}
+<script src="//code.jivosite.com/widget/4KV9asgCZK" async></script>
 </head>
 
 
@@ -291,9 +234,13 @@
 
   {% sections 'group-footer' %}
 
+
   <div class="search--popdown">
     {% render 'search-predictive', version: 'search-popdown' %}
   </div>
+
+
+  {% render 'template-swatch' %}
 
   <div data-modal-container></div>
 
@@ -304,9 +251,12 @@
   {%- endcomment -%}
 
   <!-- Paste popup code or third party scripts below this comment line ============== -->
+<script src="//code.jivosite.com/widget/dMByEkNNj4" async></script>
 
 
   <!-- And above this comment line ================================================== -->
 
+  {% render 'freegifts-snippet-change' %}
+  
 </body>
 </html>
