@@ -32,31 +32,31 @@
               {% when 'email' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <input type="email" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[email]" placeholder="{{ block.settings.title | escape }}" autocorrect="off" autocapitalize="off" />
+                  <input type="email" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[email]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}" autocorrect="off" autocapitalize="off"{% if block.settings.required == true %} required{% endif %} />
                 </div>
 
               {% when 'body' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <textarea rows="10" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[body]" placeholder="{{ block.settings.title | escape }}"></textarea>
+                  <textarea rows="10" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[body]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}"{% if block.settings.required == true %} required{% endif %}></textarea>
                 </div>
 
               {% when 'text' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <input type="text" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'text' }}]" placeholder="{{ block.settings.title | escape }}" autocapitalize="words" value="" />
+                  <input type="text" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'text' }}]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}" autocapitalize="words" value=""{% if block.settings.required == true %} required{% endif %} />
                 </div>
 
               {% when 'textarea' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <textarea rows="10" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'textarea' }}]" placeholder="{{ block.settings.title | escape }}"></textarea>
+                  <textarea rows="10" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'textarea' }}]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}"{% if block.settings.required == true %} required{% endif %}></textarea>
                 </div>
 
               {% when 'telephone' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <input type="tel" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[telephone]" placeholder="{{ block.settings.title | escape }}" value="" />
+                  <input type="tel" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[telephone]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}" value=""{% if block.settings.required == true %} required{% endif %} />
                 </div>
 
               {% when 'form_heading' %}
@@ -76,8 +76,8 @@
               {% when 'checkbox' %}
                 <div class="contact__block" {{ block.shopify_attributes }}>
                   <div class="contact__check">
-                    <input type="checkbox" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'checkbox' }}]" value="{{ block.settings.title | escape }}">
-                    <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
+                    <input type="checkbox" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | strip_html | handleize | default: 'checkbox' }}]" value="{{ block.settings.title | escape }}"{% if block.settings.required == true %} required{% endif %}>
+                    <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}{% if block.settings.required == true %}*{% endif %}</label>
                   </div>
                 </div>
 
@@ -435,6 +435,12 @@
 			"limit": 1,
 			"settings": [
 				{
+					"type": "checkbox",
+					"id": "required",
+					"label": "Required field",
+					"default": false
+				},
+				{
 					"type": "text",
 					"id": "title",
 					"label": "Label",
@@ -448,6 +454,12 @@
 			"limit": 1,
 			"settings": [
 				{
+					"type": "checkbox",
+					"id": "required",
+					"label": "Required field",
+					"default": false
+				},
+				{
 					"type": "textarea",
 					"id": "title",
 					"label": "Label",
@@ -459,6 +471,12 @@
 			"type": "text",
 			"name": "Text line",
 			"settings": [
+				{
+					"type": "checkbox",
+					"id": "required",
+					"label": "Required field",
+					"default": false
+				},
 				{
 					"type": "text",
 					"id": "title",
@@ -473,6 +491,12 @@
 			"name": "Text area",
 			"settings": [
 				{
+					"type": "checkbox",
+					"id": "required",
+					"label": "Required field",
+					"default": false
+				},
+				{
 					"type": "textarea",
 					"id": "title",
 					"label": "Label",
@@ -486,6 +510,12 @@
 			"name": "Telephone",
 			"limit": 1,
 			"settings": [
+				{
+					"type": "checkbox",
+					"id": "required",
+					"label": "Required field",
+					"default": false
+				},
 				{
 					"type": "text",
 					"id": "title",
@@ -525,10 +555,16 @@
 			"name": "Single checkbox",
 			"settings": [
 				{
-					"type": "text",
+					"type": "checkbox",
+					"id": "required",
+					"label": "Required field",
+					"default": false
+				},
+				{
+					"type": "richtext",
 					"id": "title",
 					"label": "Label",
-					"default": "Checkbox option",
+					"default": "<p>Checkbox option</p>",
 					"info": "Example: Subscribe to newsletter"
 				}
 			]

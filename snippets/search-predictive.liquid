@@ -115,31 +115,44 @@
   <script data-search-product-template type="text/x-template">
     {% raw %}
       {{@each(it) => object, index}}
-        <a href="{{ object.url }}" class="product__inline animates" style="animation-delay: {{ index | animationDelay }}ms;">
-          <div class="product__inline__image {{ @if (object.featured_image.width === null) }} product__inline__image--no-image {{ /if}}">
-            {{ @if (object.featured_image.width !== null) }}
-              <img class="img-aspect-ratio" width="{{object.featured_image.width}}" height="{{ object.featured_image.height }}" alt="{{ object.featured_image.alt }}" src="{{ object.thumb }}">
-            {{ /if}}
-          </div>
-          <div>
-            <p class="product__inline__title">
-              {{ object.title | safe }}
-            </p>
-            <p class="product__inline__price">
-              <span class="price {{ object.classes }}">
-                {{ object.price | safe }}
-              </span>
-              {{@if(object.sold_out)}}
-                <br /><em>{{ object.sold_out_translation }}</em>
-              {{/if}}
-              {{@if(object.on_sale)}}
-                <span class="compare-at">
-                  {{ object.compare_at_price | safe }}
+        {{ @if (
+          !(
+            (function(t){
+              if (!t) return false;
+              var arr = Array.isArray(t) ? t : (''+t).split(',');
+              for (var i = 0; i < arr.length; i++) {
+                if (String(arr[i]).trim().toLowerCase() === 'hidden') return true;
+              }
+              return false;
+            })(object.tags)
+          )
+        ) }}
+          <a href="{{ object.url }}" class="product__inline animates" style="animation-delay: {{ index | animationDelay }}ms;">
+            <div class="product__inline__image {{ @if (object.featured_image.width === null) }} product__inline__image--no-image {{ /if}}">
+              {{ @if (object.featured_image.width !== null) }}
+                <img class="img-aspect-ratio" width="{{object.featured_image.width}}" height="{{ object.featured_image.height }}" alt="{{ object.featured_image.alt }}" src="{{ object.thumb }}">
+              {{ /if}}
+            </div>
+            <div>
+              <p class="product__inline__title">
+                {{ object.title | safe }}
+              </p>
+              <p class="product__inline__price">
+                <span class="price {{ object.classes }}">
+                  {{ object.price | safe }}
                 </span>
-              {{/if}}
-            </p>
-          </div>
-        </a>
+                {{@if(object.sold_out)}}
+                  <br /><em>{{ object.sold_out_translation }}</em>
+                {{/if}}
+                {{@if(object.on_sale)}}
+                  <span class="compare-at">
+                    {{ object.compare_at_price | safe }}
+                  </span>
+                {{/if}}
+              </p>
+            </div>
+          </a>
+        {{ /if }}
       {{/each}}
     {% endraw %}
   </script>

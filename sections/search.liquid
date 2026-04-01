@@ -144,8 +144,129 @@
       {%- endif -%}
 
       <div class="collection__products" data-products-grid>
+        {% assign downcased_terms = search.terms | downcase %}
+        {% assign metafield_searched_items = "" %}
+        {% for product in collections.ge-full-inventory.products %}
+          {% assign has_hidden = false %}
+          {% for tag in product.tags %}
+            {% assign current_tag = tag | downcase %}
+            {% if current_tag == 'hidden' %}
+              {% assign has_hidden = true %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+          {% unless has_hidden %}
+            {% assign found_item = 0 %}
+            {% assign metafields = product.metafields.custom %}
+            {% for metafield in metafields %}
+              {% for value in metafield %}
+                {% assign downcased_value = value.value | downcase %}
+                {% if downcased_value contains downcased_terms and found_item == 0 %}
+                  {% assign found_item = 1 %}
+                  {% assign metafield_searched_items = metafield_searched_items | append:", " | append: product.id %}
+                  <div class="search__item__generic search_metafield">
+                    {% if product.image or product.featured_media.preview_image %}
+                      <div class="search__item__generic__image">
+                        <a href="{{ product.url }}" title="{{ product.title | escape }}">
+                          {% assign image = product.featured_media.preview_image | default: product.image %}
+                          {% assign image_width = 70 | at_most: image.width %}
+                          {% assign image_width_2x = image_width | times: 2 | at_most: image.width %}
+                          {% assign alt = image.alt %}
+
+                          {% capture srcset %}
+                            {{ image | image_url: width: image_width_2x }} 2x,
+                            {{ image | image_url: width: image_width }}
+                          {% endcapture %}
+
+                          {%- render 'image',
+                            img_object: image,
+                            wh_ratio: image.aspect_ratio,
+                            width: image_width,
+                            srcset: srcset,
+                            alt: alt
+                          -%}
+                        </a>
+                      </div>
+                    {% endif %}
+
+                    <div class="search__item__generic__text">
+                      <p class="product__inline__title">
+                        {{ product.title | link_to: product.url }}
+                      </p>
+                      <p class="product__inline__price">
+                        {%- assign on_sale = false -%}
+                        {%- assign sold_out = true -%}
+                        {%- assign current_variant = product.first_available_variant -%}
+
+                        {%- if product.compare_at_price > product.price -%}
+                          {%- assign on_sale = true -%}
+                        {%- endif -%}
+
+                        {%- if product.available -%}
+                          {%- assign sold_out = false -%}
+                        {%- endif -%}
+
+                        <span class="price{% if on_sale %} on-sale{% endif %}">
+                          {% if product.price_varies %}{{ 'products.general.from' | t }} {% endif %}
+                          {% if settings.currency_code_enable %}
+                            {{ product.price | money_with_currency }}
+                          {% else %}
+                            {{ product.price | money }}
+                          {% endif %}
+                        </span>
+
+                        {% if on_sale %}
+                          <span class="compare-at">
+                            {% if settings.currency_code_enable %}
+                              {{ product.compare_at_price | money_with_currency }}
+                            {% else %}
+                              {{ product.compare_at_price | money }}
+                            {% endif %}
+                          </span>
+                        {% endif %}
+
+                        {% if current_variant.unit_price %}
+                          {% capture unit_price_separator %}
+                            <span aria-hidden="true">/</span><span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
+                          {% endcapture %}
+
+                          {% capture unit_price_base_unit %}
+                            {% if current_variant.unit_price_measurement.reference_value != 1 %}
+                              {{ current_variant.unit_price_measurement.reference_value }}
+                            {% endif %}
+                            {{ current_variant.unit_price_measurement.reference_unit }}
+                          {% endcapture %}
+
+                          <br>
+                          <span class="visually-hidden">{{ 'products.product.unit_price_label' | t }}</span>
+                          <span class="price-per-unit">{{ current_variant.unit_price | money }}{{ unit_price_separator }}{{ unit_price_base_unit }}</span>
+                        {% endif %}
+
+                        {% if sold_out %}
+                          <br><em>{{ 'products.product.sold_out' | t }}</em>
+                        {% endif %}
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          {% endunless %}
+        {% endfor %}
         {% paginate search.results by section.settings.pagination_count %}
             {% for item in search.results %}
+              {% assign item_is_hidden = false %}
+              {% if item.object_type == 'product' and item.tags %}
+                {% for tag in item.tags %}
+                  {% assign current_tag = tag | downcase %}
+                  {% if current_tag == 'hidden' %}
+                    {% assign item_is_hidden = true %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              {% unless metafield_searched_items contains item.id or item_is_hidden %}
               <div class="search__item__generic">
                 {% if item.image or item.featured_media.preview_image %}
 
@@ -242,6 +363,7 @@
                   </div>
                 </div>
               {% unless forloop.last %}<hr>{% endunless %}
+              {% endunless %}
             {% endfor %}
 
             {% if paginate.pages > 1 %}

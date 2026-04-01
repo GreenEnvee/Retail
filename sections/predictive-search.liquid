@@ -14,6 +14,21 @@
   assign terms = predictive_search.terms
 -%}
 
+{% assign ge_hidden_handles_collection = collections['hidden-products'] | default: nil %}
+{% if ge_hidden_handles_collection %}
+  {% assign ge_hidden_handles = collections['hidden-products'].products | map: 'handle' | uniq %}
+{% else %}
+  {% assign ge_hidden_handles = '' | split: '|' %}
+{% endif %}
+
+{% assign ge_filtered_product_count = 0 %}
+{% for p in predictive_search.resources.products %}
+  {% assign ge_handle_tmp = p.url | split: '/products/' | last | split: '?' | first | split: '#' | first | downcase %}
+  {% unless ge_hidden_handles contains ge_handle_tmp %}
+    {% assign ge_filtered_product_count = ge_filtered_product_count | plus: 1 %}
+  {% endunless %}
+{% endfor %}
+
 {%- if collection_count > 0 -%}
   {%- liquid
     assign exclude_collections_strict = settings.exclude_collections_strict | split: ','
@@ -62,7 +77,7 @@
   {%- endfor -%}
 {%- endif -%}
 
-{%- assign total_results = product_count | plus: query_count | plus: collection_counter | plus: page_count | plus: article_count -%}
+{%- assign total_results = ge_filtered_product_count | plus: query_count | plus: collection_counter | plus: page_count | plus: article_count -%}
 
 {%- if predictive_search.performed -%}
   <div class="wrapper">
@@ -83,13 +98,107 @@
             echo 'general.search.results_pages_with_count' | t: count: count | append: ', '
           endif
 
-          if product_count > 0
-            echo 'general.search.results_products_with_count' | t: count: product_count
+          if ge_filtered_product_count > 0
+            echo 'general.search.results_products_with_count' | t: count: ge_filtered_product_count
           endif
         endif
       -%}
     </span>
     <div class="search__results__wrapper" id="predictive-search-results" role="listbox" aria-label="{{ 'general.search.search_for' | t: terms: terms }}">
+      {% assign downcased_terms = terms | downcase %}
+      {% for product in collections.ge-full-inventory.products %}
+        {% unless ge_hidden_handles contains product.handle %}
+          {% assign found_items = 0 %}
+          {% assign metafields = product.metafields.custom %}
+          {% for metafield in metafields %}
+            {% for value in metafield %}
+              {% assign downcased_value = value.value | downcase %}
+              {% if downcased_value contains downcased_terms and found_items == 0 %}
+                {% assign found_items = 1 %}
+                <div class="search__item__generic search_metafield">
+                  {% if product.image or product.featured_media.preview_image %}
+                    <div class="search__item__generic__image">
+                      <a href="{{ product.url }}" title="{{ product.title | escape }}">
+                        {% assign image = product.featured_media.preview_image | default: product.image %}
+                        {% assign image_width = 70 | at_most: image.width %}
+                        {% assign image_width_2x = image_width | times: 2 | at_most: image.width %}
+                        {% assign alt = image.alt %}
+                        {% capture srcset %}
+                          {{ image | image_url: width: image_width_2x }} 2x,
+                          {{ image | image_url: width: image_width }}
+                        {% endcapture %}
+                        {%- render 'image',
+                          img_object: image,
+                          wh_ratio: image.aspect_ratio,
+                          width: image_width,
+                          srcset: srcset,
+                          alt: alt
+                        -%}
+                      </a>
+                    </div>
+                  {% endif %}
+                  <div class="search__item__generic__text">
+                    <p class="product__inline__title">
+                      {{ product.title | link_to: product.url }}
+                    </p>
+                    <p class="product__inline__price">
+                      {%- assign on_sale = false -%}
+                      {%- assign sold_out = true -%}
+                      {%- assign current_variant = product.first_available_variant -%}
+
+                      {%- if product.compare_at_price > product.price -%}
+                        {%- assign on_sale = true -%}
+                      {%- endif -%}
+
+                      {%- if product.available -%}
+                        {%- assign sold_out = false -%}
+                      {%- endif -%}
+
+                      <span class="price{% if on_sale %} on-sale{% endif %}">
+                        {% if product.price_varies %}{{ 'products.general.from' | t }} {% endif %}
+                        {% if settings.currency_code_enable %}
+                          {{ product.price | money_with_currency }}
+                        {% else %}
+                          {{ product.price | money }}
+                        {% endif %}
+                      </span>
+
+                      {% if on_sale %}
+                        <span class="compare-at">
+                          {% if settings.currency_code_enable %}
+                            {{ product.compare_at_price | money_with_currency }}
+                          {% else %}
+                            {{ product.compare_at_price | money }}
+                          {% endif %}
+                        </span>
+                      {% endif %}
+
+                      {% if current_variant.unit_price %}
+                        {% capture unit_price_separator %}
+                          <span aria-hidden="true">/</span><span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
+                        {% endcapture %}
+                        {% capture unit_price_base_unit %}
+                          {% if current_variant.unit_price_measurement.reference_value != 1 %}
+                            {{ current_variant.unit_price_measurement.reference_value }}
+                          {% endif %}
+                          {{ current_variant.unit_price_measurement.reference_unit }}
+                        {% endcapture %}
+                        <br>
+                        <span class="visually-hidden">{{ 'products.product.unit_price_label' | t }}</span>
+                        <span class="price-per-unit">{{ current_variant.unit_price | money }}{{ unit_price_separator }}{{ unit_price_base_unit }}</span>
+                      {% endif %}
+
+                      {% if sold_out %}
+                        <br><em>{{ 'products.product.sold_out' | t }}</em>
+                      {% endif %}
+                    </p>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% endunless %}
+      {% endfor %}
       {%- if total_results > 0 -%}
         <div class="search__results__outer">
           <div class="search__results__other">
@@ -115,17 +224,19 @@
               </div>
             {%- endif -%}
 
-            {%- if product_count > 0 -%}
+            {%- if ge_filtered_product_count > 0 -%}
               <div class="search__results__products">
                 <div class="search__results__products__title">
                   <div id="search_product_results_heading" class="search__results__heading">
                     <p class="search__results__title">{{ 'products.general.products' | t }}</p>
-                    <span class="badge">{{ product_count }}</span>
+                    <span class="badge">{{ ge_filtered_product_count }}</span>
                   </div>
                 </div>
 
                 <ul aria-label="{{ 'products.general.products' | t }}" class="search__results__products__list">
                   {%- for product in predictive_search.resources.products -%}
+                    {% assign ge_handle = product.url | split: '/products/' | last | split: '?' | first | split: '#' | first | downcase %}
+                    {% unless ge_hidden_handles contains ge_handle %}
                     {%- liquid
                       assign total_results_counter = total_results_counter | plus: 1
                       assign on_sale = false
@@ -179,6 +290,7 @@
                         </div>
                       </a>
                     </div>
+                    {% endunless %}
                   {%- endfor -%}
                 </ul>
               </div>
