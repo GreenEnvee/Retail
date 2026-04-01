@@ -1,11 +1,1 @@
-{
-	"sections": {
-		"main": {
-			"type": "article",
-			"settings": {}
-		}
-	},
-	"order": [
-		"main"
-	]
-}
+{"sections":{"main":{"type":"article","settings":{"blog_show_meta":false,"tags":false,"color_bg":"palette--light bg--neutral","social":false,"share_label":"Share","show_featured_image":false,"image_height":"use_screen_one_third","bg_position":"center-center","sidebar_tags":false,"recent":false,"wh_ratio":1.7,"show_author":false,"show_tags":false,"show_date":false,"show_preview":true,"show_link":true,"width":"wrapper--full","padding_top":36,"padding_bottom":16}},"section_richtext_YFiqEy":{"type":"section-richtext","blocks":{"button_RY9TYD":{"type":"button","settings":{"link_text_1":"Back to all Blogs","link_1":"shopify:\/\/blogs\/skin-categories","button_size_1":"btn--medium","button_style_1":"btn--soft","button_color_1":"btn--secondary","link_text_2":"","link_2":"","button_size_2":"btn--medium","button_style_2":"btn-text-thick-line","button_color_2":"btn--neutral","link_text_3":"","link_3":"","button_size_3":"btn--long","button_style_3":"btn-text-thick-line","button_color_3":"btn--white"}},"spacer_j3YFEQ":{"type":"spacer","settings":{"spacer_padding":40,"show_line":false}},"text_em9xBp":{"type":"text","settings":{"text":"<p>This information is for educational purposes only and is not intended as medical advice. Please consult your healthcare provider before implementing any new remedy.<\/p>","text_size":3,"text_columns":1}}},"block_order":["button_RY9TYD","spacer_j3YFEQ","text_em9xBp"],"name":"Rich text","settings":{"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper--narrow","padding_top":0,"padding_bottom":36}}},"order":["main","section_richtext_YFiqEy"]}

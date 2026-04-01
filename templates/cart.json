@@ -1,11 +1,1 @@
-{
-	"sections": {
-		"main": {
-			"type": "cart",
-			"settings": {}
-		}
-	},
-	"order": [
-		"main"
-	]
-}
+{"sections":{"main":{"type":"cart","settings":{"cart_shipping_enable":false,"cart_show_quantity":true,"cart_notes_enable":false,"show_free_shipping_message":false,"message":"Spend ||amount|| more for free shipping","cart_custom_message_enable":false,"cart_custom_message_text":"<p>Use code <strong>TENOFF<\/strong> at checkout for 10% off<\/p>","cart_color_bg":"palette--light bg--neutral","cart_show_additional_buttons":false,"bg":"palette--light bg--neutral","width":"wrapper","padding_top":36,"padding_bottom":36}},"17526756088e3107c9":{"type":"apps","blocks":{"bogos_io_free_gift_cart_message_view_Cczh6a":{"type":"shopify:\/\/apps\/bogos-io-free-gift\/blocks\/cart-message-view\/0432bba6-720a-4e95-be5a-b868386f7aa6","settings":{}}},"block_order":["bogos_io_free_gift_cart_message_view_Cczh6a"],"settings":{"text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper","padding_top":36,"padding_bottom":36}}},"order":["main","17526756088e3107c9"]}
