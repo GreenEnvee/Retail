@@ -28,39 +28,35 @@
           {% for block in section.blocks %}
 
             {% case block.type %}
-              {% comment %}Green Envee update START: add required option to fields.
-               Code added (multiple):
-                1. {% if block.settings.required == true %}*{% endif %}
-                2. {% if block.settings.required == true %} required{% endif %}
-              {% endcomment %}
+
               {% when 'email' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <input type="email" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[email]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}" autocorrect="off" autocapitalize="off"{% if block.settings.required == true %} required{% endif %} />
+                  <input type="email" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[email]" placeholder="{{ block.settings.title | escape }}" autocorrect="off" autocapitalize="off" />
                 </div>
 
               {% when 'body' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <textarea rows="10" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[body]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}"{% if block.settings.required == true %} required{% endif %}></textarea>
+                  <textarea rows="10" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[body]" placeholder="{{ block.settings.title | escape }}"></textarea>
                 </div>
 
               {% when 'text' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <input type="text" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'text' }}]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}" autocapitalize="words" value=""{% if block.settings.required == true %} required{% endif %} />
+                  <input type="text" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'text' }}]" placeholder="{{ block.settings.title | escape }}" autocapitalize="words" value="" />
                 </div>
 
               {% when 'textarea' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <textarea rows="10" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'textarea' }}]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}"{% if block.settings.required == true %} required{% endif %}></textarea>
+                  <textarea rows="10" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'textarea' }}]" placeholder="{{ block.settings.title | escape }}"></textarea>
                 </div>
 
               {% when 'telephone' %}
                 <div class="float__wrapper" {{ block.shopify_attributes }}>
                   <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
-                  <input type="tel" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[telephone]" placeholder="{{ block.settings.title | escape }}{% if block.settings.required == true %}*{% endif %}" value=""{% if block.settings.required == true %} required{% endif %} />
+                  <input type="tel" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[telephone]" placeholder="{{ block.settings.title | escape }}" value="" />
                 </div>
 
               {% when 'form_heading' %}
@@ -80,8 +76,8 @@
               {% when 'checkbox' %}
                 <div class="contact__block" {{ block.shopify_attributes }}>
                   <div class="contact__check">
-                    <input type="checkbox" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | strip_html | handleize | default: 'checkbox' }}]" value="{{ block.settings.title | escape }}"{% if block.settings.required == true %} required{% endif %}>
-                    <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}{% if block.settings.required == true %}*{% endif %}</label>
+                    <input type="checkbox" id="Form-{{ section.id }}-{{ forloop.index0 }}" name="contact[{{ block.settings.title | handleize | default: 'checkbox' }}]" value="{{ block.settings.title | escape }}">
+                    <label for="Form-{{ section.id }}-{{ forloop.index0 }}">{{ block.settings.title }}</label>
                   </div>
                 </div>
 
@@ -155,7 +151,6 @@
 
                   </select>
                 </div>
-              {% comment %}Green Envee update END: add required option to fields.{% endcomment %}
             {% endcase %}
           {% endfor %}
 
@@ -190,11 +185,7 @@
     </div>
   </div>
 </section>
-{% comment %}
-Green Envee updates:
-  1. Add "required" field option to all possible form field blocks
-  2. Change "Single checkbox" title field type to richtext from text and update default value to add wrapping <p> tag
-{% endcomment %}
+
 {% schema %}
 {
   "name": "Contact form",
@@ -336,12 +327,6 @@ Green Envee updates:
       "limit": 1,
       "settings": [
         {
-          "type": "checkbox",
-          "id": "required",
-          "label": "Required field",
-          "default": false
-        },
-        {
           "type": "text",
           "id": "title",
           "label": "Label",
@@ -355,12 +340,6 @@ Green Envee updates:
       "limit": 1,
       "settings": [
         {
-          "type": "checkbox",
-          "id": "required",
-          "label": "Required field",
-          "default": false
-        },
-        {
           "type": "textarea",
           "id": "title",
           "label": "Label",
@@ -372,12 +351,6 @@ Green Envee updates:
       "type": "text",
       "name": "Text line",
       "settings": [
-        {
-          "type": "checkbox",
-          "id": "required",
-          "label": "Required field",
-          "default": false
-        },
         {
           "type": "text",
           "id": "title",
@@ -392,12 +365,6 @@ Green Envee updates:
       "name": "Text area",
       "settings": [
         {
-          "type": "checkbox",
-          "id": "required",
-          "label": "Required field",
-          "default": false
-        },
-        {
           "type": "textarea",
           "id": "title",
           "label": "Label",
@@ -411,12 +378,6 @@ Green Envee updates:
       "name": "Telephone",
       "limit": 1,
       "settings": [
-        {
-          "type": "checkbox",
-          "id": "required",
-          "label": "Required field",
-          "default": false
-        },
         {
           "type": "text",
           "id": "title",
@@ -456,16 +417,10 @@ Green Envee updates:
       "name": "Single checkbox",
       "settings": [
         {
-          "type": "checkbox",
-          "id": "required",
-          "label": "Required field",
-          "default": false
-        },
-        {
-          "type": "richtext",
+          "type": "text",
           "id": "title",
           "label": "Label",
-          "default": "<p>Checkbox option</p>",
+          "default": "Checkbox option",
           "info": "Example: Subscribe to newsletter"
         }
       ]

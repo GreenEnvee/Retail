@@ -1,30 +1,4 @@
 <!-- /sections/product.liquid -->
-
-<!-- Green Envee update START: block access to hidden-tagged products on PDP -->
-{% assign hidden = false %}
-{% for tag in product.tags %}
-  {% assign current_tag = tag | downcase %}
-  {% if current_tag == 'hidden' %}
-    {% assign hidden = true %}
-    {% break %}
-  {% endif %}
-{% endfor %}
-{% if hidden %}
-  <script>window.location.replace('/');</script>
-  <noscript>
-    <div class="{{ section.settings.width }} section-padding" style="--PT: {{ section.settings.padding_top }}px; --PB: {{ section.settings.padding_bottom }}px;">
-      <div class="float-grid">
-        <div class="grid__item medium-up--two-thirds medium-up--push-one-sixth">
-          <h1 class="title text-center">{{ 'general.404.title' | t }}</h1>
-          <p class="text-center">{{ 'general.404.subtext_html' | t }}</p>
-        </div>
-      </div>
-    </div>
-  </noscript>
-  {% comment %} Stop rendering the rest of the PDP {% endcomment %}
-{% else %}
-<!-- Green Envee update END -->
-
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
 
@@ -528,9 +502,6 @@
 }
 </script>
 
-<!-- Green Envee update START: close PDP hidden guard -->
-{% endif %}
-<!-- Green Envee update END -->
 
 {% schema %}
 {

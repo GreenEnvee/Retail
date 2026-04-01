@@ -115,18 +115,6 @@
               <!-- /snippets/product-grid-item.liquid -->
 
               {% for product in collection.products %}
-                <!-- Green Envee update START: skip hidden-tagged products in collection listings (downcase-safe) -->
-                {% assign hidden = false %}
-                {% for tag in product.tags %}
-                  {% assign current_tag = tag | downcase %}
-                  {% if current_tag == 'hidden' %}
-                    {% assign hidden = true %}
-                    {% break %}
-                  {% endif %}
-                {% endfor %}
-                {% unless hidden %}
-                <!-- Green Envee update END -->
-
                 <div>
                   {%- liquid
                     assign preload = false
@@ -142,10 +130,6 @@
                   -%}
                   {% render 'product-grid-item', product: product, preload: preload, eagerload: eagerload %}
                 </div>
-
-                <!-- Green Envee update START: close hidden skip -->
-                {% endunless %}
-                <!-- Green Envee update END -->
               {% else %}
                 {% if collection.handle == 'all' and collection.current_tags == '' %}
                   {% render 'onboarding-empty-collection' %}

@@ -25092,25 +25092,3 @@ input:not(.sold-out):not(.unavailable):not(:disabled) ~ label [data-shopify-xr-h
 .\[\&\>svg\]\:inline-block>svg{
   display: inline-block;
 }
-
-/* ============================================================================
-Andrea's custom CSS to make footer headers bold
-============================================================================== */
-.footer h4, 
-.footer__title, 
-.site-footer__title {
-  font-weight: bold;
-}
-/* ============================================================================
-Andrea's custom CSS to make footer headers bold
-============================================================================== */
-
-/* ============================================================================
-BOGOS gift widget customization start
-============================================================================== */
-.bogos-gift-item-quantity-dropdown .bogos-gift-item-quantity-input {
-  margin: 0;
-}
-/* ============================================================================
-BOGOS gift widget customization end
-============================================================================== */
