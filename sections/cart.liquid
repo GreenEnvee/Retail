@@ -91,6 +91,8 @@
               {%- endif -%}
             </div>
 
+            {% render 'shipping-protection', location: 'page', section: section %}
+
             <div class="page__footer__subtotal" data-cart-subtotal>
               {% render 'cart-subtotal' %}
             </div>

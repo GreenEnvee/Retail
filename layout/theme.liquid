@@ -244,11 +244,16 @@
 
   <div data-modal-container></div>
 
-  {%- comment -%}
-    In order to use your custom javascript file at assets/custom.js
-    just cut and paste this next line outside this comment.
-    <script src="{{ 'custom.js' | asset_url }}" defer="defer"></script>
-  {%- endcomment -%}
+  <script>
+    window.__shippingProtectionConfig = {
+      enabled: {{ settings.shipping_protection_enable | default: false | json }},
+      defaultSelected: {{ settings.shipping_protection_default_selected | default: false | json }},
+      variantId: {{ settings.shipping_protection_variant_id | strip | json }},
+      label: {{ settings.shipping_protection_label | strip | json }},
+      helperText: {{ settings.shipping_protection_helper_text | strip | json }}
+    };
+  </script>
+  <script src="{{ 'custom.js' | asset_url }}" defer="defer"></script>
 
   <!-- Paste popup code or third party scripts below this comment line ============== -->
 <script src="//code.jivosite.com/widget/dMByEkNNj4" async></script>

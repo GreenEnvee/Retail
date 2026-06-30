@@ -923,6 +923,41 @@
         "id": "cart_continue_browsing",
         "label": "Empty cart link",
         "info": "Continue browsing link for the empty cart"
+      },
+      {
+        "type": "header",
+        "content": "Shipping protection"
+      },
+      {
+        "type": "checkbox",
+        "id": "shipping_protection_enable",
+        "label": "Enable shipping protection",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "shipping_protection_default_selected",
+        "label": "Default shipping protection to selected",
+        "default": false,
+        "info": "Automatically adds shipping protection when the first merchandise item is added to cart."
+      },
+      {
+        "type": "text",
+        "id": "shipping_protection_variant_id",
+        "label": "Shipping protection variant ID",
+        "info": "Enter the hidden Shipping Protection variant ID."
+      },
+      {
+        "type": "text",
+        "id": "shipping_protection_label",
+        "label": "Shipping protection label",
+        "default": "Protect my order for $2.99"
+      },
+      {
+        "type": "textarea",
+        "id": "shipping_protection_helper_text",
+        "label": "Shipping protection helper text",
+        "default": "Protect your shipment against loss, damage, or theft during transit."
       }
     ]
   },
