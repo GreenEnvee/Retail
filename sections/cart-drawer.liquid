@@ -103,6 +103,8 @@
 
             <p class="drawer__bottom__meta body-size-3"><em>{% render 'taxes-included-cart' %}</em></p>
 
+            {% render 'shipping-protection', location: 'drawer', section: section %}
+
             <div class="drawer__footer__subtotal" data-cart-subtotal>
               {% render 'cart-subtotal' %}
             </div>

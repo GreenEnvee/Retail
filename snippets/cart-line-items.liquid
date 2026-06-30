@@ -1,9 +1,15 @@
 <!-- /snippets/cart-line-items.liquid -->
 
 {%- assign cart_products = '' -%}
+{%- assign shipping_protection_variant_id = settings.shipping_protection_variant_id | strip -%}
 
 <div class="cart__items">
   {% for line_item in cart.items %}
+    {%- assign is_shipping_protection = false -%}
+    {%- assign line_item_variant_id = line_item.variant_id | append: '' -%}
+    {%- if shipping_protection_variant_id != blank and line_item_variant_id == shipping_protection_variant_id -%}
+      {%- assign is_shipping_protection = true -%}
+    {%- endif -%}
     <div class="cart__items__row" data-cart-item>
       <div class="item--loadbar" data-item-loadbar style="display: none;">&nbsp;</div>
       <div class="cart__items__grid" data-item>
@@ -190,21 +196,23 @@
           {% endif %}
         </div>
 
-        <div class="cart__items__quantity">
-          <div class="quantity__wrapper" data-quantity-selector>
-            <button class="quantity__button quantity__button--minus" data-decrease-quantity type="button">&minus;</button>
-            <label for="updates_{{ line_item.key }}" class="visually-hidden">{{ 'cart.label.quantity' | t }}</label>
-            <input data-quantity-input
-              data-update-cart="{{ line_item.key }}"
-              class="quantity__input"
-              type="number"
-              min="0"
-              id="updates_{{ line_item.key }}"
-              name="updates[]"
-              value="{{ line_item.quantity }}"/>
-            <button class="quantity__button quantity__button--plus" data-increase-quantity type="button">+</button>
+        {% unless is_shipping_protection %}
+          <div class="cart__items__quantity">
+            <div class="quantity__wrapper" data-quantity-selector>
+              <button class="quantity__button quantity__button--minus" data-decrease-quantity type="button">&minus;</button>
+              <label for="updates_{{ line_item.key }}" class="visually-hidden">{{ 'cart.label.quantity' | t }}</label>
+              <input data-quantity-input
+                data-update-cart="{{ line_item.key }}"
+                class="quantity__input"
+                type="number"
+                min="0"
+                id="updates_{{ line_item.key }}"
+                name="updates[]"
+                value="{{ line_item.quantity }}"/>
+              <button class="quantity__button quantity__button--plus" data-increase-quantity type="button">+</button>
+            </div>
           </div>
-        </div>
+        {% endunless %}
 
        <div class="cart__items__total">
           {% if settings.currency_code_enable %}
