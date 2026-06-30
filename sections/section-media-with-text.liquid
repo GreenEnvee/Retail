@@ -276,6 +276,7 @@
 
           {% when 'video' %}
             <div class="brick__block" data-overflow-frame {{ block.shopify_attributes }}>
+              {%- assign use_background_video = block.settings.enable_background_video -%}
               <div
                 class="brick__block__video aspect-[--wh-ratio] {{ block.settings.text_color }} {{ section.settings.height }}"
                 {% if section.settings.height == 'use_image' %}
@@ -283,77 +284,97 @@
                   style="--wh-ratio: {{ video_wh_ratio }};"
                 {% endif %}
               >
-                <div class="hero__content__wrapper {{ block.settings.text_align }}">
-                  <div class="hero__content" data-overflow-content>
-                    {% unless block.settings.kicker == '' %}
-                      <p class="hero__kicker"
-                        data-aos="hero"
-                        data-aos-anchor="{{ animation_anchor }}"
-                        data-aos-order="1">
-                        {{ block.settings.kicker | escape }}
-                      </p>
-                    {% endunless %}
-                    {% unless block.settings.title == '' %}
-                      <h1 class="hero__title heading-size-9"
-                        data-aos="hero"
-                        data-aos-anchor="{{ animation_anchor }}"
-                        data-aos-order="2">
-                        {{ block.settings.title | escape }}
-                      </h1>
-                    {% endunless %}
-                    {% unless block.settings.richtext == '' %}
-                      <div class="hero__description rte body-size-6"
-                        data-aos="hero"
-                        data-aos-anchor="{{ animation_anchor }}"
-                        data-aos-order="3">
-                        {{ block.settings.richtext }}
-                      </div>
-                    {% endunless %}
+                {% if use_background_video %}
+                  <div class="hero__content__wrapper {{ block.settings.text_align }}">
+                    <div class="hero__content" data-overflow-content>
+                      {% unless block.settings.kicker == '' %}
+                        <p class="hero__kicker"
+                          data-aos="hero"
+                          data-aos-anchor="{{ animation_anchor }}"
+                          data-aos-order="1">
+                          {{ block.settings.kicker | escape }}
+                        </p>
+                      {% endunless %}
+                      {% unless block.settings.title == '' %}
+                        <h1 class="hero__title heading-size-9"
+                          data-aos="hero"
+                          data-aos-anchor="{{ animation_anchor }}"
+                          data-aos-order="2">
+                          {{ block.settings.title | escape }}
+                        </h1>
+                      {% endunless %}
+                      {% unless block.settings.richtext == '' %}
+                        <div class="hero__description rte body-size-6"
+                          data-aos="hero"
+                          data-aos-anchor="{{ animation_anchor }}"
+                          data-aos-order="3">
+                          {{ block.settings.richtext }}
+                        </div>
+                      {% endunless %}
 
-                    {% if block.settings.video_link != '' or block.settings.link_text != '' %}
-                      <div class="hero__cta__wrapper">
-                        {% unless block.settings.link_text == '' %}
-                          <a class="{{ block.settings.button_style }} {{ block.settings.button_color }} hero__btn"
-                            href="{{ block.settings.link }}"
-                            data-aos="hero"
-                            data-aos-anchor="{{ animation_anchor }}"
-                            data-aos-order="4">
-                            {{ block.settings.link_text | escape }}
-                          </a>
-                        {% endunless %}
-                        {% unless block.settings.video_link == nil %}
-                          <div class="hero__btn hero__btn--play {{ block.settings.popup_button_color }}"
-                            data-aos="hero"
-                            data-aos-anchor="{{ animation_anchor }}"
-                            data-aos-order="5"
-                            style="--icon-play-size: {{ block.settings.popup_button_width }}px;">
-                            {% render 'video-popup', video: block.settings.video_link, unique: block.id, text: block.settings.popup_text %}
-                          </div>
-                        {% endunless %}
-                      </div>
+                      {% if block.settings.video_link != '' or block.settings.link_text != '' %}
+                        <div class="hero__cta__wrapper">
+                          {% unless block.settings.link_text == '' %}
+                            <a class="{{ block.settings.button_style }} {{ block.settings.button_color }} hero__btn"
+                              href="{{ block.settings.link }}"
+                              data-aos="hero"
+                              data-aos-anchor="{{ animation_anchor }}"
+                              data-aos-order="4">
+                              {{ block.settings.link_text | escape }}
+                            </a>
+                          {% endunless %}
+                          {% unless block.settings.video_link == nil %}
+                            <div class="hero__btn hero__btn--play {{ block.settings.popup_button_color }}"
+                              data-aos="hero"
+                              data-aos-anchor="{{ animation_anchor }}"
+                              data-aos-order="5"
+                              style="--icon-play-size: {{ block.settings.popup_button_width }}px;">
+                              {% render 'video-popup', video: block.settings.video_link, unique: block.id, text: block.settings.popup_text %}
+                            </div>
+                          {% endunless %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="image-overlay" style="--bg:{{ block.settings.overlay_color }}; opacity:{{ block.settings.overlay_opacity | times: 0.01 }};"></div>
+
+                  {%- if block.settings.video_bg != nil -%}
+                    <div class="video-autoplay-wrapper">
+                      {%- assign video_styles = block.settings.object_position | replace: '-', ' ' | prepend: 'object-position: ' -%}
+                      {{ block.settings.video_bg | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, image_size: '1200x', style: video_styles, data-video-autoplay: '' }}
+                    </div>
+                  {%- else -%}
+                    {%- capture srcset -%}
+                      {%- render 'image-grid-srcset',
+                        image: block.settings.image.src,
+                        columns_desktop: 2,
+                        columns_tablet: 2,
+                        columns_mobile: 1.0,
+                        section_width: section.settings.width
+                      %}
+                    {%- endcapture -%}
+
+                    {% render 'image-parallax', img_object: block.settings.image.src, frame_height_class: section.settings.height, srcset: srcset, sizes: video_block_sizes, preload: preload, loading: loading, fetchpriority: fetchpriority %}
+                  {% endif %}
+                {% else %}
+                  <div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; padding:24px;">
+                    {%- if block.settings.video_bg != nil -%}
+                      {{ block.settings.video_bg | video_tag: controls: true, preload: 'metadata', image_size: '1200x', playsinline: true, class: 'block w-full h-auto' }}
+                    {%- else -%}
+                      {%- capture srcset -%}
+                        {%- render 'image-grid-srcset',
+                          image: block.settings.image.src,
+                          columns_desktop: 2,
+                          columns_tablet: 2,
+                          columns_mobile: 1.0,
+                          section_width: section.settings.width
+                        %}
+                      {%- endcapture -%}
+
+                      {% render 'image-parallax', img_object: block.settings.image.src, frame_height_class: section.settings.height, srcset: srcset, sizes: video_block_sizes, preload: preload, loading: loading, fetchpriority: fetchpriority %}
                     {% endif %}
                   </div>
-                </div>
-
-                <div class="image-overlay" style="--bg:{{ block.settings.overlay_color }}; opacity:{{ block.settings.overlay_opacity | times: 0.01 }};"></div>
-
-                {%- if block.settings.video_bg != nil -%}
-                  <div class="video-autoplay-wrapper">
-                    {%- assign video_styles = block.settings.object_position | replace: '-', ' ' | prepend: 'object-position: ' -%}
-                    {{ block.settings.video_bg | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, image_size: '1200x', style: video_styles, data-video-autoplay: '' }}
-                  </div>
-                {%- else -%}
-                  {%- capture srcset -%}
-                    {%- render 'image-grid-srcset',
-                      image: block.settings.image.src,
-                      columns_desktop: 2,
-                      columns_tablet: 2,
-                      columns_mobile: 1.0,
-                      section_width: section.settings.width
-                    %}
-                  {%- endcapture -%}
-
-                  {% render 'image-parallax', img_object: block.settings.image.src, frame_height_class: section.settings.height, srcset: srcset, sizes: video_block_sizes, preload: preload, loading: loading, fetchpriority: fetchpriority %}
                 {% endif %}
               </div>
             </div>
@@ -1048,6 +1069,12 @@
         "type": "video",
         "id": "video_bg",
         "label": "Video background"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_background_video",
+        "label": "Display video as background cover",
+        "default": true
       },
       {
         "type": "select",
