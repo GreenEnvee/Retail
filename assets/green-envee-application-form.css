@@ -1,0 +1,279 @@
+.ge-application {
+  --ge-error: #bf4b34;
+  --ge-space-1: 0.25rem;
+  --ge-space-2: 0.5rem;
+  --ge-space-3: 0.75rem;
+  --ge-space-4: 1rem;
+  --ge-space-5: 1.5rem;
+  --ge-space-6: 2rem;
+  padding: 24px 0 48px;
+}
+
+.ge-application *,
+.ge-application *::before,
+.ge-application *::after {
+  box-sizing: border-box;
+}
+
+.ge-application__shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.ge-application__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ge-space-5);
+}
+
+.ge-application--design-mode .ge-application__card {
+  pointer-events: none;
+}
+
+.ge-application-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ge-space-4);
+}
+
+.ge-application-form__step {
+  display: none;
+}
+
+.ge-application-form__step.ge-is-active {
+  display: block;
+}
+
+.ge-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.ge-stack--xs {
+  gap: var(--ge-space-1);
+}
+
+.ge-stack--sm {
+  gap: var(--ge-space-2);
+}
+
+.ge-stack--md {
+  gap: var(--ge-space-4);
+}
+
+.ge-stack--lg {
+  gap: var(--ge-space-5);
+}
+
+.ge-field-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.ge-field-grid--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.ge-field-grid--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ge-col-span-full {
+  grid-column: 1 / -1;
+}
+
+.ge-field,
+.ge-fieldset {
+  min-width: 0;
+}
+
+.ge-field__required {
+  color: var(--ge-error);
+}
+
+.ge-field__hint {
+  font-size: 0.75rem;
+}
+
+.ge-application input,
+.ge-application select,
+.ge-application textarea,
+.ge-application button {
+  font: inherit;
+}
+
+.ge-application input,
+.ge-application select,
+.ge-application textarea {
+  width: 100%;
+  min-width: 0;
+}
+
+.ge-application textarea {
+  resize: vertical;
+}
+
+.ge-field-inline {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ge-field-inline input[type="checkbox"] {
+  width: auto;
+  margin-top: 3px;
+}
+
+.ge-fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.ge-video {
+  width: 100%;
+  margin-bottom: var(--ge-space-4);
+}
+
+.ge-video--centered {
+  display: flex;
+  justify-content: center;
+}
+
+.ge-video__frame {
+  width: min(100%, 720px);
+  aspect-ratio: 16 / 9;
+}
+
+.ge-video__frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.ge-rich-copy {
+  max-width: 48rem;
+}
+
+.ge-rich-copy > * {
+  margin: 0;
+}
+
+.ge-rich-copy > p + p,
+.ge-rich-copy > p + ul,
+.ge-rich-copy > ul + p {
+  margin-top: var(--ge-space-4);
+}
+
+.ge-rich-copy__title {
+  font-weight: 700;
+  margin-top: var(--ge-space-5);
+}
+
+.ge-rich-copy__title:first-child {
+  margin-top: 0;
+}
+
+.ge-rich-copy ul {
+  display: block;
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.ge-rich-copy li {
+  display: list-item;
+}
+
+.ge-rich-copy li + li {
+  margin-top: var(--ge-space-1);
+}
+
+.ge-section-note {
+  padding: 0;
+}
+
+.ge-progress {
+  width: 100%;
+  height: 0.75rem;
+  overflow: hidden;
+  background: color-mix(in srgb, currentColor 12%, transparent);
+  border-radius: 999px;
+}
+
+.ge-progress__bar {
+  width: 0;
+  height: 100%;
+  background: currentColor;
+  border-radius: inherit;
+  transition: width 160ms ease;
+}
+
+.ge-form-feedback {
+  min-height: 24px;
+  color: var(--ge-error);
+}
+
+.ge-submit-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 24px;
+  color: currentColor;
+}
+
+.ge-submit-status__spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid color-mix(in srgb, currentColor 22%, transparent);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  animation: ge-spin 0.8s linear infinite;
+}
+
+.ge-submit-status__text {
+  line-height: 1.4;
+}
+
+.ge-turnstile {
+  min-height: 65px;
+}
+
+.ge-turnstile__widget {
+  min-height: 65px;
+}
+
+.ge-form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ge-space-3);
+}
+
+.ge-is-hidden,
+.ge-is-hidden-by-logic {
+  display: none !important;
+}
+
+.ge-button.ge-is-invisible {
+  visibility: hidden;
+}
+
+@keyframes ge-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .ge-application__card {
+    padding: 20px;
+  }
+
+  .ge-field-grid--two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ge-form-actions {
+    flex-direction: column;
+  }
+}

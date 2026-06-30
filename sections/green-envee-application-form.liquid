@@ -1,0 +1,594 @@
+{{ 'green-envee-application-form.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'green-envee-application-form.js' | asset_url }}" defer></script>
+
+{% unless request.design_mode %}
+  <script>
+    if (!document.querySelector('script[data-green-envee-hubspot-tracking]')) {
+      var hubspotTrackingScript = document.createElement('script');
+      hubspotTrackingScript.async = true;
+      hubspotTrackingScript.defer = true;
+      hubspotTrackingScript.dataset.greenEnveeHubspotTracking = 'true';
+      hubspotTrackingScript.src = 'https://js.hs-scripts.com/50831585.js';
+      document.head.appendChild(hubspotTrackingScript);
+    }
+  </script>
+  {% if section.settings.turnstile_site_key != blank %}
+    <script>
+      if (!document.querySelector('script[data-green-envee-turnstile]')) {
+        var turnstileScript = document.createElement('script');
+        turnstileScript.async = true;
+        turnstileScript.defer = true;
+        turnstileScript.dataset.greenEnveeTurnstile = 'true';
+        turnstileScript.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+        document.head.appendChild(turnstileScript);
+      }
+    </script>
+  {% endif %}
+{% endunless %}
+
+<section
+  class="ge-application{% if request.design_mode %} ge-application--design-mode{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-design-mode="{{ request.design_mode }}"
+>
+  <div
+    class="ge-application__shell"
+    style="max-width: {{ section.settings.max_width }}px;"
+  >
+    <div class="ge-application__card">
+      <form
+        class="ge-application-form"
+        data-green-envee-form
+        data-api-endpoint="{{ section.settings.api_endpoint | escape }}"
+        data-turnstile-site-key="{{ section.settings.turnstile_site_key | escape }}"
+        novalidate
+      >
+        <section class="ge-application-form__step" data-step-id="step-1">
+          <div class="ge-stack ge-stack--md">
+            <div class="ge-video ge-video--centered">
+              <div class="ge-video__frame">
+                <iframe
+                  src="https://player.vimeo.com/video/1154103491?h=b8f68465ff&title=0&byline=0&portrait=0"
+                  title="Green Envee Brand Story"
+                  loading="lazy"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="ge-field-grid ge-field-grid--single">
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">I'm Applying For:<span class="ge-field__required">*</span></span>
+                <select name="pro_website_account_applied_for" required>
+                  <option value="">Select one</option>
+                  <option value="Professional Account">Professional Account</option>
+                  <option value="School Account">School Account</option>
+                  <option value="Student Account">Student Account</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">What State Are You Located In?<span class="ge-field__required">*</span></span>
+                <select name="hs_state_code" required>
+                  <option value="">Select one</option>
+                  <option value="AL">AL</option>
+                  <option value="AK">AK</option>
+                  <option value="AZ">AZ</option>
+                  <option value="AR">AR</option>
+                  <option value="CA">CA</option>
+                  <option value="CO">CO</option>
+                  <option value="CT">CT</option>
+                  <option value="DE">DE</option>
+                  <option value="FL">FL</option>
+                  <option value="GA">GA</option>
+                  <option value="HI">HI</option>
+                  <option value="ID">ID</option>
+                  <option value="IL">IL</option>
+                  <option value="IN">IN</option>
+                  <option value="IA">IA</option>
+                  <option value="KS">KS</option>
+                  <option value="KY">KY</option>
+                  <option value="LA">LA</option>
+                  <option value="ME">ME</option>
+                  <option value="MD">MD</option>
+                  <option value="MA">MA</option>
+                  <option value="MI">MI</option>
+                  <option value="MN">MN</option>
+                  <option value="MS">MS</option>
+                  <option value="MO">MO</option>
+                  <option value="MT">MT</option>
+                  <option value="NE">NE</option>
+                  <option value="NV">NV</option>
+                  <option value="NH">NH</option>
+                  <option value="NJ">NJ</option>
+                  <option value="NM">NM</option>
+                  <option value="NY">NY</option>
+                  <option value="NC">NC</option>
+                  <option value="ND">ND</option>
+                  <option value="OH">OH</option>
+                  <option value="OK">OK</option>
+                  <option value="OR">OR</option>
+                  <option value="PA">PA</option>
+                  <option value="RI">RI</option>
+                  <option value="SC">SC</option>
+                  <option value="SD">SD</option>
+                  <option value="TN">TN</option>
+                  <option value="TX">TX</option>
+                  <option value="UT">UT</option>
+                  <option value="VT">VT</option>
+                  <option value="VA">VA</option>
+                  <option value="WA">WA</option>
+                  <option value="WV">WV</option>
+                  <option value="WI">WI</option>
+                  <option value="WY">WY</option>
+                  <option value="DC">DC</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="ge-application-form__step" data-step-id="step-2">
+          <div class="ge-stack ge-stack--lg">
+            <div class="ge-video ge-video--centered">
+              <div class="ge-video__frame">
+                <iframe
+                  src="https://player.vimeo.com/video/1154104409?h=6840c108f4&title=0&byline=0&portrait=0"
+                  title="Green Envee Business Account Video"
+                  loading="lazy"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="ge-rich-copy ge-stack ge-stack--sm">
+              <p class="ge-rich-copy__title heading-size-5">Professional Account</p>
+              <p>Owns a spa, medical spa, resort spa or medical practice</p>
+              <p class="ge-rich-copy__title heading-size-5">Professional Account Benefits</p>
+              <ul>
+                <li>Wholesale Pricing</li>
+                <li>Professional-only backbar, peels and treatment protocols</li>
+                <li>Work exclusively with our Business Development Team</li>
+                <li>Access to our educational portal, Green Envee University</li>
+                <li>Free Shipping on all orders over $399</li>
+                <li>Monthly digital marketing plan</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="ge-application-form__step" data-step-id="step-3">
+          <div class="ge-stack ge-stack--lg">
+            <div class="ge-video ge-video--centered">
+              <div class="ge-video__frame">
+                <iframe
+                  src="https://player.vimeo.com/video/1154105119?h=01d08c6153&title=0&byline=0&portrait=0"
+                  title="Green Envee School Account Video"
+                  loading="lazy"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+
+            <div class="ge-rich-copy ge-stack ge-stack--sm">
+              <p class="ge-rich-copy__title heading-size-5">Esthetic School Account</p>
+              <p>Accredited esthetics school program</p>
+              <p class="ge-rich-copy__title heading-size-5">Esthetics School Account Benefits</p>
+              <ul>
+                <li>Exclusive School Pricing</li>
+                <li>Professional-only backbar, peels and treatment protocols</li>
+                <li>Access to our educational portal, Green Envee University</li>
+                <li>Free Shipping on all orders over $150</li>
+                <li>Student Kit Option</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="ge-application-form__step" data-step-id="step-student-video">
+          <div class="ge-stack ge-stack--lg">
+            <div class="ge-video ge-video--centered">
+              <div class="ge-video__frame">
+                <iframe
+                  src="https://player.vimeo.com/video/1154105536?h=0be913723d&title=0&byline=0&portrait=0"
+                  title="Green Envee Student Account Video"
+                  loading="lazy"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="ge-application-form__step" data-step-id="step-4">
+          <div class="ge-stack ge-stack--md">
+            <div class="ge-field-grid ge-field-grid--two">
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full" data-hide-accounts="Student Account">
+                <span class="ge-field__label">Company Name<span class="ge-field__required">*</span></span>
+                <input type="text" name="name" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">First Name<span class="ge-field__required">*</span></span>
+                <input type="text" name="firstname" autocomplete="given-name" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">Last Name<span class="ge-field__required">*</span></span>
+                <input type="text" name="lastname" autocomplete="family-name" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full">
+                <span class="ge-field__label">Business Email Address<span class="ge-field__required">*</span></span>
+                <span class="ge-field__hint">This email will be used as your login email once your account is approved</span>
+                <input type="email" name="email" autocomplete="email" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full">
+                <span class="ge-field__label">Street Address<span class="ge-field__required">*</span></span>
+                <input type="text" name="address" autocomplete="address-line1" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full">
+                <span class="ge-field__label">Street Address Line 2</span>
+                <input type="text" name="address2" autocomplete="address-line2">
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">City<span class="ge-field__required">*</span></span>
+                <input type="text" name="city" autocomplete="address-level2" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">Zip Code<span class="ge-field__required">*</span></span>
+                <input type="text" name="zip" autocomplete="postal-code" required>
+              </label>
+
+              <label class="ge-field-inline ge-col-span-full" data-hide-accounts="Student Account">
+                <input type="checkbox" name="application_address_is_business_address" value="true">
+                <span>The above address is my business address (where clients visit)</span>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full">
+                <span class="ge-field__label">Phone Number<span class="ge-field__required">*</span></span>
+                <input type="tel" name="phone" autocomplete="tel" required>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="ge-application-form__step" data-step-id="step-5">
+          <div class="ge-stack ge-stack--md">
+            <div class="ge-field-grid ge-field-grid--two">
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">Website URL<span class="ge-field__required">*</span></span>
+                <input type="text" name="website" inputmode="url" autocomplete="url" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">Instagram URL</span>
+                <input type="text" name="instagram_url" inputmode="url" autocomplete="url">
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">Role<span class="ge-field__required">*</span></span>
+                <select name="role" required>
+                  <option value="">Select one</option>
+                  <option value="Owner">Owner</option>
+                  <option value="Esthetician">Esthetician</option>
+                  <option value="Manager">Manager</option>
+                  <option value="Director">Director</option>
+                  <option value="Physician/Physician Assistant">Physician/Physician Assistant</option>
+                  <option value="Nurse Practitioner">Nurse Practitioner</option>
+                  <option value="Cosmetologist">Cosmetologist</option>
+                  <option value="School Director / Instructor">School Director / Instructor</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">Type of Business<span class="ge-field__required">*</span></span>
+                <select name="type_of_business" required>
+                  <option value="">Select one</option>
+                  <option value="Spa">Spa</option>
+                  <option value="Medical Spa">Medical Spa</option>
+                  <option value="Hotel/Resort">Hotel/Resort</option>
+                  <option value="Wellness Center">Wellness Center</option>
+                  <option value="Physician's Office">Physician's Office</option>
+                  <option value="School">School</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full">
+                <span class="ge-field__label">What Treatment Lines Are You Currently Using?<span class="ge-field__required">*</span></span>
+                <input type="text" name="what_treatment_lines_are_you_currently_using" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">Number of Locations<span class="ge-field__required">*</span></span>
+                <select name="number_of_locations" required>
+                  <option value="">Select one</option>
+                  <option value="1">1</option>
+                  <option value="2-4">2-4</option>
+                  <option value="5+">5+</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="School Account,Student Account">
+                <span class="ge-field__label">Number of Treatment Rooms<span class="ge-field__required">*</span></span>
+                <select name="number_of_treatment_rooms" required>
+                  <option value="">Select one</option>
+                  <option value="1">1</option>
+                  <option value="2-4">2-4</option>
+                  <option value="5+">5+</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="School Account">
+                <span class="ge-field__label">Number of Licensed Professionals On Staff<span class="ge-field__required">*</span></span>
+                <select name="number_of_licensed_professionals_on_staff" required>
+                  <option value="">Select one</option>
+                  <option value="1">1</option>
+                  <option value="2-3">2-3</option>
+                  <option value="4-5">4-5</option>
+                  <option value="6-9">6-9</option>
+                  <option value="10+">10+</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="School Account">
+                <span class="ge-field__label">Average Number of Clients Per Week<span class="ge-field__required">*</span></span>
+                <select name="average_number_of_clients_per_week" required>
+                  <option value="">Select one</option>
+                  <option value="0-10">0-10</option>
+                  <option value="11-20">11-20</option>
+                  <option value="21-35">21-35</option>
+                  <option value="36-50">36-50</option>
+                  <option value="50+">50+</option>
+                </select>
+              </label>
+
+              <fieldset class="ge-fieldset ge-stack ge-stack--xs ge-col-span-full" data-hide-accounts="School Account,Student Account">
+                <legend class="ge-field__label">What Areas in Your Business Can We Assist as a Professional Partner?</legend>
+                <div class="ge-stack ge-stack--xs">
+                  <label class="ge-field-inline">
+                    <input type="checkbox" name="what_areas_in_your_business_can_we_assist_as_a_professional_partner" value="education">
+                    <span>Education</span>
+                  </label>
+                  <label class="ge-field-inline">
+                    <input type="checkbox" name="what_areas_in_your_business_can_we_assist_as_a_professional_partner" value="retail">
+                    <span>Retail</span>
+                  </label>
+                  <label class="ge-field-inline">
+                    <input type="checkbox" name="what_areas_in_your_business_can_we_assist_as_a_professional_partner" value="treatments">
+                    <span>Treatments</span>
+                  </label>
+                  <label class="ge-field-inline">
+                    <input type="checkbox" name="what_areas_in_your_business_can_we_assist_as_a_professional_partner" value="marketing">
+                    <span>Marketing</span>
+                  </label>
+                  <label class="ge-field-inline">
+                    <input type="checkbox" name="what_areas_in_your_business_can_we_assist_as_a_professional_partner" value="social_media">
+                    <span>Social Media</span>
+                  </label>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </section>
+
+        <section class="ge-application-form__step" data-step-id="step-6">
+          <div class="ge-stack ge-stack--md">
+            <div class="ge-field-grid ge-field-grid--two">
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="Student Account">
+                <span class="ge-field__label">Opening Order Budget<span class="ge-field__required">*</span></span>
+                <select name="opening_order_budget" required>
+                  <option value="">Select one</option>
+                  <option value="$1,500 - $2,499">$1,500 - $2,499</option>
+                  <option value="$2,500 - $3,499">$2,500 - $3,499</option>
+                  <option value="$4,000-$5,999">$4,000-$5,999</option>
+                  <option value="$6,000-$9,999">$6,000-$9,999</option>
+                  <option value="$10K+">$10K+</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs">
+                <span class="ge-field__label">Estimated Date of First Order<span class="ge-field__required">*</span></span>
+                <select name="estimated_date_of_first_order" required>
+                  <option value="">Select one</option>
+                  <option value="ASAP">ASAP</option>
+                  <option value="In 1 Month">In 1 Month</option>
+                  <option value="In 2 Months">In 2 Months</option>
+                  <option value="In 3+ Months">In 3+ Months</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full" data-hide-accounts="Student Account">
+                <span class="ge-field__label">What is Your Goal for Retail Sales This Year?<span class="ge-field__required">*</span></span>
+                <input type="text" name="what_is_your_goal_for_retail_sales_this_year" required>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="ge-application-form__step" data-step-id="step-7">
+          <div class="ge-stack ge-stack--md">
+            <p class="ge-section-note">Single-file uploads only, up to 20 MB per file.</p>
+
+            <div class="ge-field-grid ge-field-grid--two">
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="Student Account">
+                <span class="ge-field__label">Upload Business License</span>
+                <input type="file" name="upload_business_license" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="Student Account">
+                <span class="ge-field__label">Professional License Number<span class="ge-field__required">*</span></span>
+                <input type="text" name="professional_license_number" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="School Account,Student Account">
+                <span class="ge-field__label">Upload Professional License<span class="ge-field__required">*</span></span>
+                <input type="file" name="upload_professional_license" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="School Account,Student Account">
+                <span class="ge-field__label">Professional License Expiration Date<span class="ge-field__required">*</span></span>
+                <input type="date" name="professional_license_expiration_date" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full" data-hide-accounts="Student Account">
+                <span class="ge-field__label">Upload Your State Tax Resale Certificate</span>
+                <span class="ge-field__hint">In order to sell wholesale, we need to have your state's sales tax number on file for your business. Please note that seller's permits or EIN confirmations are not accepted. Please contact your state tax agency if you do not have this information.</span>
+                <input type="file" name="upload_your_state_tax_resale_certificate" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full" data-hide-accounts="Professional Account">
+                <span class="ge-field__label">Upload Proof of Valid/Accredited Esthetic School<span class="ge-field__required">*</span></span>
+                <input type="file" name="upload_proof_of_validaccredited_esthetic_school" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="Professional Account,School Account">
+                <span class="ge-field__label">Upload Copy of Apprentice License or Proof of Enrollment</span>
+                <input type="file" name="upload_copy_of_apprentice_license_or_proof_of_enrollment" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="Professional Account,School Account">
+                <span class="ge-field__label">Expiration Date of Apprentice License<span class="ge-field__required">*</span></span>
+                <input type="date" name="expiration_date_of_apprentice_license" required>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs ge-col-span-full" data-hide-accounts="Professional Account,School Account">
+                <span class="ge-field__label">Graduation date<span class="ge-field__required">*</span></span>
+                <input type="date" name="graduation_date" required>
+              </label>
+
+              <fieldset class="ge-fieldset ge-stack ge-stack--xs ge-col-span-full" data-hide-accounts="Professional Account,School Account">
+                <legend class="ge-field__label">I Understand As An Esthetic Student<span class="ge-field__required">*</span></legend>
+                <label class="ge-field-inline">
+                  <input type="checkbox" name="i_understand_as_an_esthetic_student" value="I understand" required>
+                  <span>I understand my account status depends on current student eligibility documentation.</span>
+                </label>
+              </fieldset>
+            </div>
+          </div>
+        </section>
+
+        <section class="ge-application-form__step" data-step-id="step-8">
+          <div class="ge-stack ge-stack--md">
+            <div class="ge-field-grid ge-field-grid--two">
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="Student Account">
+                <span class="ge-field__label">How Did You Hear About Us</span>
+                <select name="how_did_you_hear_about_us_june26">
+                  <option value="">Select one</option>
+                  <option value="referred_by_a_green_envee_partner">Referred by a Green Envee Partner</option>
+                  <option value="referred_by_a_green_envee_sales_representative">Referred by a Green Envee Sales Representative</option>
+                  <option value="social_media">Social Media</option>
+                  <option value="google_search">Google Search</option>
+                  <option value="green_envee_website">Green Envee Website</option>
+                  <option value="industry_publication__media_feature">Industry Publication / Media Feature</option>
+                  <option value="influencer">Influencer</option>
+                  <option value="trade_show__industry_event">Trade Show / Industry Event</option>
+                  <option value="online_advertisement">Online Advertisement</option>
+                  <option value="podcast_facial_finance_by_green_envee">Podcast (Facial Finance by Green Envee)</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+
+              <label class="ge-field ge-stack ge-stack--xs" data-hide-accounts="Student Account">
+                <span class="ge-field__label">Referred By</span>
+                <input type="text" name="referred_by">
+              </label>
+
+              <fieldset class="ge-fieldset ge-stack ge-stack--xs ge-col-span-full">
+                <legend class="ge-field__label">By applying to The Envee Collective Pro Partnership:<span class="ge-field__required">*</span></legend>
+                <label class="ge-field-inline">
+                  <input type="checkbox" name="by_applying_to_the_envee_collective_pro_partnership" value="I agree to receive marketing emails" required>
+                  <span>I agree to receive marketing emails</span>
+                </label>
+              </fieldset>
+
+              <label class="ge-field-inline ge-col-span-full">
+                <input type="checkbox" name="i_have_read_and_agree_to_the_policies__guidelines" value="true" required>
+                <span>I have read and agree to the <a href="https://view.publitas.com/green-envee-organics/8-5-x-11-policies-guidelines/page/1" target="_blank" rel="noopener">Policies + Guidelines</a><span class="ge-field__required">*</span></span>
+              </label>
+
+              <label class="ge-field-inline ge-col-span-full">
+                <input type="checkbox" name="i_have_read_and_agree_to_the_skincare_treatment_guide" value="true" required>
+                <span>I have read and agree to the <a href="https://view.publitas.com/green-envee-organics/skincare-treatment-agreement/page/1" target="_blank" rel="noopener">Skincare Treatment Guide</a><span class="ge-field__required">*</span></span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <div class="ge-stack ge-stack--sm">
+          <div
+            class="ge-progress"
+            aria-label="Application progress"
+            aria-live="polite"
+            aria-valuemin="1"
+            aria-valuemax="8"
+            aria-valuenow="1"
+            role="progressbar"
+          >
+            <div class="ge-progress__bar" data-progress-bar></div>
+          </div>
+
+          <div class="ge-form-feedback" data-form-feedback aria-live="polite"></div>
+
+          <div class="ge-submit-status ge-is-hidden" data-submit-status aria-live="polite">
+            <span class="ge-submit-status__spinner" aria-hidden="true"></span>
+            <span class="ge-submit-status__text">Uploading files and submitting application...</span>
+          </div>
+
+          <div class="ge-turnstile ge-is-hidden" data-turnstile-wrapper>
+            <div class="ge-turnstile__widget" data-turnstile-container></div>
+          </div>
+
+          <div class="ge-form-actions">
+            <button type="button" class="ge-button btn--neutral btn--long btn--outline" data-back-button>Previous</button>
+            <button type="button" class="ge-button btn--neutral btn--long btn--outline" data-next-button>Next</button>
+            <button type="submit" class="ge-button btn--neutral btn--long btn--outline ge-is-hidden" data-submit-button>Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "GE Application Form",
+  "settings": [
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 640,
+      "max": 1400,
+      "step": 20,
+      "unit": "px",
+      "default": 1120
+    },
+    {
+      "type": "text",
+      "id": "api_endpoint",
+      "label": "API endpoint",
+      "default": "https://green-envee-integrations.vercel.app/api/hubspot/application-submit"
+    },
+    {
+      "type": "text",
+      "id": "turnstile_site_key",
+      "label": "Turnstile site key",
+    }
+  ],
+  "presets": [
+    {
+      "name": "GE Application Form"
+    }
+  ]
+}
+{% endschema %}

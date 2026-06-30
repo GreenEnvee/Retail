@@ -1,0 +1,16 @@
+[environments.development]
+store = "green-envee-retail.myshopify.com"
+theme = "182372958489"
+
+[environments.staging]
+store = "green-envee-retail.myshopify.com"
+theme = "187391115545"
+
+[environments.production]
+store = "green-envee-retail.myshopify.com"
+theme = "178420613401"
+ignore = [
+  "config/settings_data.json",
+  "templates/*.json",
+  "sections/*.json",
+]
