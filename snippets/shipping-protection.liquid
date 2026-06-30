@@ -1,0 +1,22 @@
+{%- liquid
+  assign shipping_protection_enabled = settings.shipping_protection_enable
+  assign shipping_protection_variant_id = settings.shipping_protection_variant_id | strip
+  assign shipping_protection_label = settings.shipping_protection_label | strip
+  assign shipping_protection_helper_text = settings.shipping_protection_helper_text | strip
+-%}
+
+{%- if shipping_protection_enabled and shipping_protection_variant_id != blank and shipping_protection_label != blank -%}
+  {%- assign shipping_protection_input_id = 'shipping-protection-' | append: location | append: '-' | append: section.id -%}
+  <div class="shipping-protection cart__message cart__message--custom" data-shipping-protection data-shipping-protection-location="{{ location }}" aria-live="polite">
+    <label class="shipping-protection__label" for="{{ shipping_protection_input_id }}">
+      <input
+        id="{{ shipping_protection_input_id }}"
+        type="checkbox"
+        data-shipping-protection-toggle>
+      <span>{{ shipping_protection_label }}</span>
+    </label>
+    {%- if shipping_protection_helper_text != blank -%}
+      <p class="body-size-3 shipping-protection__helper">{{ shipping_protection_helper_text }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
