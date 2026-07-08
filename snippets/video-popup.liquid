@@ -14,38 +14,52 @@
 
 {%- assign video_type = video.type -%}
 {%- assign video_id = video.id -%}
+{%- assign video_url = video | append: '' -%}
+{%- assign video_hash = '' -%}
 {%- assign is_shopify_video = false -%}
-{%- assign external_video_url = '' -%}
 
 {%- if video.sources != blank or video.media_type == 'video' -%}
-  {%- assign is_shopify_video = true -%}
   {%- assign video_type = 'shopify' -%}
+  {%- assign is_shopify_video = true -%}
 {%- endif -%}
 
 {% comment %}
-  If video is a string, not an object, set type and id manually
+  Parse external video URLs manually so unlisted Vimeo links keep their privacy hash.
 {% endcomment %}
-{%- unless video_id or is_shopify_video -%}
+{%- unless is_shopify_video -%}
   {% comment %}
     Infer video_type from url text
   {% endcomment %}
-  {%- assign video_type = "null" -%}
-  {%- if video contains "vimeo.com" -%}
+  {%- if video_url contains "vimeo.com" -%}
     {%- assign video_type = "vimeo" -%}
-  {%- elsif video contains "youtube.com" -%}
+  {%- elsif video_url contains "youtube.com" -%}
     {%- assign video_type = "youtube" -%}
-  {%- elsif video contains "youtu.be" -%}
+  {%- elsif video_url contains "youtu.be" -%}
     {%- assign video_type = "youtube" -%}
     {%- assign youtubeShortlink = true -%}
   {%- endif -%}
   {% comment %}
     Extract video ID from link url
   {% endcomment %}
-  {%- assign link_array = video | split: '/' -%}
+  {%- assign link_array = video_url | split: '/' -%}
   {%- assign id_with_params = link_array | last -%}
-  {%- if video_type == "vimeo" or youtubeShortlink -%}
+  {%- if video_type == "vimeo" -%}
     {% comment %}
       https://vimeo.com/[ID]?foo=bar&baz=boo
+      https://vimeo.com/[ID]/[HASH]
+    {% endcomment %}
+    {%- assign vimeo_parts = video_url | split: 'vimeo.com/' -%}
+    {%- assign vimeo_path = vimeo_parts | last | split: '?' | first -%}
+    {%- assign vimeo_segments = vimeo_path | split: '/' -%}
+    {%- assign video_id = vimeo_segments | first -%}
+    {%- assign query_hash = video_url | split: '?h=' | last -%}
+    {%- if video_url contains '?h=' -%}
+      {%- assign video_hash = query_hash | split: '&' | first -%}
+    {%- elsif vimeo_segments.size > 1 -%}
+      {%- assign video_hash = vimeo_segments[1] -%}
+    {%- endif -%}
+  {%- elsif youtubeShortlink -%}
+    {% comment %}
       https://youtu.be/[ID]?foo=bar&baz=boo
     {% endcomment %}
     {%- assign starts_with_id = id_with_params | split: '?' -%}
@@ -62,10 +76,13 @@
   {%- endif -%}
 {%- endunless -%}
 
-{%- if video_type == 'youtube' and video_id != blank -%}
-  {%- assign external_video_url = 'https://www.youtube.com/embed/' | append: video_id | append: '?autoplay=1&playsinline=1&rel=0&modestbranding=1' -%}
-{%- elsif video_type == 'vimeo' and video_id != blank -%}
-  {%- assign external_video_url = 'https://player.vimeo.com/video/' | append: video_id | append: '?autoplay=1&playsinline=1' -%}
+{%- if is_shopify_video and video_id == blank -%}
+  {%- assign video_id = unique | append: '-shopify-video' -%}
+{%- endif -%}
+
+{%- assign player_key = video_id | append: '-' | append: unique -%}
+{%- if video_hash != blank -%}
+  {%- assign player_key = video_id | append: '-' | append: video_hash | append: '-' | append: unique -%}
 {%- endif -%}
 
 {%- assign button_class = "play__button" -%}
@@ -81,13 +98,19 @@
   data-unique="{{ unique }}"
   data-video-type="{{ video_type }}"
   data-video-id="{{ video_id }}"
+  {% if video_hash != blank %}
+    data-video-hash="{{ video_hash }}"
+  {% endif %}
+  {% unless is_shopify_video %}
+    data-video-url="{{ video_url }}"
+  {% endunless %}
   {% if pause != 'null' %}
     data-pause="{{ pause }}"
   {% endif %}
   aria-label="{{ button_label }}">
   {% render 'icon-fill-play' %}
   {% if text and text != '' %}
-    <p class="pt-r4">{{ text }}</p>
+    <p>{{ text }}</p>
   {%- else -%}
     <span class="visually-hidden">{{ 'general.accessibility.play' | t }}</span>
   {%- endif -%}
@@ -101,24 +124,18 @@
       aria-modal="true"
       aria-label="{{ 'general.accessibility.play' | t }}">
       <div class="rte__video-wrapper">
-        <div data-player="{{ video_id }}-{{ unique }}">
-          {% if is_shopify_video %}
-            {{ video | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1600x', class: 'popup-video__local', data-popup-local-video: '' }}
-          {% elsif external_video_url != blank %}
-            <iframe
-              data-popup-iframe
-              data-src="{{ external_video_url }}"
-              src=""
-              frameborder="0"
-              allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-              allowfullscreen
-              title="{{ button_label | escape }}">
-            </iframe>
-          {% else %}
+        {%- if is_shopify_video -%}
+          {{ video | video_tag: controls: true, playsinline: true, preload: 'metadata', image_size: '1200x', class: 'modal__video', data-modal-video: '' }}
+        {%- else -%}
+          <div data-player="{{ player_key }}">
             <div data-video-id="{{ video_id }}"></div>
+            {% if video_hash != blank %}
+              <div data-video-hash="{{ video_hash }}"></div>
+            {% endif %}
+            <div data-video-url="{{ video_url }}"></div>
             <div data-replace></div>
-          {% endif %}
-        </div>
+          </div>
+        {%- endif -%}
       </div>
     </div>
   </div>

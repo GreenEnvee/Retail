@@ -277,27 +277,79 @@
           {% when 'video' %}
             {%- liquid
               assign use_background_video = block.settings.enable_background_video
+              assign background_video = block.settings.video_bg
+              assign background_video_url = block.settings.video_bg_url
               assign popup_video = block.settings.popup_video
               assign popup_video_url = block.settings.video_link
-              assign has_popup_video = false
+              assign has_dedicated_popup_video = false
               if popup_video != blank or popup_video_url != blank
+                assign has_dedicated_popup_video = true
+              endif
+              assign has_background_video_source = false
+              if background_video != blank or background_video_url != blank
+                assign has_background_video_source = true
+              endif
+              assign has_popup_video = false
+              if has_dedicated_popup_video or has_background_video_source
                 assign has_popup_video = true
               endif
 
-              assign background_video_type = block.settings.video_bg_url.type
-              assign background_video_id = block.settings.video_bg_url.id
+              assign video_wh_ratio = background_video.aspect_ratio | default: block.settings.image.aspect_ratio
+              if video_wh_ratio == blank and background_video_url != blank
+                assign video_wh_ratio = 1.7777777778
+              endif
+              if video_wh_ratio == blank
+                assign video_wh_ratio = 1
+              endif
+
+              assign background_video_type = background_video_url.type
+              assign background_video_id = background_video_url.id
+              assign background_video_url_string = background_video_url | append: ''
+              assign background_video_hash = ''
               assign background_embed_url = ''
+              assign inline_background_embed_url = ''
+              assign standard_background_embed_url = ''
+              if background_video_type == 'vimeo' and background_video_url_string contains 'vimeo.com/'
+                assign vimeo_parts = background_video_url_string | split: 'vimeo.com/'
+                assign vimeo_path = vimeo_parts | last | split: '?' | first
+                assign vimeo_segments = vimeo_path | split: '/'
+                if vimeo_segments.size > 1
+                  assign background_video_hash = vimeo_segments[1]
+                endif
+                if background_video_url_string contains '?h='
+                  assign background_video_hash = background_video_url_string | split: '?h=' | last | split: '&' | first
+                endif
+              endif
               if background_video_type == 'youtube' and background_video_id != blank
-                assign background_embed_url = 'https://www.youtube.com/embed/' | append: background_video_id | append: '?autoplay=1&mute=1&loop=1&playlist=' | append: background_video_id | append: '&controls=0&showinfo=0&modestbranding=1&playsinline=1&rel=0'
+                assign background_embed_url = 'https://www.youtube.com/embed/' | append: background_video_id | append: '?autoplay=1&mute=1&controls=0&loop=1&playlist=' | append: background_video_id | append: '&playsinline=1&enablejsapi=1&rel=0&modestbranding=1'
+                assign inline_background_embed_url = 'https://www.youtube.com/embed/' | append: background_video_id | append: '?autoplay=1&mute=0&controls=1&playsinline=1&enablejsapi=1&rel=0&modestbranding=1'
+                assign standard_background_embed_url = 'https://www.youtube.com/embed/' | append: background_video_id | append: '?autoplay=0&mute=0&controls=1&playsinline=1&enablejsapi=1&rel=0&modestbranding=1'
               elsif background_video_type == 'vimeo' and background_video_id != blank
-                assign background_embed_url = 'https://player.vimeo.com/video/' | append: background_video_id | append: '?autoplay=1&muted=1&loop=1&background=1&playsinline=1'
+                assign background_embed_url = 'https://player.vimeo.com/video/' | append: background_video_id
+                assign inline_background_embed_url = 'https://player.vimeo.com/video/' | append: background_video_id
+                assign standard_background_embed_url = 'https://player.vimeo.com/video/' | append: background_video_id
+                if background_video_hash != blank
+                  assign background_embed_url = background_embed_url | append: '?h=' | append: background_video_hash | append: '&autoplay=1&muted=1&loop=1&background=1&autopause=0&api=1'
+                  assign inline_background_embed_url = inline_background_embed_url | append: '?h=' | append: background_video_hash | append: '&autoplay=1&muted=0&loop=0&autopause=1&api=1&title=0&byline=0&portrait=0'
+                  assign standard_background_embed_url = standard_background_embed_url | append: '?h=' | append: background_video_hash | append: '&autoplay=0&muted=0&loop=0&autopause=1&api=1&title=0&byline=0&portrait=0'
+                else
+                  assign background_embed_url = background_embed_url | append: '?autoplay=1&muted=1&loop=1&background=1&autopause=0&api=1'
+                  assign inline_background_embed_url = inline_background_embed_url | append: '?autoplay=1&muted=0&loop=0&autopause=1&api=1&title=0&byline=0&portrait=0'
+                  assign standard_background_embed_url = standard_background_embed_url | append: '?autoplay=0&muted=0&loop=0&autopause=1&api=1&title=0&byline=0&portrait=0'
+                endif
+              endif
+              assign cover_image = block.settings.image
+              if cover_image == blank and background_video != blank
+                assign cover_image = background_video.preview_image
+              endif
+              if cover_image == blank and popup_video != blank
+                assign cover_image = popup_video.preview_image
               endif
             -%}
             <div class="brick__block" data-overflow-frame {{ block.shopify_attributes }}>
               <div
-                class="brick__block__video aspect-[--wh-ratio] {{ block.settings.text_color }} {{ section.settings.height }}"
+                class="brick__block__video {% if has_background_video_source and use_background_video %}brick__block__video--inline-player{% endif %} aspect-[--wh-ratio] {{ block.settings.text_color }} {{ section.settings.height }}"
                 {% if section.settings.height == 'use_image' %}
-                  {%- assign video_wh_ratio = block.settings.video_bg.aspect_ratio | default: block.settings.image.aspect_ratio | default: 1 -%}
                   style="--wh-ratio: {{ video_wh_ratio }};"
                 {% endif %}
               >
@@ -346,10 +398,30 @@
                               data-aos-anchor="{{ animation_anchor }}"
                               data-aos-order="5"
                               style="--icon-play-size: {{ block.settings.popup_button_width }}px;">
-                              {% if popup_video != blank %}
-                                {% render 'video-popup', video: popup_video, unique: block.id, text: block.settings.popup_text %}
+                              {% if has_dedicated_popup_video %}
+                                {% if popup_video != blank %}
+                                  {% render 'video-popup', video: popup_video, unique: block.id, text: block.settings.popup_text %}
+                                {% else %}
+                                  {% render 'video-popup', video: popup_video_url, unique: block.id, text: block.settings.popup_text %}
+                                {% endif %}
                               {% else %}
-                                {% render 'video-popup', video: popup_video_url, unique: block.id, text: block.settings.popup_text %}
+                                {%- assign button_class = 'play__button' -%}
+                                {%- assign button_label = block.settings.popup_text | default: 'general.accessibility.play' | t -%}
+                                {% if block.settings.popup_text != blank %}
+                                  {%- assign button_class = 'play__button--text' -%}
+                                {% endif %}
+                                <button class="btn--play {{ button_class }}"
+                                  data-inline-video-trigger
+                                  data-inline-video-target="{{ block.id }}"
+                                  aria-pressed="false"
+                                  aria-label="{{ button_label }}">
+                                  {% render 'icon-fill-play' %}
+                                  {% if block.settings.popup_text != blank %}
+                                    <p>{{ block.settings.popup_text }}</p>
+                                  {% else %}
+                                    <span class="visually-hidden">{{ 'general.accessibility.play' | t }}</span>
+                                  {% endif %}
+                                </button>
                               {% endif %}
                             </div>
                           {% endif %}
@@ -360,50 +432,42 @@
 
                   <div class="image-overlay" style="--bg:{{ block.settings.overlay_color }}; opacity:{{ block.settings.overlay_opacity | times: 0.01 }};"></div>
 
-                  {%- if block.settings.video_bg != nil -%}
-                    <div class="video-autoplay-wrapper">
-                      {%- assign video_styles = block.settings.object_position | replace: '-', ' ' | prepend: 'object-position: ' -%}
-                      {{ block.settings.video_bg | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, image_size: '1200x', style: video_styles, data-video-autoplay: '' }}
+                  {%- if has_background_video_source -%}
+                    <div class="video-cover-wrapper">
+                      {% if cover_image != blank %}
+                        {%- capture srcset -%}
+                          {%- render 'image-grid-srcset',
+                            image: cover_image,
+                            columns_desktop: 2,
+                            columns_tablet: 2,
+                            columns_mobile: 1.0,
+                            section_width: section.settings.width
+                          %}
+                        {%- endcapture -%}
+
+                        {% render 'image-parallax', img_object: cover_image, frame_height_class: section.settings.height, srcset: srcset, sizes: video_block_sizes, preload: preload, loading: loading, fetchpriority: fetchpriority %}
+                      {% endif %}
                     </div>
-                  {%- elsif background_embed_url != blank -%}
-                    <div class="video-autoplay-wrapper">
-                      <iframe
-                        src="{{ background_embed_url }}"
-                        title="{{ block.settings.title | default: 'Background video' | escape }}"
-                        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-                        allowfullscreen>
-                      </iframe>
+                    <div class="video-inline-wrapper{% if background_video_url != blank %} video-inline-wrapper--embed{% endif %}" data-inline-video="{{ block.id }}">
+                      {%- if background_video != blank -%}
+                        {%- assign video_styles = block.settings.object_position | replace: '-', ' ' | prepend: 'object-position: ' -%}
+                        {{ background_video | video_tag: controls: true, preload: 'metadata', playsinline: true, image_size: '1200x', style: video_styles, class: 'video-inline-media', data-inline-video-media: '' }}
+                      {%- elsif inline_background_embed_url != blank -%}
+                        <iframe
+                          title="{{ block.settings.title | default: 'Background video' | escape }}"
+                          allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                          allowfullscreen
+                          data-inline-video-media
+                          data-inline-video-src="{{ inline_background_embed_url }}"
+                          data-video-provider="{{ background_video_type }}">
+                        </iframe>
+                      {%- endif -%}
                     </div>
                   {%- else -%}
-                    {%- capture srcset -%}
-                      {%- render 'image-grid-srcset',
-                        image: block.settings.image.src,
-                        columns_desktop: 2,
-                        columns_tablet: 2,
-                        columns_mobile: 1.0,
-                        section_width: section.settings.width
-                      %}
-                    {%- endcapture -%}
-
-                    {% render 'image-parallax', img_object: block.settings.image.src, frame_height_class: section.settings.height, srcset: srcset, sizes: video_block_sizes, preload: preload, loading: loading, fetchpriority: fetchpriority %}
-                  {% endif %}
-                {% else %}
-                  <div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; padding:24px;">
-                    {%- if block.settings.video_bg != nil -%}
-                      {{ block.settings.video_bg | video_tag: controls: true, preload: 'metadata', image_size: '1200x', playsinline: true, class: 'block w-full h-auto' }}
-                    {%- elsif background_embed_url != blank -%}
-                      <div class="rte__video-wrapper" style="width:100%; height:100%;">
-                        <iframe
-                          src="{{ background_embed_url }}"
-                          title="{{ block.settings.title | default: 'Video' | escape }}"
-                          allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
-                          allowfullscreen>
-                        </iframe>
-                      </div>
-                    {%- else -%}
+                    {% if cover_image != blank %}
                       {%- capture srcset -%}
                         {%- render 'image-grid-srcset',
-                          image: block.settings.image.src,
+                          image: cover_image,
                           columns_desktop: 2,
                           columns_tablet: 2,
                           columns_mobile: 1.0,
@@ -411,7 +475,36 @@
                         %}
                       {%- endcapture -%}
 
-                      {% render 'image-parallax', img_object: block.settings.image.src, frame_height_class: section.settings.height, srcset: srcset, sizes: video_block_sizes, preload: preload, loading: loading, fetchpriority: fetchpriority %}
+                      {% render 'image-parallax', img_object: cover_image, frame_height_class: section.settings.height, srcset: srcset, sizes: video_block_sizes, preload: preload, loading: loading, fetchpriority: fetchpriority %}
+                    {% endif %}
+                  {% endif %}
+                {% else %}
+                  <div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; padding:24px;">
+                    {%- if background_video != blank -%}
+                      {{ background_video | video_tag: controls: true, preload: 'metadata', image_size: '1200x', playsinline: true, class: 'block w-full h-auto' }}
+                    {%- elsif standard_background_embed_url != blank -%}
+                      <div class="rte__video-wrapper" style="width:100%; height:100%;">
+                        <iframe
+                          src="{{ standard_background_embed_url }}"
+                          title="{{ block.settings.title | default: 'Video' | escape }}"
+                          allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                          allowfullscreen>
+                        </iframe>
+                      </div>
+                    {%- else -%}
+                      {% if cover_image != blank %}
+                        {%- capture srcset -%}
+                          {%- render 'image-grid-srcset',
+                            image: cover_image,
+                            columns_desktop: 2,
+                            columns_tablet: 2,
+                            columns_mobile: 1.0,
+                            section_width: section.settings.width
+                          %}
+                        {%- endcapture -%}
+
+                        {% render 'image-parallax', img_object: cover_image, frame_height_class: section.settings.height, srcset: srcset, sizes: video_block_sizes, preload: preload, loading: loading, fetchpriority: fetchpriority %}
+                      {% endif %}
                     {% endif %}
                   </div>
                 {% endif %}
@@ -1114,7 +1207,7 @@
         "id": "video_bg_url",
         "label": "Background video link",
         "accept": ["youtube", "vimeo"],
-        "info": "Streaming background video source from YouTube or Vimeo."
+        "info": "Used when no Shopify-hosted background video is selected."
       },
       {
         "type": "checkbox",
@@ -1158,7 +1251,7 @@
         "id": "video_link",
         "label": "Popup video link",
         "accept": ["youtube", "vimeo"],
-        "info": "Streaming video source from YouTube or Vimeo.",
+        "info": "Used when no Shopify-hosted popup video is selected.",
         "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
       },
       {

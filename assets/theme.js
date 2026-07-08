@@ -5620,7 +5620,9 @@
     };
     const selectors$A = {
         player: 'iframe, [data-replace]',
-        videoId: 'data-video-id'
+        videoId: 'data-video-id',
+        videoHash: 'data-video-hash',
+        videoUrl: 'data-video-url'
     };
     function embedVimeo(uniqueKey, options) {
         const playerOptions = {
@@ -5630,16 +5632,25 @@
         const playerWrapper = document.querySelector(`[data-player="${uniqueKey}"]`);
         const playerElement = playerWrapper.querySelector(selectors$A.player);
         const vimeoKey = playerWrapper.querySelector(`[${selectors$A.videoId}]`).getAttribute(selectors$A.videoId);
+        const vimeoHashNode = playerWrapper.querySelector(`[${selectors$A.videoHash}]`);
+        const vimeoUrlNode = playerWrapper.querySelector(`[${selectors$A.videoUrl}]`);
+        const vimeoHash = vimeoHashNode ? vimeoHashNode.getAttribute(selectors$A.videoHash) : '';
+        const vimeoUrl = vimeoUrlNode ? vimeoUrlNode.getAttribute(selectors$A.videoUrl) : '';
         const loadedPromise = loadScript({
             url: 'https://player.vimeo.com/api/player.js'
         });
         const vimeoSelector = `select-${uniqueKey}`;
         playerElement.setAttribute('id', vimeoSelector);
         const returnPlayer = loadedPromise.then(()=>{
-            const player = new window.Vimeo.Player(vimeoSelector, {
-                ...playerOptions,
-                id: vimeoKey
-            });
+            const vimeoConfig = {
+                ...playerOptions
+            };
+            if (vimeoUrl && vimeoHash) {
+                vimeoConfig.url = vimeoUrl;
+            } else {
+                vimeoConfig.id = vimeoKey;
+            }
+            const player = new window.Vimeo.Player(vimeoSelector, vimeoConfig);
             // We need these play/pause events because the Vimeo video does not emit the regular play/pause events on Mobile
             player.on('play', ()=>{
                 playerWrapper.dispatchEvent(new CustomEvent('play'));
@@ -5685,25 +5696,133 @@
     const selectors$z = {
         videoPopup: '[data-video-popup]',
         videoAutoplay: '[data-video-autoplay]',
+        backgroundVideoEmbed: '[data-video-background-embed]',
+        inlineVideoTrigger: '[data-inline-video-trigger]',
+        inlineVideoContainer: '.brick__block__video--inline-player',
+        inlineVideoHolder: '[data-inline-video]',
+        inlineVideoMedia: '[data-inline-video-media]',
         attrUnique: 'data-unique',
         attrVideoId: 'data-video-id',
+        attrVideoHash: 'data-video-hash',
         attrVideoType: 'data-video-type',
         attrPlayer: 'data-player',
-        popupIframe: '[data-popup-iframe]',
-        popupLocalVideo: '[data-popup-local-video]'
+        modalVideo: '[data-modal-video]',
+        attrInlineVideoTarget: 'data-inline-video-target',
+        attrInlineVideoSrc: 'data-inline-video-src'
     };
+    const youtubeCommand = (action)=>JSON.stringify({
+            event: 'command',
+            func: action === 'play' ? 'playVideo' : 'pauseVideo',
+            args: []
+        });
+    const vimeoCommand = (action)=>JSON.stringify({
+            method: action
+        });
+    function controlEmbeddedVideo(element, action) {
+        if (!element || !element.contentWindow) return;
+        const provider = element.getAttribute('data-video-provider');
+        if (provider === 'youtube') {
+            element.contentWindow.postMessage(youtubeCommand(action), '*');
+        } else if (provider === 'vimeo') {
+            element.contentWindow.postMessage(vimeoCommand(action), '*');
+        }
+    }
     let PopupVideo = class PopupVideo {
+        toggleInlineVideoState(trigger, isPlaying) {
+            const videoContainer = trigger.closest('.brick__block__video');
+            if (!videoContainer) return;
+            videoContainer.classList.toggle('is-playing-inline-video', isPlaying);
+            trigger.classList.toggle('is-paused', !isPlaying);
+            trigger.setAttribute('aria-pressed', isPlaying ? 'true' : 'false');
+        }
+        playInlineVideo(trigger) {
+            const target = trigger.getAttribute(selectors$z.attrInlineVideoTarget);
+            const holder = this.container.querySelector(`[data-inline-video="${target}"]`);
+            const videoContainer = trigger.closest('.brick__block__video');
+            if (!holder || !videoContainer) return;
+            const media = holder.querySelector(selectors$z.inlineVideoMedia);
+            if (!media) return;
+            const isActive = videoContainer.classList.contains('is-playing-inline-video');
+            if (isActive) {
+                if (media.tagName === 'IFRAME') {
+                    controlEmbeddedVideo(media, 'pause');
+                } else if (typeof media.pause === 'function') {
+                    media.pause();
+                }
+                this.toggleInlineVideoState(trigger, false);
+                return;
+            }
+            this.toggleInlineVideoState(trigger, true);
+            if (media.tagName === 'IFRAME') {
+                const source = media.getAttribute(selectors$z.attrInlineVideoSrc);
+                if (source && media.getAttribute('src') !== source) {
+                    media.setAttribute('src', source);
+                } else {
+                    controlEmbeddedVideo(media, 'play');
+                }
+            } else if (typeof media.play === 'function') {
+                media.muted = false;
+                const playPromise = media.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(()=>{});
+                }
+                media.addEventListener('pause', ()=>{
+                    this.toggleInlineVideoState(trigger, false);
+                }, {
+                    once: true
+                });
+            }
+        }
+        pauseBackgroundMedia() {
+            this.backgroundMedia.forEach((media)=>{
+                if (typeof media.pause === 'function') {
+                    media.pause();
+                } else {
+                    controlEmbeddedVideo(media, 'pause');
+                }
+            });
+        }
+        playBackgroundMedia() {
+            this.backgroundMedia.forEach((media)=>{
+                if (typeof media.play === 'function') {
+                    const playPromise = media.play();
+                    if (playPromise && typeof playPromise.catch === 'function') {
+                        playPromise.catch(()=>{});
+                    }
+                } else {
+                    controlEmbeddedVideo(media, 'play');
+                }
+            });
+        }
         init() {
+            this.inlineTriggers.forEach((trigger)=>{
+                trigger.addEventListener('click', (event)=>{
+                    event.preventDefault();
+                    event.stopPropagation();
+                    this.playInlineVideo(trigger);
+                });
+            });
+            this.inlineVideoContainers.forEach((videoContainer)=>{
+                const trigger = videoContainer.querySelector(selectors$z.inlineVideoTrigger);
+                if (!trigger) return;
+                videoContainer.addEventListener('click', (event)=>{
+                    const interactiveTarget = event.target.closest('a, button, input, textarea, select, summary');
+                    if (interactiveTarget && interactiveTarget !== trigger && !trigger.contains(interactiveTarget)) {
+                        return;
+                    }
+                    event.preventDefault();
+                    this.playInlineVideo(trigger);
+                });
+            });
             this.triggers.forEach((trigger)=>{
                 const unique = trigger.getAttribute(selectors$z.attrUnique);
                 const video = trigger.getAttribute(selectors$z.attrVideoId);
+                const hash = trigger.getAttribute(selectors$z.attrVideoHash);
                 const type = trigger.getAttribute(selectors$z.attrVideoType);
                 // Find the modal body, which has been moved to the document root
                 // and append a unique ID for youtube and vimeo to init players.
-                const uniqueKey = `${video}-${unique}`;
+                const uniqueKey = hash ? `${video}-${hash}-${unique}` : `${video}-${unique}`;
                 const player = document.querySelector(`[${selectors$z.attrPlayer}="${uniqueKey}"]`);
-                const iframe = player ? player.querySelector(selectors$z.popupIframe) : null;
-                const localVideo = player ? player.querySelector(selectors$z.popupLocalVideo) : null;
                 // Modal Event Logic:
                 // When a modal opens it creates and plays the video
                 // When a modal opens it pauses background videos in this section
@@ -5711,50 +5830,47 @@
                 // When a modal closes it destroys the player
                 // When a modal closes it plays background videos anywhere on the page
                 MicroModal.init({
-                    onShow: ()=>{
-                        if (this.backgroundVideo && typeof this.backgroundVideo.pause === 'function') {
-                            this.backgroundVideo.pause();
+                    onShow: (modal)=>{
+                        this.pauseBackgroundMedia();
+                        let playerPromise = Promise.resolve();
+                        if (type === 'youtube') {
+                            playerPromise = embedYoutube(uniqueKey);
+                        } else if (type === 'vimeo') {
+                            playerPromise = embedVimeo(uniqueKey);
+                        } else if (type === 'shopify') {
+                            const modalVideo = modal.querySelector(selectors$z.modalVideo);
+                            if (modalVideo) {
+                                try {
+                                    modalVideo.currentTime = 0;
+                                } catch (e) {
+                                    console.warn(e);
+                                }
+                                playerPromise = Promise.resolve(modalVideo.play()).catch(()=>{});
+                            }
                         }
-                        if (iframe) {
-                            if (!iframe.src) {
-                                iframe.src = iframe.dataset.src || '';
-                            }
-                        } else if (localVideo) {
-                            try {
-                                localVideo.currentTime = 0;
-                                localVideo.play();
-                            } catch (e) {
-                                console.warn(e);
-                            }
-                        } else {
-                            let playerPromise = {};
-                            if (type === 'youtube') {
-                                playerPromise = embedYoutube(uniqueKey);
-                            } else if (type === 'vimeo') {
-                                playerPromise = embedVimeo(uniqueKey);
-                            }
-                            playerPromise.then(()=>{
+                        playerPromise.then(()=>{
+                            if (player) {
                                 player.dispatchEvent(new CustomEvent('play'));
-                            });
-                        }
+                            }
+                        });
                     },
                     onClose: (modal, el, event)=>{
-                        event.preventDefault();
-                        if (iframe) {
-                            iframe.src = '';
-                        } else if (localVideo) {
+                        if (event) {
+                            event.preventDefault();
+                        }
+                        if (player) {
+                            player.dispatchEvent(new CustomEvent('destroy'));
+                        }
+                        const modalVideo = modal.querySelector(selectors$z.modalVideo);
+                        if (modalVideo) {
+                            modalVideo.pause();
                             try {
-                                localVideo.pause();
-                                localVideo.currentTime = 0;
+                                modalVideo.currentTime = 0;
                             } catch (e) {
                                 console.warn(e);
                             }
-                        } else if (player) {
-                            player.dispatchEvent(new CustomEvent('destroy'));
                         }
-                        if (this.backgroundVideo && typeof this.backgroundVideo.play === 'function') {
-                            this.backgroundVideo.play();
-                        }
+                        this.playBackgroundMedia();
                     },
                     openTrigger: `data-trigger-${video}-${unique}`
                 });
@@ -5763,7 +5879,11 @@
         constructor(section){
             this.container = section.container;
             this.triggers = this.container.querySelectorAll(selectors$z.videoPopup);
-            this.backgroundVideo = this.container.querySelector(selectors$z.videoAutoplay);
+            this.inlineTriggers = this.container.querySelectorAll(selectors$z.inlineVideoTrigger);
+            this.inlineVideoContainers = this.container.querySelectorAll(selectors$z.inlineVideoContainer);
+            this.backgroundMedia = [
+                ...this.container.querySelectorAll(`${selectors$z.videoAutoplay}, ${selectors$z.backgroundVideoEmbed}`)
+            ];
             this.init();
         }
     };
