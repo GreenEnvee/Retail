@@ -1,1 +1,127 @@
-{"sections":{"main":{"type":"page","settings":{"kicker":"","kicker_size":3,"show_title":true,"title_size":8,"show_content":true,"content_size":5,"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper--narrow","padding_top":40,"padding_bottom":20}},"section_video_DQqUYF":{"type":"section-video","blocks":{"heading_3rQC7w":{"type":"heading","settings":{"title":"","text_size":10}},"video_cCQVnJ":{"type":"video","settings":{"video_link":"https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc","popup_text":"","button_width":80,"button_color":"text--white"}}},"block_order":["heading_3rQC7w","video_cCQVnJ"],"disabled":true,"settings":{"height":"use_screen_two_thirds","color_bg":"palette--light bg--neutral","object_position":"center-center","preload_image":false,"text_align":"align--middle-center","text_color":"text--white","overlay_opacity":15,"overlay_color":"#000000","enable_overlay_text":false,"width":"wrapper--none","padding_top":0,"padding_bottom":0}},"section_gallery_JUGxra":{"type":"section-gallery","blocks":{"image_7W9QRM":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Elle_-_Envee_Editorial.png","link":""}},"image_niBfej":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Luana_-_Envee_Editorial.png","link":""}},"image_W43rrp":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Envee_Editorial_5.png","link":""}},"image_HgVN3h":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/America_-_Envee_Editorial.png","link":""}}},"block_order":["image_7W9QRM","image_niBfej","image_W43rrp","image_HgVN3h"],"settings":{"scale_image":true,"wh_ratio":0.8,"bg":"palette--light bg--neutral","add_gutters":true,"progress_bar":"mobile","grid_large":3,"grid_medium":2,"grid_mobile":1.2,"width":"wrapper","padding_top":36,"padding_bottom":36}}},"order":["main","section_video_DQqUYF","section_gallery_JUGxra"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": true,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper--narrow",
+        "padding_top": 40,
+        "padding_bottom": 20
+      }
+    },
+    "section_video_DQqUYF": {
+      "type": "section-video",
+      "blocks": {
+        "heading_3rQC7w": {
+          "type": "heading",
+          "settings": {
+            "title": "",
+            "text_size": 10
+          }
+        },
+        "video_cCQVnJ": {
+          "type": "video",
+          "settings": {
+            "video_link": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "popup_text": "",
+            "button_width": 80,
+            "button_color": "text--white"
+          }
+        }
+      },
+      "block_order": [
+        "heading_3rQC7w",
+        "video_cCQVnJ"
+      ],
+      "disabled": true,
+      "settings": {
+        "height": "use_screen_two_thirds",
+        "color_bg": "palette--light bg--neutral",
+        "object_position": "center-center",
+        "preload_image": false,
+        "text_align": "align--middle-center",
+        "text_color": "text--white",
+        "overlay_opacity": 15,
+        "overlay_color": "#000000",
+        "enable_overlay_text": false,
+        "width": "wrapper--none",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "section_gallery_JUGxra": {
+      "type": "section-gallery",
+      "blocks": {
+        "image_7W9QRM": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Elle_-_Envee_Editorial.png",
+            "link": ""
+          }
+        },
+        "image_niBfej": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Luana_-_Envee_Editorial.png",
+            "link": ""
+          }
+        },
+        "image_W43rrp": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Envee_Editorial_5.png",
+            "link": ""
+          }
+        },
+        "image_HgVN3h": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/America_-_Envee_Editorial.png",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_7W9QRM",
+        "image_niBfej",
+        "image_W43rrp",
+        "image_HgVN3h"
+      ],
+      "settings": {
+        "scale_image": true,
+        "wh_ratio": 0.8,
+        "bg": "palette--light bg--neutral",
+        "add_gutters": true,
+        "progress_bar": "mobile",
+        "grid_large": 3,
+        "grid_medium": 2,
+        "grid_mobile": 1.2,
+        "width": "wrapper",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_video_DQqUYF",
+    "section_gallery_JUGxra"
+  ]
+}

@@ -1,1 +1,240 @@
-{"type":"header","name":"Header","sections":{"announcement":{"type":"announcement","blocks":{"announce_text":{"type":"text","settings":{"text":"<p><strong>Free Shipping <\/strong>on Retail Orders of $149 or More | $10 Flat Rate Shipping | Choose <strong>3 Free Samples<\/strong> with Purchase of $149 or More<br\/><\/p>","target_url_enabled":false,"target_url":"","target_referrer_enabled":false,"target_referrer":"","target_device_enabled":false,"target_device":"mobile"}},"text_qTmXR9":{"type":"text","settings":{"text":"<p>Back in Its Best Light - Sun Shield Serum SPF 50 Returns with a New Name and a New Tint Option<\/p>","target_url_enabled":false,"target_url":"","target_referrer_enabled":false,"target_referrer":"","target_device_enabled":false,"target_device":"mobile"}},"text_dckpah":{"type":"text","settings":{"text":"<p>Where nature <strong>meets science<\/strong><\/p>","target_url_enabled":false,"target_url":"","target_referrer_enabled":false,"target_referrer":"","target_device_enabled":false,"target_device":"mobile"}}},"block_order":["announce_text","text_qTmXR9","text_dckpah"],"settings":{"text_size":3,"layout":"slider","speed":5,"padding_top":4,"padding_bottom":4}},"header":{"type":"header","blocks":{"header-block-toolbar":{"type":"toolbar","disabled":true,"settings":{"announcement_text":"<p>This is announcement <em><strong>richtext<\/strong><\/em> from an announcement block<\/p>","secondary_linklist":"","show_menu_desktop":true,"show_menu_mobile":true,"show_locale_desktop":true,"show_locale_mobile":true,"show_currency_desktop":true,"show_currency_mobile":true}},"header-block-image-1":{"type":"image","disabled":true,"settings":{"position":"1","wh_ratio":2,"wide_element":false,"overlay_opacity":0,"overlay_color":"#000000","title":"Pinned to item 1","title_color":"text--neutral","button_style":"is-on-image","link_text":"Shop All","link":"shopify:\/\/collections\/all","button_color":"btn--neutral","display":"all"}},"header-block-image-2":{"type":"image","disabled":true,"settings":{"position":"2","wh_ratio":0.8,"wide_element":false,"overlay_opacity":0,"overlay_color":"#000000","title":"Pinned to item 2","title_color":"text--neutral","button_style":"is-below-image","link_text":"Shop All","link":"shopify:\/\/collections\/all","button_color":"btn--neutral","display":"all"}},"header-block-image-3":{"type":"image","disabled":true,"settings":{"position":"2","wh_ratio":0.8,"wide_element":false,"overlay_opacity":0,"overlay_color":"#000000","title":"Pinned to item 2","title_color":"text--neutral","button_style":"is-below-image","link_text":"Shop All","link":"shopify:\/\/collections\/all","button_color":"btn--neutral","display":"all"}},"image_PmQpf3":{"type":"image","settings":{"position":"1","wh_ratio":1.7,"image":"shopify:\/\/shop_images\/acne_group.png","wide_element":false,"overlay_opacity":0,"overlay_color":"#000000","title":"best sellers","title_color":"text--white","button_style":"is-below-image","link_text":"","link":"shopify:\/\/collections\/best-sellers","button_color":"btn--neutral","display":"all"}},"image_DND6gq":{"type":"image","settings":{"position":"1","wh_ratio":1.7,"image":"shopify:\/\/shop_images\/Mandelic_4.png","wide_element":false,"overlay_opacity":0,"overlay_color":"#000000","title":"shop by skin type","title_color":"text--white","button_style":"text-button","link_text":"","link":"shopify:\/\/pages\/shop-by-skin-type","button_color":"btn--white","display":"all"}},"image_7FW9DX":{"type":"image","settings":{"position":"1","wh_ratio":1.7,"image":"shopify:\/\/shop_images\/Mini-Travel-Bag-Back.jpg","wide_element":false,"overlay_opacity":0,"overlay_color":"#000000","title":"shop kits + gifts","title_color":"text--white","button_style":"is-below-image","link_text":"","link":"shopify:\/\/collections\/retail-skin-care-sets","button_color":"btn--neutral","display":"all"}},"image_XyeQK6":{"type":"image","settings":{"position":"1","wh_ratio":1.7,"image":"shopify:\/\/shop_images\/Roller.jpg","wide_element":false,"overlay_opacity":0,"overlay_color":"#000000","title":"tools + accessories","title_color":"text--white","button_style":"is-below-image","link_text":"","link":"shopify:\/\/collections\/tools-accessories","button_color":"btn--neutral","display":"all"}}},"block_order":["header-block-toolbar","header-block-image-1","header-block-image-2","header-block-image-3","image_PmQpf3","image_DND6gq","image_7FW9DX","image_XyeQK6"],"settings":{"header_style":"split","logo":"{{ shop.brand.logo }}","logo_max_limit":270,"logo_padding":15,"logo_text_size":5,"main_menu_linklist":"main-menu","mobile_menu_linklist":"","full_width":true,"underline_current":false,"enable_search":true,"enable_account":true,"use_icons":true,"icons_type":"classic","cart_icon":"cart","header_sticky":"static","transparent_home":true,"transparent_collection":false,"transparent_blog":false,"transparent_article":false,"transparent_page":false,"transparent_text_color":"#ffffff","transparent_logo":"shopify:\/\/shop_images\/logo-tall-white.png","show_collection_images":true,"collection_wh_ratio":2.5}}},"order":["announcement","header"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement": {
+      "type": "announcement",
+      "blocks": {
+        "announce_text": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Free Shipping </strong>on Retail Orders of $149 or More | $10 Flat Rate Shipping | Choose <strong>3 Free Samples</strong> with Purchase of $149 or More<br/></p>",
+            "target_url_enabled": false,
+            "target_url": "",
+            "target_referrer_enabled": false,
+            "target_referrer": "",
+            "target_device_enabled": false,
+            "target_device": "mobile"
+          }
+        },
+        "text_dckpah": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Where nature <strong>meets science</strong></p>",
+            "target_url_enabled": false,
+            "target_url": "",
+            "target_referrer_enabled": false,
+            "target_referrer": "",
+            "target_device_enabled": false,
+            "target_device": "mobile"
+          }
+        }
+      },
+      "block_order": [
+        "announce_text",
+        "text_dckpah"
+      ],
+      "settings": {
+        "text_size": 3,
+        "layout": "slider",
+        "speed": 5,
+        "padding_top": 4,
+        "padding_bottom": 4
+      }
+    },
+    "header": {
+      "type": "header",
+      "blocks": {
+        "header-block-toolbar": {
+          "type": "toolbar",
+          "disabled": true,
+          "settings": {
+            "announcement_text": "<p>This is announcement <em><strong>richtext</strong></em> from an announcement block</p>",
+            "secondary_linklist": "",
+            "show_menu_desktop": true,
+            "show_menu_mobile": true,
+            "show_locale_desktop": true,
+            "show_locale_mobile": true,
+            "show_currency_desktop": true,
+            "show_currency_mobile": true
+          }
+        },
+        "header-block-image-1": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "position": "1",
+            "wh_ratio": 2,
+            "wide_element": false,
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "title": "Pinned to item 1",
+            "title_color": "text--neutral",
+            "button_style": "is-on-image",
+            "link_text": "Shop All",
+            "link": "shopify://collections/all",
+            "button_color": "btn--neutral",
+            "display": "all"
+          }
+        },
+        "header-block-image-2": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "position": "2",
+            "wh_ratio": 0.8,
+            "wide_element": false,
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "title": "Pinned to item 2",
+            "title_color": "text--neutral",
+            "button_style": "is-below-image",
+            "link_text": "Shop All",
+            "link": "shopify://collections/all",
+            "button_color": "btn--neutral",
+            "display": "all"
+          }
+        },
+        "header-block-image-3": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "position": "2",
+            "wh_ratio": 0.8,
+            "wide_element": false,
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "title": "Pinned to item 2",
+            "title_color": "text--neutral",
+            "button_style": "is-below-image",
+            "link_text": "Shop All",
+            "link": "shopify://collections/all",
+            "button_color": "btn--neutral",
+            "display": "all"
+          }
+        },
+        "image_PmQpf3": {
+          "type": "image",
+          "settings": {
+            "position": "1",
+            "wh_ratio": 1.7,
+            "image": "shopify://shop_images/acne_group.png",
+            "wide_element": false,
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "title": "best sellers",
+            "title_color": "text--white",
+            "button_style": "is-below-image",
+            "link_text": "",
+            "link": "shopify://collections/best-sellers",
+            "button_color": "btn--neutral",
+            "display": "all"
+          }
+        },
+        "image_DND6gq": {
+          "type": "image",
+          "settings": {
+            "position": "1",
+            "wh_ratio": 1.7,
+            "image": "shopify://shop_images/Mandelic_4.png",
+            "wide_element": false,
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "title": "shop by skin type",
+            "title_color": "text--white",
+            "button_style": "text-button",
+            "link_text": "",
+            "link": "shopify://pages/shop-by-skin-type",
+            "button_color": "btn--white",
+            "display": "all"
+          }
+        },
+        "image_7FW9DX": {
+          "type": "image",
+          "settings": {
+            "position": "1",
+            "wh_ratio": 1.7,
+            "image": "shopify://shop_images/Mini-Travel-Bag-Back.jpg",
+            "wide_element": false,
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "title": "shop kits + gifts",
+            "title_color": "text--white",
+            "button_style": "is-below-image",
+            "link_text": "",
+            "link": "shopify://collections/retail-skin-care-sets",
+            "button_color": "btn--neutral",
+            "display": "all"
+          }
+        },
+        "image_XyeQK6": {
+          "type": "image",
+          "settings": {
+            "position": "1",
+            "wh_ratio": 1.7,
+            "image": "shopify://shop_images/Roller.jpg",
+            "wide_element": false,
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "title": "tools + accessories",
+            "title_color": "text--white",
+            "button_style": "is-below-image",
+            "link_text": "",
+            "link": "shopify://collections/tools-accessories",
+            "button_color": "btn--neutral",
+            "display": "all"
+          }
+        }
+      },
+      "block_order": [
+        "header-block-toolbar",
+        "header-block-image-1",
+        "header-block-image-2",
+        "header-block-image-3",
+        "image_PmQpf3",
+        "image_DND6gq",
+        "image_7FW9DX",
+        "image_XyeQK6"
+      ],
+      "settings": {
+        "header_style": "split",
+        "logo": "{{ shop.brand.logo }}",
+        "logo_max_limit": 270,
+        "logo_padding": 15,
+        "logo_text_size": 5,
+        "main_menu_linklist": "main-menu",
+        "mobile_menu_linklist": "",
+        "full_width": true,
+        "underline_current": false,
+        "enable_search": true,
+        "enable_account": true,
+        "use_icons": true,
+        "icons_type": "classic",
+        "cart_icon": "cart",
+        "header_sticky": "static",
+        "transparent_home": true,
+        "transparent_collection": false,
+        "transparent_blog": false,
+        "transparent_article": false,
+        "transparent_page": false,
+        "transparent_text_color": "#ffffff",
+        "transparent_logo": "shopify://shop_images/logo-tall-white.png",
+        "show_collection_images": true,
+        "collection_wh_ratio": 2.5
+      }
+    }
+  },
+  "order": [
+    "announcement",
+    "header"
+  ]
+}

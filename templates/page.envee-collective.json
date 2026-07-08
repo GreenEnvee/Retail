@@ -1,1 +1,612 @@
-{"sections":{"section_hero_TxTJgV":{"type":"section-hero","blocks":{"heading_JzwEwc":{"type":"heading","settings":{"title":"Join the Envee Pro Collective","text_size":9}},"spacer_yztqAP":{"type":"spacer","settings":{"spacer_padding":30,"show_line":false}},"kicker_RLqMqw":{"type":"kicker","settings":{"kicker":"A Professional Skincare Partnership for Results, Ritual, and Real Growth","enable_line":false,"text_size":4}},"spacer_6bC4Ai":{"type":"spacer","settings":{"spacer_padding":30,"show_line":false}},"button_P3wnDe":{"type":"button","settings":{"link_text_1":"Apply Now","link_1":"","button_size_1":"btn--long","button_style_1":"btn--outline","button_color_1":"btn--white","link_text_2":"","link_2":"","button_size_2":"btn--long","button_style_2":"btn-text-thick-line","button_color_2":"btn--white","link_text_3":"","link_3":"","button_size_3":"btn--long","button_style_3":"btn-text-thick-line","button_color_3":"btn--white"}},"spacer_DrawiN":{"type":"spacer","settings":{"spacer_padding":100,"show_line":false}},"spacer_9pmGke":{"type":"spacer","settings":{"spacer_padding":100,"show_line":false}}},"block_order":["heading_JzwEwc","spacer_yztqAP","kicker_RLqMqw","spacer_6bC4Ai","button_P3wnDe","spacer_DrawiN","spacer_9pmGke"],"settings":{"image":"shopify:\/\/shop_images\/Envee_Pro_Collective.png","height":"use_screen_one_half","overlay_opacity":0,"overlay_color":"#000000","enable_overlay_text":false,"preload_image":false,"content_width":2000,"text_align":"align--middle-center","text_color":"text--white","color_bg":"hero__content--transparent","width":"wrapper--none","padding_top":0,"padding_bottom":32}},"section_richtext_TLBGQJ":{"type":"section-richtext","blocks":{"kicker_hHLQeY":{"type":"kicker","settings":{"kicker":"Where Advanced Skin Science","enable_line":false,"text_size":8}},"heading_RACjad":{"type":"heading","settings":{"heading":"Meets Holistic Luxury","text_size":4}},"spacer_8xEr6y":{"type":"spacer","settings":{"spacer_padding":46,"show_line":false}},"text_yFMn3q":{"type":"text","settings":{"text":"<p><em>A selective professional partnership for estheticians and spas committed to visible results and elevated client experiences.<br\/><br\/><\/em>Green Envee combines pure botanicals, proven clinical actives, and advanced delivery systems to deliver transformative treatments while supporting a profitable, differentiated business.<br\/><br\/>To protect partner success, we carefully select professional accounts and maintain thoughtful regional distribution.<br\/><br\/>Approved partners begin with a curated opening order designed to support treatment performance, retail confidence, and long-term growth and become part of the Envee Pro Collective community.<\/p>","text_size":4,"text_columns":1}}},"block_order":["kicker_hHLQeY","heading_RACjad","spacer_8xEr6y","text_yFMn3q"],"name":"Rich text","settings":{"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper","padding_top":102,"padding_bottom":50}},"section_double_XGamBn":{"type":"section-double","blocks":{"image_VRHFgQ":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/u7936877933_httpss.mj.runUUWcqxyXosU_esthetician_performing_m_9a1679f0-1444-4cc9-b069-b5299d4c9917_2.png","overlay_opacity":0,"overlay_color":"#000000","enable_overlay_text":false,"kicker":"","title":"","richtext":"","text_align":"align--middle-center","text_color":"text--white","link_text":"","link":"","button_color":"btn--white","button_style":"btn"}},"text_wHh3gr":{"type":"text","settings":{"kicker":"","title":"","text":"<h5><strong>Why Professionals Choose<br\/>Green ENvee Pro<\/strong><\/h5><p><br\/><br\/>Clinical-Level Results. Without Compromise.<br\/><br\/>Green Envee formulas are developed to deliver visible, professional results while honoring skin health, holistic wellness, and ingredient integrity.<br\/><br\/>Our Partners Value:<br\/><br\/>✔ Visible results your clients trust<br\/><br\/>✔ Clean formulations aligned with holistic wellness<br\/><br\/>✔ High-performance botanical actives and advanced delivery systems<br\/><br\/>✔ Luxury textures and aromatherapy-enhanced treatment rituals<br\/><br\/>✔ Education and professional support designed for long-term growth<\/p>","font_size":3,"text_columns":1,"align_text":"text-left","button_text":"Apply Now","button_url":"","button_color":"btn--neutral","button_style":"btn--outline btn--long","text_color":"text--neutral","bg_color":""}}},"block_order":["image_VRHFgQ","text_wHh3gr"],"name":"Image with text","settings":{"height":"use_screen_one_third","brick_gutter":0,"borders":false,"bg_color":"","preload_image":false,"width":"wrapper","padding_top":102,"padding_bottom":50}},"section_richtext_LzWFrY":{"type":"section-richtext","blocks":{"kicker_EbJAzg":{"type":"kicker","settings":{"kicker":"Grow With Confidence.","enable_line":false,"text_size":4}},"heading_VVpGhL":{"type":"heading","settings":{"heading":"Partner With Purpose.","text_size":8}},"text_NW8cB7":{"type":"text","settings":{"text":"<p><br\/>Green Envee supports both treatment excellence and business growth.<br\/><br\/><\/p>","text_size":4,"text_columns":1}}},"block_order":["kicker_EbJAzg","heading_VVpGhL","text_NW8cB7"],"name":"Rich text","settings":{"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper--narrow","padding_top":102,"padding_bottom":0}},"main":{"type":"page","disabled":true,"settings":{"kicker":"","kicker_size":3,"show_title":false,"title_size":8,"show_content":true,"content_size":5,"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper--full","padding_top":78,"padding_bottom":36}},"section_richtext_tC7PTC":{"type":"section-richtext","blocks":{"heading_NjcV9V":{"type":"heading","settings":{"heading":"Stay up to date","text_size":7}},"kicker_ggi8e3":{"type":"kicker","settings":{"kicker":"on social media @greenenvee","enable_line":false,"text_size":4}}},"block_order":["heading_NjcV9V","kicker_ggi8e3"],"disabled":true,"settings":{"align_text":"text-left","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper--full","padding_top":36,"padding_bottom":36}},"section_gallery_4ajYBn":{"type":"section-gallery","blocks":{"image_9HhjeE":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-1.png","link":"https:\/\/www.instagram.com\/greenenvee\/?hl=en"}},"image_G9BeY6":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-2.png","link":"https:\/\/www.instagram.com\/p\/C-dxmcKPlqG\/?hl=en&img_index=1"}},"image_YGKfAB":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-3.png","link":"https:\/\/www.instagram.com\/p\/C-dSvDyzcXc\/?hl=en&img_index=1"}},"image_4f7AUc":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-4.png","link":"https:\/\/www.instagram.com\/p\/C_ggbiNuaxW\/?hl=en&img_index=1"}},"image_cYVbDY":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-5.png","link":"https:\/\/www.instagram.com\/p\/C-nbz-jNeIW\/?hl=en"}}},"block_order":["image_9HhjeE","image_G9BeY6","image_YGKfAB","image_4f7AUc","image_cYVbDY"],"disabled":true,"settings":{"scale_image":true,"wh_ratio":1,"bg":"palette--light bg--neutral","add_gutters":true,"progress_bar":"mobile","grid_large":5,"grid_medium":2,"grid_mobile":1.2,"width":"wrapper--full","padding_top":0,"padding_bottom":36}},"section_faq_CrXpYL":{"type":"section-faq","blocks":{"text_EKrxVb":{"type":"text","settings":{"title":"Professional Wholesale Access","content":"<p>Access our full collection of professional formulations with preferred wholesale pricing and streamlined ordering. Your dedicated Business Development Manager provides strategic guidance and curated product recommendations tailored to your spa.<\/p>"}},"text_wFCTeT":{"type":"text","settings":{"title":"Master the Envee Experience","content":"<p>Through Green Envee University and personalized guidance, you’ll learn how to transform treatments into memorable rituals that drive both results and client loyalty.<\/p>"}},"text_bwrUgy":{"type":"text","settings":{"title":"Facial Finance Podcast","content":"<p>Our industry podcast shares real conversations, insights, and strategies to help estheticians and spa owners build stronger, more profitable businesses.<\/p>"}},"text_cmfNiJ":{"type":"text","settings":{"title":"Envee Connect Partner Community","content":"<p>Our monthly partner-exclusive experience provides ongoing education, marketing insights, and collaboration with like-minded professionals within the Envee Pro Collective.<\/p>"}}},"block_order":["text_EKrxVb","text_wFCTeT","text_bwrUgy","text_cmfNiJ"],"name":"Accordion group","settings":{"title":"","title_align":"text-left","title_size":4,"heading_size":4,"text_size":4,"text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper","padding_top":28,"padding_bottom":50}},"section_richtext_NnxgbW":{"type":"section-richtext","blocks":{"heading_83K7L6":{"type":"heading","settings":{"heading":"Take the Next Step","text_size":8}},"text_AgYBAH":{"type":"text","settings":{"text":"<p><br\/>If Green Envee resonates with your treatment philosophy and business vision, we invite you to apply for professional partnership consideration.<br\/><br\/><\/p>","text_size":4,"text_columns":1}}},"block_order":["heading_83K7L6","text_AgYBAH"],"name":"Rich text","settings":{"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper--narrow","padding_top":102,"padding_bottom":0}},"section_faq_w3Y4Qh":{"type":"section-faq","blocks":{"text_ngh647":{"type":"text","settings":{"title":"Our Partnership Process","content":"<p>Step 1 – Submit your professional application<\/p><p>Step 2 – Connect with our team for a Professional Fit Discovery Call<\/p><p>Step 3 – Curate your opening order with a Business Development Manager and begin onboarding<\/p><p>Step 4 – Launch your Green Envee experience<\/p>"}}},"block_order":["text_ngh647"],"name":"Accordion group","settings":{"title":"","title_align":"text-left","title_size":4,"heading_size":4,"text_size":4,"text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper","padding_top":68,"padding_bottom":50}},"section_hero_EQAeQX":{"type":"section-hero","name":"Image banner","settings":{"image":"shopify:\/\/shop_images\/u7936877933_a_luxury_california_esthetics_spa_room_that_is_su_b9a7b729-7d60-473d-b28b-7650e2690871_1.png","height":"use_screen_one_third","overlay_opacity":0,"overlay_color":"#000000","enable_overlay_text":false,"preload_image":false,"content_width":2000,"text_align":"align--middle-center","text_color":"text--white","color_bg":"hero__content--transparent","width":"wrapper--none","padding_top":102,"padding_bottom":50}},"section_richtext_jVGnXi":{"type":"section-richtext","blocks":{"heading_rVdiFe":{"type":"heading","settings":{"heading":"Apply to Join the Envee Pro Collective","text_size":8}},"spacer_qBkTyi":{"type":"spacer","settings":{"spacer_padding":36,"show_line":false}},"text_xJjmP3":{"type":"text","settings":{"text":"<p>Applications are carefully reviewed to ensure alignment with Green Envee’s professional partnership standards and long-term partner success.<\/p>","text_size":4,"text_columns":1}}},"block_order":["heading_rVdiFe","spacer_qBkTyi","text_xJjmP3"],"name":"Rich text","settings":{"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper","padding_top":102,"padding_bottom":0}},"section_double_D6Na8E":{"type":"section-double","blocks":{"image_FnTpw9":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/u7936877933_luxury_aesthetician_aged_35_with_blonde_hair_whit_e76f0ad4-4a2a-4c3a-abd5-ff491fe93381_2.png","overlay_opacity":0,"overlay_color":"#000000","enable_overlay_text":false,"kicker":"","title":"","richtext":"","text_align":"align--middle-center","text_color":"text--white","link_text":"","link":"","button_color":"btn--white","button_style":"btn"}},"text_i9EyNb":{"type":"text","settings":{"kicker":"","title":"","text":"<h5><strong>Is Green Envee the RighT<br\/>Fit for Your Spa?<\/strong><\/h5><p><br\/><br\/>Green Envee Pro partners are typically:<br\/><br\/>✔ Licensed estheticians or spa owners<br\/><br\/>✔ Wellness-focused or luxury treatment environments<br\/><br\/>✔ Professionals committed to education and visible results<br\/><br\/>✔ Businesses seeking to grow retail revenue and client loyalty<br\/><br\/>✔ Esthetic schools committed to advanced education + strong brand partnerships<br\/><br\/>If you’re looking for a professional skincare partner rooted in clean science, holistic wellness, and long-term growth, we invite you to apply.<\/p>","font_size":3,"text_columns":1,"align_text":"text-left","button_text":"Apply Now","button_url":"","button_color":"btn--neutral","button_style":"btn--outline btn--long","text_color":"text--neutral","bg_color":""}}},"block_order":["image_FnTpw9","text_i9EyNb"],"name":"Image with text","settings":{"height":"use_screen_one_third","brick_gutter":0,"borders":false,"bg_color":"","preload_image":false,"width":"wrapper","padding_top":102,"padding_bottom":100}}},"order":["section_hero_TxTJgV","section_richtext_TLBGQJ","section_double_XGamBn","section_richtext_LzWFrY","main","section_richtext_tC7PTC","section_gallery_4ajYBn","section_faq_CrXpYL","section_richtext_NnxgbW","section_faq_w3Y4Qh","section_hero_EQAeQX","section_richtext_jVGnXi","section_double_D6Na8E"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "section_hero_TxTJgV": {
+      "type": "section-hero",
+      "blocks": {
+        "heading_JzwEwc": {
+          "type": "heading",
+          "settings": {
+            "title": "Join the Envee Pro Collective",
+            "text_size": 9
+          }
+        },
+        "spacer_yztqAP": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 30,
+            "show_line": false
+          }
+        },
+        "kicker_RLqMqw": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "A Professional Skincare Partnership for Results, Ritual, and Real Growth",
+            "enable_line": false,
+            "text_size": 4
+          }
+        },
+        "spacer_6bC4Ai": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 30,
+            "show_line": false
+          }
+        },
+        "button_P3wnDe": {
+          "type": "button",
+          "settings": {
+            "link_text_1": "Apply Now",
+            "link_1": "https://greenenvee.com/pages/become-a-spa-partner?view=partner-application",
+            "button_size_1": "btn--long",
+            "button_style_1": "btn--outline",
+            "button_color_1": "btn--white",
+            "link_text_2": "",
+            "link_2": "",
+            "button_size_2": "btn--long",
+            "button_style_2": "btn-text-thick-line",
+            "button_color_2": "btn--white",
+            "link_text_3": "",
+            "link_3": "",
+            "button_size_3": "btn--long",
+            "button_style_3": "btn-text-thick-line",
+            "button_color_3": "btn--white"
+          }
+        },
+        "spacer_DrawiN": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 100,
+            "show_line": false
+          }
+        },
+        "spacer_9pmGke": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 100,
+            "show_line": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_JzwEwc",
+        "spacer_yztqAP",
+        "kicker_RLqMqw",
+        "spacer_6bC4Ai",
+        "button_P3wnDe",
+        "spacer_DrawiN",
+        "spacer_9pmGke"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Envee_Pro_Collective.png",
+        "height": "use_screen_one_half",
+        "overlay_opacity": 0,
+        "overlay_color": "#000000",
+        "enable_overlay_text": false,
+        "preload_image": false,
+        "content_width": 2000,
+        "text_align": "align--middle-center",
+        "text_color": "text--white",
+        "color_bg": "hero__content--transparent",
+        "width": "wrapper--none",
+        "padding_top": 0,
+        "padding_bottom": 32
+      }
+    },
+    "section_richtext_TLBGQJ": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_hHLQeY": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "Where Advanced Skin Science",
+            "enable_line": false,
+            "text_size": 8
+          }
+        },
+        "heading_RACjad": {
+          "type": "heading",
+          "settings": {
+            "heading": "Meets Holistic Luxury",
+            "text_size": 4
+          }
+        },
+        "spacer_8xEr6y": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 46,
+            "show_line": false
+          }
+        },
+        "text_yFMn3q": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>A selective professional partnership for estheticians and spas committed to visible results and elevated client experiences.<br/><br/></em>Green Envee combines pure botanicals, proven clinical actives, and advanced delivery systems to deliver transformative treatments while supporting a profitable, differentiated business.<br/><br/>To protect partner success, we carefully select professional accounts and maintain thoughtful regional distribution.<br/><br/>Approved partners begin with a curated opening order designed to support treatment performance, retail confidence, and long-term growth and become part of the Envee Pro Collective community.</p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "kicker_hHLQeY",
+        "heading_RACjad",
+        "spacer_8xEr6y",
+        "text_yFMn3q"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 50
+      }
+    },
+    "section_double_XGamBn": {
+      "type": "section-double",
+      "blocks": {
+        "image_VRHFgQ": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/u7936877933_httpss.mj.runUUWcqxyXosU_esthetician_performing_m_9a1679f0-1444-4cc9-b069-b5299d4c9917_2.png",
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "enable_overlay_text": false,
+            "kicker": "",
+            "title": "",
+            "richtext": "",
+            "text_align": "align--middle-center",
+            "text_color": "text--white",
+            "link_text": "",
+            "link": "",
+            "button_color": "btn--white",
+            "button_style": "btn"
+          }
+        },
+        "text_wHh3gr": {
+          "type": "text",
+          "settings": {
+            "kicker": "",
+            "title": "",
+            "text": "<h5><strong>Why Professionals Choose<br/>Green ENvee Pro</strong></h5><p><br/><br/>Clinical-Level Results. Without Compromise.<br/><br/>Green Envee formulas are developed to deliver visible, professional results while honoring skin health, holistic wellness, and ingredient integrity.<br/><br/>Our Partners Value:<br/><br/>✔ Visible results your clients trust<br/><br/>✔ Clean formulations aligned with holistic wellness<br/><br/>✔ High-performance botanical actives and advanced delivery systems<br/><br/>✔ Luxury textures and aromatherapy-enhanced treatment rituals<br/><br/>✔ Education and professional support designed for long-term growth</p>",
+            "font_size": 3,
+            "text_columns": 1,
+            "align_text": "text-left",
+            "button_text": "Apply Now",
+            "button_url": "https://greenenvee.com/pages/become-a-spa-partner",
+            "button_color": "btn--neutral",
+            "button_style": "btn--outline btn--long",
+            "text_color": "text--neutral",
+            "bg_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_VRHFgQ",
+        "text_wHh3gr"
+      ],
+      "name": "Image with text",
+      "settings": {
+        "height": "use_screen_one_third",
+        "brick_gutter": 0,
+        "borders": false,
+        "bg_color": "",
+        "preload_image": false,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 50
+      }
+    },
+    "section_richtext_LzWFrY": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_EbJAzg": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "Grow With Confidence.",
+            "enable_line": false,
+            "text_size": 4
+          }
+        },
+        "heading_VVpGhL": {
+          "type": "heading",
+          "settings": {
+            "heading": "Partner With Purpose.",
+            "text_size": 8
+          }
+        },
+        "text_NW8cB7": {
+          "type": "text",
+          "settings": {
+            "text": "<p><br/>Green Envee supports both treatment excellence and business growth.<br/><br/></p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "kicker_EbJAzg",
+        "heading_VVpGhL",
+        "text_NW8cB7"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper--narrow",
+        "padding_top": 102,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": false,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper--full",
+        "padding_top": 78,
+        "padding_bottom": 36
+      }
+    },
+    "section_richtext_tC7PTC": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_NjcV9V": {
+          "type": "heading",
+          "settings": {
+            "heading": "Stay up to date",
+            "text_size": 7
+          }
+        },
+        "kicker_ggi8e3": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "on social media @greenenvee",
+            "enable_line": false,
+            "text_size": 4
+          }
+        }
+      },
+      "block_order": [
+        "heading_NjcV9V",
+        "kicker_ggi8e3"
+      ],
+      "disabled": true,
+      "settings": {
+        "align_text": "text-left",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper--full",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "section_gallery_4ajYBn": {
+      "type": "section-gallery",
+      "blocks": {
+        "image_9HhjeE": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-1.png",
+            "link": "https://www.instagram.com/greenenvee/?hl=en"
+          }
+        },
+        "image_G9BeY6": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-2.png",
+            "link": "https://www.instagram.com/p/C-dxmcKPlqG/?hl=en&img_index=1"
+          }
+        },
+        "image_YGKfAB": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-3.png",
+            "link": "https://www.instagram.com/p/C-dSvDyzcXc/?hl=en&img_index=1"
+          }
+        },
+        "image_4f7AUc": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-4.png",
+            "link": "https://www.instagram.com/p/C_ggbiNuaxW/?hl=en&img_index=1"
+          }
+        },
+        "image_cYVbDY": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-5.png",
+            "link": "https://www.instagram.com/p/C-nbz-jNeIW/?hl=en"
+          }
+        }
+      },
+      "block_order": [
+        "image_9HhjeE",
+        "image_G9BeY6",
+        "image_YGKfAB",
+        "image_4f7AUc",
+        "image_cYVbDY"
+      ],
+      "disabled": true,
+      "settings": {
+        "scale_image": true,
+        "wh_ratio": 1,
+        "bg": "palette--light bg--neutral",
+        "add_gutters": true,
+        "progress_bar": "mobile",
+        "grid_large": 5,
+        "grid_medium": 2,
+        "grid_mobile": 1.2,
+        "width": "wrapper--full",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "section_faq_CrXpYL": {
+      "type": "section-faq",
+      "blocks": {
+        "text_EKrxVb": {
+          "type": "text",
+          "settings": {
+            "title": "Professional Wholesale Access",
+            "content": "<p>Access our full collection of professional formulations with preferred wholesale pricing and streamlined ordering. Your dedicated Business Development Manager provides strategic guidance and curated product recommendations tailored to your spa.</p>"
+          }
+        },
+        "text_wFCTeT": {
+          "type": "text",
+          "settings": {
+            "title": "Master the Envee Experience",
+            "content": "<p>Through Green Envee University and personalized guidance, you’ll learn how to transform treatments into memorable rituals that drive both results and client loyalty.</p>"
+          }
+        },
+        "text_bwrUgy": {
+          "type": "text",
+          "settings": {
+            "title": "Facial Finance Podcast",
+            "content": "<p>Our industry podcast shares real conversations, insights, and strategies to help estheticians and spa owners build stronger, more profitable businesses.</p>"
+          }
+        },
+        "text_cmfNiJ": {
+          "type": "text",
+          "settings": {
+            "title": "Envee Connect Partner Community",
+            "content": "<p>Our monthly partner-exclusive experience provides ongoing education, marketing insights, and collaboration with like-minded professionals within the Envee Pro Collective.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_EKrxVb",
+        "text_wFCTeT",
+        "text_bwrUgy",
+        "text_cmfNiJ"
+      ],
+      "name": "Accordion group",
+      "settings": {
+        "title": "",
+        "title_align": "text-left",
+        "title_size": 4,
+        "heading_size": 4,
+        "text_size": 4,
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper",
+        "padding_top": 28,
+        "padding_bottom": 50
+      }
+    },
+    "section_richtext_NnxgbW": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_83K7L6": {
+          "type": "heading",
+          "settings": {
+            "heading": "Take the Next Step",
+            "text_size": 8
+          }
+        },
+        "text_AgYBAH": {
+          "type": "text",
+          "settings": {
+            "text": "<p><br/>If Green Envee resonates with your treatment philosophy and business vision, we invite you to apply for professional partnership consideration.<br/><br/></p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "heading_83K7L6",
+        "text_AgYBAH"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper--narrow",
+        "padding_top": 102,
+        "padding_bottom": 0
+      }
+    },
+    "section_faq_w3Y4Qh": {
+      "type": "section-faq",
+      "blocks": {
+        "text_ngh647": {
+          "type": "text",
+          "settings": {
+            "title": "Our Partnership Process",
+            "content": "<p>Step 1 – Submit your professional application</p><p>Step 2 – Connect with our team for a Professional Fit Discovery Call</p><p>Step 3 – Curate your opening order with a Business Development Manager and begin onboarding</p><p>Step 4 – Launch your Green Envee experience</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_ngh647"
+      ],
+      "name": "Accordion group",
+      "settings": {
+        "title": "",
+        "title_align": "text-left",
+        "title_size": 4,
+        "heading_size": 4,
+        "text_size": 4,
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper",
+        "padding_top": 68,
+        "padding_bottom": 50
+      }
+    },
+    "section_hero_EQAeQX": {
+      "type": "section-hero",
+      "name": "Image banner",
+      "settings": {
+        "image": "shopify://shop_images/u7936877933_a_luxury_california_esthetics_spa_room_that_is_su_b9a7b729-7d60-473d-b28b-7650e2690871_1.png",
+        "height": "use_screen_one_third",
+        "overlay_opacity": 0,
+        "overlay_color": "#000000",
+        "enable_overlay_text": false,
+        "preload_image": false,
+        "content_width": 2000,
+        "text_align": "align--middle-center",
+        "text_color": "text--white",
+        "color_bg": "hero__content--transparent",
+        "width": "wrapper--none",
+        "padding_top": 102,
+        "padding_bottom": 50
+      }
+    },
+    "section_richtext_jVGnXi": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_rVdiFe": {
+          "type": "heading",
+          "settings": {
+            "heading": "Apply to Join the Envee Pro Collective",
+            "text_size": 8
+          }
+        },
+        "spacer_qBkTyi": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 36,
+            "show_line": false
+          }
+        },
+        "text_xJjmP3": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Applications are carefully reviewed to ensure alignment with Green Envee’s professional partnership standards and long-term partner success.</p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "heading_rVdiFe",
+        "spacer_qBkTyi",
+        "text_xJjmP3"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 0
+      }
+    },
+    "section_double_D6Na8E": {
+      "type": "section-double",
+      "blocks": {
+        "image_FnTpw9": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/u7936877933_luxury_aesthetician_aged_35_with_blonde_hair_whit_e76f0ad4-4a2a-4c3a-abd5-ff491fe93381_2.png",
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "enable_overlay_text": false,
+            "kicker": "",
+            "title": "",
+            "richtext": "",
+            "text_align": "align--middle-center",
+            "text_color": "text--white",
+            "link_text": "",
+            "link": "",
+            "button_color": "btn--white",
+            "button_style": "btn"
+          }
+        },
+        "text_i9EyNb": {
+          "type": "text",
+          "settings": {
+            "kicker": "",
+            "title": "",
+            "text": "<h5><strong>Is Green Envee the RighT<br/>Fit for Your Spa?</strong></h5><p><br/><br/>Green Envee Pro partners are typically:<br/><br/>✔ Licensed estheticians or spa owners<br/><br/>✔ Wellness-focused or luxury treatment environments<br/><br/>✔ Professionals committed to education and visible results<br/><br/>✔ Businesses seeking to grow retail revenue and client loyalty<br/><br/>✔ Esthetic schools committed to advanced education + strong brand partnerships<br/><br/>If you’re looking for a professional skincare partner rooted in clean science, holistic wellness, and long-term growth, we invite you to apply.</p>",
+            "font_size": 3,
+            "text_columns": 1,
+            "align_text": "text-left",
+            "button_text": "Apply Now",
+            "button_url": "",
+            "button_color": "btn--neutral",
+            "button_style": "btn--outline btn--long",
+            "text_color": "text--neutral",
+            "bg_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_FnTpw9",
+        "text_i9EyNb"
+      ],
+      "name": "Image with text",
+      "settings": {
+        "height": "use_screen_one_third",
+        "brick_gutter": 0,
+        "borders": false,
+        "bg_color": "",
+        "preload_image": false,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 100
+      }
+    }
+  },
+  "order": [
+    "section_hero_TxTJgV",
+    "section_richtext_TLBGQJ",
+    "section_double_XGamBn",
+    "section_richtext_LzWFrY",
+    "main",
+    "section_richtext_tC7PTC",
+    "section_gallery_4ajYBn",
+    "section_faq_CrXpYL",
+    "section_richtext_NnxgbW",
+    "section_faq_w3Y4Qh",
+    "section_hero_EQAeQX",
+    "section_richtext_jVGnXi",
+    "section_double_D6Na8E"
+  ]
+}

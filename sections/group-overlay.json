@@ -1,1 +1,79 @@
-{"type":"aside","name":"Overlay","sections":{"cart":{"type":"cart-drawer","settings":{"cart_shipping_enable":false,"cart_show_quantity":true,"cart_notes_enable":false,"show_free_shipping_message":false,"message":"Spend ||amount|| more for free shipping","cart_custom_message_enable":false,"cart_custom_message_text":"<p>Use code <strong>TENOFF<\/strong> at checkout for 10% off<\/p>","cart_color_bg":"palette--light bg--neutral","cart_show_additional_buttons":false}},"popups":{"type":"popups","blocks":{"cookies":{"type":"cookie","disabled":true,"settings":{"show_cookies_popup":true,"text_title":"Are Cookies OK?","text_body":"<p>We use cookies to improve your browsing experience<\/p>","text_accept":"Accept","text_learn":"Learn more","learn_url":"shopify:\/\/policies\/privacy-policy","text_color":"text--neutral","button_color":"btn--neutral","button_style":"btn--soft","bg":"palette--light bg--neutral","position":"popup--bottom"}},"newsletter_signup":{"type":"newsletter","disabled":true,"settings":{"title":"Join the club","text":"<p>Enter your email to save 10% on your next order<\/p>","success":"Success! Use code CLUB10 to save 10%","text_color":"text--neutral","bg":"palette--light bg--neutral","position":"popup--right","trigger":"always","target_url_enabled":false,"target_url":"","target_referrer_enabled":false,"target_referrer":"","target_device_enabled":false,"target_device":"mobile"}}},"block_order":["cookies","newsletter_signup"],"settings":{}}},"order":["cart","popups"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "aside",
+  "name": "Overlay",
+  "sections": {
+    "cart": {
+      "type": "cart-drawer",
+      "settings": {
+        "cart_shipping_enable": false,
+        "cart_show_quantity": true,
+        "cart_notes_enable": false,
+        "show_free_shipping_message": false,
+        "message": "Spend ||amount|| more for free shipping",
+        "cart_custom_message_enable": false,
+        "cart_custom_message_text": "<p>Use code <strong>TENOFF</strong> at checkout for 10% off</p>",
+        "cart_color_bg": "palette--light bg--neutral",
+        "cart_show_additional_buttons": false
+      }
+    },
+    "popups": {
+      "type": "popups",
+      "blocks": {
+        "cookies": {
+          "type": "cookie",
+          "disabled": true,
+          "settings": {
+            "show_cookies_popup": true,
+            "text_title": "Are Cookies OK?",
+            "text_body": "<p>We use cookies to improve your browsing experience</p>",
+            "text_accept": "Accept",
+            "text_learn": "Learn more",
+            "learn_url": "shopify://policies/privacy-policy",
+            "text_color": "text--neutral",
+            "button_color": "btn--neutral",
+            "button_style": "btn--soft",
+            "bg": "palette--light bg--neutral",
+            "position": "popup--bottom"
+          }
+        },
+        "newsletter_signup": {
+          "type": "newsletter",
+          "disabled": true,
+          "settings": {
+            "title": "Join the club",
+            "text": "<p>Enter your email to save 10% on your next order</p>",
+            "success": "Success! Use code CLUB10 to save 10%",
+            "text_color": "text--neutral",
+            "bg": "palette--light bg--neutral",
+            "position": "popup--right",
+            "trigger": "always",
+            "target_url_enabled": false,
+            "target_url": "",
+            "target_referrer_enabled": false,
+            "target_referrer": "",
+            "target_device_enabled": false,
+            "target_device": "mobile"
+          }
+        }
+      },
+      "block_order": [
+        "cookies",
+        "newsletter_signup"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "cart",
+    "popups"
+  ]
+}

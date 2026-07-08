@@ -1,1 +1,108 @@
-{"type":"footer","name":"Footer","sections":{"footer":{"type":"footer","blocks":{"linklist-1":{"type":"linklist","settings":{"linklist":"footer-shop","title":"Shop","accordion_default":""}},"linklist-2":{"type":"linklist","settings":{"linklist":"footer","title":"About Us","accordion_default":""}},"linklist_43UzHa":{"type":"linklist","settings":{"linklist":"footer-professional-resources","title":"Professional Resources","accordion_default":""}},"linklist_GYrEP6":{"type":"linklist","settings":{"linklist":"footer-contact-us","title":"Get in Touch","accordion_default":""}},"social":{"type":"social","settings":{"title":"Let's Glow Together.","text_size":7,"enable_follow_on_shop":true}}},"block_order":["linklist-1","linklist-2","linklist_43UzHa","linklist_GYrEP6","social"],"settings":{"menu_position":"left","logo_max_limit":310,"width":"wrapper--full","padding_top":50,"padding_bottom":24}},"subfooter":{"type":"subfooter","settings":{"footer_secondary_linklist":"","footer_payment_enable":false,"footer_social_enable":false,"show_locale_selector":true,"show_currency_selector":true,"width":"wrapper--full","padding_top":0,"padding_bottom":36}}},"order":["footer","subfooter"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "newsletter_H6wirD": {
+          "type": "newsletter",
+          "disabled": true,
+          "settings": {
+            "show_image": false,
+            "wh_ratio": 2,
+            "newsletter_enable": true,
+            "recaptcha_enabled": false,
+            "kicker": "",
+            "heading": "Exclusive offers straight to your inbox",
+            "richtext": "<p>Join to get special offers, free giveaways, and once-in-a-lifetime deals.</p>",
+            "text_size": 4,
+            "background_color": "#f2f1f0",
+            "text_color_value": "#656565"
+          }
+        },
+        "linklist-1": {
+          "type": "linklist",
+          "settings": {
+            "linklist": "footer-shop",
+            "title": "Shop",
+            "accordion_default": ""
+          }
+        },
+        "linklist-2": {
+          "type": "linklist",
+          "settings": {
+            "linklist": "footer",
+            "title": "About Us",
+            "accordion_default": ""
+          }
+        },
+        "linklist_43UzHa": {
+          "type": "linklist",
+          "settings": {
+            "linklist": "footer-professional-resources",
+            "title": "Professional Resources",
+            "accordion_default": ""
+          }
+        },
+        "linklist_GYrEP6": {
+          "type": "linklist",
+          "settings": {
+            "linklist": "footer-contact-us",
+            "title": "Get in Touch",
+            "accordion_default": ""
+          }
+        },
+        "social": {
+          "type": "social",
+          "settings": {
+            "title": "Let's Glow Together.",
+            "text_size": 7,
+            "enable_follow_on_shop": true
+          }
+        }
+      },
+      "block_order": [
+        "newsletter_H6wirD",
+        "linklist-1",
+        "linklist-2",
+        "linklist_43UzHa",
+        "linklist_GYrEP6",
+        "social"
+      ],
+      "settings": {
+        "menu_position": "left",
+        "logo_max_limit": 310,
+        "width": "wrapper--full",
+        "padding_top": 50,
+        "padding_bottom": 24
+      }
+    },
+    "subfooter": {
+      "type": "subfooter",
+      "settings": {
+        "footer_secondary_linklist": "",
+        "footer_payment_enable": false,
+        "footer_social_enable": false,
+        "show_locale_selector": true,
+        "show_currency_selector": true,
+        "width": "wrapper--full",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "subfooter"
+  ]
+}

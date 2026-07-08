@@ -1,1 +1,96 @@
-{"sections":{"main":{"type":"page","disabled":true,"settings":{"kicker":"","kicker_size":3,"show_title":true,"title_size":8,"show_content":true,"content_size":5,"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper--full","padding_top":78,"padding_bottom":36}},"section_double_V6rBYp":{"type":"section-double","blocks":{"text_A86ifH":{"type":"text","settings":{"kicker":"","title":"Skincare Treatment Agreement","text":"<p>When applying to become a Green Envee Professional Partner you have agreed with each statement below:<br\/><br\/><\/p>","font_size":5,"text_columns":1,"align_text":"text-center","button_text":"","button_url":"","button_color":"btn--neutral","button_style":"btn-text-thick-line","text_color":"text--neutral","bg_color":""}}},"block_order":["text_A86ifH"],"settings":{"height":"use_image","brick_gutter":0,"borders":false,"bg_color":"","preload_image":false,"width":"wrapper","padding_top":70,"padding_bottom":0}},"section_richtext_DbTGjW":{"type":"section-richtext","blocks":{"text_gkMaPn":{"type":"text","settings":{"text":"<p>1. You hereby confirm that you are licensed and insured to perform professional skin care treatments and services, and have the required training in skin care to perform professional treatments and chemical peels.<br\/><br\/>2. You acknowledge that Green Envee, LLC has provided the professional protocols for Green Envee professional products which you agree to follow and take full responsibility for any adverse results that may arise from performing these treatments improperly and not in accordance with Green Envee Skin Care protocols.<br\/><br\/>3. You agree to acquire a signed Skin Health Intake Form, from each client receiving treatments prior to performing Green Envee professional treatments and chemical peels.<br\/><br\/>4. You understand, acknowledge and agree that if you deviate in any way from these protocols and guidelines, you automatically release Green Envee, LLC from liability in the event of any undesired or negative outcomes from performing Green Envee’s professional treatments and peels.<\/p>","text_size":4,"text_columns":1}}},"block_order":["text_gkMaPn"],"settings":{"align_text":"text-left","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper","padding_top":0,"padding_bottom":70}}},"order":["main","section_double_V6rBYp","section_richtext_DbTGjW"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": true,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper--full",
+        "padding_top": 78,
+        "padding_bottom": 36
+      }
+    },
+    "section_double_V6rBYp": {
+      "type": "section-double",
+      "blocks": {
+        "text_A86ifH": {
+          "type": "text",
+          "settings": {
+            "kicker": "",
+            "title": "Skincare Treatment Agreement",
+            "text": "<p>When applying to become a Green Envee Professional Partner you have agreed with each statement below:<br/><br/></p>",
+            "font_size": 5,
+            "text_columns": 1,
+            "align_text": "text-center",
+            "button_text": "",
+            "button_url": "",
+            "button_color": "btn--neutral",
+            "button_style": "btn-text-thick-line",
+            "text_color": "text--neutral",
+            "bg_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_A86ifH"
+      ],
+      "settings": {
+        "height": "use_image",
+        "brick_gutter": 0,
+        "borders": false,
+        "bg_color": "",
+        "preload_image": false,
+        "width": "wrapper",
+        "padding_top": 70,
+        "padding_bottom": 0
+      }
+    },
+    "section_richtext_DbTGjW": {
+      "type": "section-richtext",
+      "blocks": {
+        "text_gkMaPn": {
+          "type": "text",
+          "settings": {
+            "text": "<p>1. You hereby confirm that you are licensed and insured to perform professional skin care treatments and services, and have the required training in skin care to perform professional treatments and chemical peels.<br/><br/>2. You acknowledge that Green Envee, LLC has provided the professional protocols for Green Envee professional products which you agree to follow and take full responsibility for any adverse results that may arise from performing these treatments improperly and not in accordance with Green Envee Skin Care protocols.<br/><br/>3. You agree to acquire a signed Skin Health Intake Form, from each client receiving treatments prior to performing Green Envee professional treatments and chemical peels.<br/><br/>4. You understand, acknowledge and agree that if you deviate in any way from these protocols and guidelines, you automatically release Green Envee, LLC from liability in the event of any undesired or negative outcomes from performing Green Envee’s professional treatments and peels.</p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "text_gkMaPn"
+      ],
+      "settings": {
+        "align_text": "text-left",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 0,
+        "padding_bottom": 70
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_double_V6rBYp",
+    "section_richtext_DbTGjW"
+  ]
+}

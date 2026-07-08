@@ -1,1 +1,385 @@
-{"sections":{"main":{"type":"page","settings":{"kicker":"","kicker_size":3,"show_title":false,"title_size":8,"show_content":true,"content_size":5,"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper--full","padding_top":78,"padding_bottom":36}},"section_richtext_FJq4hC":{"type":"section-richtext","blocks":{"kicker_qMaeXG":{"type":"kicker","settings":{"kicker":"","enable_line":false,"text_size":4}},"heading_6iAjMk":{"type":"heading","settings":{"heading":"{{ page.metafields.custom.job_title.value }}","text_size":7}},"text_4bpidH":{"type":"text","settings":{"text":"<p>Role Type: {{ page.metafields.custom.employment_type.value }}<\/p>","text_size":4,"text_columns":1}},"text_HngaLU":{"type":"text","settings":{"text":"<p><strong>Location:<\/strong> {{ page.metafields.custom.location.value }}<\/p>","text_size":4,"text_columns":3}},"text_WQJ3PR":{"type":"text","settings":{"text":"<p>Department: {{ page.metafields.custom.department.value }}<\/p>","text_size":4,"text_columns":1}},"spacer_JBKnpz":{"type":"spacer","settings":{"spacer_padding":40,"show_line":false}},"text_7ctKk7":{"type":"text","settings":{"text":"<p><strong>About the Role<\/strong><\/p>","text_size":6,"text_columns":1}},"text_AWK4hn":{"type":"text","settings":{"text":"{{ page.metafields.custom.job_description | metafield_tag }}","text_size":4,"text_columns":1}},"spacer_jmnABx":{"type":"spacer","settings":{"spacer_padding":40,"show_line":false}},"text_UHEewM":{"type":"text","settings":{"text":"<p><strong>Core Responsibilities<\/strong><\/p>","text_size":6,"text_columns":1}},"text_kf8ixm":{"type":"text","settings":{"text":"{{ page.metafields.custom.responsibilities | metafield_tag }}","text_size":4,"text_columns":1}},"spacer_c88NRn":{"type":"spacer","settings":{"spacer_padding":40,"show_line":false}},"text_JbDtB9":{"type":"text","settings":{"text":"<p><strong>Qualifications<\/strong><\/p>","text_size":6,"text_columns":1}},"text_bdYz4t":{"type":"text","settings":{"text":"{{ page.metafields.custom.qualifications | metafield_tag }}","text_size":4,"text_columns":1}},"spacer_6yCRcr":{"type":"spacer","settings":{"spacer_padding":40,"show_line":false}},"text_UyXqyQ":{"type":"text","settings":{"text":"<p><strong>Who You Are<\/strong><\/p>","text_size":6,"text_columns":1}},"text_F8eAHn":{"type":"text","settings":{"text":"<ul><li>You bring a consistently positive, upbeat energy to customers, pros, and teammates<\/li><li>You genuinely enjoy helping people and turning problems into easy wins<\/li><li>You are calm under pressure and solutions-oriented when things change or issues arise<\/li><li>You’re a team player who collaborates well and is open to feedback and continual improvement<\/li><\/ul>","text_size":4,"text_columns":1}},"spacer_g494Rn":{"type":"spacer","settings":{"spacer_padding":40,"show_line":false}},"text_6k98cr":{"type":"text","disabled":true,"settings":{"text":"<p><strong>Compensation + Benefits<\/strong><\/p>","text_size":6,"text_columns":1}},"text_gqWhtq":{"type":"text","disabled":true,"settings":{"text":"<p>Base Salary: $90,000 - $100,000 based on experience + performance based bonus tied to sales and goal achievement<\/p><p>Medical + Dental Benefits + PTO<\/p>","text_size":4,"text_columns":1}},"button_aKmPiq":{"type":"button","disabled":true,"settings":{"link_text_1":"Apply Now","link_1":"shopify:\/\/pages\/job-application","button_size_1":"btn--medium","button_style_1":"btn--outline","button_color_1":"btn--neutral","link_text_2":"","link_2":"","button_size_2":"btn--medium","button_style_2":"btn-text-thick-line","button_color_2":"btn--neutral","link_text_3":"","link_3":"","button_size_3":"btn--long","button_style_3":"btn-text-thick-line","button_color_3":"btn--white"}}},"block_order":["kicker_qMaeXG","heading_6iAjMk","text_4bpidH","text_HngaLU","text_WQJ3PR","spacer_JBKnpz","text_7ctKk7","text_AWK4hn","spacer_jmnABx","text_UHEewM","text_kf8ixm","spacer_c88NRn","text_JbDtB9","text_bdYz4t","spacer_6yCRcr","text_UyXqyQ","text_F8eAHn","spacer_g494Rn","text_6k98cr","text_gqWhtq","button_aKmPiq"],"name":"Rich text","settings":{"align_text":"text-left","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper","padding_top":0,"padding_bottom":0}},"section_richtext_tC7PTC":{"type":"section-richtext","blocks":{"heading_NjcV9V":{"type":"heading","settings":{"heading":"Stay up to date","text_size":7}},"kicker_ggi8e3":{"type":"kicker","settings":{"kicker":"on social media @greenenvee","enable_line":false,"text_size":4}}},"block_order":["heading_NjcV9V","kicker_ggi8e3"],"disabled":true,"settings":{"align_text":"text-left","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper--full","padding_top":36,"padding_bottom":36}},"section_gallery_4ajYBn":{"type":"section-gallery","blocks":{"image_9HhjeE":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-1.png","link":"https:\/\/www.instagram.com\/greenenvee\/?hl=en"}},"image_G9BeY6":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-2.png","link":"https:\/\/www.instagram.com\/p\/C-dxmcKPlqG\/?hl=en&img_index=1"}},"image_YGKfAB":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-3.png","link":"https:\/\/www.instagram.com\/p\/C-dSvDyzcXc\/?hl=en&img_index=1"}},"image_4f7AUc":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-4.png","link":"https:\/\/www.instagram.com\/p\/C_ggbiNuaxW\/?hl=en&img_index=1"}},"image_cYVbDY":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-5.png","link":"https:\/\/www.instagram.com\/p\/C-nbz-jNeIW\/?hl=en"}}},"block_order":["image_9HhjeE","image_G9BeY6","image_YGKfAB","image_4f7AUc","image_cYVbDY"],"disabled":true,"settings":{"scale_image":true,"wh_ratio":1,"bg":"palette--light bg--neutral","add_gutters":true,"progress_bar":"mobile","grid_large":5,"grid_medium":2,"grid_mobile":1.2,"width":"wrapper--full","padding_top":0,"padding_bottom":36}},"section_richtext_gYKnkC":{"type":"section-richtext","blocks":{"button_nR7km7":{"type":"button","settings":{"link_text_1":"Apply now","link_1":"shopify:\/\/pages\/job-application","button_size_1":"btn--medium","button_style_1":"btn--outline","button_color_1":"btn--neutral","link_text_2":"","link_2":"","button_size_2":"btn--medium","button_style_2":"btn-text-thick-line","button_color_2":"btn--neutral","link_text_3":"","link_3":"","button_size_3":"btn--long","button_style_3":"btn-text-thick-line","button_color_3":"btn--white"}}},"block_order":["button_nR7km7"],"name":"Rich text","settings":{"align_text":"text-left","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper","padding_top":0,"padding_bottom":70}}},"order":["main","section_richtext_FJq4hC","section_richtext_tC7PTC","section_gallery_4ajYBn","section_richtext_gYKnkC"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": false,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper--full",
+        "padding_top": 78,
+        "padding_bottom": 36
+      }
+    },
+    "section_richtext_FJq4hC": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_qMaeXG": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "",
+            "enable_line": false,
+            "text_size": 4
+          }
+        },
+        "heading_6iAjMk": {
+          "type": "heading",
+          "settings": {
+            "heading": "{{ page.metafields.custom.job_title.value }}",
+            "text_size": 7
+          }
+        },
+        "text_4bpidH": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Role Type: {{ page.metafields.custom.employment_type.value }}</p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        },
+        "text_HngaLU": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Location:</strong> {{ page.metafields.custom.location.value }}</p>",
+            "text_size": 4,
+            "text_columns": 3
+          }
+        },
+        "text_WQJ3PR": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Department: {{ page.metafields.custom.department.value }}</p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        },
+        "spacer_JBKnpz": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 40,
+            "show_line": false
+          }
+        },
+        "text_7ctKk7": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>About the Role</strong></p>",
+            "text_size": 6,
+            "text_columns": 1
+          }
+        },
+        "text_AWK4hn": {
+          "type": "text",
+          "settings": {
+            "text": "{{ page.metafields.custom.job_description | metafield_tag }}",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        },
+        "spacer_jmnABx": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 40,
+            "show_line": false
+          }
+        },
+        "text_UHEewM": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Core Responsibilities</strong></p>",
+            "text_size": 6,
+            "text_columns": 1
+          }
+        },
+        "text_kf8ixm": {
+          "type": "text",
+          "settings": {
+            "text": "{{ page.metafields.custom.responsibilities | metafield_tag }}",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        },
+        "spacer_c88NRn": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 40,
+            "show_line": false
+          }
+        },
+        "text_JbDtB9": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Qualifications</strong></p>",
+            "text_size": 6,
+            "text_columns": 1
+          }
+        },
+        "text_bdYz4t": {
+          "type": "text",
+          "settings": {
+            "text": "{{ page.metafields.custom.qualifications | metafield_tag }}",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        },
+        "spacer_6yCRcr": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 40,
+            "show_line": false
+          }
+        },
+        "text_UyXqyQ": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Who You Are</strong></p>",
+            "text_size": 6,
+            "text_columns": 1
+          }
+        },
+        "text_F8eAHn": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li>You bring a consistently positive, upbeat energy to customers, pros, and teammates</li><li>You genuinely enjoy helping people and turning problems into easy wins</li><li>You are calm under pressure and solutions-oriented when things change or issues arise</li><li>You’re a team player who collaborates well and is open to feedback and continual improvement</li></ul>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        },
+        "spacer_g494Rn": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 40,
+            "show_line": false
+          }
+        },
+        "text_6k98cr": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "<p><strong>Compensation + Benefits</strong></p>",
+            "text_size": 6,
+            "text_columns": 1
+          }
+        },
+        "text_gqWhtq": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "<p>Base Salary: $90,000 - $100,000 based on experience + performance based bonus tied to sales and goal achievement</p><p>Medical + Dental Benefits + PTO</p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        },
+        "button_aKmPiq": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "link_text_1": "Apply Now",
+            "link_1": "shopify://pages/job-application",
+            "button_size_1": "btn--medium",
+            "button_style_1": "btn--outline",
+            "button_color_1": "btn--neutral",
+            "link_text_2": "",
+            "link_2": "",
+            "button_size_2": "btn--medium",
+            "button_style_2": "btn-text-thick-line",
+            "button_color_2": "btn--neutral",
+            "link_text_3": "",
+            "link_3": "",
+            "button_size_3": "btn--long",
+            "button_style_3": "btn-text-thick-line",
+            "button_color_3": "btn--white"
+          }
+        }
+      },
+      "block_order": [
+        "kicker_qMaeXG",
+        "heading_6iAjMk",
+        "text_4bpidH",
+        "text_HngaLU",
+        "text_WQJ3PR",
+        "spacer_JBKnpz",
+        "text_7ctKk7",
+        "text_AWK4hn",
+        "spacer_jmnABx",
+        "text_UHEewM",
+        "text_kf8ixm",
+        "spacer_c88NRn",
+        "text_JbDtB9",
+        "text_bdYz4t",
+        "spacer_6yCRcr",
+        "text_UyXqyQ",
+        "text_F8eAHn",
+        "spacer_g494Rn",
+        "text_6k98cr",
+        "text_gqWhtq",
+        "button_aKmPiq"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-left",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "section_richtext_tC7PTC": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_NjcV9V": {
+          "type": "heading",
+          "settings": {
+            "heading": "Stay up to date",
+            "text_size": 7
+          }
+        },
+        "kicker_ggi8e3": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "on social media @greenenvee",
+            "enable_line": false,
+            "text_size": 4
+          }
+        }
+      },
+      "block_order": [
+        "heading_NjcV9V",
+        "kicker_ggi8e3"
+      ],
+      "disabled": true,
+      "settings": {
+        "align_text": "text-left",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper--full",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "section_gallery_4ajYBn": {
+      "type": "section-gallery",
+      "blocks": {
+        "image_9HhjeE": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-1.png",
+            "link": "https://www.instagram.com/greenenvee/?hl=en"
+          }
+        },
+        "image_G9BeY6": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-2.png",
+            "link": "https://www.instagram.com/p/C-dxmcKPlqG/?hl=en&img_index=1"
+          }
+        },
+        "image_YGKfAB": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-3.png",
+            "link": "https://www.instagram.com/p/C-dSvDyzcXc/?hl=en&img_index=1"
+          }
+        },
+        "image_4f7AUc": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-4.png",
+            "link": "https://www.instagram.com/p/C_ggbiNuaxW/?hl=en&img_index=1"
+          }
+        },
+        "image_cYVbDY": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-5.png",
+            "link": "https://www.instagram.com/p/C-nbz-jNeIW/?hl=en"
+          }
+        }
+      },
+      "block_order": [
+        "image_9HhjeE",
+        "image_G9BeY6",
+        "image_YGKfAB",
+        "image_4f7AUc",
+        "image_cYVbDY"
+      ],
+      "disabled": true,
+      "settings": {
+        "scale_image": true,
+        "wh_ratio": 1,
+        "bg": "palette--light bg--neutral",
+        "add_gutters": true,
+        "progress_bar": "mobile",
+        "grid_large": 5,
+        "grid_medium": 2,
+        "grid_mobile": 1.2,
+        "width": "wrapper--full",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "section_richtext_gYKnkC": {
+      "type": "section-richtext",
+      "blocks": {
+        "button_nR7km7": {
+          "type": "button",
+          "settings": {
+            "link_text_1": "Apply now",
+            "link_1": "shopify://pages/job-application",
+            "button_size_1": "btn--medium",
+            "button_style_1": "btn--outline",
+            "button_color_1": "btn--neutral",
+            "link_text_2": "",
+            "link_2": "",
+            "button_size_2": "btn--medium",
+            "button_style_2": "btn-text-thick-line",
+            "button_color_2": "btn--neutral",
+            "link_text_3": "",
+            "link_3": "",
+            "button_size_3": "btn--long",
+            "button_style_3": "btn-text-thick-line",
+            "button_color_3": "btn--white"
+          }
+        }
+      },
+      "block_order": [
+        "button_nR7km7"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-left",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 0,
+        "padding_bottom": 70
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_richtext_FJq4hC",
+    "section_richtext_tC7PTC",
+    "section_gallery_4ajYBn",
+    "section_richtext_gYKnkC"
+  ]
+}

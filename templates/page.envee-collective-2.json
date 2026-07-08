@@ -1,0 +1,513 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "section_hero_TxTJgV": {
+      "type": "section-hero",
+      "blocks": {
+        "heading_JzwEwc": {
+          "type": "heading",
+          "settings": {
+            "title": "Wholesale Partnership",
+            "text_size": 9
+          }
+        },
+        "spacer_yztqAP": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 12,
+            "show_line": false
+          }
+        },
+        "kicker_RLqMqw": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "Join the Envee Pro Collective",
+            "enable_line": false,
+            "text_size": 4
+          }
+        },
+        "button_P3wnDe": {
+          "type": "button",
+          "settings": {
+            "link_text_1": "",
+            "link_1": "",
+            "button_size_1": "btn--long",
+            "button_style_1": "btn--outline",
+            "button_color_1": "btn--white",
+            "link_text_2": "Our Brand Story",
+            "link_2": "shopify://pages/our-brand-story",
+            "button_size_2": "btn--long",
+            "button_style_2": "btn--outline",
+            "button_color_2": "btn--white",
+            "link_text_3": "",
+            "link_3": "",
+            "button_size_3": "btn--long",
+            "button_style_3": "btn-text-thick-line",
+            "button_color_3": "btn--white"
+          }
+        },
+        "spacer_DrawiN": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 100,
+            "show_line": false
+          }
+        },
+        "spacer_H94baM": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 100,
+            "show_line": false
+          }
+        },
+        "spacer_nMYjbn": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 100,
+            "show_line": false
+          }
+        },
+        "spacer_9pmGke": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 100,
+            "show_line": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_JzwEwc",
+        "spacer_yztqAP",
+        "kicker_RLqMqw",
+        "button_P3wnDe",
+        "spacer_DrawiN",
+        "spacer_H94baM",
+        "spacer_nMYjbn",
+        "spacer_9pmGke"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Envee_Collective.png",
+        "height": "use_screen_full",
+        "overlay_opacity": 0,
+        "overlay_color": "#000000",
+        "enable_overlay_text": false,
+        "preload_image": false,
+        "content_width": 2000,
+        "text_align": "align--top-center",
+        "text_color": "text--white",
+        "color_bg": "hero__content--transparent",
+        "width": "wrapper--none",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "section_richtext_TLBGQJ": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_hHLQeY": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "Where Clinical Plant Actives",
+            "enable_line": false,
+            "text_size": 8
+          }
+        },
+        "heading_RACjad": {
+          "type": "heading",
+          "settings": {
+            "heading": "Meet Functional Wellness",
+            "text_size": 4
+          }
+        },
+        "spacer_8xEr6y": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 46,
+            "show_line": false
+          }
+        },
+        "text_yFMn3q": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>Antioxidant-Dense. Barrier Supportive. Intentionally Formulated for Transformation.<br/><br/></em>Green Envee was created for estheticians, spas, and wellness professionals who believe skincare should do more than treat the skin. It should support the whole client experience.</p><p>Our professional skincare collection bridges the gap between advanced skincare science and wellness-centered treatment design, combining antioxidant-dense botanicals, barrier-supportive ingredients, and intentional actives to deliver visible results while elevating the treatment room experience.</p>",
+            "text_size": 3,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "kicker_hHLQeY",
+        "heading_RACjad",
+        "spacer_8xEr6y",
+        "text_yFMn3q"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 0
+      }
+    },
+    "section_double_XGamBn": {
+      "type": "section-double",
+      "blocks": {
+        "image_VRHFgQ": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/ScienceProps.png",
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "enable_overlay_text": false,
+            "kicker": "",
+            "title": "",
+            "richtext": "",
+            "text_align": "align--middle-center",
+            "text_color": "text--white",
+            "link_text": "",
+            "link": "",
+            "button_color": "btn--white",
+            "button_style": "btn"
+          }
+        },
+        "text_wHh3gr": {
+          "type": "text",
+          "settings": {
+            "kicker": "",
+            "title": "",
+            "text": "<h5><strong>Why Professionals Choose<br/>Green Envee Pro</strong></h5><p><br/>Clinical-Level Results. Without Compromise.<br/><br/>Powered by intentional formulations, non-toxic ingredients, antioxidant-rich botanicals, barrier-supportive nutrients, and anti-inflammatory plant actives, our collection is designed to support visible transformation and long-term skin health across all skin types.<br/><br/>Our Partners Value:<br/><br/>✔ Visible, professional results that build client trust and retention<br/><br/>✔ A differentiated approach that combines advanced skincare science with functional wellness<br/><br/>✔ High-performance formulations designed to support long-term skin health across all skin types<br/><br/>✔ Luxury treatment experiences that elevate the client journey and set their business apart<br/><br/>✔ Comprehensive education, business resources, and dedicated partnership support</p>",
+            "font_size": 3,
+            "text_columns": 1,
+            "align_text": "text-left",
+            "button_text": "Apply Now",
+            "button_url": "https://greenenvee.com/pages/become-a-spa-partner",
+            "button_color": "btn--neutral",
+            "button_style": "btn--outline btn--long",
+            "text_color": "text--neutral",
+            "bg_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_VRHFgQ",
+        "text_wHh3gr"
+      ],
+      "name": "Image with text",
+      "settings": {
+        "height": "use_image",
+        "brick_gutter": 0,
+        "borders": false,
+        "bg_color": "",
+        "preload_image": false,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 0
+      }
+    },
+    "section_richtext_QPnCRm": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_Jtnaei": {
+          "type": "heading",
+          "settings": {
+            "heading": "What Makes Green Envee Different",
+            "text_size": 8
+          }
+        }
+      },
+      "block_order": [
+        "heading_Jtnaei"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper--full",
+        "padding_top": 102,
+        "padding_bottom": 0
+      }
+    },
+    "section_hero_U8X7xw": {
+      "type": "section-hero",
+      "name": "Image banner",
+      "settings": {
+        "image": "shopify://shop_images/BenefitChart.png",
+        "mobile_image": "shopify://shop_images/BenefitChart-Mobile.png",
+        "height": "use_image",
+        "overlay_opacity": 0,
+        "overlay_color": "#000",
+        "enable_overlay_text": false,
+        "preload_image": false,
+        "content_width": 2000,
+        "text_align": "align--middle-center",
+        "text_color": "text--white",
+        "color_bg": "hero__content--transparent",
+        "width": "wrapper--none",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "section_double_CNAATy": {
+      "type": "section-double",
+      "blocks": {
+        "video_XJWkJN": {
+          "type": "video",
+          "settings": {
+            "video_bg": "shopify://files/videos/GEU Header.mp4",
+            "object_position": "center-center",
+            "video_link": "",
+            "popup_text": "",
+            "kicker": "",
+            "title": "",
+            "richtext": "",
+            "text_align": "align--middle-center",
+            "text_color": "text--white",
+            "overlay_opacity": 15,
+            "overlay_color": "#000000",
+            "link_text": "",
+            "link": "",
+            "button_color": "btn--white",
+            "button_style": "btn"
+          }
+        },
+        "text_AKVqyT": {
+          "type": "text",
+          "settings": {
+            "kicker": "",
+            "title": "",
+            "text": "<h5><strong>Take the Next Step</strong></h5><p><br/>Gain access to professional education, business support, and results-driven skincare designed to help your practice thrive.<br/><br/>Step 1: Submit your application<br/><br/>Step 2: Book Your Discovery Call<br/><br/>Step 3: Place Your Opening Order<br/><br/>Step 4: Begin Your Green Envee Partnership</p>",
+            "font_size": 3,
+            "text_columns": 1,
+            "align_text": "text-left",
+            "button_text": "Apply Now",
+            "button_url": "https://greenenvee.com/pages/become-a-spa-partner",
+            "button_color": "btn--neutral",
+            "button_style": "btn--outline btn--long",
+            "text_color": "text--neutral",
+            "bg_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "video_XJWkJN",
+        "text_AKVqyT"
+      ],
+      "name": "Image with text",
+      "settings": {
+        "height": "use_image",
+        "brick_gutter": 0,
+        "borders": false,
+        "bg_color": "",
+        "preload_image": false,
+        "width": "wrapper",
+        "padding_top": 64,
+        "padding_bottom": 0
+      }
+    },
+    "section_richtext_LzWFrY": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_VVpGhL": {
+          "type": "heading",
+          "settings": {
+            "heading": "Grow With Confidence. Partner With Purpose.",
+            "text_size": 8
+          }
+        },
+        "text_NW8cB7": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Everything you need to support client results, business growth, and long-term success.</strong></p>",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "heading_VVpGhL",
+        "text_NW8cB7"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 0
+      }
+    },
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": false,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper--full",
+        "padding_top": 78,
+        "padding_bottom": 36
+      }
+    },
+    "section_richtext_RMfpkF": {
+      "type": "section-richtext",
+      "blocks": {
+        "text_VxMwx6": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Partner Benefits:<br/><br/>✔ Marketing Rewards Program<br/><br/>✔ Green Envee University Education Platform<br/><br/>✔ Personalized Onboarding & Business Support<br/><br/>✔ Treatment Protocols & Revenue-Building Resources<br/><br/>✔ Marketing Assets & Retail Growth Tools<br/><br/>✔ Access to the Envee Pro Collective Community<br/><br/>✔ Monthly Educational Webinars & Business Trainings<br/><br/>✔ Client Home Care Guides & Retail Conversion Tools</p>",
+            "text_size": 3,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "text_VxMwx6"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 46,
+        "padding_bottom": 0
+      }
+    },
+    "section_richtext_xLXPHy": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_UPYPK6": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "",
+            "enable_line": false,
+            "text_size": 4
+          }
+        },
+        "kicker_aaPYeF": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "What Green Envee",
+            "enable_line": false,
+            "text_size": 4
+          }
+        },
+        "heading_EnzjQt": {
+          "type": "heading",
+          "settings": {
+            "heading": "Pro Partners Are Saying",
+            "text_size": 8
+          }
+        }
+      },
+      "block_order": [
+        "kicker_UPYPK6",
+        "kicker_aaPYeF",
+        "heading_EnzjQt"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 26
+      }
+    },
+    "section_icons_3AttRb": {
+      "type": "section-icons",
+      "blocks": {
+        "icon_block_xAqAXF": {
+          "type": "icon_block",
+          "settings": {
+            "icon_name": "icon-shipment-world",
+            "icon_alt": "shopify://shop_images/Upcoming-Events_a5d3f6c5-ccd7-41e5-911d-6f01608076ca.png",
+            "icon_color": "#aaaaaa",
+            "title": "Emma Guinn",
+            "text": "<p><br/>”Green Envee has set a very high bar for skincare. These products are infused with powerful plant actives that truly deliver on their promise. The results speak for themselves - my skin has never felt so smooth, clear, and radiant.“ <br/><br/>- Emma Guinn<br/>LE at The Babe Bodega</p>",
+            "link_text": "",
+            "link_url": ""
+          }
+        },
+        "icon_block_qTUUEz": {
+          "type": "icon_block",
+          "settings": {
+            "icon_name": "icon-shipment-world",
+            "icon_alt": "shopify://shop_images/KristenHeadshot_2.jpg",
+            "icon_color": "#aaaaaa",
+            "title": "Kristen Brōwe",
+            "text": "<p><br/>”Since becoming a spa partner, Green Envee has not only enhanced the quality of our services but also played a major role in scaling my business to where it is today.”<br/><br/>- Kristen Brōwe<br/>Founder + CEO of Brōwe Skin + Brow Bar<br/><br/></p>",
+            "link_text": "",
+            "link_url": ""
+          }
+        },
+        "icon_block_dzRNqD": {
+          "type": "icon_block",
+          "settings": {
+            "icon_name": "icon-shipment-world",
+            "icon_alt": "shopify://shop_images/Screenshot_2026-06-22_093840.png",
+            "icon_color": "#aaaaaa",
+            "title": "Terah Aarino",
+            "text": "<p><br/>“When initially learning about all that Green Envee has to offer to our spa, choosing to partner with them took no time at all. We’re so happy to have paired with such a thoughtful, caring and supportive brand and we just hope that any other small business finds that same ease as we did when selecting Green Envee as a spa partner. “ <br/><br/>- Terah Aarino<br/>Founder of Aura Beauty<br/><br/></p>",
+            "link_text": "",
+            "link_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "icon_block_xAqAXF",
+        "icon_block_qTUUEz",
+        "icon_block_dzRNqD"
+      ],
+      "name": "Icon columns",
+      "settings": {
+        "title": "",
+        "bg": "palette--light bg--neutral",
+        "icons_size": 80,
+        "icon_alignment": "icon--top",
+        "layout": "grid--stacked",
+        "align_text": "text-center",
+        "width": "wrapper",
+        "padding_top": 36,
+        "padding_bottom": 100
+      }
+    }
+  },
+  "order": [
+    "section_hero_TxTJgV",
+    "section_richtext_TLBGQJ",
+    "section_double_XGamBn",
+    "section_richtext_QPnCRm",
+    "section_hero_U8X7xw",
+    "section_double_CNAATy",
+    "section_richtext_LzWFrY",
+    "main",
+    "section_richtext_RMfpkF",
+    "section_richtext_xLXPHy",
+    "section_icons_3AttRb"
+  ]
+}

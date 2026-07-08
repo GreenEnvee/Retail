@@ -1,1 +1,244 @@
-{"sections":{"section_richtext_Xrk8Vp":{"type":"section-richtext","blocks":{"kicker_hAk8cq":{"type":"kicker","settings":{"kicker":"","enable_line":false,"text_size":4}},"heading_FtEUAh":{"type":"heading","settings":{"heading":"Shop By Aroma Collection","text_size":8}},"text_hiTQrg":{"type":"text","settings":{"text":"","text_size":4,"text_columns":1}}},"block_order":["kicker_hAk8cq","heading_FtEUAh","text_hiTQrg"],"settings":{"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper","padding_top":20,"padding_bottom":8}},"main":{"type":"page","disabled":true,"settings":{"kicker":"","kicker_size":3,"show_title":true,"title_size":8,"show_content":true,"content_size":5,"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper","padding_top":36,"padding_bottom":36}},"section_list_collections_tDVdmD":{"type":"section-list-collections","blocks":{"collection_JmR6wL":{"type":"collection","settings":{"collection":"relax","image":"shopify:\/\/shop_images\/Relax-Aroma.jpg","overlay_color":"#000000","overlay_opacity":0,"top_text":"","top_text_disabled":false,"title":"","title_disabled":false,"bottom_text":"","bottom_text_disabled":false,"collection_url":"","text_color":"text--white"}},"collection_CdcAVV":{"type":"collection","settings":{"collection":"bliss","image":"shopify:\/\/shop_images\/Bliss-Aroma.png","overlay_color":"#000000","overlay_opacity":0,"top_text":"","top_text_disabled":false,"title":"","title_disabled":false,"bottom_text":"","bottom_text_disabled":false,"collection_url":"","text_color":"text--white"}},"collection_jfezDK":{"type":"collection","settings":{"collection":"balance","image":"shopify:\/\/shop_images\/Balance-Aroma.png","overlay_color":"#000000","overlay_opacity":0,"top_text":"","top_text_disabled":false,"title":"","title_disabled":false,"bottom_text":"","bottom_text_disabled":false,"collection_url":"","text_color":"text--white"}},"collection_mc3imr":{"type":"collection","settings":{"collection":"refresh","image":"shopify:\/\/shop_images\/Refresh-Aroma.png","overlay_color":"#000000","overlay_opacity":0,"top_text":"","top_text_disabled":false,"title":"","title_disabled":false,"bottom_text":"","bottom_text_disabled":false,"collection_url":"","text_color":"text--white"}},"collection_fJ6aYG":{"type":"collection","settings":{"collection":"zen","image":"shopify:\/\/shop_images\/Zen-Aroma.png","overlay_color":"#000000","overlay_opacity":0,"top_text":"","top_text_disabled":false,"title":"","title_disabled":false,"bottom_text":"","bottom_text_disabled":false,"collection_url":"","text_color":"text--white"}},"collection_LythDp":{"type":"collection","settings":{"collection":"stress-remedy","image":"shopify:\/\/shop_images\/Stress-Remedy-Aroma.png","overlay_color":"#000000","overlay_opacity":0,"top_text":"","top_text_disabled":false,"title":"","title_disabled":false,"bottom_text":"","bottom_text_disabled":false,"collection_url":"","text_color":"text--white"}},"collection_jB7ptm":{"type":"collection","settings":{"collection":"sweet-dreams","image":"shopify:\/\/shop_images\/Mist.png","overlay_color":"#000000","overlay_opacity":0,"top_text":"","top_text_disabled":false,"title":"","title_disabled":false,"bottom_text":"","bottom_text_disabled":false,"collection_url":"","text_color":"text--white"}},"collection_jxYPpX":{"type":"collection","settings":{"collection":"immunity-boost","image":"shopify:\/\/shop_images\/All-Complexion.png","overlay_color":"#000000","overlay_opacity":0,"top_text":"","top_text_disabled":false,"title":"","title_disabled":false,"bottom_text":"","bottom_text_disabled":false,"collection_url":"","text_color":"text--white"}}},"block_order":["collection_JmR6wL","collection_CdcAVV","collection_jfezDK","collection_mc3imr","collection_fJ6aYG","collection_LythDp","collection_jB7ptm","collection_jxYPpX"],"settings":{"title":"","bg":"palette--light bg--neutral","carousel_enabled_on":"mobile","wh_ratio":1.5,"grid_large":2,"grid_medium":2,"grid_mobile":1.2,"font_family":"body","title_size":8,"accent_size":3,"width":"wrapper","padding_top":36,"padding_bottom":36}}},"order":["section_richtext_Xrk8Vp","main","section_list_collections_tDVdmD"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "section_richtext_Xrk8Vp": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_hAk8cq": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "",
+            "enable_line": false,
+            "text_size": 4
+          }
+        },
+        "heading_FtEUAh": {
+          "type": "heading",
+          "settings": {
+            "heading": "Shop By Aroma Collection",
+            "text_size": 8
+          }
+        },
+        "text_hiTQrg": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_size": 4,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "kicker_hAk8cq",
+        "heading_FtEUAh",
+        "text_hiTQrg"
+      ],
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 20,
+        "padding_bottom": 8
+      }
+    },
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": true,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "section_list_collections_tDVdmD": {
+      "type": "section-list-collections",
+      "blocks": {
+        "collection_JmR6wL": {
+          "type": "collection",
+          "settings": {
+            "collection": "relax",
+            "image": "shopify://shop_images/Relax-Aroma.jpg",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "top_text": "",
+            "top_text_disabled": false,
+            "title": "",
+            "title_disabled": false,
+            "bottom_text": "",
+            "bottom_text_disabled": false,
+            "collection_url": "",
+            "text_color": "text--white"
+          }
+        },
+        "collection_CdcAVV": {
+          "type": "collection",
+          "settings": {
+            "collection": "bliss",
+            "image": "shopify://shop_images/Bliss-Aroma.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "top_text": "",
+            "top_text_disabled": false,
+            "title": "",
+            "title_disabled": false,
+            "bottom_text": "",
+            "bottom_text_disabled": false,
+            "collection_url": "",
+            "text_color": "text--white"
+          }
+        },
+        "collection_jfezDK": {
+          "type": "collection",
+          "settings": {
+            "collection": "balance",
+            "image": "shopify://shop_images/Balance-Aroma.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "top_text": "",
+            "top_text_disabled": false,
+            "title": "",
+            "title_disabled": false,
+            "bottom_text": "",
+            "bottom_text_disabled": false,
+            "collection_url": "",
+            "text_color": "text--white"
+          }
+        },
+        "collection_mc3imr": {
+          "type": "collection",
+          "settings": {
+            "collection": "refresh",
+            "image": "shopify://shop_images/Refresh-Aroma.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "top_text": "",
+            "top_text_disabled": false,
+            "title": "",
+            "title_disabled": false,
+            "bottom_text": "",
+            "bottom_text_disabled": false,
+            "collection_url": "",
+            "text_color": "text--white"
+          }
+        },
+        "collection_fJ6aYG": {
+          "type": "collection",
+          "settings": {
+            "collection": "zen",
+            "image": "shopify://shop_images/Zen-Aroma.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "top_text": "",
+            "top_text_disabled": false,
+            "title": "",
+            "title_disabled": false,
+            "bottom_text": "",
+            "bottom_text_disabled": false,
+            "collection_url": "",
+            "text_color": "text--white"
+          }
+        },
+        "collection_LythDp": {
+          "type": "collection",
+          "settings": {
+            "collection": "stress-remedy",
+            "image": "shopify://shop_images/Stress-Remedy-Aroma.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "top_text": "",
+            "top_text_disabled": false,
+            "title": "",
+            "title_disabled": false,
+            "bottom_text": "",
+            "bottom_text_disabled": false,
+            "collection_url": "",
+            "text_color": "text--white"
+          }
+        },
+        "collection_jB7ptm": {
+          "type": "collection",
+          "settings": {
+            "collection": "sweet-dreams",
+            "image": "shopify://shop_images/Mist.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "top_text": "",
+            "top_text_disabled": false,
+            "title": "",
+            "title_disabled": false,
+            "bottom_text": "",
+            "bottom_text_disabled": false,
+            "collection_url": "",
+            "text_color": "text--white"
+          }
+        },
+        "collection_jxYPpX": {
+          "type": "collection",
+          "settings": {
+            "collection": "immunity-boost",
+            "image": "shopify://shop_images/All-Complexion.png",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "top_text": "",
+            "top_text_disabled": false,
+            "title": "",
+            "title_disabled": false,
+            "bottom_text": "",
+            "bottom_text_disabled": false,
+            "collection_url": "",
+            "text_color": "text--white"
+          }
+        }
+      },
+      "block_order": [
+        "collection_JmR6wL",
+        "collection_CdcAVV",
+        "collection_jfezDK",
+        "collection_mc3imr",
+        "collection_fJ6aYG",
+        "collection_LythDp",
+        "collection_jB7ptm",
+        "collection_jxYPpX"
+      ],
+      "settings": {
+        "title": "",
+        "bg": "palette--light bg--neutral",
+        "carousel_enabled_on": "mobile",
+        "wh_ratio": 1.5,
+        "grid_large": 2,
+        "grid_medium": 2,
+        "grid_mobile": 1.2,
+        "font_family": "body",
+        "title_size": 8,
+        "accent_size": 3,
+        "width": "wrapper",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "section_richtext_Xrk8Vp",
+    "main",
+    "section_list_collections_tDVdmD"
+  ]
+}

@@ -1,1 +1,174 @@
-{"sections":{"main":{"type":"page","disabled":true,"settings":{"kicker":"","kicker_size":3,"show_title":false,"title_size":8,"show_content":true,"content_size":5,"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper--full","padding_top":78,"padding_bottom":36}},"section_hero_mn8hqg":{"type":"section-hero","disabled":true,"name":"Image banner","settings":{"image":"shopify:\/\/shop_images\/Eco-packaging_16.png","height":"use_screen_one_third","overlay_opacity":0,"overlay_color":"#000000","enable_overlay_text":false,"preload_image":false,"content_width":2000,"text_align":"align--middle-center","text_color":"text--white","color_bg":"hero__content--transparent","width":"wrapper--none","padding_top":0,"padding_bottom":0}},"section_richtext_tC7PTC":{"type":"section-richtext","blocks":{"heading_NjcV9V":{"type":"heading","settings":{"heading":"Candidate Application","text_size":7}},"kicker_ggi8e3":{"type":"kicker","settings":{"kicker":"for a Position at green envee","enable_line":false,"text_size":4}}},"block_order":["heading_NjcV9V","kicker_ggi8e3"],"settings":{"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","content_width":2000,"width":"wrapper--full","padding_top":36,"padding_bottom":36}},"section_gallery_4ajYBn":{"type":"section-gallery","blocks":{"image_9HhjeE":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-1.png","link":"https:\/\/www.instagram.com\/greenenvee\/?hl=en"}},"image_G9BeY6":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-2.png","link":"https:\/\/www.instagram.com\/p\/C-dxmcKPlqG\/?hl=en&img_index=1"}},"image_YGKfAB":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-3.png","link":"https:\/\/www.instagram.com\/p\/C-dSvDyzcXc\/?hl=en&img_index=1"}},"image_4f7AUc":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-4.png","link":"https:\/\/www.instagram.com\/p\/C_ggbiNuaxW\/?hl=en&img_index=1"}},"image_cYVbDY":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Socials-5.png","link":"https:\/\/www.instagram.com\/p\/C-nbz-jNeIW\/?hl=en"}}},"block_order":["image_9HhjeE","image_G9BeY6","image_YGKfAB","image_4f7AUc","image_cYVbDY"],"disabled":true,"settings":{"scale_image":true,"wh_ratio":1,"bg":"palette--light bg--neutral","add_gutters":true,"progress_bar":"mobile","grid_large":5,"grid_medium":2,"grid_mobile":1.2,"width":"wrapper--full","padding_top":0,"padding_bottom":36}},"section_html_cWLqeG":{"type":"section-html","disabled":true,"name":"Custom HTML","settings":{"html":"<script type=\"text\/javascript\" src=\"https:\/\/form.jotform.com\/jsform\/250876742794169\"><\/script>","width":"wrapper","padding_top":0,"padding_bottom":0}},"section_html_8AKfkd":{"type":"section-html","name":"Custom HTML","settings":{"html":"<iframe data-tally-src=\"https:\/\/tally.so\/embed\/q4aMOk?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1\" loading=\"lazy\" width=\"100%\" height=\"1186\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\" title=\"Green Envee Application\"><\/iframe>\n<script>var d=document,w=\"https:\/\/tally.so\/widgets\/embed.js\",v=function(){\"undefined\"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll(\"iframe[data-tally-src]:not([src])\").forEach((function(e){e.src=e.dataset.tallySrc}))};if(\"undefined\"!=typeof Tally)v();else if(d.querySelector('script[src=\"'+w+'\"]')==null){var s=d.createElement(\"script\");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}<\/script>","width":"wrapper--tiny","padding_top":0,"padding_bottom":0}}},"order":["main","section_hero_mn8hqg","section_richtext_tC7PTC","section_gallery_4ajYBn","section_html_cWLqeG","section_html_8AKfkd"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": false,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper--full",
+        "padding_top": 78,
+        "padding_bottom": 36
+      }
+    },
+    "section_hero_mn8hqg": {
+      "type": "section-hero",
+      "disabled": true,
+      "name": "Image banner",
+      "settings": {
+        "image": "shopify://shop_images/Eco-packaging_16.png",
+        "height": "use_screen_one_third",
+        "overlay_opacity": 0,
+        "overlay_color": "#000000",
+        "enable_overlay_text": false,
+        "preload_image": false,
+        "content_width": 2000,
+        "text_align": "align--middle-center",
+        "text_color": "text--white",
+        "color_bg": "hero__content--transparent",
+        "width": "wrapper--none",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "section_richtext_tC7PTC": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_NjcV9V": {
+          "type": "heading",
+          "settings": {
+            "heading": "Candidate Application",
+            "text_size": 7
+          }
+        },
+        "kicker_ggi8e3": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "for a Position at green envee",
+            "enable_line": false,
+            "text_size": 4
+          }
+        }
+      },
+      "block_order": [
+        "heading_NjcV9V",
+        "kicker_ggi8e3"
+      ],
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper--full",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "section_gallery_4ajYBn": {
+      "type": "section-gallery",
+      "blocks": {
+        "image_9HhjeE": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-1.png",
+            "link": "https://www.instagram.com/greenenvee/?hl=en"
+          }
+        },
+        "image_G9BeY6": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-2.png",
+            "link": "https://www.instagram.com/p/C-dxmcKPlqG/?hl=en&img_index=1"
+          }
+        },
+        "image_YGKfAB": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-3.png",
+            "link": "https://www.instagram.com/p/C-dSvDyzcXc/?hl=en&img_index=1"
+          }
+        },
+        "image_4f7AUc": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-4.png",
+            "link": "https://www.instagram.com/p/C_ggbiNuaxW/?hl=en&img_index=1"
+          }
+        },
+        "image_cYVbDY": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-5.png",
+            "link": "https://www.instagram.com/p/C-nbz-jNeIW/?hl=en"
+          }
+        }
+      },
+      "block_order": [
+        "image_9HhjeE",
+        "image_G9BeY6",
+        "image_YGKfAB",
+        "image_4f7AUc",
+        "image_cYVbDY"
+      ],
+      "disabled": true,
+      "settings": {
+        "scale_image": true,
+        "wh_ratio": 1,
+        "bg": "palette--light bg--neutral",
+        "add_gutters": true,
+        "progress_bar": "mobile",
+        "grid_large": 5,
+        "grid_medium": 2,
+        "grid_mobile": 1.2,
+        "width": "wrapper--full",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "section_html_cWLqeG": {
+      "type": "section-html",
+      "disabled": true,
+      "name": "Custom HTML",
+      "settings": {
+        "html": "<script type=\"text/javascript\" src=\"https://form.jotform.com/jsform/250876742794169\"></script>",
+        "width": "wrapper",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "section_html_8AKfkd": {
+      "type": "section-html",
+      "name": "Custom HTML",
+      "settings": {
+        "html": "<iframe data-tally-src=\"https://tally.so/embed/q4aMOk?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1\" loading=\"lazy\" width=\"100%\" height=\"1186\" frameborder=\"0\" marginheight=\"0\" marginwidth=\"0\" title=\"Green Envee Application\"></iframe>\n<script>var d=document,w=\"https://tally.so/widgets/embed.js\",v=function(){\"undefined\"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll(\"iframe[data-tally-src]:not([src])\").forEach((function(e){e.src=e.dataset.tallySrc}))};if(\"undefined\"!=typeof Tally)v();else if(d.querySelector('script[src=\"'+w+'\"]')==null){var s=d.createElement(\"script\");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>",
+        "width": "wrapper--tiny",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_hero_mn8hqg",
+    "section_richtext_tC7PTC",
+    "section_gallery_4ajYBn",
+    "section_html_cWLqeG",
+    "section_html_8AKfkd"
+  ]
+}

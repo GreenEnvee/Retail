@@ -1,0 +1,489 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "section_hero_TxTJgV": {
+      "type": "section-hero",
+      "blocks": {
+        "heading_JzwEwc": {
+          "type": "heading",
+          "settings": {
+            "title": "Join the Envee Pro Collective",
+            "text_size": 9
+          }
+        },
+        "spacer_yztqAP": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 30,
+            "show_line": false
+          }
+        },
+        "kicker_RLqMqw": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "A Professional Skincare Partnership for Results, Ritual, and Real Growth",
+            "enable_line": false,
+            "text_size": 4
+          }
+        },
+        "spacer_6bC4Ai": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 30,
+            "show_line": false
+          }
+        },
+        "button_P3wnDe": {
+          "type": "button",
+          "settings": {
+            "link_text_1": "Apply Now",
+            "link_1": "",
+            "button_size_1": "btn--long",
+            "button_style_1": "btn--outline",
+            "button_color_1": "btn--white",
+            "link_text_2": "",
+            "link_2": "",
+            "button_size_2": "btn--long",
+            "button_style_2": "btn-text-thick-line",
+            "button_color_2": "btn--white",
+            "link_text_3": "",
+            "link_3": "",
+            "button_size_3": "btn--long",
+            "button_style_3": "btn-text-thick-line",
+            "button_color_3": "btn--white"
+          }
+        },
+        "spacer_DrawiN": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 100,
+            "show_line": false
+          }
+        },
+        "spacer_9pmGke": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 100,
+            "show_line": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_JzwEwc",
+        "spacer_yztqAP",
+        "kicker_RLqMqw",
+        "spacer_6bC4Ai",
+        "button_P3wnDe",
+        "spacer_DrawiN",
+        "spacer_9pmGke"
+      ],
+      "disabled": true,
+      "settings": {
+        "image": "shopify://shop_images/Envee_Pro_Collective.png",
+        "height": "use_screen_one_half",
+        "overlay_opacity": 0,
+        "overlay_color": "#000000",
+        "enable_overlay_text": false,
+        "preload_image": false,
+        "content_width": 2000,
+        "text_align": "align--middle-center",
+        "text_color": "text--white",
+        "color_bg": "hero__content--transparent",
+        "width": "wrapper--none",
+        "padding_top": 0,
+        "padding_bottom": 32
+      }
+    },
+    "section_richtext_TLBGQJ": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_hHLQeY": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "Your Application Has Been Received",
+            "enable_line": false,
+            "text_size": 8
+          }
+        },
+        "heading_RACjad": {
+          "type": "heading",
+          "settings": {
+            "heading": "You’re one step closer to joining the Envee Pro Collective",
+            "text_size": 4
+          }
+        },
+        "spacer_8xEr6y": {
+          "type": "spacer",
+          "settings": {
+            "spacer_padding": 46,
+            "show_line": false
+          }
+        },
+        "text_yFMn3q": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Thank you for applying to partner with Green Envee.</p><p>We’re honored you’re considering aligning your business with a brand that merges advanced skin science with holistic luxury, delivering visible results while elevating the client experience.</p><p>As part of our commitment to protecting partner success, every application is thoughtfully reviewed to ensure alignment in philosophy, treatment standards, and growth vision.</p>",
+            "text_size": 5,
+            "text_columns": 1
+          }
+        }
+      },
+      "block_order": [
+        "kicker_hHLQeY",
+        "heading_RACjad",
+        "spacer_8xEr6y",
+        "text_yFMn3q"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 50
+      }
+    },
+    "section_richtext_NnxgbW": {
+      "type": "section-richtext",
+      "blocks": {
+        "button_8dYUMN": {
+          "type": "button",
+          "settings": {
+            "link_text_1": "Book Your Discovery Call",
+            "link_1": "https://calendly.com/liv-fox-greenenvee",
+            "button_size_1": "btn--long",
+            "button_style_1": "btn--outline",
+            "button_color_1": "btn--black",
+            "link_text_2": "",
+            "link_2": "https://calendly.com/liv-fox-greenenvee",
+            "button_size_2": "btn--long",
+            "button_style_2": "btn-text-thick-line",
+            "button_color_2": "btn--white",
+            "link_text_3": "",
+            "link_3": "",
+            "button_size_3": "btn--long",
+            "button_style_3": "btn-text-thick-line",
+            "button_color_3": "btn--white"
+          }
+        }
+      },
+      "block_order": [
+        "button_8dYUMN"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 0,
+        "padding_bottom": 98
+      }
+    },
+    "section_double_XGamBn": {
+      "type": "section-double",
+      "blocks": {
+        "image_VRHFgQ": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Upcoming-Events.png",
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "enable_overlay_text": false,
+            "kicker": "",
+            "title": "",
+            "richtext": "",
+            "text_align": "align--middle-center",
+            "text_color": "text--white",
+            "link_text": "",
+            "link": "",
+            "button_color": "btn--white",
+            "button_style": "btn"
+          }
+        },
+        "text_wHh3gr": {
+          "type": "text",
+          "settings": {
+            "kicker": "",
+            "title": "",
+            "text": "<h4><strong>The next step is essential.<br/></strong></h4><p><br/><br/>To move forward in the approval process, you’ll need to schedule your Discovery Call with our team.</p><p>Why This Call Matters:</p><p>This is more than a formality - it’s a strategic conversation designed to support your success.</p><p>During your Discovery Call, we will:</p><p>✔ Explore your treatment philosophy and business goals<br/>✔ Identify opportunities to elevate your client experience and results<br/>✔ Share how Green Envee supports both treatment performance <em>and</em> retail growth<br/>✔ Walk you through our professional support, education, and partner resources<br/>✔ Ensure this partnership is aligned for long-term success on both sides</p>",
+            "font_size": 4,
+            "text_columns": 1,
+            "align_text": "text-left",
+            "button_text": "",
+            "button_url": "",
+            "button_color": "btn--neutral",
+            "button_style": "btn--outline btn--long",
+            "text_color": "text--neutral",
+            "bg_color": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_VRHFgQ",
+        "text_wHh3gr"
+      ],
+      "name": "Image with text",
+      "settings": {
+        "height": "use_image",
+        "brick_gutter": 0,
+        "borders": false,
+        "bg_color": "",
+        "preload_image": false,
+        "width": "wrapper",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": false,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper--full",
+        "padding_top": 78,
+        "padding_bottom": 36
+      }
+    },
+    "section_richtext_tC7PTC": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_NjcV9V": {
+          "type": "heading",
+          "settings": {
+            "heading": "Stay up to date",
+            "text_size": 7
+          }
+        },
+        "kicker_ggi8e3": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "on social media @greenenvee",
+            "enable_line": false,
+            "text_size": 4
+          }
+        }
+      },
+      "block_order": [
+        "heading_NjcV9V",
+        "kicker_ggi8e3"
+      ],
+      "disabled": true,
+      "settings": {
+        "align_text": "text-left",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper--full",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "section_gallery_4ajYBn": {
+      "type": "section-gallery",
+      "blocks": {
+        "image_9HhjeE": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-1.png",
+            "link": "https://www.instagram.com/greenenvee/?hl=en"
+          }
+        },
+        "image_G9BeY6": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-2.png",
+            "link": "https://www.instagram.com/p/C-dxmcKPlqG/?hl=en&img_index=1"
+          }
+        },
+        "image_YGKfAB": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-3.png",
+            "link": "https://www.instagram.com/p/C-dSvDyzcXc/?hl=en&img_index=1"
+          }
+        },
+        "image_4f7AUc": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-4.png",
+            "link": "https://www.instagram.com/p/C_ggbiNuaxW/?hl=en&img_index=1"
+          }
+        },
+        "image_cYVbDY": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Socials-5.png",
+            "link": "https://www.instagram.com/p/C-nbz-jNeIW/?hl=en"
+          }
+        }
+      },
+      "block_order": [
+        "image_9HhjeE",
+        "image_G9BeY6",
+        "image_YGKfAB",
+        "image_4f7AUc",
+        "image_cYVbDY"
+      ],
+      "disabled": true,
+      "settings": {
+        "scale_image": true,
+        "wh_ratio": 1,
+        "bg": "palette--light bg--neutral",
+        "add_gutters": true,
+        "progress_bar": "mobile",
+        "grid_large": 5,
+        "grid_medium": 2,
+        "grid_mobile": 1.2,
+        "width": "wrapper--full",
+        "padding_top": 0,
+        "padding_bottom": 36
+      }
+    },
+    "section_richtext_pHcVwr": {
+      "type": "section-richtext",
+      "blocks": {
+        "heading_JQUAqL": {
+          "type": "heading",
+          "settings": {
+            "heading": "Book Your Discovery Call",
+            "text_size": 8
+          }
+        },
+        "text_EAEiYk": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Due to limited regional availability and our commitment to partner success, Discovery Call availability may be limited.</p><p>We recommend reserving your time as soon as possible to avoid delays in your application review.</p>",
+            "text_size": 5,
+            "text_columns": 1
+          }
+        },
+        "button_xmU6Lr": {
+          "type": "button",
+          "settings": {
+            "link_text_1": "Book now",
+            "link_1": "",
+            "button_size_1": "btn--long",
+            "button_style_1": "btn--outline",
+            "button_color_1": "btn--black",
+            "link_text_2": "",
+            "link_2": "https://calendly.com/liv-fox-greenenvee",
+            "button_size_2": "btn--long",
+            "button_style_2": "btn-text-thick-line",
+            "button_color_2": "btn--white",
+            "link_text_3": "",
+            "link_3": "",
+            "button_size_3": "btn--long",
+            "button_style_3": "btn-text-thick-line",
+            "button_color_3": "btn--white"
+          }
+        }
+      },
+      "block_order": [
+        "heading_JQUAqL",
+        "text_EAEiYk",
+        "button_xmU6Lr"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 102,
+        "padding_bottom": 100
+      }
+    },
+    "section_faq_hyUJah": {
+      "type": "section-faq",
+      "blocks": {
+        "text_rVPeDH": {
+          "type": "text",
+          "settings": {
+            "title": "What is Green Envee?",
+            "content": "<p>Green Envee is a clinical wellness skincare company offering professional treatment and retail systems that blend high-performance plant actives with advanced delivery technology to deliver visible results while elevating the client experience through ritual-driven skincare.</p>"
+          }
+        },
+        "text_rimHr7": {
+          "type": "text",
+          "settings": {
+            "title": "Will I have support?",
+            "content": "<p>Your partnership includes access to Green Envee University, full product protocols, marketing + sales tools, and direct 1:1 support so you are never left to figure it out alone.</p>"
+          }
+        },
+        "text_awDwxx": {
+          "type": "text",
+          "settings": {
+            "title": "Can I try before I commit?",
+            "content": "<p>Yes - sample access is available before your opening order, including sample sizes and our Skincare Luxe Minis. You can explore those here: <a href=\"https://samples.greenenvee.com/\"><span style=\"text-decoration:underline\">Green Envee Samples</span></a></p>"
+          }
+        },
+        "text_9iXHg6": {
+          "type": "text",
+          "settings": {
+            "title": "What does a typical opening order look like?",
+            "content": "<p>You can shop à la carte or choose from our curated packages based on your business and clientele.</p>"
+          }
+        },
+        "text_yBtmLf": {
+          "type": "text",
+          "settings": {
+            "title": "What does the investment look like and how quickly can I see a return?",
+            "content": "<p>Most pros performing 10-15 facials a week and retailing recommended home-care see their opening order returned within the first one to two weeks. We'll map out exactly what that looks like for your specific business on our call.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_rVPeDH",
+        "text_rimHr7",
+        "text_awDwxx",
+        "text_9iXHg6",
+        "text_yBtmLf"
+      ],
+      "name": "Accordion group",
+      "settings": {
+        "title": "",
+        "title_align": "text-left",
+        "title_size": 4,
+        "heading_size": 4,
+        "text_size": 4,
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper",
+        "padding_top": 36,
+        "padding_bottom": 100
+      }
+    }
+  },
+  "order": [
+    "section_hero_TxTJgV",
+    "section_richtext_TLBGQJ",
+    "section_richtext_NnxgbW",
+    "section_double_XGamBn",
+    "main",
+    "section_richtext_tC7PTC",
+    "section_gallery_4ajYBn",
+    "section_richtext_pHcVwr",
+    "section_faq_hyUJah"
+  ]
+}

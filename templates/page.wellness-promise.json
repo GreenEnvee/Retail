@@ -1,1 +1,149 @@
-{"sections":{"main":{"type":"page","disabled":true,"settings":{"kicker":"","kicker_size":3,"show_title":false,"title_size":8,"show_content":true,"content_size":5,"align_text":"text-center","text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper--narrow","padding_top":52,"padding_bottom":12}},"section_double_fGjMaD":{"type":"section-double","blocks":{"text_W9JzgQ":{"type":"text","settings":{"kicker":"","title":"Wellness Promise","text":"<p>THE mission at Green Envee is to share your passion for holistic wellness that brings positive change to an otherwise toxic beauty industry. The wellness of the skin is a blueprint to understanding overall health. Understanding the connection between skin health and mind + body is an important aspect to the Green Envee spa experience. the commitment to clean beauty + wellness is treated as whole beauty.<\/p>","font_size":5,"text_columns":1,"align_text":"text-center","button_text":"Shop clean skincare","button_url":"shopify:\/\/collections\/skin-care","button_color":"btn--neutral","button_style":"btn--outline btn--long","text_color":"text--neutral","bg_color":""}},"image_39T4ea":{"type":"image","settings":{"image":"shopify:\/\/shop_images\/Wellness-Promise-Header-11_057d683e-7440-43b7-bd57-7e515af8e97f.png","overlay_opacity":0,"overlay_color":"#000000","enable_overlay_text":false,"kicker":"","title":"","richtext":"","text_align":"align--middle-center","text_color":"text--white","link_text":"","link":"","button_color":"btn--white","button_style":"btn"}}},"block_order":["text_W9JzgQ","image_39T4ea"],"settings":{"height":"use_image","brick_gutter":0,"borders":false,"bg_color":"","preload_image":false,"width":"wrapper","padding_top":70,"padding_bottom":70}},"section_faq_9KwQHT":{"type":"section-faq","blocks":{"text_3VhE38":{"type":"text","settings":{"title":"100% Clean Beauty","content":"<p>SAFE + PURE INGREDIENTS THAT ARE NEVER HARMFUL + ALWAYS BENEFICIAL.  OUR COMMITMENT TO 100% NON-TOXIC BEAUTY <\/p>"}},"text_y8BQc7":{"type":"text","settings":{"title":"Potent + Active","content":"<p>BLENDING NATURE + SCIENCE WITH HIGH POTENCY HERBS, BIOACTIVE ESSENTIAL OILS + PLANT ACTIVES THAT DELIVER AMAZING RESULTS<\/p>"}},"text_yG79P4":{"type":"text","settings":{"title":"Wild + Organic","content":"<p>SUSTAINABLY HARVESTED FROM ARTISAN GROWERS ALL AROUND THE GLOBE, HIGH QUALITY INGREDIENTS THAT ARE FRESH, WILD, ORGANIC + CONCENTRATED FOR MAXIMUM BENEFIT<\/p>"}},"text_aBea8Q":{"type":"text","settings":{"title":"Sustainable","content":"<p>ENVIRONMENTALLY SUSTAINABLE PRODUCTS AND PACKAGING THAT BIODEGRADE + ARE RECYCLABLE, ALONG WITH A COMMITMENT TO CRUELTY FREE, VEGAN + FAIR TRADE INGREDIENTS<\/p>"}},"text_rdQtYD":{"type":"text","settings":{"title":"Expert Crafted","content":"<p>CAREFULLY CRAFTED BY EXPERT FORMULATORS UTILIZING ALCHEMY, AROMATHERAPY + HERBOLOGY FOR UNRENOWNED EFFECTIVENESS<\/p>"}}},"block_order":["text_3VhE38","text_y8BQc7","text_yG79P4","text_aBea8Q","text_rdQtYD"],"settings":{"title":"","title_align":"text-left","title_size":4,"heading_size":4,"text_size":4,"text_color":"text--neutral","bg":"palette--light bg--neutral","width":"wrapper","padding_top":2,"padding_bottom":70}}},"order":["main","section_double_fGjMaD","section_faq_9KwQHT"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+        "kicker": "",
+        "kicker_size": 3,
+        "show_title": false,
+        "title_size": 8,
+        "show_content": true,
+        "content_size": 5,
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper--narrow",
+        "padding_top": 52,
+        "padding_bottom": 12
+      }
+    },
+    "section_double_fGjMaD": {
+      "type": "section-double",
+      "blocks": {
+        "text_W9JzgQ": {
+          "type": "text",
+          "settings": {
+            "kicker": "",
+            "title": "Wellness Promise",
+            "text": "<p>THE mission at Green Envee is to share your passion for holistic wellness that brings positive change to an otherwise toxic beauty industry. The wellness of the skin is a blueprint to understanding overall health. Understanding the connection between skin health and mind + body is an important aspect to the Green Envee spa experience. the commitment to clean beauty + wellness is treated as whole beauty.</p>",
+            "font_size": 5,
+            "text_columns": 1,
+            "align_text": "text-center",
+            "button_text": "Shop clean skincare",
+            "button_url": "shopify://collections/skin-care",
+            "button_color": "btn--neutral",
+            "button_style": "btn--outline btn--long",
+            "text_color": "text--neutral",
+            "bg_color": ""
+          }
+        },
+        "image_39T4ea": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Wellness-Promise-Header-11_057d683e-7440-43b7-bd57-7e515af8e97f.png",
+            "overlay_opacity": 0,
+            "overlay_color": "#000000",
+            "enable_overlay_text": false,
+            "kicker": "",
+            "title": "",
+            "richtext": "",
+            "text_align": "align--middle-center",
+            "text_color": "text--white",
+            "link_text": "",
+            "link": "",
+            "button_color": "btn--white",
+            "button_style": "btn"
+          }
+        }
+      },
+      "block_order": [
+        "text_W9JzgQ",
+        "image_39T4ea"
+      ],
+      "settings": {
+        "height": "use_image",
+        "brick_gutter": 0,
+        "borders": false,
+        "bg_color": "",
+        "preload_image": false,
+        "width": "wrapper",
+        "padding_top": 70,
+        "padding_bottom": 70
+      }
+    },
+    "section_faq_9KwQHT": {
+      "type": "section-faq",
+      "blocks": {
+        "text_3VhE38": {
+          "type": "text",
+          "settings": {
+            "title": "100% Clean Beauty",
+            "content": "<p>SAFE + PURE INGREDIENTS THAT ARE NEVER HARMFUL + ALWAYS BENEFICIAL.  OUR COMMITMENT TO 100% NON-TOXIC BEAUTY </p>"
+          }
+        },
+        "text_y8BQc7": {
+          "type": "text",
+          "settings": {
+            "title": "Potent + Active",
+            "content": "<p>BLENDING NATURE + SCIENCE WITH HIGH POTENCY HERBS, BIOACTIVE ESSENTIAL OILS + PLANT ACTIVES THAT DELIVER AMAZING RESULTS</p>"
+          }
+        },
+        "text_yG79P4": {
+          "type": "text",
+          "settings": {
+            "title": "Wild + Organic",
+            "content": "<p>SUSTAINABLY HARVESTED FROM ARTISAN GROWERS ALL AROUND THE GLOBE, HIGH QUALITY INGREDIENTS THAT ARE FRESH, WILD, ORGANIC + CONCENTRATED FOR MAXIMUM BENEFIT</p>"
+          }
+        },
+        "text_aBea8Q": {
+          "type": "text",
+          "settings": {
+            "title": "Sustainable",
+            "content": "<p>ENVIRONMENTALLY SUSTAINABLE PRODUCTS AND PACKAGING THAT BIODEGRADE + ARE RECYCLABLE, ALONG WITH A COMMITMENT TO CRUELTY FREE, VEGAN + FAIR TRADE INGREDIENTS</p>"
+          }
+        },
+        "text_rdQtYD": {
+          "type": "text",
+          "settings": {
+            "title": "Expert Crafted",
+            "content": "<p>CAREFULLY CRAFTED BY EXPERT FORMULATORS UTILIZING ALCHEMY, AROMATHERAPY + HERBOLOGY FOR UNRENOWNED EFFECTIVENESS</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_3VhE38",
+        "text_y8BQc7",
+        "text_yG79P4",
+        "text_aBea8Q",
+        "text_rdQtYD"
+      ],
+      "settings": {
+        "title": "",
+        "title_align": "text-left",
+        "title_size": 4,
+        "heading_size": 4,
+        "text_size": 4,
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "width": "wrapper",
+        "padding_top": 2,
+        "padding_bottom": 70
+      }
+    }
+  },
+  "order": [
+    "main",
+    "section_double_fGjMaD",
+    "section_faq_9KwQHT"
+  ]
+}

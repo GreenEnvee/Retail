@@ -1,1 +1,68 @@
-{"sections":{"main":{"type":"section-list-collections","blocks":{"list-collection-block-0":{"type":"all_collections","settings":{"overlay_color":"#000000","overlay_opacity":15,"text_color":"text--white"}}},"block_order":["list-collection-block-0"],"settings":{"title":"Catalog","width":"wrapper","padding_top":36,"padding_bottom":108}},"secondary":{"type":"section-list-collections-products","blocks":{"list-collections-products-block-0":{"type":"all_collections","settings":{"link_text":"View all","enable_item":true,"item_link_text":"Shop all [name]","background_color":"#fcfaf7","text_color":"text--neutral"}}},"block_order":["list-collections-products-block-0"],"disabled":true,"settings":{"title":"Catalog","grid":3,"rows":2,"enable_scroll_mobile":true,"grid_small":1.2,"width":"wrapper","padding_top":36,"padding_bottom":108}}},"order":["main","secondary"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "section-list-collections",
+      "blocks": {
+        "list-collection-block-0": {
+          "type": "all_collections",
+          "settings": {
+            "overlay_color": "#000000",
+            "overlay_opacity": 15,
+            "text_color": "text--white"
+          }
+        }
+      },
+      "block_order": [
+        "list-collection-block-0"
+      ],
+      "settings": {
+        "title": "Catalog",
+        "width": "wrapper",
+        "padding_top": 36,
+        "padding_bottom": 108
+      }
+    },
+    "secondary": {
+      "type": "section-list-collections-products",
+      "blocks": {
+        "list-collections-products-block-0": {
+          "type": "all_collections",
+          "settings": {
+            "link_text": "View all",
+            "enable_item": true,
+            "item_link_text": "Shop all [name]",
+            "background_color": "#fcfaf7",
+            "text_color": "text--neutral"
+          }
+        }
+      },
+      "block_order": [
+        "list-collections-products-block-0"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "Catalog",
+        "grid": 3,
+        "rows": 2,
+        "enable_scroll_mobile": true,
+        "grid_small": 1.2,
+        "width": "wrapper",
+        "padding_top": 36,
+        "padding_bottom": 108
+      }
+    }
+  },
+  "order": [
+    "main",
+    "secondary"
+  ]
+}

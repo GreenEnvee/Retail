@@ -33,8 +33,18 @@
         "padding_bottom": 40
       }
     },
+    "green_envee_application_form_BmNEQd": {
+      "type": "green-envee-application-form",
+      "name": "GE Application Form",
+      "settings": {
+        "max_width": 800,
+        "api_endpoint": "https://green-envee-integrations.vercel.app/api/hubspot/application-submit",
+        "turnstile_site_key": "0x4AAAAAADTTvYCeYCTTZonj"
+      }
+    },
     "main": {
       "type": "page",
+      "disabled": true,
       "settings": {
         "kicker": "",
         "kicker_size": 3,
@@ -53,6 +63,7 @@
   },
   "order": [
     "section_richtext_AL6bNC",
+    "green_envee_application_form_BmNEQd",
     "main"
   ]
 }

@@ -1,0 +1,251 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "collection-hero",
+      "settings": {
+        "text_align": "align--middle-center",
+        "show_title": true,
+        "show_title_below": false,
+        "show_description": true,
+        "show_description_below": false,
+        "color_bg": "palette--light bg--neutral",
+        "show_image": true,
+        "bg_position": "center-center",
+        "image_height": "use_screen_one_third",
+        "overlay_opacity": 20,
+        "overlay_color": "#000000",
+        "enable_overlay_text": false,
+        "text_color": "text--white",
+        "width": "wrapper--none",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "width_text": "wrapper",
+        "padding_top_text": 36,
+        "padding_bottom_text": 0
+      }
+    },
+    "section_richtext_pxMJUA": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_44CMY9": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "Give Her More Than a Gift. Give Her a Ritual.",
+            "enable_line": false,
+            "text_size": 4
+          }
+        }
+      },
+      "block_order": [
+        "kicker_44CMY9"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 20,
+        "padding_bottom": 36
+      }
+    },
+    "subcollections": {
+      "type": "collection-sub",
+      "settings": {
+        "subcollections": [],
+        "limit": 6,
+        "color_bg": "palette--light bg--neutral",
+        "text_color": "text--white",
+        "text_align": "align--middle-center",
+        "select_image": "collection",
+        "bg_position": "center-center",
+        "wh_ratio": 1.7,
+        "overlay_opacity": 20,
+        "overlay_color": "#000000",
+        "grid_mobile": 1.2,
+        "width": "wrapper",
+        "padding_top": 20,
+        "padding_bottom": 0
+      }
+    },
+    "section_columns_FwgDr9": {
+      "type": "section-columns",
+      "blocks": {
+        "text_block_kcbVbd": {
+          "type": "text_block",
+          "settings": {
+            "enable_image": true,
+            "image": "shopify://shop_images/Wellness_Promise_New_Marketing_Vibe_Campaign_Glass_Self_Reflection_-03.png",
+            "shape_class": "",
+            "title": "",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_color": "btn--neutral",
+            "button_style": "btn--soft",
+            "enable_video": false,
+            "video_link": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "video_button_color": "text--white"
+          }
+        },
+        "text_block_Jzhbim": {
+          "type": "text_block",
+          "settings": {
+            "enable_image": true,
+            "image": "shopify://shop_images/Wellness_Promise_New_Marketing_Vibe_Campaign_Glass_Self_Reflection_-04.png",
+            "shape_class": "",
+            "title": "",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_color": "btn--neutral",
+            "button_style": "btn--soft",
+            "enable_video": false,
+            "video_link": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "video_button_color": "text--white"
+          }
+        },
+        "text_block_mbddat": {
+          "type": "text_block",
+          "settings": {
+            "enable_image": true,
+            "image": "shopify://shop_images/Wellness_Promise_New_Marketing_Vibe_Campaign_Glass_Self_Reflection_Post.png",
+            "shape_class": "",
+            "title": "",
+            "text": "",
+            "button_label": "",
+            "button_link": "",
+            "button_color": "btn--neutral",
+            "button_style": "btn--soft",
+            "enable_video": false,
+            "video_link": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+            "video_button_color": "text--white"
+          }
+        }
+      },
+      "block_order": [
+        "text_block_kcbVbd",
+        "text_block_Jzhbim",
+        "text_block_mbddat"
+      ],
+      "name": "Text columns with images",
+      "settings": {
+        "title": "",
+        "bg": "palette--light bg--neutral",
+        "align_text": "text-center",
+        "scale_image": true,
+        "wh_ratio": 0.8,
+        "grid_large": 3,
+        "grid_medium": 3,
+        "grid_mobile": 1.2,
+        "progress_bar_mobile": false,
+        "width": "wrapper",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "main": {
+      "type": "collection",
+      "blocks": {
+        "collections": {
+          "type": "collections",
+          "disabled": true,
+          "settings": {
+            "title": "All collections"
+          }
+        },
+        "filters": {
+          "type": "filters",
+          "disabled": true,
+          "settings": {}
+        },
+        "nav_links_UkTHzc": {
+          "type": "nav_links",
+          "disabled": true,
+          "settings": {
+            "collection_linklist": "shop-by-skin-type"
+          }
+        },
+        "nav_links_k3yQjh": {
+          "type": "nav_links",
+          "disabled": true,
+          "settings": {
+            "collection_linklist": "shop-by-routine"
+          }
+        },
+        "nav_links_UypHwh": {
+          "type": "nav_links",
+          "disabled": true,
+          "settings": {
+            "collection_linklist": "shop-best-sellers"
+          }
+        }
+      },
+      "block_order": [
+        "collections",
+        "filters",
+        "nav_links_UkTHzc",
+        "nav_links_k3yQjh",
+        "nav_links_UypHwh"
+      ],
+      "settings": {
+        "product_limit": 50,
+        "grid_large": 4,
+        "grid_mobile": "2",
+        "enable_layout_toggle": true,
+        "color_bg": "palette--light bg--neutral",
+        "collection_sorting": false,
+        "hide_sidebar": false,
+        "collapse_filters": true,
+        "show_products_count": false,
+        "width": "wrapper",
+        "padding_top": 20,
+        "padding_bottom": 64
+      }
+    },
+    "section_richtext_QcwAzw": {
+      "type": "section-richtext",
+      "blocks": {
+        "kicker_8m8txn": {
+          "type": "kicker",
+          "settings": {
+            "kicker": "Create her ritual. Her moment of calm.",
+            "enable_line": false,
+            "text_size": 4
+          }
+        }
+      },
+      "block_order": [
+        "kicker_8m8txn"
+      ],
+      "name": "Rich text",
+      "settings": {
+        "align_text": "text-center",
+        "text_color": "text--neutral",
+        "bg": "palette--light bg--neutral",
+        "content_width": 2000,
+        "width": "wrapper",
+        "padding_top": 20,
+        "padding_bottom": 64
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "section_richtext_pxMJUA",
+    "subcollections",
+    "section_columns_FwgDr9",
+    "main",
+    "section_richtext_QcwAzw"
+  ]
+}
