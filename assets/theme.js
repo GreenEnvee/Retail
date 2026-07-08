@@ -5688,7 +5688,9 @@
         attrUnique: 'data-unique',
         attrVideoId: 'data-video-id',
         attrVideoType: 'data-video-type',
-        attrPlayer: 'data-player'
+        attrPlayer: 'data-player',
+        popupIframe: '[data-popup-iframe]',
+        popupLocalVideo: '[data-popup-local-video]'
     };
     let PopupVideo = class PopupVideo {
         init() {
@@ -5700,6 +5702,8 @@
                 // and append a unique ID for youtube and vimeo to init players.
                 const uniqueKey = `${video}-${unique}`;
                 const player = document.querySelector(`[${selectors$z.attrPlayer}="${uniqueKey}"]`);
+                const iframe = player ? player.querySelector(selectors$z.popupIframe) : null;
+                const localVideo = player ? player.querySelector(selectors$z.popupLocalVideo) : null;
                 // Modal Event Logic:
                 // When a modal opens it creates and plays the video
                 // When a modal opens it pauses background videos in this section
@@ -5711,19 +5715,43 @@
                         if (this.backgroundVideo && typeof this.backgroundVideo.pause === 'function') {
                             this.backgroundVideo.pause();
                         }
-                        let playerPromise = {};
-                        if (type === 'youtube') {
-                            playerPromise = embedYoutube(uniqueKey);
-                        } else if (type === 'vimeo') {
-                            playerPromise = embedVimeo(uniqueKey);
+                        if (iframe) {
+                            if (!iframe.src) {
+                                iframe.src = iframe.dataset.src || '';
+                            }
+                        } else if (localVideo) {
+                            try {
+                                localVideo.currentTime = 0;
+                                localVideo.play();
+                            } catch (e) {
+                                console.warn(e);
+                            }
+                        } else {
+                            let playerPromise = {};
+                            if (type === 'youtube') {
+                                playerPromise = embedYoutube(uniqueKey);
+                            } else if (type === 'vimeo') {
+                                playerPromise = embedVimeo(uniqueKey);
+                            }
+                            playerPromise.then(()=>{
+                                player.dispatchEvent(new CustomEvent('play'));
+                            });
                         }
-                        playerPromise.then(()=>{
-                            player.dispatchEvent(new CustomEvent('play'));
-                        });
                     },
                     onClose: (modal, el, event)=>{
                         event.preventDefault();
-                        player.dispatchEvent(new CustomEvent('destroy'));
+                        if (iframe) {
+                            iframe.src = '';
+                        } else if (localVideo) {
+                            try {
+                                localVideo.pause();
+                                localVideo.currentTime = 0;
+                            } catch (e) {
+                                console.warn(e);
+                            }
+                        } else if (player) {
+                            player.dispatchEvent(new CustomEvent('destroy'));
+                        }
                         if (this.backgroundVideo && typeof this.backgroundVideo.play === 'function') {
                             this.backgroundVideo.play();
                         }

@@ -275,8 +275,25 @@
             </div>
 
           {% when 'video' %}
+            {%- liquid
+              assign use_background_video = block.settings.enable_background_video
+              assign popup_video = block.settings.popup_video
+              assign popup_video_url = block.settings.video_link
+              assign has_popup_video = false
+              if popup_video != blank or popup_video_url != blank
+                assign has_popup_video = true
+              endif
+
+              assign background_video_type = block.settings.video_bg_url.type
+              assign background_video_id = block.settings.video_bg_url.id
+              assign background_embed_url = ''
+              if background_video_type == 'youtube' and background_video_id != blank
+                assign background_embed_url = 'https://www.youtube.com/embed/' | append: background_video_id | append: '?autoplay=1&mute=1&loop=1&playlist=' | append: background_video_id | append: '&controls=0&showinfo=0&modestbranding=1&playsinline=1&rel=0'
+              elsif background_video_type == 'vimeo' and background_video_id != blank
+                assign background_embed_url = 'https://player.vimeo.com/video/' | append: background_video_id | append: '?autoplay=1&muted=1&loop=1&background=1&playsinline=1'
+              endif
+            -%}
             <div class="brick__block" data-overflow-frame {{ block.shopify_attributes }}>
-              {%- assign use_background_video = block.settings.enable_background_video -%}
               <div
                 class="brick__block__video aspect-[--wh-ratio] {{ block.settings.text_color }} {{ section.settings.height }}"
                 {% if section.settings.height == 'use_image' %}
@@ -312,7 +329,7 @@
                         </div>
                       {% endunless %}
 
-                      {% if block.settings.video_link != '' or block.settings.link_text != '' %}
+                      {% if has_popup_video or block.settings.link_text != '' %}
                         <div class="hero__cta__wrapper">
                           {% unless block.settings.link_text == '' %}
                             <a class="{{ block.settings.button_style }} {{ block.settings.button_color }} hero__btn"
@@ -323,15 +340,19 @@
                               {{ block.settings.link_text | escape }}
                             </a>
                           {% endunless %}
-                          {% unless block.settings.video_link == nil %}
+                          {% if has_popup_video %}
                             <div class="hero__btn hero__btn--play {{ block.settings.popup_button_color }}"
                               data-aos="hero"
                               data-aos-anchor="{{ animation_anchor }}"
                               data-aos-order="5"
                               style="--icon-play-size: {{ block.settings.popup_button_width }}px;">
-                              {% render 'video-popup', video: block.settings.video_link, unique: block.id, text: block.settings.popup_text %}
+                              {% if popup_video != blank %}
+                                {% render 'video-popup', video: popup_video, unique: block.id, text: block.settings.popup_text %}
+                              {% else %}
+                                {% render 'video-popup', video: popup_video_url, unique: block.id, text: block.settings.popup_text %}
+                              {% endif %}
                             </div>
-                          {% endunless %}
+                          {% endif %}
                         </div>
                       {% endif %}
                     </div>
@@ -343,6 +364,15 @@
                     <div class="video-autoplay-wrapper">
                       {%- assign video_styles = block.settings.object_position | replace: '-', ' ' | prepend: 'object-position: ' -%}
                       {{ block.settings.video_bg | video_tag: autoplay: true, loop: true, muted: true, controls: false, playsinline: true, image_size: '1200x', style: video_styles, data-video-autoplay: '' }}
+                    </div>
+                  {%- elsif background_embed_url != blank -%}
+                    <div class="video-autoplay-wrapper">
+                      <iframe
+                        src="{{ background_embed_url }}"
+                        title="{{ block.settings.title | default: 'Background video' | escape }}"
+                        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                        allowfullscreen>
+                      </iframe>
                     </div>
                   {%- else -%}
                     {%- capture srcset -%}
@@ -361,6 +391,15 @@
                   <div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; padding:24px;">
                     {%- if block.settings.video_bg != nil -%}
                       {{ block.settings.video_bg | video_tag: controls: true, preload: 'metadata', image_size: '1200x', playsinline: true, class: 'block w-full h-auto' }}
+                    {%- elsif background_embed_url != blank -%}
+                      <div class="rte__video-wrapper" style="width:100%; height:100%;">
+                        <iframe
+                          src="{{ background_embed_url }}"
+                          title="{{ block.settings.title | default: 'Video' | escape }}"
+                          allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                          allowfullscreen>
+                        </iframe>
+                      </div>
                     {%- else -%}
                       {%- capture srcset -%}
                         {%- render 'image-grid-srcset',
@@ -1068,7 +1107,14 @@
       {
         "type": "video",
         "id": "video_bg",
-        "label": "Video background"
+        "label": "Background video file"
+      },
+      {
+        "type": "video_url",
+        "id": "video_bg_url",
+        "label": "Background video link",
+        "accept": ["youtube", "vimeo"],
+        "info": "Streaming background video source from YouTube or Vimeo."
       },
       {
         "type": "checkbox",
@@ -1103,9 +1149,14 @@
         "content": "Video popup"
       },
       {
+        "type": "video",
+        "id": "popup_video",
+        "label": "Popup video file"
+      },
+      {
         "type": "video_url",
         "id": "video_link",
-        "label": "Video popup link",
+        "label": "Popup video link",
         "accept": ["youtube", "vimeo"],
         "info": "Streaming video source from YouTube or Vimeo.",
         "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
