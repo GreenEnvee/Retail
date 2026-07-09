@@ -59,82 +59,203 @@
     assign accent_font_bold = accent_font_400
   endif
 
+  assign fallback_sans = 'Arial, "Helvetica Neue", Helvetica, sans-serif'
+  assign fallback_serif = 'Georgia, "Times New Roman", Times, serif'
+  assign fallback_mono = '"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace'
+
+  assign custom_font_heading_name = 'Sainte Colombe'
+  if settings.custom_font_heading_family == 'lato'
+    assign custom_font_heading_name = 'Lato'
+  elsif settings.custom_font_heading_family == 'brandon-grotesque'
+    assign custom_font_heading_name = 'Brandon Grotesque'
+  endif
+
+  assign custom_font_body_name = 'Lato'
+  if settings.custom_font_body_family == 'sainte-colombe'
+    assign custom_font_body_name = 'Sainte Colombe'
+  elsif settings.custom_font_body_family == 'brandon-grotesque'
+    assign custom_font_body_name = 'Brandon Grotesque'
+  endif
+
+  assign custom_font_accent_name = 'Brandon Grotesque'
+  if settings.custom_font_accent_family == 'sainte-colombe'
+    assign custom_font_accent_name = 'Sainte Colombe'
+  elsif settings.custom_font_accent_family == 'lato'
+    assign custom_font_accent_name = 'Lato'
+  endif
+
+  assign custom_font_heading_fallback = fallback_sans
+  if settings.custom_font_heading_fallback == 'serif'
+    assign custom_font_heading_fallback = fallback_serif
+  elsif settings.custom_font_heading_fallback == 'mono'
+    assign custom_font_heading_fallback = fallback_mono
+  endif
+
+  assign custom_font_body_fallback = fallback_sans
+  if settings.custom_font_body_fallback == 'serif'
+    assign custom_font_body_fallback = fallback_serif
+  elsif settings.custom_font_body_fallback == 'mono'
+    assign custom_font_body_fallback = fallback_mono
+  endif
+
+  assign custom_font_accent_fallback = fallback_sans
+  if settings.custom_font_accent_fallback == 'serif'
+    assign custom_font_accent_fallback = fallback_serif
+  elsif settings.custom_font_accent_fallback == 'mono'
+    assign custom_font_accent_fallback = fallback_mono
+  endif
+
+  assign heading_font_stack = heading_font.family | append: ', ' | append: heading_font.fallback_families
+  assign heading_font_style_value = heading_font.style
+  assign heading_font_style_bold_value = heading_font_bold.style
+  assign heading_font_weight_value = heading_font.weight | default: 400
+  assign heading_font_weight_bold_value = heading_font_bold.weight | default: 700
+  if settings.custom_font_heading_enable and settings.custom_font_heading_family != blank
+    assign heading_font_stack = custom_font_heading_name | append: ', ' | append: custom_font_heading_fallback
+    assign heading_font_style_value = settings.custom_font_heading_style
+    assign heading_font_style_bold_value = settings.custom_font_heading_style_bold
+    assign heading_font_weight_value = settings.custom_font_heading_weight
+    assign heading_font_weight_bold_value = settings.custom_font_heading_weight_bold
+  endif
+
+  assign body_font_stack = body_font.family | append: ', ' | append: body_font.fallback_families
+  assign body_font_style_value = body_font.style
+  assign body_font_style_bold_value = body_font_bold.style
+  assign body_font_weight_value = body_font.weight | default: 400
+  assign body_font_weight_bold_value = body_font_bold.weight | default: 700
+  if settings.custom_font_body_enable and settings.custom_font_body_family != blank
+    assign body_font_stack = custom_font_body_name | append: ', ' | append: custom_font_body_fallback
+    assign body_font_style_value = settings.custom_font_body_style
+    assign body_font_style_bold_value = settings.custom_font_body_style_bold
+    assign body_font_weight_value = settings.custom_font_body_weight
+    assign body_font_weight_bold_value = settings.custom_font_body_weight_bold
+  endif
+
+  assign accent_font_stack = accent_font.family | append: ', ' | append: accent_font.fallback_families
+  assign accent_font_style_value = accent_font.style
+  assign accent_font_style_bold_value = accent_font_bold.style
+  assign accent_font_weight_value = accent_font.weight | default: 400
+  assign accent_font_weight_bold_value = accent_font_bold.weight | default: 700
+  if settings.custom_font_accent_enable and settings.custom_font_accent_family != blank
+    assign accent_font_stack = custom_font_accent_name | append: ', ' | append: custom_font_accent_fallback
+    assign accent_font_style_value = settings.custom_font_accent_style
+    assign accent_font_style_bold_value = settings.custom_font_accent_style_bold
+    assign accent_font_weight_value = settings.custom_font_accent_weight
+    assign accent_font_weight_bold_value = settings.custom_font_accent_weight_bold
+  endif
+
   assign nav_font_string = settings.type_nav_font | split: "_" | first
   assign nav_font_embolden = settings.type_nav_font | split: "_" | last
   assign type_nav_size = 100
+  assign nav_font_stack = body_font_stack
+  assign nav_font_style = body_font_style_value
+  assign nav_font_weight = body_font_weight_value
   if nav_font_string == 'heading'
     assign type_nav_size = settings.font_heading_size
     if nav_font_embolden == 'bold'
-      assign nav_font_drop = heading_font_bold
+      assign nav_font_style = heading_font_style_bold_value
+      assign nav_font_weight = heading_font_weight_bold_value
     else
-      assign nav_font_drop = heading_font
+      assign nav_font_style = heading_font_style_value
+      assign nav_font_weight = heading_font_weight_value
     endif
+    assign nav_font_stack = heading_font_stack
   elsif nav_font_string == 'accent'
     assign type_nav_size = settings.font_accent_size
     if nav_font_embolden == 'bold'
-      assign nav_font_drop = accent_font_bold
+      assign nav_font_style = accent_font_style_bold_value
+      assign nav_font_weight = accent_font_weight_bold_value
     else
-      assign nav_font_drop = accent_font
+      assign nav_font_style = accent_font_style_value
+      assign nav_font_weight = accent_font_weight_value
     endif
+    assign nav_font_stack = accent_font_stack
   else
     assign type_nav_size = settings.font_body_size
     if nav_font_embolden == 'bold'
-      assign nav_font_drop = body_font_bold
+      assign nav_font_style = body_font_style_bold_value
+      assign nav_font_weight = body_font_weight_bold_value
     else
-      assign nav_font_drop = body_font
+      assign nav_font_style = body_font_style_value
+      assign nav_font_weight = body_font_weight_value
     endif
+    assign nav_font_stack = body_font_stack
   endif
 
   assign button_font_string = settings.type_button_font | split: "_" | first
   assign button_font_embolden = settings.type_button_font | split: "_" | last
   assign type_button_size = 100
+  assign button_font_stack = body_font_stack
+  assign button_font_style = body_font_style_value
+  assign button_font_weight = body_font_weight_value
   if button_font_string == 'heading'
     assign type_button_size = settings.font_heading_size
     if button_font_embolden == 'bold'
-      assign button_font_drop = heading_font_bold
+      assign button_font_style = heading_font_style_bold_value
+      assign button_font_weight = heading_font_weight_bold_value
     else
-      assign button_font_drop = heading_font
+      assign button_font_style = heading_font_style_value
+      assign button_font_weight = heading_font_weight_value
     endif
+    assign button_font_stack = heading_font_stack
   elsif button_font_string == 'accent'
     assign type_button_size = settings.font_accent_size
     if button_font_embolden == 'bold'
-      assign button_font_drop = accent_font_bold
+      assign button_font_style = accent_font_style_bold_value
+      assign button_font_weight = accent_font_weight_bold_value
     else
-      assign button_font_drop = accent_font
+      assign button_font_style = accent_font_style_value
+      assign button_font_weight = accent_font_weight_value
     endif
+    assign button_font_stack = accent_font_stack
   else
     assign type_button_size = settings.font_body_size
     if button_font_embolden == 'bold'
-      assign button_font_drop = body_font_bold
+      assign button_font_style = body_font_style_bold_value
+      assign button_font_weight = body_font_weight_bold_value
     else
-      assign button_font_drop = body_font
+      assign button_font_style = body_font_style_value
+      assign button_font_weight = body_font_weight_value
     endif
+    assign button_font_stack = body_font_stack
   endif
 
   assign kicker_font_string = settings.type_kicker_font | split: "_" | first
   assign kicker_font_embolden = settings.type_kicker_font | split: "_" | last
   assign type_kicker_size = 100
+  assign kicker_font_stack = body_font_stack
+  assign kicker_font_style = body_font_style_value
+  assign kicker_font_weight = body_font_weight_value
   if kicker_font_string == 'heading'
     assign type_kicker_size = settings.font_heading_size
     if kicker_font_embolden == 'bold'
-      assign kicker_font_drop = heading_font_bold
+      assign kicker_font_style = heading_font_style_bold_value
+      assign kicker_font_weight = heading_font_weight_bold_value
     else
-      assign kicker_font_drop = heading_font
+      assign kicker_font_style = heading_font_style_value
+      assign kicker_font_weight = heading_font_weight_value
     endif
+    assign kicker_font_stack = heading_font_stack
   elsif kicker_font_string == 'accent'
     assign type_kicker_size = settings.font_accent_size
     if kicker_font_embolden == 'bold'
-      assign kicker_font_drop = accent_font_bold
+      assign kicker_font_style = accent_font_style_bold_value
+      assign kicker_font_weight = accent_font_weight_bold_value
     else
-      assign kicker_font_drop = accent_font
+      assign kicker_font_style = accent_font_style_value
+      assign kicker_font_weight = accent_font_weight_value
     endif
+    assign kicker_font_stack = accent_font_stack
   else
     assign type_kicker_size = settings.font_body_size
     if kicker_font_embolden == 'bold'
-      assign kicker_font_drop = body_font_bold
+      assign kicker_font_style = body_font_style_bold_value
+      assign kicker_font_weight = body_font_weight_bold_value
     else
-      assign kicker_font_drop = body_font
+      assign kicker_font_style = body_font_style_value
+      assign kicker_font_weight = body_font_weight_value
     endif
+    assign kicker_font_stack = body_font_stack
   endif
 
 
@@ -413,10 +534,10 @@
 
 /* ================ Typography ================ */
 
---FONT-STACK-BODY: {{ body_font.family }}, {{ body_font.fallback_families }};
---FONT-STYLE-BODY: {{ body_font.style }};
---FONT-WEIGHT-BODY: {{ body_font.weight | default: 400 }};
---FONT-WEIGHT-BODY-BOLD: {{ body_font_bold.weight | default: 700 }};
+--FONT-STACK-BODY: {{ body_font_stack }};
+--FONT-STYLE-BODY: {{ body_font_style_value }};
+--FONT-WEIGHT-BODY: {{ body_font_weight_value }};
+--FONT-WEIGHT-BODY-BOLD: {{ body_font_weight_bold_value }};
 --FONT-ADJUST-BODY: {{ settings.font_body_size | divided_by: 100.0 }};
 {% if settings.font_body_uppercase %}
   --FONT-BODY-TRANSFORM: uppercase;
@@ -426,10 +547,10 @@
   --FONT-BODY-LETTER-SPACING: normal;
 {% endif %}
 
---FONT-STACK-HEADING: {{ heading_font.family }}, {{ heading_font.fallback_families }};
---FONT-STYLE-HEADING: {{ heading_font.style }};
---FONT-WEIGHT-HEADING: {{ heading_font.weight | default: 400 }};
---FONT-WEIGHT-HEADING-BOLD: {{ heading_font_bold.weight | default: 700 }};
+--FONT-STACK-HEADING: {{ heading_font_stack }};
+--FONT-STYLE-HEADING: {{ heading_font_style_value }};
+--FONT-WEIGHT-HEADING: {{ heading_font_weight_value }};
+--FONT-WEIGHT-HEADING-BOLD: {{ heading_font_weight_bold_value }};
 --FONT-ADJUST-HEADING: {{ settings.font_heading_size | divided_by: 100.0 }};
 {% if settings.font_heading_uppercase %}
   --FONT-HEADING-TRANSFORM: uppercase;
@@ -439,10 +560,10 @@
   --FONT-HEADING-LETTER-SPACING: normal;
 {% endif %}
 
---FONT-STACK-ACCENT: {{ accent_font.family }}, {{ heading_font.fallback_families }};
---FONT-STYLE-ACCENT: {{ accent_font.style }};
---FONT-WEIGHT-ACCENT: {{ accent_font.weight | default: 400 }};
---FONT-WEIGHT-ACCENT-BOLD: {{ accent_font_bold.weight | default: 700 }};
+--FONT-STACK-ACCENT: {{ accent_font_stack }};
+--FONT-STYLE-ACCENT: {{ accent_font_style_value }};
+--FONT-WEIGHT-ACCENT: {{ accent_font_weight_value }};
+--FONT-WEIGHT-ACCENT-BOLD: {{ accent_font_weight_bold_value }};
 --FONT-ADJUST-ACCENT: {{ settings.font_accent_size | divided_by: 100.0 }};
 {% if settings.font_accent_uppercase %}
   --FONT-ACCENT-TRANSFORM: uppercase;
@@ -452,10 +573,10 @@
   --FONT-ACCENT-LETTER-SPACING: normal;
 {% endif %}
 
---TYPE-STACK-NAV: {{ nav_font_drop.family }}, {{ nav_font_drop.fallback_families }};
---TYPE-STYLE-NAV: {{ nav_font_drop.style }};
+--TYPE-STACK-NAV: {{ nav_font_stack }};
+--TYPE-STYLE-NAV: {{ nav_font_style }};
 --TYPE-ADJUST-NAV: {{ type_nav_size | divided_by: 100.0 }};
---TYPE-WEIGHT-NAV: {{ nav_font_drop.weight | default: 400 }};
+--TYPE-WEIGHT-NAV: {{ nav_font_weight }};
 {% if settings.type_nav_uppercase %}
   --FONT-NAV-TRANSFORM: uppercase;
   --FONT-NAV-LETTER-SPACING: {{ settings.font_uppercase_spacing | divided_by: 1000.0 | append: 'em' }};
@@ -464,10 +585,10 @@
   --FONT-NAV-LETTER-SPACING: normal;
 {% endif %}
 
---TYPE-STACK-BUTTON: {{ button_font_drop.family }}, {{ button_font_drop.fallback_families }};
---TYPE-STYLE-BUTTON: {{ button_font_drop.style }};
+--TYPE-STACK-BUTTON: {{ button_font_stack }};
+--TYPE-STYLE-BUTTON: {{ button_font_style }};
 --TYPE-ADJUST-BUTTON: {{ type_button_size | divided_by: 100.0 }};
---TYPE-WEIGHT-BUTTON: {{ button_font_drop.weight | default: 400 }};
+--TYPE-WEIGHT-BUTTON: {{ button_font_weight }};
 {% if settings.type_button_uppercase %}
   --FONT-BUTTON-TRANSFORM: uppercase;
   --FONT-BUTTON-LETTER-SPACING: {{ settings.font_uppercase_spacing | divided_by: 1000.0 | append: 'em' }};
@@ -476,10 +597,10 @@
   --FONT-BUTTON-LETTER-SPACING: normal;
 {% endif %}
 
---TYPE-STACK-KICKER: {{ kicker_font_drop.family }}, {{ kicker_font_drop.fallback_families }};
---TYPE-STYLE-KICKER: {{ kicker_font_drop.style }};
+--TYPE-STACK-KICKER: {{ kicker_font_stack }};
+--TYPE-STYLE-KICKER: {{ kicker_font_style }};
 --TYPE-ADJUST-KICKER: {{ type_kicker_size | divided_by: 100.0 }};
---TYPE-WEIGHT-KICKER: {{ kicker_font_drop.weight | default: 400 }};
+--TYPE-WEIGHT-KICKER: {{ kicker_font_weight }};
 {% if settings.type_kicker_uppercase %}
   --FONT-KICKER-TRANSFORM: uppercase;
   --FONT-KICKER-LETTER-SPACING: {{ settings.font_uppercase_spacing | divided_by: 1000.0 | append: 'em' }};

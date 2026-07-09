@@ -23,9 +23,30 @@
   <!-- Preloading ================================================================== -->
 
   <link rel="preconnect" href="https://fonts.shopify.com" crossorigin>
-  <link rel="preload" href="{{ settings.font_body_family | font_url }}" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="{{ settings.font_heading_family | font_url }}" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="{{ settings.font_accent_family | font_url }}" as="font" type="font/woff2" crossorigin>
+  {% if settings.custom_font_body_enable and settings.custom_font_body_family != blank %}
+    {% render 'custom-font-preload', font_family_key: settings.custom_font_body_family, font_weight: settings.custom_font_body_weight, font_style: settings.custom_font_body_style %}
+    {% if settings.custom_font_body_weight_bold != settings.custom_font_body_weight or settings.custom_font_body_style_bold != settings.custom_font_body_style %}
+      {% render 'custom-font-preload', font_family_key: settings.custom_font_body_family, font_weight: settings.custom_font_body_weight_bold, font_style: settings.custom_font_body_style_bold %}
+    {% endif %}
+  {% else %}
+    <link rel="preload" href="{{ settings.font_body_family | font_url }}" as="font" type="font/woff2" crossorigin>
+  {% endif %}
+  {% if settings.custom_font_heading_enable and settings.custom_font_heading_family != blank %}
+    {% render 'custom-font-preload', font_family_key: settings.custom_font_heading_family, font_weight: settings.custom_font_heading_weight, font_style: settings.custom_font_heading_style %}
+    {% if settings.custom_font_heading_weight_bold != settings.custom_font_heading_weight or settings.custom_font_heading_style_bold != settings.custom_font_heading_style %}
+      {% render 'custom-font-preload', font_family_key: settings.custom_font_heading_family, font_weight: settings.custom_font_heading_weight_bold, font_style: settings.custom_font_heading_style_bold %}
+    {% endif %}
+  {% else %}
+    <link rel="preload" href="{{ settings.font_heading_family | font_url }}" as="font" type="font/woff2" crossorigin>
+  {% endif %}
+  {% if settings.custom_font_accent_enable and settings.custom_font_accent_family != blank %}
+    {% render 'custom-font-preload', font_family_key: settings.custom_font_accent_family, font_weight: settings.custom_font_accent_weight, font_style: settings.custom_font_accent_style %}
+    {% if settings.custom_font_accent_weight_bold != settings.custom_font_accent_weight or settings.custom_font_accent_style_bold != settings.custom_font_accent_style %}
+      {% render 'custom-font-preload', font_family_key: settings.custom_font_accent_family, font_weight: settings.custom_font_accent_weight_bold, font_style: settings.custom_font_accent_style_bold %}
+    {% endif %}
+  {% else %}
+    <link rel="preload" href="{{ settings.font_accent_family | font_url }}" as="font" type="font/woff2" crossorigin>
+  {% endif %}
 
   <!-- Title and description ================================================ -->
   {%- if settings.favicon != blank -%}

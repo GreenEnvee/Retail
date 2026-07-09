@@ -1,0 +1,93 @@
+{% liquid
+  assign family = family | default: '' | strip | downcase
+  assign weight = weight | default: '400' | append: ''
+  assign style = style | default: 'normal' | strip | downcase
+  assign asset = ''
+
+  case family
+    when 'lato'
+      if style == 'italic'
+        case weight
+          when '100'
+            assign asset = 'lato-hairline-italic.woff2'
+          when '200'
+            assign asset = 'lato-thin-italic.woff2'
+          when '300'
+            assign asset = 'lato-light-italic.woff2'
+          when '500'
+            assign asset = 'lato-medium-italic.woff2'
+          when '600'
+            assign asset = 'lato-semibold-italic.woff2'
+          when '700'
+            assign asset = 'lato-bold-italic.woff2'
+          when '800'
+            assign asset = 'lato-heavy-italic.woff2'
+          when '900'
+            assign asset = 'lato-black-italic.woff2'
+          else
+            assign asset = 'lato-italic.woff2'
+        endcase
+      else
+        case weight
+          when '100'
+            assign asset = 'lato-hairline.woff2'
+          when '200'
+            assign asset = 'lato-thin.woff2'
+          when '300'
+            assign asset = 'lato-light.woff2'
+          when '500'
+            assign asset = 'lato-medium.woff2'
+          when '600'
+            assign asset = 'lato-semibold.woff2'
+          when '700'
+            assign asset = 'lato-bold.woff2'
+          when '800'
+            assign asset = 'lato-heavy.woff2'
+          when '900'
+            assign asset = 'lato-black.woff2'
+          else
+            assign asset = 'lato-regular.woff2'
+        endcase
+      endif
+    when 'brandon-grotesque'
+      if style == 'italic'
+        case weight
+          when '200'
+            assign asset = 'brandon-grotesque-thin-italic.woff2'
+          when '300'
+            assign asset = 'brandon-grotesque-light-italic.woff2'
+          when '500'
+            assign asset = 'brandon-grotesque-medium-italic.woff2'
+          when '700'
+            assign asset = 'brandon-grotesque-bold-italic.woff2'
+          when '900'
+            assign asset = 'brandon-grotesque-black-italic.woff2'
+          else
+            assign asset = 'brandon-grotesque-regular-italic.woff2'
+        endcase
+      else
+        case weight
+          when '200'
+            assign asset = 'brandon-grotesque-thin.woff2'
+          when '300'
+            assign asset = 'brandon-grotesque-light.woff2'
+          when '500'
+            assign asset = 'brandon-grotesque-medium.woff2'
+          when '700'
+            assign asset = 'brandon-grotesque-bold.woff2'
+          when '900'
+            assign asset = 'brandon-grotesque-black.woff2'
+          else
+            assign asset = 'brandon-grotesque-regular.woff2'
+        endcase
+      endif
+    when 'sainte-colombe'
+      if style == 'italic'
+        assign asset = 'saintecolombeweb-extralightitalic.woff2'
+      elsif weight == '500' or weight == '600' or weight == '700' or weight == '800' or weight == '900'
+        assign asset = 'saintecolombeweb-medium.woff2'
+      else
+        assign asset = 'saintecolombeweb-extralight.woff2'
+      endif
+  endcase
+%}{{ asset }}

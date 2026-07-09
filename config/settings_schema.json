@@ -479,6 +479,273 @@
     ]
   },
   {
+    "name": "Typography - Custom Fonts",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Use uploaded theme assets for custom fonts while keeping the theme's existing typography size and uppercase controls."
+      },
+      {
+        "type": "header",
+        "content": "Heading font override"
+      },
+      {
+        "type": "checkbox",
+        "id": "custom_font_heading_enable",
+        "label": "Enable custom heading font",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "custom_font_heading_family",
+        "label": "Heading custom font family",
+        "default": "sainte-colombe",
+        "options": [
+          { "value": "sainte-colombe", "label": "Sainte Colombe" },
+          { "value": "lato", "label": "Lato" },
+          { "value": "brandon-grotesque", "label": "Brandon Grotesque" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_heading_fallback",
+        "label": "Heading fallback stack",
+        "default": "sans",
+        "options": [
+          { "value": "sans", "label": "Sans serif" },
+          { "value": "serif", "label": "Serif" },
+          { "value": "mono", "label": "Monospace" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_heading_weight",
+        "label": "Heading font weight",
+        "default": "300",
+        "options": [
+          { "value": "100", "label": "100" },
+          { "value": "200", "label": "200" },
+          { "value": "300", "label": "300" },
+          { "value": "400", "label": "400" },
+          { "value": "500", "label": "500" },
+          { "value": "600", "label": "600" },
+          { "value": "700", "label": "700" },
+          { "value": "800", "label": "800" },
+          { "value": "900", "label": "900" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_heading_weight_bold",
+        "label": "Heading bold font weight",
+        "default": "700",
+        "options": [
+          { "value": "100", "label": "100" },
+          { "value": "200", "label": "200" },
+          { "value": "300", "label": "300" },
+          { "value": "400", "label": "400" },
+          { "value": "500", "label": "500" },
+          { "value": "600", "label": "600" },
+          { "value": "700", "label": "700" },
+          { "value": "800", "label": "800" },
+          { "value": "900", "label": "900" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_heading_style",
+        "label": "Heading font style",
+        "default": "normal",
+        "options": [
+          { "value": "normal", "label": "Normal" },
+          { "value": "italic", "label": "Italic" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_heading_style_bold",
+        "label": "Heading bold font style",
+        "default": "normal",
+        "options": [
+          { "value": "normal", "label": "Normal" },
+          { "value": "italic", "label": "Italic" }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Body font override"
+      },
+      {
+        "type": "checkbox",
+        "id": "custom_font_body_enable",
+        "label": "Enable custom body font",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "custom_font_body_family",
+        "label": "Body custom font family",
+        "default": "lato",
+        "options": [
+          { "value": "sainte-colombe", "label": "Sainte Colombe" },
+          { "value": "lato", "label": "Lato" },
+          { "value": "brandon-grotesque", "label": "Brandon Grotesque" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_body_fallback",
+        "label": "Body fallback stack",
+        "default": "sans",
+        "options": [
+          { "value": "sans", "label": "Sans serif" },
+          { "value": "serif", "label": "Serif" },
+          { "value": "mono", "label": "Monospace" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_body_weight",
+        "label": "Body font weight",
+        "default": "300",
+        "options": [
+          { "value": "100", "label": "100" },
+          { "value": "200", "label": "200" },
+          { "value": "300", "label": "300" },
+          { "value": "400", "label": "400" },
+          { "value": "500", "label": "500" },
+          { "value": "600", "label": "600" },
+          { "value": "700", "label": "700" },
+          { "value": "800", "label": "800" },
+          { "value": "900", "label": "900" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_body_weight_bold",
+        "label": "Body bold font weight",
+        "default": "700",
+        "options": [
+          { "value": "100", "label": "100" },
+          { "value": "200", "label": "200" },
+          { "value": "300", "label": "300" },
+          { "value": "400", "label": "400" },
+          { "value": "500", "label": "500" },
+          { "value": "600", "label": "600" },
+          { "value": "700", "label": "700" },
+          { "value": "800", "label": "800" },
+          { "value": "900", "label": "900" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_body_style",
+        "label": "Body font style",
+        "default": "normal",
+        "options": [
+          { "value": "normal", "label": "Normal" },
+          { "value": "italic", "label": "Italic" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_body_style_bold",
+        "label": "Body bold font style",
+        "default": "normal",
+        "options": [
+          { "value": "normal", "label": "Normal" },
+          { "value": "italic", "label": "Italic" }
+        ]
+      },
+      {
+        "type": "header",
+        "content": "Accent font override"
+      },
+      {
+        "type": "checkbox",
+        "id": "custom_font_accent_enable",
+        "label": "Enable custom accent font",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "custom_font_accent_family",
+        "label": "Accent custom font family",
+        "default": "brandon-grotesque",
+        "options": [
+          { "value": "sainte-colombe", "label": "Sainte Colombe" },
+          { "value": "lato", "label": "Lato" },
+          { "value": "brandon-grotesque", "label": "Brandon Grotesque" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_accent_fallback",
+        "label": "Accent fallback stack",
+        "default": "sans",
+        "options": [
+          { "value": "sans", "label": "Sans serif" },
+          { "value": "serif", "label": "Serif" },
+          { "value": "mono", "label": "Monospace" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_accent_weight",
+        "label": "Accent font weight",
+        "default": "400",
+        "options": [
+          { "value": "100", "label": "100" },
+          { "value": "200", "label": "200" },
+          { "value": "300", "label": "300" },
+          { "value": "400", "label": "400" },
+          { "value": "500", "label": "500" },
+          { "value": "600", "label": "600" },
+          { "value": "700", "label": "700" },
+          { "value": "800", "label": "800" },
+          { "value": "900", "label": "900" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_accent_weight_bold",
+        "label": "Accent bold font weight",
+        "default": "700",
+        "options": [
+          { "value": "100", "label": "100" },
+          { "value": "200", "label": "200" },
+          { "value": "300", "label": "300" },
+          { "value": "400", "label": "400" },
+          { "value": "500", "label": "500" },
+          { "value": "600", "label": "600" },
+          { "value": "700", "label": "700" },
+          { "value": "800", "label": "800" },
+          { "value": "900", "label": "900" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_accent_style",
+        "label": "Accent font style",
+        "default": "normal",
+        "options": [
+          { "value": "normal", "label": "Normal" },
+          { "value": "italic", "label": "Italic" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "custom_font_accent_style_bold",
+        "label": "Accent bold font style",
+        "default": "normal",
+        "options": [
+          { "value": "normal", "label": "Normal" },
+          { "value": "italic", "label": "Italic" }
+        ]
+      }
+    ]
+  },
+  {
     "name": "Layout",
     "settings": [
       {

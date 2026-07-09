@@ -1,0 +1,31 @@
+{% liquid
+  assign font_asset = font_asset | default: '' | strip
+  if font_asset == blank and font_family_key != blank
+    capture font_asset
+      render 'custom-font-asset', family: font_family_key, weight: font_weight, style: font_style
+    endcapture
+    assign font_asset = font_asset | strip
+  endif
+  assign font_family = font_family | default: '' | strip
+  assign font_weight = font_weight | default: '400'
+  assign font_style = font_style | default: 'normal'
+
+  assign font_extension = font_asset | split: '.' | last | downcase
+  assign font_format = 'woff2'
+  if font_extension == 'woff'
+    assign font_format = 'woff'
+  elsif font_extension == 'ttf'
+    assign font_format = 'truetype'
+  elsif font_extension == 'otf'
+    assign font_format = 'opentype'
+  endif
+%}
+{% if font_asset != blank and font_family != blank %}
+@font-face {
+  font-family: {{ font_family | json }};
+  src: url({{ font_asset | asset_url }}) format('{{ font_format }}');
+  font-weight: {{ font_weight }};
+  font-style: {{ font_style }};
+  font-display: swap;
+}
+{% endif %}

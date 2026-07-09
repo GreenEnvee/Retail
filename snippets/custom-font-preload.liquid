@@ -1,0 +1,21 @@
+{% liquid
+  assign font_asset = font_asset | default: '' | strip
+  if font_asset == blank and font_family_key != blank
+    capture font_asset
+      render 'custom-font-asset', family: font_family_key, weight: font_weight, style: font_style
+    endcapture
+    assign font_asset = font_asset | strip
+  endif
+  assign font_extension = font_asset | split: '.' | last | downcase
+  assign font_mime = 'font/woff2'
+  if font_extension == 'woff'
+    assign font_mime = 'font/woff'
+  elsif font_extension == 'ttf'
+    assign font_mime = 'font/ttf'
+  elsif font_extension == 'otf'
+    assign font_mime = 'font/otf'
+  endif
+%}
+{% if font_asset != blank %}
+  <link rel="preload" href="{{ font_asset | asset_url }}" as="font" type="{{ font_mime }}" crossorigin>
+{% endif %}
