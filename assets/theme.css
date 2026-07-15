@@ -3165,7 +3165,7 @@ video {
   --leading-hairline: 1.25;
   --leading-tight: 1.25;
   --leading-snug: 1.375;
-  --leading-normal: 1.5;
+  --leading-normal: 2.1;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
 }
@@ -8897,7 +8897,7 @@ input[type=search]::-webkit-search-decoration {
   --leading-hairline: 1.25;
   --leading-tight: 1.25;
   --leading-snug: 1.375;
-  --leading-normal: 1.5;
+  --leading-normal: 2.1;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
 }
@@ -18164,7 +18164,6 @@ body.focus-enabled .product-grid-item:focus-within {
   font-family: var(--FONT-STACK-BODY);
   font-style: var(--FONT-STYLE-BODY);
   font-weight: var(--FONT-WEIGHT-BODY);
-  font-weight: var(--FONT-WEIGHT-BODY-BOLD);
   letter-spacing: var(--FONT-BODY-LETTER-SPACING);
   text-transform: var(--FONT-BODY-TRANSFORM);
   font-size: calc(var(--font-4) * var(--FONT-ADJUST-BODY));

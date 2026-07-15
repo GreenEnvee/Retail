@@ -508,17 +508,6 @@
       },
       {
         "type": "select",
-        "id": "custom_font_heading_fallback",
-        "label": "Heading fallback stack",
-        "default": "sans",
-        "options": [
-          { "value": "sans", "label": "Sans serif" },
-          { "value": "serif", "label": "Serif" },
-          { "value": "mono", "label": "Monospace" }
-        ]
-      },
-      {
-        "type": "select",
         "id": "custom_font_heading_weight",
         "label": "Heading font weight",
         "default": "300",
@@ -594,17 +583,6 @@
       },
       {
         "type": "select",
-        "id": "custom_font_body_fallback",
-        "label": "Body fallback stack",
-        "default": "sans",
-        "options": [
-          { "value": "sans", "label": "Sans serif" },
-          { "value": "serif", "label": "Serif" },
-          { "value": "mono", "label": "Monospace" }
-        ]
-      },
-      {
-        "type": "select",
         "id": "custom_font_body_weight",
         "label": "Body font weight",
         "default": "300",
@@ -676,17 +654,6 @@
           { "value": "sainte-colombe", "label": "Sainte Colombe" },
           { "value": "lato", "label": "Lato" },
           { "value": "brandon-grotesque", "label": "Brandon Grotesque" }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "custom_font_accent_fallback",
-        "label": "Accent fallback stack",
-        "default": "sans",
-        "options": [
-          { "value": "sans", "label": "Sans serif" },
-          { "value": "serif", "label": "Serif" },
-          { "value": "mono", "label": "Monospace" }
         ]
       },
       {

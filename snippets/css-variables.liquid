@@ -59,10 +59,6 @@
     assign accent_font_bold = accent_font_400
   endif
 
-  assign fallback_sans = 'Arial, "Helvetica Neue", Helvetica, sans-serif'
-  assign fallback_serif = 'Georgia, "Times New Roman", Times, serif'
-  assign fallback_mono = '"SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace'
-
   assign custom_font_heading_name = 'Sainte Colombe'
   if settings.custom_font_heading_family == 'lato'
     assign custom_font_heading_name = 'Lato'
@@ -84,34 +80,13 @@
     assign custom_font_accent_name = 'Lato'
   endif
 
-  assign custom_font_heading_fallback = fallback_sans
-  if settings.custom_font_heading_fallback == 'serif'
-    assign custom_font_heading_fallback = fallback_serif
-  elsif settings.custom_font_heading_fallback == 'mono'
-    assign custom_font_heading_fallback = fallback_mono
-  endif
-
-  assign custom_font_body_fallback = fallback_sans
-  if settings.custom_font_body_fallback == 'serif'
-    assign custom_font_body_fallback = fallback_serif
-  elsif settings.custom_font_body_fallback == 'mono'
-    assign custom_font_body_fallback = fallback_mono
-  endif
-
-  assign custom_font_accent_fallback = fallback_sans
-  if settings.custom_font_accent_fallback == 'serif'
-    assign custom_font_accent_fallback = fallback_serif
-  elsif settings.custom_font_accent_fallback == 'mono'
-    assign custom_font_accent_fallback = fallback_mono
-  endif
-
   assign heading_font_stack = heading_font.family | append: ', ' | append: heading_font.fallback_families
   assign heading_font_style_value = heading_font.style
   assign heading_font_style_bold_value = heading_font_bold.style
   assign heading_font_weight_value = heading_font.weight | default: 400
   assign heading_font_weight_bold_value = heading_font_bold.weight | default: 700
   if settings.custom_font_heading_enable and settings.custom_font_heading_family != blank
-    assign heading_font_stack = custom_font_heading_name | append: ', ' | append: custom_font_heading_fallback
+    assign heading_font_stack = custom_font_heading_name | append: ', ' | append: heading_font.fallback_families
     assign heading_font_style_value = settings.custom_font_heading_style
     assign heading_font_style_bold_value = settings.custom_font_heading_style_bold
     assign heading_font_weight_value = settings.custom_font_heading_weight
@@ -124,7 +99,7 @@
   assign body_font_weight_value = body_font.weight | default: 400
   assign body_font_weight_bold_value = body_font_bold.weight | default: 700
   if settings.custom_font_body_enable and settings.custom_font_body_family != blank
-    assign body_font_stack = custom_font_body_name | append: ', ' | append: custom_font_body_fallback
+    assign body_font_stack = custom_font_body_name | append: ', ' | append: body_font.fallback_families
     assign body_font_style_value = settings.custom_font_body_style
     assign body_font_style_bold_value = settings.custom_font_body_style_bold
     assign body_font_weight_value = settings.custom_font_body_weight
@@ -137,7 +112,7 @@
   assign accent_font_weight_value = accent_font.weight | default: 400
   assign accent_font_weight_bold_value = accent_font_bold.weight | default: 700
   if settings.custom_font_accent_enable and settings.custom_font_accent_family != blank
-    assign accent_font_stack = custom_font_accent_name | append: ', ' | append: custom_font_accent_fallback
+    assign accent_font_stack = custom_font_accent_name | append: ', ' | append: accent_font.fallback_families
     assign accent_font_style_value = settings.custom_font_accent_style
     assign accent_font_style_bold_value = settings.custom_font_accent_style_bold
     assign accent_font_weight_value = settings.custom_font_accent_weight
