@@ -14059,16 +14059,22 @@ body:not(.theme-animate-hover) .header__desktop__buttons--icons .header__desktop
 .navlink--child {
   font-weight: var(--FONT-WEIGHT-ACCENT-BOLD);
 }
+.menu__item.grandparent .navlink--child .navtext {
+  font-family: var(--FONT-STACK-ACCENT);
+  font-style: var(--FONT-STYLE-ACCENT);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: calc(var(--font-2) * 1.0435 * var(--FONT-ADJUST-ACCENT));
+}
 .dropdown__family--grandchild .navlink--grandchild .navtext {
-  font-family: var(--FONT-STACK-BODY);
-  font-style: var(--FONT-STYLE-BODY);
-  font-weight: var(--FONT-WEIGHT-BODY);
-  letter-spacing: var(--FONT-BODY-LETTER-SPACING);
-  text-transform: var(--FONT-BODY-TRANSFORM);
-  font-size: calc(var(--font-4) * var(--FONT-ADJUST-BODY));
+  font-family: var(--FONT-STACK-ACCENT);
+  font-style: var(--FONT-STYLE-ACCENT);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: calc(var(--font-2) * 1.0435 * var(--FONT-ADJUST-ACCENT));
   line-height: var(--leading-normal);
-  text-transform: none;
-  letter-spacing: normal;
 }
 .dropdown__family--grandchild .navlink--grandchild:not(.highlight--link) .navtext {
   color: var(--text-light);
@@ -15747,6 +15753,9 @@ html.js [x-data^=announcementSlider]:not(.flickity-enabled) > *:not(:first-child
   letter-spacing: var(--FONT-ACCENT-LETTER-SPACING);
   font-size: calc(var(--font-3) * var(--FONT-ADJUST-ACCENT));
   line-height: var(--leading-normal);
+}
+.product-accordion .accordion__body p {
+  margin: 10px;
 }
 /* ============================================================================
   #Tabs
@@ -18161,17 +18170,15 @@ body.focus-enabled .product-grid-item:focus-within {
 }
 /* ================ Collection ================ */
 .product__grid__title {
-  font-family: var(--FONT-STACK-BODY);
-  font-style: var(--FONT-STYLE-BODY);
-  font-weight: var(--FONT-WEIGHT-BODY);
-  letter-spacing: var(--FONT-BODY-LETTER-SPACING);
-  text-transform: var(--FONT-BODY-TRANSFORM);
-  font-size: calc(var(--font-4) * var(--FONT-ADJUST-BODY));
-  line-height: var(--leading-normal);
+  font-family: var(--FONT-STACK-HEADING);
+  font-style: var(--FONT-STYLE-HEADING);
+  font-weight: var(--FONT-WEIGHT-HEADING);
+  font-size: calc(var(--font-3) * var(--FONT-ADJUST-HEADING));
+  line-height: 1.923;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
   margin: 8px 0 2px 0;
   word-break: break-word;
-  text-transform: none;
-  letter-spacing: 0;
 }
 .product__grid__price {
   overflow: hidden;
@@ -18972,10 +18979,10 @@ input:checked + label > .sidebar__heading-chevron, .accordion-is-open > .sidebar
 .sidebar__item a, .sidebar__item span {
   font-family: var(--FONT-STACK-ACCENT);
   font-style: var(--FONT-STYLE-ACCENT);
-  font-weight: var(--FONT-WEIGHT-ACCENT);
-  text-transform: var(--FONT-ACCENT-TRANSFORM);
-  letter-spacing: var(--FONT-ACCENT-LETTER-SPACING);
-  font-size: calc(var(--font-3) * var(--FONT-ADJUST-ACCENT));
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: calc(var(--font-1) * var(--FONT-ADJUST-ACCENT));
   line-height: var(--leading-normal);
   padding: 4px 50px 4px 0;
   text-decoration: none;
@@ -19683,6 +19690,13 @@ a.product__form__link:after {
 .product__title {
   margin: 0;
   word-break: break-word;
+}
+.product__title.heading-size-9 {
+  font-weight: 400;
+  font-size: calc(var(--font-7) * 0.9615 * var(--FONT-ADJUST-HEADING));
+  line-height: 1.6;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
 .product__price {
   line-height: 1em;
