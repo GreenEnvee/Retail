@@ -33,6 +33,23 @@
     "upload_proof_of_validaccredited_esthetic_school",
     "upload_copy_of_apprentice_license_or_proof_of_enrollment",
   ]);
+  const WHITESPACE_NORMALIZED_FIELD_NAMES = new Set([
+    "name",
+    "firstname",
+    "lastname",
+    "address",
+    "address2",
+    "city",
+  ]);
+  const SMART_CASE_FIELD_NAMES = new Set([
+    "name",
+    "firstname",
+    "lastname",
+    "address",
+    "address2",
+    "city",
+  ]);
+  const ADDRESS_UPPERCASE_WORDS = new Set(["ne", "nw", "po", "se", "sw"]);
 
   let turnstileApiPromise = null;
 
@@ -112,6 +129,64 @@
 
   function normalizeEmailValue(value) {
     return value.trim().toLowerCase();
+  }
+
+  function hasUniformLetterCase(value) {
+    const letters = value.match(/\p{L}/gu);
+
+    if (!letters) {
+      return false;
+    }
+
+    const letterString = letters.join("");
+    return letterString === letterString.toLowerCase() || letterString === letterString.toUpperCase();
+  }
+
+  function titleCaseSegment(segment) {
+    const titled = segment
+      .toLowerCase()
+      .replace(/^(\P{L}*)(\p{L})/u, (_, prefix, firstLetter) => `${prefix}${firstLetter.toUpperCase()}`);
+
+    return titled.replace(/^Mc(\p{L})/u, (_, firstLetter) => `Mc${firstLetter.toUpperCase()}`);
+  }
+
+  function normalizeFormattedFieldValue(fieldName, value) {
+    if (fieldName === "email") {
+      return normalizeEmailValue(value);
+    }
+
+    if (!WHITESPACE_NORMALIZED_FIELD_NAMES.has(fieldName)) {
+      return value;
+    }
+
+    const normalizedWhitespace = value.trim().replace(/\s+/gu, " ");
+
+    if (!SMART_CASE_FIELD_NAMES.has(fieldName) || !hasUniformLetterCase(normalizedWhitespace)) {
+      return normalizedWhitespace;
+    }
+
+    return normalizedWhitespace
+      .split(" ")
+      .map((word) => {
+        const normalizedWord = word.toLowerCase();
+
+        if (
+          (fieldName === "address" || fieldName === "address2") &&
+          ADDRESS_UPPERCASE_WORDS.has(normalizedWord)
+        ) {
+          return normalizedWord.toUpperCase();
+        }
+
+        return word
+          .split(/([-'’])/u)
+          .map((segment) =>
+            segment === "-" || segment === "'" || segment === "’"
+              ? segment
+              : titleCaseSegment(segment),
+          )
+          .join("");
+      })
+      .join(" ");
   }
 
   function createAttemptId() {
@@ -812,9 +887,33 @@
       }
     });
 
+    form.addEventListener("blur", (event) => {
+      const field = event.target;
+
+      if (!(field instanceof HTMLInputElement) || field.type === "file") {
+        return;
+      }
+
+      field.value = normalizeFormattedFieldValue(field.name, field.value);
+    }, true);
+
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       currentSubmissionAttemptId = createAttemptId();
+
+      WHITESPACE_NORMALIZED_FIELD_NAMES.forEach((fieldName) => {
+        const field = form.elements.namedItem(fieldName);
+
+        if (field instanceof HTMLInputElement) {
+          field.value = normalizeFormattedFieldValue(fieldName, field.value);
+        }
+      });
+
+      const emailField = form.elements.namedItem("email");
+
+      if (emailField instanceof HTMLInputElement) {
+        emailField.value = normalizeFormattedFieldValue("email", emailField.value);
+      }
 
       if (!validateCurrentStep()) {
         return;
