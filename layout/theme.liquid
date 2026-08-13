@@ -89,6 +89,8 @@
 
   {{ 'font-settings.css' | asset_url | stylesheet_tag: preload: true }}
 
+  {% render 'custom-font-styles' %}
+
   {% render 'css-variables' %}
 
   {{ 'theme.css' | asset_url | stylesheet_tag: preload: true }}

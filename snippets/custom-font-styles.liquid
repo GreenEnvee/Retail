@@ -1,0 +1,47 @@
+{% comment %}
+  Custom font faces must be rendered from an HTML/Liquid context. Shopify does
+  not allow snippets to be rendered from a compiled stylesheet asset.
+{% endcomment %}
+{% liquid
+  assign custom_font_heading_name = 'Sainte Colombe'
+  if settings.custom_font_heading_family == 'lato'
+    assign custom_font_heading_name = 'Lato'
+  elsif settings.custom_font_heading_family == 'brandon-grotesque'
+    assign custom_font_heading_name = 'Brandon Grotesque'
+  endif
+
+  assign custom_font_body_name = 'Lato'
+  if settings.custom_font_body_family == 'sainte-colombe'
+    assign custom_font_body_name = 'Sainte Colombe'
+  elsif settings.custom_font_body_family == 'brandon-grotesque'
+    assign custom_font_body_name = 'Brandon Grotesque'
+  endif
+
+  assign custom_font_accent_name = 'Brandon Grotesque'
+  if settings.custom_font_accent_family == 'sainte-colombe'
+    assign custom_font_accent_name = 'Sainte Colombe'
+  elsif settings.custom_font_accent_family == 'lato'
+    assign custom_font_accent_name = 'Lato'
+  endif
+%}
+<style id="custom-font-faces">
+  {% if settings.custom_font_heading_enable %}
+    {% render 'custom-font-face', font_family_key: settings.custom_font_heading_family, font_family: custom_font_heading_name, font_weight: settings.custom_font_heading_weight, font_style: settings.custom_font_heading_style %}
+    {% render 'custom-font-face', font_family_key: settings.custom_font_heading_family, font_family: custom_font_heading_name, font_weight: settings.custom_font_heading_weight_bold, font_style: settings.custom_font_heading_style_bold %}
+  {% endif %}
+
+  {% if settings.custom_font_body_enable %}
+    {% render 'custom-font-face', font_family_key: settings.custom_font_body_family, font_family: custom_font_body_name, font_weight: settings.custom_font_body_weight, font_style: settings.custom_font_body_style %}
+    {% render 'custom-font-face', font_family_key: settings.custom_font_body_family, font_family: custom_font_body_name, font_weight: settings.custom_font_body_weight_bold, font_style: settings.custom_font_body_style_bold %}
+  {% endif %}
+
+  {% if settings.custom_font_accent_enable %}
+    {% render 'custom-font-face', font_family_key: settings.custom_font_accent_family, font_family: custom_font_accent_name, font_weight: settings.custom_font_accent_weight, font_style: settings.custom_font_accent_style %}
+    {% render 'custom-font-face', font_family_key: settings.custom_font_accent_family, font_family: custom_font_accent_name, font_weight: settings.custom_font_accent_weight_bold, font_style: settings.custom_font_accent_style_bold %}
+  {% endif %}
+
+  {% if settings.custom_font_heading_enable and settings.custom_font_heading_family == 'brandon-grotesque' or settings.custom_font_accent_enable and settings.custom_font_accent_family == 'brandon-grotesque' %}
+    {% render 'custom-font-face', font_family_key: 'brandon-grotesque', font_family: 'Brandon Grotesque', font_weight: '400', font_style: 'normal' %}
+    {% render 'custom-font-face', font_family_key: 'brandon-grotesque', font_family: 'Brandon Grotesque', font_weight: '500', font_style: 'normal' %}
+  {% endif %}
+</style>

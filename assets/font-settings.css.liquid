@@ -4,27 +4,6 @@
   Must match css-variables.liquid
 {% endcomment %}
 {%- liquid
-  assign custom_font_heading_name = 'Sainte Colombe'
-  if settings.custom_font_heading_family == 'lato'
-    assign custom_font_heading_name = 'Lato'
-  elsif settings.custom_font_heading_family == 'brandon-grotesque'
-    assign custom_font_heading_name = 'Brandon Grotesque'
-  endif
-
-  assign custom_font_body_name = 'Lato'
-  if settings.custom_font_body_family == 'sainte-colombe'
-    assign custom_font_body_name = 'Sainte Colombe'
-  elsif settings.custom_font_body_family == 'brandon-grotesque'
-    assign custom_font_body_name = 'Brandon Grotesque'
-  endif
-
-  assign custom_font_accent_name = 'Brandon Grotesque'
-  if settings.custom_font_accent_family == 'sainte-colombe'
-    assign custom_font_accent_name = 'Sainte Colombe'
-  elsif settings.custom_font_accent_family == 'lato'
-    assign custom_font_accent_name = 'Lato'
-  endif
-
   assign body_font = settings.font_body_family
   assign body_font_bold = body_font | font_modify: 'weight', 'bolder'
 
@@ -104,49 +83,4 @@
 {% endif %}
 {% if body_font_bold_italic %}
   {{ body_font_bold_italic | font_face: font_display: 'swap' }}
-{% endif %}
-
-{% if settings.custom_font_heading_enable %}
-  {% render 'custom-font-face',
-    font_family_key: settings.custom_font_heading_family,
-    font_family: custom_font_heading_name,
-    font_weight: settings.custom_font_heading_weight,
-    font_style: settings.custom_font_heading_style
-  %}
-  {% render 'custom-font-face',
-    font_family_key: settings.custom_font_heading_family,
-    font_family: custom_font_heading_name,
-    font_weight: settings.custom_font_heading_weight_bold,
-    font_style: settings.custom_font_heading_style_bold
-  %}
-{% endif %}
-
-{% if settings.custom_font_body_enable %}
-  {% render 'custom-font-face',
-    font_family_key: settings.custom_font_body_family,
-    font_family: custom_font_body_name,
-    font_weight: settings.custom_font_body_weight,
-    font_style: settings.custom_font_body_style
-  %}
-  {% render 'custom-font-face',
-    font_family_key: settings.custom_font_body_family,
-    font_family: custom_font_body_name,
-    font_weight: settings.custom_font_body_weight_bold,
-    font_style: settings.custom_font_body_style_bold
-  %}
-{% endif %}
-
-{% if settings.custom_font_accent_enable %}
-  {% render 'custom-font-face',
-    font_family_key: settings.custom_font_accent_family,
-    font_family: custom_font_accent_name,
-    font_weight: settings.custom_font_accent_weight,
-    font_style: settings.custom_font_accent_style
-  %}
-  {% render 'custom-font-face',
-    font_family_key: settings.custom_font_accent_family,
-    font_family: custom_font_accent_name,
-    font_weight: settings.custom_font_accent_weight_bold,
-    font_style: settings.custom_font_accent_style_bold
-  %}
 {% endif %}

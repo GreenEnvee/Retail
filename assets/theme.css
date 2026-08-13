@@ -3166,6 +3166,7 @@ video {
   --leading-tight: 1.25;
   --leading-snug: 1.375;
   --leading-normal: 2.1;
+  --leading-interface: 1.5;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
 }
@@ -14062,10 +14063,11 @@ body:not(.theme-animate-hover) .header__desktop__buttons--icons .header__desktop
 .menu__item.grandparent .navlink--child .navtext {
   font-family: var(--FONT-STACK-ACCENT);
   font-style: var(--FONT-STYLE-ACCENT);
-  font-weight: 500;
+  font-weight: var(--FONT-WEIGHT-ACCENT-BOLD);
   letter-spacing: 0.2em;
   text-transform: uppercase;
   font-size: calc(var(--font-2) * 1.0435 * var(--FONT-ADJUST-ACCENT));
+  line-height: var(--leading-interface);
 }
 .dropdown__family--grandchild .navlink--grandchild .navtext {
   font-family: var(--FONT-STACK-ACCENT);
@@ -14074,7 +14076,7 @@ body:not(.theme-animate-hover) .header__desktop__buttons--icons .header__desktop
   letter-spacing: 0.2em;
   text-transform: uppercase;
   font-size: calc(var(--font-2) * 1.0435 * var(--FONT-ADJUST-ACCENT));
-  line-height: var(--leading-normal);
+  line-height: var(--leading-interface);
 }
 .dropdown__family--grandchild .navlink--grandchild:not(.highlight--link) .navtext {
   color: var(--text-light);
@@ -17481,6 +17483,7 @@ Collection grid item
 ============================================================================== */
 .footer {
   --bg: var(--COLOR-FOOTER-BG);
+  --FONT-ADJUST-FOOTER-MENU: 0.8;
   --hairline: var(--COLOR-FOOTER-A5);
   --text: var(--COLOR-FOOTER-A90);
   --border: var(--COLOR-FOOTER-A15);
@@ -17590,9 +17593,17 @@ Collection grid item
 }
 .footer__quicklinks li {
   margin: 0 0 11px 0;
+  font-size: calc(var(--font-4) * var(--FONT-ADJUST-FOOTER-MENU));
+  line-height: var(--leading-interface);
 }
 .footer__quicklinks a {
   position: relative;
+  font-family: var(--FONT-STACK-ACCENT);
+  font-style: var(--FONT-STYLE-ACCENT);
+  font-weight: 400;
+  font-size: inherit;
+  text-transform: var(--FONT-ACCENT-TRANSFORM);
+  letter-spacing: var(--FONT-ACCENT-LETTER-SPACING);
   text-decoration: none;
 }
 .footer__quicklinks a:after {
